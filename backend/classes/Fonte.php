@@ -70,7 +70,7 @@ class Fonte {
 			$this->idfonte = $rs->fields["idfonte"];
 		}
 		else {
-			die("Erro ao buscar identificador da fonte de informaÁ„o!");
+			die("Erro ao buscar identificador da fonte de informaçao!");
 		}
 	}
 	
