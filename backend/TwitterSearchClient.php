@@ -111,9 +111,9 @@ function readNewAsRssItem($key, $value, $noticia){
 $myself = new TwitterSearchClient(); 
 $clubes = array("Benfica", "Porto", "Sporting"); 
 $noticias = $myself->search($clubes);
-var_dump($noticias); 
+var_dump($noticias);
 $n = new Noticia(); 
-$msg =  $n->insert($noticias); 
+//$msg =  $n->insert($noticias); 
  echo $msg; 
 /*foreach ($noticias as $n){
 	$n->insert($news); 

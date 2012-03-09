@@ -247,6 +247,46 @@ class Noticia {
 		$this->visivel = $v;
 	}
 	
+	/**
+	 * Cria uma array associativo preparado para entregar ao aodb.    
+	 * @return Map de campos de noticia para array indexado pelos nomes dos campos de Noticia na bd.  
+	 */
+
+	public function toHash(){
+		$myNew = array(); 
+		$myNew["idnoticia"] = $this->idnoticia;						//campo auto increment
+		$myNew["idfonte"] = $this->idfonte;         				//identificador da fonte 
+		$myNew["idlocal"] = $this->idlocal;					        //@todo buscar ref espacial
+		$myNew["data_pub"] = $this->data_pub; 
+		$myNew["data_noticia"] = $this->data_noticia;					//@todo buscar ref tempora podem ser v‡rias
+		$myNew["assunto"] = $this->assunto;                 
+		$myNew["descricao"] = $this->descricao;
+		$myNew["texto"] = $this->texto; 
+		$myNew["url"] = $this->url; 
+		$myNew["visivel"] = $this->visivel;
+		
+		return $myNew; 			
+	}
+	
+	
+	/**
+	 * Transforma um array associativo de uma tabela de Noticia para um objecto noticia
+	 * @param noticia Array associativo indexados pelos campos da tabela noticia
+	 * @return Um objecto noticia. 
+	 */
+	public static function fromHash($noticia){
+		$n = new Noticia(); 
+		$n->setIdnoticia($noticia["idnoticia"]); 
+		$n->setIdfonte($noticia["idfonte"]); 
+		$n->setIdLocal($noticia["idLocal"]);
+		$n->setData_pub($noticia["data_pub"]);
+		$n->setData_noticia($noticia["data_noticia"]); 
+		$n->setAssunto($noticia["assunto"]); 
+		$n->setDescricao($noticia["descricao"]);
+		$n->setTexto($noticia["texto"]);
+		$n->setUrl($noticia["url"]); 
+		$n->setVisivel($noticia["visivel"]); 
+	}
 	
 	/**
 	 * Insere uma notícia na Base de Dados
@@ -286,7 +326,8 @@ class Noticia {
 		$msg = "Foram inseridas ".count($fields)." mensagens.";
 		return $msg;
 	}
-				
+	
+	
 	/**
 	 * Função para apagar todas as entradas da tabela noticia na Base de Dados
 	 */
