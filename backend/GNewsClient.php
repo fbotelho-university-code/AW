@@ -26,14 +26,14 @@ class GNewsClient extends Fonte {
 	*  - URL principal da fonte {@link $main_url}
 	*/
 	public function __construct() {
-		//parent::__construct("RSS Google News", "https://ajax.googleapis.com/ajax/services/search/news?v=1.0&q=");
-		parent::__construct("RSS Google News", "https://ajax.googleapis.com/ajax/services/feed/find?v=1.0&output=json&q=");
+		parent::__construct("RSS Google News", "https://ajax.googleapis.com/ajax/services/search/news?v=1.0&q=");
+		//parent::__construct("RSS Google News", "https://ajax.googleapis.com/ajax/services/feed/find?v=1.0&output=json&q=");
 	}
 	
 	public function search($parameters) {
 		foreach($parameters as $searchWord) {
 			$encode = urlencode($searchWord);
-			$url_search = $this->main_url.$encode;	
+			$url_search = $this->main_url.$encode;
 			$result_json = $this->execSearch($url_search);
 			$output = json_decode($result_json);
 			print_r($output);

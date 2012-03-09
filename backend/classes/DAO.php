@@ -7,8 +7,8 @@ class DAO extends ADOConnection {
 	private $mysgbd = "mysql";
 	private $myserver = "localhost";
 	private $myuser = "root";
-	private $mypassword = "fabiim";
-	private $mydbName = "aw";
+	private $mypassword = "pcdamf06";
+	private $mydbName = "gollaw";
 	
 	public $db;
 	
@@ -28,6 +28,13 @@ class DAO extends ADOConnection {
 	function disconnect() {
 		//parent::Close();
 		$this->db->Close();
-	}	
+	}
+
+	function execute($sql) {
+		$this->connect();
+		$rs = $this->db->Execute($sql) or die(ErrorMsg());
+		$this->disconnect();
+		return $rs;
+	}
 }
 

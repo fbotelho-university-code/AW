@@ -1,6 +1,6 @@
 <?php
 
-include 'DAO.php'; 
+
 /**
 * Classe que representa uma fonte de informações da Web
 *  (Google News, Sapo News, Twitter, etc.)
@@ -56,7 +56,6 @@ class Fonte {
 	public function getIdfonte() {
 		return $this->idfonte;
 	}
-	
 	
 	/**
 	* Recupera o valor do identificador da fonte {@link $idfonte} da base de dados

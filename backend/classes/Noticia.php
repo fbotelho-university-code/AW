@@ -1,7 +1,5 @@
 <?php
 
-ini_set('default_charset','UTF-8');
-
 /**
  * Classe que representa uma notícia recuperada de fontes de informações da Web
  *  (Google News, Sapo News, Twitter, etc.)
@@ -74,7 +72,7 @@ class Noticia {
 	 * Define se uma notícia deve estar visível para o utilizador
 	 * @var boolean
 	 */
-	private $visivel =1 ;
+	private $visivel;
 	
 	/**
 	 * Objeto para acesso à base de dados
@@ -247,10 +245,12 @@ class Noticia {
 		$this->visivel = $v;
 	}
 	
-	
 	/**
 	 * Insere uma notícia na Base de Dados
-	 * @param Array $fields Array com as notícias recolhidas da fonte de informação
+	 * @param Array $fields Array com as notícias recolhidas da fonte de informação.
+	 *                      O parâmetro deve ser uma array associativo, onde  as chaves devem 
+	*                       representar o nome de todas as coluna da tabela 'noticia' e o valor 
+	*                       associado a chave deve ser o valor a ser inserido na tabela.
 	 * @return String $msg Mensagem com informações sobre a execução da operação
 	 */
 	public function insert($fields) {
@@ -262,7 +262,7 @@ class Noticia {
 		$dao = new DAO();
 		$dao->connect();
 		
-		/** Apaga todas as noticias da fonte de informação **/
+		/** Apaga todas as noticias da base de dados associadas à fonte de informação **/
 		if(count($fields) > 0) {
 			$sql = "DELETE FROM noticia WHERE idfonte = ".$fields[0]["idfonte"];
 			$rs = $dao->db->Execute($sql) or die($dao->db->ErrorMsg());
@@ -286,7 +286,7 @@ class Noticia {
 		$msg = "Foram inseridas ".count($fields)." mensagens.";
 		return $msg;
 	}
-				
+	
 	/**
 	 * Função para apagar todas as entradas da tabela noticia na Base de Dados
 	 */
@@ -295,16 +295,9 @@ class Noticia {
 		$dao->connect();
 		$sql = "TRUNCATE TABLE noticia";
 		$rs = $dao->db->Execute($sql) or die($dao->db->ErrorMsg());
+		$dao->disconnect();
 		echo "Tabela noticia apagada com sucesso!";
 	}
-	
-	public function __toString(){
-		$return = "Noticia -";
-		if ($this->assunto) $return .= 'ASSUNTO: ' . $this->assunto; 
-		if ($this->data_pub) $return .= 'PUBLICADO EM : ' . $this->data_pub; 
-		if ($this->descricao) $return .= 'DESCRI‚ÌO :' . $this->descricao; 
-		if ($this->url) $return .= 'URL :' . $this->url;   
-		return $return; 
-	}
 }
+
 ?>

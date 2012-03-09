@@ -13,8 +13,7 @@ ini_set('default_charset','UTF-8');
  * 
  * Classe responsável pelo leitura e consulta dos RSS do Serviço Sapo News
  */
- 
- 
+
 class SapoClient extends Fonte {
 	
 	private $rss;		// Objecto da classe rss_php
@@ -42,6 +41,7 @@ class SapoClient extends Fonte {
 		
 		//Cria array com itens presentes no RSS consultado
 		$items = $this->rss->getItems();
+		
 		$records = array();
 		
 		//Busca das palavras presentes em $parameters nos itens do RSS

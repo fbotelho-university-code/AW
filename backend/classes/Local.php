@@ -85,6 +85,9 @@ class Local {
 	/**
 	* Insere um local na Base de Dados
 	* @param Array $fields Array com os locais recolhidos da fonte de informação Geo-Net-PT
+	* 					   O parâmetro deve ser uma array associativo, onde  as chaves devem 
+	*                      representar o nome de todas as coluna da tabela 'local' e o valor 
+	*                      associado a chave deve ser o valor a ser inserido na tabela.
 	* @return String $msg Mensagem sobre a execução da operação
 	*/
 	public function insert($fields) {

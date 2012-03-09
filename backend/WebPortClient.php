@@ -28,7 +28,6 @@ class WebPortClientClient extends Fonte {
 		$this->rss = new rss_php();
 	}
 	
-	
 	/**
 	 * 
 	 * Busca das notícias publicadas no RSS com palavras presentes no RSS Feed
