@@ -7,7 +7,7 @@ include "./classes/DAO.php";
 include "./classes/Noticia.php";
 include "./classes/Fonte.php";
 
-ini_set('default_charset','UTF-8');
+//ini_set('default_charset','UTF-8');
 
 /**
  * 
