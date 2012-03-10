@@ -40,16 +40,17 @@ class GNewsClient extends Fonte {
 			$results = array();
 			
 			foreach($output->responseData->entries as $news) {
-				$myNew["idnoticia"] = null;						//campo auto increment
-				$myNew["idfonte"] = $this->idfonte;				//identificador da Sapo News
-				$myNew["idlocal"] = 1;							//@todo buscar ref espacial
-				$myNew["data_pub"] = Util::formatDateToDB($news->publishedDate);
-				$myNew["data_noticia"] = "";					//@todo buscar ref temporal
-				$myNew["assunto"] = addslashes($news->titleNoFormatting);
-				$myNew["descricao"] = addslashes($news->content);
-				$myNew["texto"] = file_get_contents($news->unescapedUrl);		//@todo buscar texto da noticia
-				$myNew["url"] = $news->unescapedUrl;
-				$myNew["visivel"] = 1;							//notícia com visibilidade habilitada
+				$myNew = new Noticia(); 
+				//$myNew["idnoticia"] = null;						//campo auto increment
+				$myNew->setIdfonte($this->idfonte);				//identificador da Sapo News
+				$myNew->setIdLocal(1);							//@todo buscar ref espacial
+				$myNew->setData_pub(Util::formatDateToDB($news->publishedDate)); 
+				$myNew->setData_noticia(""); 
+				$myNew->setAssunto(addslashes($news->titleNoFormatting));
+				$myNew->setDescricao(addslashes($news->content));
+				$myNew->setTexto(file_get_contents($news->unescapedUrl));  //@todo buscar texto da noticia
+				$myNew->setUrl($news->unescapedUrl); 
+				
 				//$myNew["entidade"] = $parameters[$j];			//@todo inserir identidicador da identidade
 				$results[] = $myNew;
 			}
@@ -68,7 +69,6 @@ class GNewsClient extends Fonte {
 		return $result;
 	}
 }
-
 $gn = new GNewsClient();
 $clubes = array("Benfica", "Porto", "Sporting");
 $news = $gn->search($clubes);
@@ -76,3 +76,4 @@ $news = $gn->search($clubes);
 $n = new Noticia();
 $msg = $n->insert($news);
 echo $msg;
+?>

@@ -1,5 +1,7 @@
 <?php
 
+
+
 /**
 * Classe que representa um local. Pode ser um Distrito, Ilha ou Concelho de Portugal
 * @author Anderson Barretto - Nr 42541
@@ -10,6 +12,19 @@
 * @version 1.0 20120305
 */
 class Local {
+	/**
+	 * Criar instancia Local a partir de um array Associativo
+	 * @param $map O array associativo com todos os campos de local 
+	 * @return O Objecto local correspondente 
+	 */
+	 
+	public static function fromHash( $map){
+		$l = new Local(); 
+		$l->setIdlocal($map["idlocal"]);
+		$l->setNome_local($map["nome_local"]); 
+		$l->setCoordenadas($map["coordenadas"]);
+		return $l;   	
+	}
 	
 	/**
 	* Identificador do local
@@ -82,6 +97,15 @@ class Local {
 		$this->coordenadas = $c;
 	}
 	
+	
+	public function __toString(){
+		$str = 'Local - ';
+		if ($this->idlocal) $str .=  ' IdLocal : ' . $this->idlocal;  
+		if ($this->nome_local) $str .= ' Nome : ' . $this->nome_local;  
+		if ($this->coordenadas) $str .= ' Coordenadas : ' . $this->coordenadas;
+		return $str; 
+	}
+	
 	/**
 	* Insere um local na Base de Dados
 	* @param Array $fields Array com os locais recolhidos da fonte de informação Geo-Net-PT
@@ -106,10 +130,7 @@ class Local {
 		//Insere todos os locais
 		foreach ($fields as $local) {
 			$rs = $dao->db->AutoExecute("local", $local, "INSERT") or die($dao->db->ErrorMsg());
-			if($rs) {
-				//echo "Local \"<b>".$local["nome_local"]."</b>\" inserido com sucesso!<br>";
-			}
-			else {
+			if(!$rs) {
 				$msg = "Erro na inserção de local<br>";
 			}
 		}
@@ -118,7 +139,40 @@ class Local {
 		return $msg;
 	}
 	
+	/**
+	 * Consultar lista de todos os locais existentes
+	 * @return Um array de objectos Local
+	 */
+	 
+	public static function getAll(){
+		$dao = new DAO(); 
+		$dao->connect(); 
+		
+		$sql = "SELECT  * FROM local"; 
+		$rs = $dao->db->execute($sql);
+		
+		if (!$rs){
+		   die ($dao->db->ErrorMsg()); 
+		}
+		
+		$locais = array(); // array de locais para retornar
+		
+		while (!$rs->EOF){
+				$locais[] = Local::fromHash($rs->fields);
+				$rs->MoveNext();
+		}
+		
+		$rs->Close(); 
+		$dao->disconnect();
+		return $locais;
+	}
 }
+/*
+$l= new Local();
+$rs = $l->getAll(); 
 
-
+foreach($rs as $ll){
+	echo $ll . '<br/>'; 
+}
+*/
 ?>

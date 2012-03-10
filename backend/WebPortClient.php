@@ -54,16 +54,15 @@ class WebPortClientClient extends Fonte {
 			//echo "<hr>";
 			
 			foreach($items as $news) {
-				$myNew["idnoticia"] = null;						//campo auto increment
-				$myNew["idfonte"] = $this->idfonte;				//identificador da fonte
-				$myNew["idlocal"] = 1;							//@todo buscar ref espacial
-				$myNew["data_pub"] = Util::formatTstampToDb($news["pwa:tstamp"]);
-				$myNew["data_noticia"] = "";					//@todo buscar ref temporal
-				$myNew["assunto"] = addslashes($news["title"]);
-				$myNew["descricao"] = addslashes($news["pwa:digest"]);
-				$myNew["texto"] = "";							//@todo buscar texto da noticia
-				$myNew["url"] = $news["link"];
-				$myNew["visivel"] = 1;							//notícia com visibilidade habilitada
+				$myNew = new Notica(); 
+				$myNew->setIdFonte($this->idfonte); 				//identificador da fonte
+				$myNew->setIdLocal(1);							//@todo buscar ref espacial
+				$myNew->setData_pub(Util::formatTstampToDb($news["pwa:tstamp"]));
+				$myNew->setData_noticia("");					//@todo buscar ref temporal
+				$myNew->setAssunto(addslashes($news["title"]));
+				$myNew->setDescricao(addslashes($news["pwa:digest"]));
+				$myNew->setTexto("");							//@todo buscar texto da noticia
+				$myNew->setUrl($news["link"]);
 				//$myNew["entidade"] = $parameters[$j];			//@todo inserir identidicador da identidade
 				$results[] = $myNew;
 			}
@@ -71,11 +70,12 @@ class WebPortClientClient extends Fonte {
 		return $results;
 	}
 }
-
+/*
 $arq = new WebPortClientClient();
 $clubes = array("Benfica", "Porto", "Sporting");
 $news = $arq->search($clubes);
 $n = new Noticia();
 $msg = $n->insert($news);
 echo $msg;
+*/
 ?>

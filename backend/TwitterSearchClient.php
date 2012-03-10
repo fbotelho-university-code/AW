@@ -22,14 +22,15 @@ class TwitterSearchClient extends Fonte{
 	}
 	
 	public function search($parameters){
-		$noticias = array(); 
+		$noticias = array();
+		 
 		foreach ($parameters as  $searchWord){
 			$url_search = $this->main_url . '?q='; 
 			$encode = urlencode($searchWord);
 			$url_search .= $encode;    
 			$url_search .= '&include_entities=true&result_type=mixed';
 			  
-			//echo $url_search;
+			echo $url_search;
 			
 			$ch = curl_init($url_search);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -37,7 +38,8 @@ class TwitterSearchClient extends Fonte{
 			curl_close($ch);
 			if (!$data){
 				//TODO ERROR
-			}	
+			}
+			
 			
 			$doc = new SimpleXmlElement($data, LIBXML_NOCDATA);
 			if ($doc){
@@ -61,29 +63,11 @@ class TwitterSearchClient extends Fonte{
 			else{
 				die ("error reading rss "); 
 			}
-			
-		/*	foreach ($noticias as $n){
-				echo $n; 
-			}*/
 		}
 	return $noticias; 
-	}
+  }
+
 	
-/*
-			$rss = new rss_php();
-			$rss->loadRSS($url_search);  
-			$items = $rss->getItems();
-			$noticias = array();
-			var_dump($items); 
-			foreach ($items as $key => $value){
-				
-				}
-		}
-		foreach ($noticias as $n){
-			echo $n; 
-		}		
-	}
-	*/
 	
 function readNewAsRssItem($key, $value, $noticia){
 	if ($value != ""){
@@ -99,7 +83,6 @@ function readNewAsRssItem($key, $value, $noticia){
 					break; 
 				case "link":
 					$noticia->setUrl($value);
-					
 					break;    
 				}
 		}	
@@ -107,15 +90,13 @@ function readNewAsRssItem($key, $value, $noticia){
 	}
 }
 
-
+/*
 $myself = new TwitterSearchClient(); 
-$clubes = array("Benfica", "Porto", "Sporting"); 
+$clubes = array("Benfica", "Porto", "Sporting");
 $noticias = $myself->search($clubes);
-var_dump($noticias);
-$n = new Noticia(); 
-//$msg =  $n->insert($noticias); 
- echo $msg; 
-/*foreach ($noticias as $n){
-	$n->insert($news); 
-}*/
+
+ foreach ($noticias as $n){
+	$n->add(); 
+  }
+*/
 ?>

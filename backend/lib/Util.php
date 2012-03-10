@@ -65,8 +65,7 @@ class Util {
     	}
 
    	 	return $text;
-	}
-	
+	}	
 }
 
 ?>

@@ -16,7 +16,7 @@ class Noticia {
 	 * Identificador da noticia
 	 * @var int
 	 */
-	private $idnoticia;
+	private $idnoticia = null;
 	
 	/**
 	 * Identificador da fonte da notícia
@@ -72,8 +72,8 @@ class Noticia {
 	 * Define se uma notícia deve estar visível para o utilizador
 	 * @var boolean
 	 */
-	private $visivel;
-	
+	private $visivel = true;
+		
 	/**
 	 * Objeto para acesso à base de dados
 	 * @var DAO
@@ -89,6 +89,7 @@ class Noticia {
 	* Retorna o identificador da notícia
 	* @return int {@link $idnoticia}
 	*/
+	
 	public function getIdnoticia() {
 		return $this->idnoticia;
 	}
@@ -253,7 +254,7 @@ class Noticia {
 
 	public function toHash(){
 		$myNew = array(); 
-		$myNew["idnoticia"] = $this->idnoticia;						//campo auto increment
+		$myNew["idnoticia"] = $this->idnoticia; 						//campo auto increment
 		$myNew["idfonte"] = $this->idfonte;         				//identificador da fonte 
 		$myNew["idlocal"] = $this->idlocal;					        //@todo buscar ref espacial
 		$myNew["data_pub"] = $this->data_pub; 
@@ -263,7 +264,6 @@ class Noticia {
 		$myNew["texto"] = $this->texto; 
 		$myNew["url"] = $this->url; 
 		$myNew["visivel"] = $this->visivel;
-		
 		return $myNew; 			
 	}
 	
@@ -287,7 +287,25 @@ class Noticia {
 		$n->setVisivel($noticia["visivel"]); 
 	}
 	
-
+	/**
+	 * Adiciona Noticia n‹o existente anteriormente ˆ base de dados
+	 * 
+	 */
+	public function add(){
+		$dao = new DAO();
+		$dao->connect(); 
+		
+		$fields = $this->toHash(); 
+		var_dump ($fields); 
+		echo '<br/> inserting in bd <br/>';
+		
+		$rs = $dao->db->AutoExecute("noticia", $fields, "INSERT");
+		if (!$rs){
+			//echo $dao->db->ErrorMsg(); 
+		    die ($dao->db->ErrorMsg()); 
+		}
+	}
+	
 	/**
 	 * Insere uma notícia na Base de Dados
 	 * @param Array $fields Array com as notícias recolhidas da fonte de informação.
@@ -314,6 +332,7 @@ class Noticia {
 			$msg = "<b>Não existem notícias a inserir</b>";
 		}
 		
+		
 		/** Insere as notícias recuperadas da fonte de informação **/
 		foreach ($fields as $new) {
 			$rs = $dao->db->AutoExecute("noticia", $new, "INSERT");
@@ -330,7 +349,6 @@ class Noticia {
 		return $msg;
 	}
 	
-
 	/**
 	 * Função para apagar todas as entradas da tabela noticia na Base de Dados
 	 */
@@ -341,6 +359,10 @@ class Noticia {
 		$rs = $dao->db->Execute($sql) or die($dao->db->ErrorMsg());
 		$dao->disconnect();
 		echo "Tabela noticia apagada com sucesso!";
+	}
+	
+	public function getClube(){
+			
 	}
 }
 

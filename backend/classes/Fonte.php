@@ -1,6 +1,7 @@
 <?php
 
 
+
 /**
 * Classe que representa uma fonte de informações da Web
 *  (Google News, Sapo News, Twitter, etc.)
@@ -11,7 +12,9 @@
 * @package backend.classes
 * @version 1.0 20120305
 */
-class Fonte {
+
+include ('DAO.php'); 
+abstract class Fonte {
 	
 	/**
 	* Identificador da fonte
@@ -57,6 +60,13 @@ class Fonte {
 		return $this->idfonte;
 	}
 	
+	/**
+	 * Pesquisa por uma determina express‹o  na fonte determinada. 
+	 * @param search_str A express‹o a pesquisa
+	 * @return Um array de objectos Noticia criados pela pesquisa.  
+	 */
+	abstract public function search($search_str);
+	 
 	/**
 	* Recupera o valor do identificador da fonte {@link $idfonte} da base de dados
 	* @uses {@link $main_url} Usa a URL principal da fonte para busca na base de dados
