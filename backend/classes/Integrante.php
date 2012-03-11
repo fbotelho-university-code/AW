@@ -49,11 +49,10 @@ class Integrante {
 	
 	public function retrieveIntegrante($param) {
 		
-		/** Query para busca do integrante pelo nome **/
+		/** Montagem da Query para busca do integrante  **/
 		$sql = "SELECT * FROM integrante WHERE ";
-		
 		if(is_int($param)) {
-			$sql .= "idintegrante = ".$idintegrante;
+			$sql .= "idintegrante = ".$param;
 		}
 		else {
 			$sql .= "nome_integrante = '".$param."'";
@@ -62,20 +61,6 @@ class Integrante {
 		/** Execução da Query **/
 		$dao = new DAO();
 		$rs = $dao->execute($sql);
-		//$rs = $dao->db->Execute($sql) or die($dao->$db->ErrorMsg());
-		
-		/** Construção do Objeto Integrante usando resposta da consulta **/
-		$this->mountIntegrante($rs->fields);
-	}
-	
-	public function getIntegranteById($id) {
-		/** Query para busca do integrante pelo nome **/
-		$sql = "SELECT * FROM integrante WHERE id = ".$nome;
-		
-		/** Execução da Query **/
-		$dao = new DAO();
-		$rs = $dao->execute($sql);
-		//$rs = $dao->db->Execute($sql) or die($dao->$db->ErrorMsg());
 		
 		/** Construção do Objeto Integrante usando resposta da consulta **/
 		$this->mountIntegrante($rs->fields);

@@ -46,6 +46,11 @@ class Clube {
 		$this->getClubeByNome();
 	}
 	
+	public function __construct($id) {
+		$this->idclube = $id;
+		$this->getClubeById();
+	}
+	
 	/**
 	* Retorna o identificador do clube
 	* @return int {@link $idclube}
@@ -119,12 +124,47 @@ class Clube {
 		$this->nome_clube = $n;
 	}
 	
+	public function retrieveClube($param) {
+	
+		/** Query principal para busca do clube **/
+		$sql = "SELECT * FROM clube WHERE ";
+	
+		if(is_int($param)) {
+			$sql .= "idclube = ".$param;
+		}
+		else {
+			$sql .= "nome_clube = '".$param."'";
+		}
+	
+		/** Execução da Query **/
+		$dao = new DAO();
+		$rs = $dao->execute($sql);
+		//$rs = $dao->db->Execute($sql) or die($dao->$db->ErrorMsg());
+	
+		/** Construção do Objeto Integrante usando resposta da consulta **/
+		$this->mountIntegrante($rs->fields);
+	}
+	
 	/**
-	* Recupera o todos os atributos do clube usando seu nome
+	* Recupera o todos os atributos do clube do BD usando seu nome
 	*/
-	public function getClubeByNome($nome) {
-		
-		
+	public function getClubeByNome($nome) {	
+		$dao = new DAO();
+		$dao->connect();
+		$sql = "SELECT idclube FROM clube WHERE nome_clube = '".$this->main_url."'";
+		$rs = $dao->db->Execute($sql) or die($dao->db->ErrorMsg());
+		if(count($rs->fields) == 1) {
+			$this->idfonte = $rs->fields["idfonte"];
+		}
+		else {
+			die("Erro ao buscar identificador da fonte de informação!");
+		}
+	}
+	
+	/**
+	* Recupera o todos os atributos do clube do BD usando seu id
+	*/
+	public function getClubeByNome($id) {
 		$dao = new DAO();
 		$dao->connect();
 		$sql = "SELECT idclube FROM clube WHERE nome_clube = '".$this->main_url."'";
