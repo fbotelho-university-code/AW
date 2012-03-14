@@ -39,7 +39,6 @@ parserPlantel($clubes[4], 11, 171);
 echo "Tabela 'integrante' inicializada com ".count($integrantes). " linhas.<br>";
 
 
-
 function parserPlantel($clube, $begin, $end) {
 	global $url, $clubes, $dao;
 	$page = file_get_html($url.$clube);

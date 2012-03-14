@@ -45,22 +45,22 @@ class SapoClient extends Fonte {
 		$records = array();
 		
 		//Busca das palavras presentes em $parameters nos itens do RSS
+		
 		for($i = 0; $i < count($items); $i++) {
 			$news = $items[$i];
 			for($j = 0; $j < count($parameters); $j ++) {
 				$pos_title = strpos($news["title"], $parameters[$j]);
 				$pos_description = strpos($news["description"], $parameters[$j]);
 				if(!($pos_title === false) || !($pos_description === false)) {
-					$myNew["idnoticia"] = null;						//campo auto increment
-					$myNew["idfonte"] = $this->idfonte;				//identificador da Sapo News
-					$myNew["idlocal"] = 1;							//@todo buscar ref espacial
-					$myNew["data_pub"] = Util::formatDateToDB($news["pubDate"]);
-					$myNew["data_noticia"] = "";					//@todo buscar ref temporal
-					$myNew["assunto"] = addslashes($news["title"]);
-					$myNew["descricao"] = addslashes($news["description"]);
-					$myNew["texto"] = addslashes(file_get_contents($news["link"]));							//@todo buscar texto da noticia
-					$myNew["url"] = $news["link"];
-					$myNew["visivel"] = 1;							//notícia com visibilidade habilitada 
+					$myNew = new Noticia(); 
+	 				$myNew->setIdfonte($thi->idfonte);
+	 				$myNew->setIdLocal(1); 
+	 				$myNew->setData_pub(Util::formatDateToDB($news["pubDate"]));
+	 				$myNew->setData_noticia(""); //@todo buscar ref temporal
+					$myNew->setAssunto(addslashes($news["title"]));
+					$myNew->setDescricao(addslashes($news["description"]));
+					$myNew->setTexto( addslashes(file_get_contents($news["link"])));							//@todo buscar texto da noticia 
+					$myNew->setUrl($news['link']); 
 					//$myNew["entidade"] = $parameters[$j];			//@todo inserir identidicador da identidade
 					$records[] = $myNew;
 				}

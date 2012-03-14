@@ -48,8 +48,8 @@ class Integrante {
 	}
 	
 	public function retrieveIntegrante($param) {
-		
-		/** Montagem da Query para busca do integrante  **/
+
+		/** Query para busca do integrante pelo nome **/
 		$sql = "SELECT * FROM integrante WHERE ";
 		if(is_int($param)) {
 			$sql .= "idintegrante = ".$param;
