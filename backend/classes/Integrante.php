@@ -3,24 +3,20 @@
 
 class Integrante {
 	
-	private $idintegrante;
-	
+	private $idintegrante='';
 	private $idclube;
-	
 	private $idfuncao;
-	
 	private $nome_integrante;
-	
 	public function __construct() {
 		
 	}
 	
-	public function getIdintegrante() {
-		return $this->$idintegrante;
+	public function getIdintegrante(){
+		return $this->idintegrante;
 	}
 	
 	public function setIdintegrante($id) {
-		$this->idclube = $idintegrante;
+		$this->idintegrante = $id;
 	}
 	
 	public function getIdclube() {
@@ -53,7 +49,7 @@ class Integrante {
 		$sql = "SELECT * FROM integrante WHERE ";
 		
 		if(is_int($param)) {
-			$sql .= "idintegrante = ".$idintegrante;
+			$sql .= "idintegrante = " . $this->idintegrante;
 		}
 		else {
 			$sql .= "nome_integrante = '".$param."'";
@@ -70,7 +66,7 @@ class Integrante {
 	
 	public function getIntegranteById($id) {
 		/** Query para busca do integrante pelo nome **/
-		$sql = "SELECT * FROM integrante WHERE id = ".$nome;
+		$sql = "SELECT * FROM integrante WHERE id = " . $this->nome_integrante;
 		
 		/** Execução da Query **/
 		$dao = new DAO();
@@ -81,6 +77,50 @@ class Integrante {
 		$this->mountIntegrante($rs->fields);
 	}
 	
+	/**
+	 * Get all integrantes from the database. 
+	 * @returns An array of objects Integrante. 
+	 */
+	public static function getAll(){
+		$dao = new DAO(); 
+		$dao->connect(); 
+		
+		$sql = "SELECT  * FROM integrante";
+
+		//TODO - does not dies ? 
+		$rs = $dao->db->execute($sql);
+		
+		if (!$rs){
+		   die ($dao->db->ErrorMsg()); 
+		}
+		
+		$integrantes = array(); // array de locais para retornar
+		
+		while (!$rs->EOF){
+			$integrantes[] = Integrante::fromHash($rs->fields);
+			$rs->MoveNext();
+		}
+		
+		$rs->Close(); 
+		$dao->disconnect();
+		return $integrantes;		
+	}
+
+	/**
+	 * 	Convert Integrante from Hash Table 
+	 * @returns An object Integrante 
+ 	*/
+	public static function fromHash($fields){
+		$int = new Integrante();
+		//echo '<br/> . id: ' . $fields["idintegrante"] .  $fields["nome_integrante"] . '<br/>' ; 
+		$int->setIdintegrante($fields["idintegrante"]);
+		$int->setIdclube($fields["idclube"]); 
+		$int->setIdfuncao($fields["idfuncao"]); 
+		$int->setNome_integrante($fields["nome_integrante"]); 		
+		return $int; 
+	}
+	 
+	 
 	private function mountIntegrante($fields) {
 		$this->idintegrante = $fields["idintegrante"];
 		$this->idclube = $fields["idclube"];
@@ -88,6 +128,5 @@ class Integrante {
 		$this->nome_integrante = $fields["nome_integrante"];
 	}
 }
-
 
 ?>
