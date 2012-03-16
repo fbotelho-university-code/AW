@@ -1,10 +1,10 @@
 <?php
 
-include "./classes/Integrante.php";
+include "./lib/Util.php";
 include "./classes/DAO.php";
 
-$i = new Integrante();
-$i->retrieveIntegrante(1);
-var_dump($i);
+$param = Util::getSearchParameters();
+
+var_dump($param);
 
 ?>

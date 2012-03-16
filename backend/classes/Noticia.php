@@ -75,12 +75,6 @@ class Noticia {
 	private $visivel = true;
 		
 	/**
-	 * Objeto para acesso à base de dados
-	 * @var DAO
-	 */
-	private $db;
-	
-	/**
 	 * Contrutor da classe. 
 	 */
 	public function __construct() {	}

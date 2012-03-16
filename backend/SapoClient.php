@@ -8,6 +8,7 @@ include "./classes/Noticia.php";
 include "./classes/Fonte.php";
 
 //ini_set('default_charset','UTF-8');
+// $tts = utf8_encode($tts);
 
 /**
  * 
@@ -25,7 +26,7 @@ class SapoClient extends Fonte {
 	 *  - URL principal da fonte {@link $main_url} 
 	 */	
 	public function __construct() {
-		parent::__construct("RSS Sapo Notícias", "http://noticias.sapo.pt/pesquisa/?q=Benfica");
+		parent::__construct("RSS Sapo Notícias");
 		$this->rss = new rss_php();
 	}
 	
@@ -36,43 +37,53 @@ class SapoClient extends Fonte {
 	 * 			Array com palavras a serem pesquisadas nos itens RSS
 	 */ 
 	public function search($parameters) {
-		//carrega RSS
-		$this->rss->load($this->main_url);
+		//Array com as noticias encontradas
+		$results = array();
 		
-		//Cria array com itens presentes no RSS consultado
-		$items = $this->rss->getItems();
-		
-		$records = array();
-		
-		//Busca das palavras presentes em $parameters nos itens do RSS
-		
-		for($i = 0; $i < count($items); $i++) {
-			$news = $items[$i];
-			for($j = 0; $j < count($parameters); $j ++) {
-				$pos_title = strpos($news["title"], $parameters[$j]);
-				$pos_description = strpos($news["description"], $parameters[$j]);
-				if(!($pos_title === false) || !($pos_description === false)) {
-					$myNew = new Noticia(); 
-	 				$myNew->setIdfonte($thi->idfonte);
-	 				$myNew->setIdLocal(1); 
-	 				$myNew->setData_pub(Util::formatDateToDB($news["pubDate"]));
-	 				$myNew->setData_noticia(""); //@todo buscar ref temporal
-					$myNew->setAssunto(addslashes($news["title"]));
-					$myNew->setDescricao(addslashes($news["description"]));
-					$myNew->setTexto( addslashes(file_get_contents($news["link"])));							//@todo buscar texto da noticia 
-					$myNew->setUrl($news['link']); 
-					//$myNew["entidade"] = $parameters[$j];			//@todo inserir identidicador da identidade
-					$records[] = $myNew;
-				}
+		foreach($parameters as $query) {
+			//prepara query
+			$encode = urldecode($query);
+			$url_search = $this->main_url.$encode;
+				
+			//carrega RSS
+			@$this->rss->load($url_search);
+				
+			//Cria array com itens presentes no RSS consultado
+			$items = $this->rss->getItems();
+				
+			/** DEBUG **/
+			//var_dump($items);
+			//echo "<hr>";
+				
+			foreach($items as $news) {
+				$myNew = new Noticia(); 
+	 			$myNew->setIdfonte($this->idfonte);
+	 			$myNew->setData_pub(isset($news["title"]) ?
+	 									addslashes($news["title"])
+	 									: "");
+	 			$myNew->setAssunto(isset($news["title"]) ?
+	 									addslashes($news["title"])
+	 									: "");
+				$myNew->setDescricao(isset($news["description"]) ?
+										addslashes($news["description"])
+										: "");
+				@$myNew->setTexto(isset($news["link"]) ?
+										addslashes(file_get_contents($news["link"]))
+										: "");
+				$myNew->setUrl(isset($news["link"]) ?
+										addslashes($news["link"])
+										: ""); 
+					
+				$results[] = $myNew;
 			}
 		}
-		return $records;
+		return $results;
 	}
 }
 
 $sapo = new SapoClient();
-$clubes = array("Benfica", "Porto", "Sporting");
-$news = $sapo->search($clubes);
-$n = new Noticia();
-$msg = $n->insert($news);
-echo $msg;
+$parameters = Util::getSearchParameters();
+$news = $sapo->search($parameters);
+//$n = new Noticia();
+//$msg = $n->insert($news);
+echo(count($news));

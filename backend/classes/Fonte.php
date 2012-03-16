@@ -3,17 +3,16 @@
 
 
 /**
-* Classe que representa uma fonte de informações da Web
+* Classe que representa uma fonte de informaÃ§Ãµes da Web
 *  (Google News, Sapo News, Twitter, etc.)
 * @author Anderson Barretto - Nr 42541
-* @author Fábio Botelho 	 - Nr 41625
-* @author José Lopes		 - Nr 42437
+* @author FÃ¡bio Botelho 	 - Nr 41625
+* @author JosÃ© Lopes		 - Nr 42437
 * @author Nuno Marques		 - Nr 42809
 * @package backend.classes
 * @version 1.0 20120305
 */
 
-include ('DAO.php'); 
 abstract class Fonte {
 	
 	/**
@@ -35,7 +34,7 @@ abstract class Fonte {
 	protected $main_url;
 	
 	/**
-	* Visibilidade das notícias recolhidas da fonte
+	* Visibilidade das notÃ­cias recolhidas da fonte
 	* @var boolean
 	*/
 	protected $ligado;
@@ -46,10 +45,9 @@ abstract class Fonte {
 	 * @param String $n Nome da fonte
 	 * @param String $u URL principal da fonte
 	 */
-	public function __construct($n, $u) {
+	public function __construct($n) {
 		$this->nome = $n;
-		$this->main_url = $u;
-		$this->setIdfonte();
+		$this->retrieveFonte();
 	}
 	
 	/**
@@ -61,8 +59,8 @@ abstract class Fonte {
 	}
 	
 	/**
-	 * Pesquisa por uma determina express‹o  na fonte determinada. 
-	 * @param search_str A express‹o a pesquisa
+	 * Pesquisa por uma determina expressâ€¹o  na fonte determinada. 
+	 * @param search_str A expressâ€¹o a pesquisa
 	 * @return Um array de objectos Noticia criados pela pesquisa.  
 	 */
 	abstract public function search($search_str);
@@ -80,7 +78,7 @@ abstract class Fonte {
 			$this->idfonte = $rs->fields["idfonte"];
 		}
 		else {
-			die("Erro ao buscar identificador da fonte de informaao!");
+			die("Erro ao buscar identificador da fonte de informaï¿½ao!");
 		}
 	}
 	
@@ -114,6 +112,29 @@ abstract class Fonte {
 	*/
 	public function setMain_url($u) {
 		$this->main_url = $u;
+	}
+	
+	/**
+	 * Recupera fonte cadastrada no BD usando o nome da fonte.
+	 * Altera os atributos do objeto de acordo com a base de dados
+	 * @uses {@link $idfonte}
+	 * @uses {@link $main_url}
+	 */
+	public function retrieveFonte() {
+		$sql = "SELECT * FROM fonte WHERE nome = '".$this->nome."'";
+		$dao = new DAO();
+		$rs = $dao->execute($sql);
+		$this->mountFonte($rs->fields);
+	}
+	
+	/**
+	 * Monta um objeto integrante com resposta de consulta Ã  base de dados
+	 */
+	private function mountFonte($fields) {
+		$this->idfonte = $fields["idfonte"];
+		$this->nome = $fields["nome"];
+		$this->main_url = $fields["main_url"];
+		$this->ligado = $fields["ligado"];
 	}
 }
 
