@@ -38,7 +38,6 @@ parserPlantel($clubes[4], 11, 171);
 
 echo "Tabela 'integrante' inicializada com ".count($integrantes). " linhas.<br>";
 
-
 function parserPlantel($clube, $begin, $end) {
 	global $url, $clubes, $dao;
 	$page = file_get_html($url.$clube);
@@ -53,7 +52,7 @@ function parserPlantel($clube, $begin, $end) {
 		$GLOBALS["integrantes"][] = $integrante;
 		$rs = $dao->db->AutoExecute("integrante", $integrante, "INSERT") or die($dao->db->ErrorMsg());
 		$i +=4;
-	}
+	} 
 }
 
 

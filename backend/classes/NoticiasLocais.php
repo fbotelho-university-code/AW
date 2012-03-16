@@ -41,7 +41,8 @@
 	 */
 	public static function insertByObject($noticia, $local){
 		return NoticiasLocais::insertById($noticia->getIdnoticia(), $local->getIdlocal());
-		
 	}
+	
+	
   }
 ?>

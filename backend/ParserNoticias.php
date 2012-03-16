@@ -53,9 +53,17 @@
 				$pos = stripos($textoNoticia, $lexico->getContexto());
 				if ($pos !== false){
 					//Find the clube associated with lexico. 
-					//TODO - lexico poderia estar associado a mais que um clube ! 
+					//TODO - lexico poderia estar associado a mais que um clube !  
+					//Assumindo que s— vai ser associado a um: 
 					$lexClubes = LexicoClubes::find(array("idlexico" => $lexico->getIdlexico()));
-					//$rel = NoticiasClubes::find(array("idnoticia" => $noticia->getIdnoticia(), "idclube" => $idNoticia);
+					
+					//rela‹o entre noticiaEClubes
+					$rel = NoticiasClubes::find(array("idnoticia" => $noticia->getIdnoticia(), "idclube" => $lexicoClubes->getIdClube())); 
+					if (!$rel){
+						$rel = new NoticiasClubes(); 
+					}
+					$rel->addQualificacao($lexico->getPol()){
+					}
 				}
 			}
 		}
