@@ -40,18 +40,26 @@
 			foreach ($locais as $local){
 				$nome_local = ' ' . $local->getNome_local() . ' ';   // para encontrar palavra exacta e nao no meio de outra palavra 
 				$pos = stripos($textoNoticia , $local->getNome_local());
-				if ($pos != false){
+				if ($pos !== false){
 					NoticiasLocais::insertByObject($noticia, $local);
-					
 				} 
 			}
-		} 	
-		
-		
-		private static function findClubes($noticia){
-			
 		}
-			
+		 	
+		private static function findClubes($noticia){
+			$textoNoticia = $noticia->getTexto(); 
+			$lexicos = Lexico::getAll(); 
+			foreach($lexicos as $lexico){
+				$pos = stripos($textoNoticia, $lexico->getContexto());
+				if ($pos !== false){
+					//Find the clube associated with lexico. 
+					//TODO - lexico poderia estar associado a mais que um clube ! 
+					$lexClubes = LexicoClubes::find(array("idlexico" => $lexico->getIdlexico()));
+					//$rel = NoticiasClubes::find(array("idnoticia" => $noticia->getIdnoticia(), "idclube" => $idNoticia);
+				}
+			}
+		}
+		
 		private static function findIntegrantes($noticia){
 				
 		} 
@@ -59,6 +67,7 @@
 		private static function findTemporal($noticia){
 			
 		}
+		
     }
 
 $noticia = new Noticia(); 
