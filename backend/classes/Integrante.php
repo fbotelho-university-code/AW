@@ -44,12 +44,11 @@ class Integrante {
 	}
 	
 	public function retrieveIntegrante($param) {
-			
+
 		/** Query para busca do integrante pelo nome **/
 		$sql = "SELECT * FROM integrante WHERE ";
-		
 		if(is_int($param)) {
-			$sql .= "idintegrante = " . $this->idintegrante;
+			$sql .= "idintegrante = ".$param;
 		}
 		else {
 			$sql .= "nome_integrante = '".$param."'";
