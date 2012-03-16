@@ -25,7 +25,7 @@ class SapoClient extends Fonte {
 	 *  - URL principal da fonte {@link $main_url} 
 	 */	
 	public function __construct() {
-		parent::__construct("RSS Sapo Notícias", "http://noticias.sapo.pt/rss/news/");
+		parent::__construct("RSS Sapo Notícias", "http://noticias.sapo.pt/pesquisa/?q=Benfica");
 		$this->rss = new rss_php();
 	}
 	

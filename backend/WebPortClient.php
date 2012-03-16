@@ -63,7 +63,10 @@ class WebPortClientClient extends Fonte {
 				$myNew->setDescricao(addslashes($news["pwa:digest"]));
 				$myNew->setTexto("");							//@todo buscar texto da noticia
 				$myNew->setUrl($news["link"]);
-				//$myNew["entidade"] = $parameters[$j];			//@todo inserir identidicador da identidade
+				
+				
+				//ParserNoticia::parserNoticia($myNew);			//@todo
+				///$myNew["entidade"] = $parameters[$j];			//@todo inserir identidicador da identidade
 				$results[] = $myNew;
 			}
 		}
