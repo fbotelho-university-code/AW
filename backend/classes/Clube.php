@@ -41,9 +41,11 @@ class Clube {
 	 * Construtor da classe. Inicializa o nome do clube {@link $nome_clube}
 	 * @param String $n
 	 */	
-	public function __construct($n) {
-		$this->nome_clube = $n;
-		$this->getClubeByNome();
+	public function __construct($n ='') {
+		if ($n != '' ){
+			$this->nome_clube = $n;
+			$this->getClubeByNome();
+		}
 	}
 	
 	/**
@@ -69,6 +71,14 @@ class Clube {
 		else {
 			die("Erro ao buscar identificador do clube!");
 		}
+	}
+	
+	/**
+	 * Altera valor do id do clube
+	 * TODO - check this with anderson 
+	 */
+	public function setId($id){
+		$this->idclube = $id; 
 	}
 	
 	/**
@@ -108,7 +118,7 @@ class Clube {
 	* @return String {@link $nome_competicao}
 	*/
 	public function getNome_clube() {
-		return $this->nome_competicao;
+		return $this->nome_clube;
 	}
 	
 	/**
@@ -120,11 +130,51 @@ class Clube {
 	}
 	
 	/**
+	 * Get all Clubes from the database. 
+	 * @returns An array of objects Clubes. 
+	 */
+	public static function getAll(){
+		$dao = new DAO(); 
+		$dao->connect(); 
+		
+		$sql = "SELECT  * FROM clube; ";
+
+		//TODO - does not dies ? 
+		$rs = $dao->db->execute($sql);
+		if (!$rs){
+			//echo 'ERROR'; 
+		   die ($dao->db->ErrorMsg()); 
+		}
+		
+		$clubes = array(); // array de locais para retornar
+		
+		while (!$rs->EOF){
+			$clubes[] = Clube::fromHash($rs->fields);
+			$rs->MoveNext();
+		}
+		
+		$rs->Close(); 
+		$dao->disconnect();
+		return $clubes;		
+	}
+	
+	
+	/**
+	 *   
+	 */
+	public static function fromhash($clube){
+		$c = new Clube(); 
+		$c->setId($clube["idclube"]);
+		$c->setIdLocal($clube["idlocal"]); 
+		$c->setIdcompeticao($clube["idcompeticao"]);
+		$c->setNome_clube($clube["nome_clube"]);
+		return $c; 
+	}
+	
+	/**
 	* Recupera o todos os atributos do clube usando seu nome
 	*/
-	public function getClubeByNome($nome) {
-		
-		
+	public function getClubeByNome($nome){
 		$dao = new DAO();
 		$dao->connect();
 		$sql = "SELECT idclube FROM clube WHERE nome_clube = '".$this->main_url."'";
@@ -136,7 +186,14 @@ class Clube {
 			die("Erro ao buscar identificador da fonte de informação!");
 		}
 	}
-	
+	public function __toString(){
+		$str = 'Clube - '; 
+		if ($this->nome_clube ) $str .= ' Nome : ' . $this->nome_clube; 
+		if ($this->idclube ) $str .= ' ID Clube : ' . $this->idclube; 
+		if ($this->idlocal ) $str .= ' ID local : ' . $this->idlocal; 
+		if ($this->idcompeticao ) $str .= ' ID competicao: ' . $this->idcompeticao; 
+	    return $str; 
+	}
 }
 
 ?>

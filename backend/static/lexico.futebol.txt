@@ -1,0 +1,430 @@
+nucleo:slb,contexto:slb,entidade:SLB,tipo:sigla,POL:0,ambiguidade:0
+nucleo:s.l.b,contexto:s.l.b,entidade:SLB,tipo:sigla,POL:0,ambiguidade:0
+nucleo:s l b,contexto:s l b,entidade:SLB,tipo:sigla,POL:0,ambiguidade:0
+nucleo:sport,contexto:sport lisboa e benfica,entidade:SLB,tipo:nome,POL:0,ambiguidade:0
+nucleo:benfica,contexto:benfica,entidade:SLB,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:benfica,contexto:s.l.benfica,entidade:SLB,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:benfica,contexto:s.l benfica,entidade:SLB,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:benfica,contexto:s l benfica,entidade:SLB,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:benfica,contexto:sl benfica,entidade:SLB,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:slbenfica,contexto:slbenfica,entidade:SLB,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:glorioso,contexto:glorioso,entidade:SLB,tipo:alcunha,POL:1,ambiguidade:0.5
+nucleo:clube,contexto:clube da luz,entidade:SLB,tipo:alcunha,POL:0,ambiguidade:0
+nucleo:clube,contexto:clube encarnado,entidade:SLB,tipo:alcunha,POL:0,ambiguidade:0.5
+nucleo:aguias,contexto:águias,entidade:SLB,tipo:alcunha,POL:0,ambiguidade:0.5
+nucleo:gaivotas,contexto:gaivotas,entidade:SLB,tipo:alcunha,POL:-1,ambiguidade:0.75
+nucleo:gayvotas,contexto:gayvotas,entidade:SLB,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:benfilixo,contexto:benfilixo,entidade:SLB,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:lampioes,contexto:lampiões,entidade:SLB,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:fcp,contexto:fcp,entidade:FCP,tipo:sigla,POL:0,ambiguidade:0
+nucleo:f.c.p,contexto:f.c.p,entidade:FCP,tipo:sigla,POL:0,ambiguidade:0
+nucleo:f c p,contexto:f c p,entidade:FCP,tipo:sigla,POL:0,ambiguidade:0
+nucleo:futebol,contexto:futebol clube do porto,entidade:FCP,tipo:nome,POL:0,ambiguidade:0
+nucleo:porto,contexto:porto,entidade:FCP,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:porto,contexto:f.c.porto,entidade:FCP,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:porto,contexto:f.c porto,entidade:FCP,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:porto,contexto:f c porto,entidade:FCP,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:porto,contexto:fc porto,entidade:FCP,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:fcporto,contexto:fcporto,entidade:FCP,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:dragoes,contexto:dragões,entidade:FCP,tipo:alcunha,POL:0,ambiguidade:0.5
+nucleo:dragays,contexto:dragays,entidade:FCP,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:clube,contexto:clube corrupto,entidade:FCP,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:clube,contexto:clube da fruta,entidade:FCP,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:clube,contexto:clube do café com leite,entidade:FCP,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:fruta,contexto:fruta corrupção e putedo,entidade:FCP,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:scp,contexto:scp,entidade:SCP,tipo:sigla,POL:0,ambiguidade:0
+nucleo:s.c.p,contexto:s.c.p,entidade:SCP,tipo:sigla,POL:0,ambiguidade:0
+nucleo:s c p,contexto:s c p,entidade:SCP,tipo:sigla,POL:0,ambiguidade:0
+nucleo:sporting,contexto:sporting clube de portugal,entidade:SCP,tipo:nome,POL:0,ambiguidade:0
+nucleo:sporting,contexto:sporting,entidade:SCP,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:sporting,contexto:sporting lisboa,entidade:SCP,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:sporting,contexto:sporting.c.p,entidade:SCP,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:sportingcp,contexto:sportingcp,entidade:SCP,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:sporting,contexto:sporting c.p,entidade:SCP,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:sporting,contexto:sporting c p,entidade:SCP,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:sporting,contexto:sporting cp,entidade:SCP,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:leoes,contexto:leões,entidade:SCP,tipo:alcunha,POL:0,ambiguidade:0.5
+nucleo:lagartos,contexto:lagartos,entidade:SCP,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:lagartagem,contexto:lagartagem,entidade:SCP,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:osgas,contexto:osgas,entidade:SCP,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:submissos,contexto:submissos clube do porto,entidade:SCP,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:submissos,contexto:submissos,entidade:SCP,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:zbordem,contexto:zbordem,entidade:SCP,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:zbording,contexto:zbording,entidade:SCP,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:estadio,contexto:estádio da luz,entidade:Estádio da Luz,tipo:nome,POL:0,ambiguidade:0
+nucleo:estadio,contexto:estádio do slb,entidade:Estádio da Luz,tipo:sigla,POL:0,ambiguidade:0
+nucleo:estadio,contexto:estádio do s.l.b,entidade:Estádio da Luz,tipo:sigla,POL:0,ambiguidade:0
+nucleo:estadio,contexto:estádio do s l b,entidade:Estádio da Luz,tipo:sigla,POL:0,ambiguidade:0
+nucleo:estadio,contexto:estádio do sport lisboa e benfica,entidade:Estádio da Luz,tipo:nome,POL:0,ambiguidade:0
+nucleo:estadio,contexto:estádio do benfica,entidade:Estádio da Luz,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:estadio,contexto:estádio do s.l.benfica,entidade:Estádio da Luz,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:estadio,contexto:estádio do s.l benfica,entidade:Estádio da Luz,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:estadio,contexto:estádio do s l benfica,entidade:Estádio da Luz,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:estadio,contexto:estádio do sl benfica,entidade:Estádio da Luz,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:estadio,contexto:estádio do slbenfica,entidade:Estádio da Luz,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:estadio,contexto:estádio do glorioso,entidade:Estádio da Luz,tipo:alcunha,POL:1,ambiguidade:0.5
+nucleo:estadio,contexto:estádio do clube da luz,entidade:Estádio da Luz,tipo:alcunha,POL:0,ambiguidade:0
+nucleo:estadio,contexto:estádio do clube encarnado,entidade:Estádio da Luz,tipo:alcunha,POL:0,ambiguidade:0.5
+nucleo:estadio,contexto:estádio das águias,entidade:Estádio da Luz,tipo:alcunha,POL:0,ambiguidade:0.5
+nucleo:estadio,contexto:estádio das gaivotas,entidade:Estádio da Luz,tipo:alcunha,POL:-1,ambiguidade:0.75
+nucleo:estadio,contexto:estádio das gayvotas,entidade:Estádio da Luz,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:estadio,contexto:estádio do benfilixo,entidade:Estádio da Luz,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:estadio,contexto:estádio dos lampiões,entidade:Estádio da Luz,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:luz,contexto:luz,entidade:Estádio da Luz,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:inferno,contexto:inferno da luz,entidade:Estádio da Luz,tipo:alternativo,POL:1,ambiguidade:0
+nucleo:catedral,contexto:catedral,entidade:Estádio da Luz,tipo:alternativo,POL:1,ambiguidade:0.5
+nucleo:gaiola,contexto:gaiola,entidade:Estádio da Luz,tipo:alternativo,POL:-1,ambiguidade:0.5
+nucleo:galinheiro,contexto:galinheiro,entidade:Estádio da Luz,tipo:alternativo,POL:-1,ambiguidade:0.5
+nucleo:estadio,contexto:estádio do dragão,entidade:Estádio do Dragão,tipo:nome,POL:0,ambiguidade:0
+nucleo:estadio,contexto:estádio do fcp,entidade:Estádio do Dragão,tipo:sigla,POL:0,ambiguidade:0
+nucleo:estadio,contexto:estádio do f.c.p,entidade:Estádio do Dragão,tipo:sigla,POL:0,ambiguidade:0
+nucleo:estadio,contexto:estádio do f c p,entidade:Estádio do Dragão,tipo:sigla,POL:0,ambiguidade:0
+nucleo:estadio,contexto:estádio do futebol clube do porto,entidade:Estádio do Dragão,tipo:nome,POL:0,ambiguidade:0
+nucleo:estadio,contexto:estádio do porto,entidade:Estádio do Dragão,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:estadio,contexto:estádio do f.c.porto,entidade:Estádio do Dragão,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:estadio,contexto:estádio do f.c porto,entidade:Estádio do Dragão,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:estadio,contexto:estádio do f c porto,entidade:Estádio do Dragão,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:estadio,contexto:estádio do fc porto,entidade:Estádio do Dragão,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:estadio,contexto:estádio do fcporto,entidade:Estádio do Dragão,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:estadio,contexto:estádio dos dragões,entidade:Estádio do Dragão,tipo:alcunha,POL:0,ambiguidade:0.5
+nucleo:estadio,contexto:estádio dos dragays,entidade:Estádio do Dragão,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:estadio,contexto:estádio do clube corrupto,entidade:Estádio do Dragão,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:estadio,contexto:estádio do clube da fruta,entidade:Estádio do Dragão,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:estadio,contexto:estádio do clube do café com leite,entidade:Estádio do Dragão,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:estadio,contexto:estádio do fruta corrupção e putedo,entidade:Estádio do Dragão,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:dragao,contexto:dragão,entidade:Estádio do Dragão,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:contumil,contexto:contumil,entidade:Estádio do Dragão,tipo:alternativo,POL:-1,ambiguidade:0.5
+nucleo:estadio,contexto:estádio alvalade xxi,entidade:Estádio Alvalade XXI,tipo:nome,POL:0,ambiguidade:0
+nucleo:estadio,contexto:estádio do scp,entidade:Estádio Alvalade XXI,tipo:sigla,POL:0,ambiguidade:0
+nucleo:estadio,contexto:estádio do s.c.p,entidade:Estádio Alvalade XXI,tipo:sigla,POL:0,ambiguidade:0
+nucleo:estadio,contexto:estádio do s c p,entidade:Estádio Alvalade XXI,tipo:sigla,POL:0,ambiguidade:0
+nucleo:estadio,contexto:estádio do sporting clube de portugal,entidade:Estádio Alvalade XXI,tipo:nome,POL:0,ambiguidade:0
+nucleo:estadio,contexto:estádio do sporting,entidade:Estádio Alvalade XXI,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:estadio,contexto:estádio do sporting lisboa,entidade:Estádio Alvalade XXI,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:estadio,contexto:estádio do sporting.c.p,entidade:Estádio Alvalade XXI,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:estadio,contexto:estádio do sportingcp,entidade:Estádio Alvalade XXI,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:estadio,contexto:estádio do sporting c.p,entidade:Estádio Alvalade XXI,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:estadio,contexto:estádio do sporting c p,entidade:Estádio Alvalade XXI,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:estadio,contexto:estádio do sporting cp,entidade:Estádio Alvalade XXI,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:estadio,contexto:estádio dos leões,entidade:Estádio Alvalade XXI,tipo:alcunha,POL:0,ambiguidade:0.5
+nucleo:estadio,contexto:estádio dos lagartos,entidade:Estádio Alvalade XXI,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:estadio,contexto:estádio da lagartagem,entidade:Estádio Alvalade XXI,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:estadio,contexto:estádio das osgas,entidade:Estádio Alvalade XXI,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:estadio,contexto:estádio dos submissos clube do porto,entidade:Estádio Alvalade XXI,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:estadio,contexto:estádio dos submissos,entidade:Estádio Alvalade XXI,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:estadio,contexto:estádio do zbordem,entidade:Estádio Alvalade XXI,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:estadio,contexto:estádio do zbording,entidade:Estádio Alvalade XXI,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:alvalade,contexto:alvalade,entidade:Estádio Alvalade XXI,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:wc,contexto:wc,entidade:Estádio Alvalade XXI,tipo:alternativo,POL:-1,ambiguidade:0.5
+nucleo:casa,contexto:casa de banho,entidade:Estádio Alvalade XXI,tipo:alternativo,POL:-1,ambiguidade:0.5
+nucleo:alvalixo,contexto:alvalixo,entidade:Estádio Alvalade XXI,tipo:alternativo,POL:-1,ambiguidade:0
+nucleo:alvalidl,contexto:alvalidl,entidade:Estádio Alvalade XXI,tipo:alternativo,POL:-1,ambiguidade:0
+nucleo:luis,contexto:luis filipe vieira,entidade:Luis Filipe Vieira,tipo:nome,POL:0,ambiguidade:0
+nucleo:lfv,contexto:lfv,entidade:Luis Filipe Vieira,tipo:sigla,POL:0,ambiguidade:0
+nucleo:filipe,contexto:filipe vieira,entidade:Luis Filipe Vieira,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:presidente,contexto:presidente do slb,entidade:Luis Filipe Vieira,tipo:sigla,POL:0,ambiguidade:0
+nucleo:presidente,contexto:presidente do s.l.b,entidade:Luis Filipe Vieira,tipo:sigla,POL:0,ambiguidade:0
+nucleo:presidente,contexto:presidente do s l b,entidade:Luis Filipe Vieira,tipo:sigla,POL:0,ambiguidade:0
+nucleo:presidente,contexto:presidente do sport lisboa e benfica,entidade:Luis Filipe Vieira,tipo:nome,POL:0,ambiguidade:0
+nucleo:presidente,contexto:presidente do benfica,entidade:Luis Filipe Vieira,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:presidente,contexto:presidente do s.l.benfica,entidade:Luis Filipe Vieira,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:presidente,contexto:presidente do s.l benfica,entidade:Luis Filipe Vieira,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:presidente,contexto:presidente do s l benfica,entidade:Luis Filipe Vieira,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:presidente,contexto:presidente do sl benfica,entidade:Luis Filipe Vieira,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:presidente,contexto:presidente do slbenfica,entidade:Luis Filipe Vieira,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:presidente,contexto:presidente do glorioso,entidade:Luis Filipe Vieira,tipo:alcunha,POL:1,ambiguidade:0.5
+nucleo:presidente,contexto:presidente do clube da luz,entidade:Luis Filipe Vieira,tipo:alcunha,POL:0,ambiguidade:0
+nucleo:presidente,contexto:presidente do clube encarnado,entidade:Luis Filipe Vieira,tipo:alcunha,POL:0,ambiguidade:0.5
+nucleo:presidente,contexto:presidente das águias,entidade:Luis Filipe Vieira,tipo:alcunha,POL:0,ambiguidade:0.5
+nucleo:presidente,contexto:presidente das gaivotas,entidade:Luis Filipe Vieira,tipo:alcunha,POL:-1,ambiguidade:0.75
+nucleo:presidente,contexto:presidente das gayvotas,entidade:Luis Filipe Vieira,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:presidente,contexto:presidente do benfilixo,entidade:Luis Filipe Vieira,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:presidente,contexto:presidente dos lampiões,entidade:Luis Filipe Vieira,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:presidente,contexto:presidente benfiquista,entidade:Luis Filipe Vieira,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:presidente,contexto:presidente encarnado,entidade:Luis Filipe Vieira,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:orelhas,contexto:orelhas,entidade:Luis Filipe Vieira,tipo:alternativo,POL:-1,ambiguidade:0
+nucleo:jorge,contexto:jorge nuno pinto da costa,entidade:Jorge Nuno Pinto da Costa,tipo:nome,POL:0,ambiguidade:0
+nucleo:pinto,contexto:pinto da costa,entidade:Jorge Nuno Pinto da Costa,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:pinto,contexto:pinto da bosta,entidade:Jorge Nuno Pinto da Costa,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:pintinho,contexto:pintinho da costa,entidade:Jorge Nuno Pinto da Costa,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:pintinho,contexto:pintinho da bosta,entidade:Jorge Nuno Pinto da Costa,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:pdc,contexto:pdc,entidade:Jorge Nuno Pinto da Costa,tipo:sigla,POL:0,ambiguidade:0.5
+nucleo:presidente,contexto:presidente do fcp,entidade:Jorge Nuno Pinto da Costa,tipo:sigla,POL:0,ambiguidade:0
+nucleo:presidente,contexto:presidente do f.c.p,entidade:Jorge Nuno Pinto da Costa,tipo:sigla,POL:0,ambiguidade:0
+nucleo:presidente,contexto:presidente do f c p,entidade:Jorge Nuno Pinto da Costa,tipo:sigla,POL:0,ambiguidade:0
+nucleo:presidente,contexto:presidente do futebol clube do porto,entidade:Jorge Nuno Pinto da Costa,tipo:nome,POL:0,ambiguidade:0
+nucleo:presidente,contexto:presidente do porto,entidade:Jorge Nuno Pinto da Costa,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:presidente,contexto:presidente do f.c.porto,entidade:Jorge Nuno Pinto da Costa,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:presidente,contexto:presidente do f.c porto,entidade:Jorge Nuno Pinto da Costa,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:presidente,contexto:presidente do f c porto,entidade:Jorge Nuno Pinto da Costa,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:presidente,contexto:presidente do fc porto,entidade:Jorge Nuno Pinto da Costa,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:presidente,contexto:presidente do fcporto,entidade:Jorge Nuno Pinto da Costa,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:presidente,contexto:presidente dos dragões,entidade:Jorge Nuno Pinto da Costa,tipo:alcunha,POL:0,ambiguidade:0.5
+nucleo:presidente,contexto:presidente dos dragays,entidade:Jorge Nuno Pinto da Costa,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:presidente,contexto:presidente do clube corrupto,entidade:Jorge Nuno Pinto da Costa,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:presidente,contexto:presidente do clube da fruta,entidade:Jorge Nuno Pinto da Costa,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:presidente,contexto:presidente do clube do café com leite,entidade:Jorge Nuno Pinto da Costa,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:presidente,contexto:presidente do fruta corrupção e putedo,entidade:Jorge Nuno Pinto da Costa,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:presidente,contexto:presidente corrupto,entidade:Jorge Nuno Pinto da Costa,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:presidente,contexto:presidente portista,entidade:Jorge Nuno Pinto da Costa,tipo:alcunha,POL:0,ambiguidade:0
+nucleo:presidente,contexto:presidente azul,entidade:Jorge Nuno Pinto da Costa,tipo:alcunha,POL:0,ambiguidade:0.5
+nucleo:pintelho,contexto:pintelho da bosta,entidade:Jorge Nuno Pinto da Costa,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:pintelho,contexto:pintelho da costa,entidade:Jorge Nuno Pinto da Costa,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:bimbo,contexto:bimbo da bosta,entidade:Jorge Nuno Pinto da Costa,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:bimbo,contexto:bimbo da costa,entidade:Jorge Nuno Pinto da Costa,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:corrupto,contexto:corrupto mor,entidade:Jorge Nuno Pinto da Costa,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:jose,contexto:josé godinho lopes,entidade:José Godinho Lopes,tipo:nome,POL:0,ambiguidade:0
+nucleo:godinho,contexto:godinho lopes,entidade:José Godinho Lopes,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:presidente,contexto:presidente do scp,entidade:José Godinho Lopes,tipo:sigla,POL:0,ambiguidade:0
+nucleo:presidente,contexto:presidente do s.c.p,entidade:José Godinho Lopes,tipo:sigla,POL:0,ambiguidade:0
+nucleo:presidente,contexto:presidente do s c p,entidade:José Godinho Lopes,tipo:sigla,POL:0,ambiguidade:0
+nucleo:presidente,contexto:presidente do sporting clube de portugal,entidade:José Godinho Lopes,tipo:nome,POL:0,ambiguidade:0
+nucleo:presidente,contexto:presidente do sporting,entidade:José Godinho Lopes,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:presidente,contexto:presidente do sporting lisboa,entidade:José Godinho Lopes,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:presidente,contexto:presidente do sporting.c.p,entidade:José Godinho Lopes,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:presidente,contexto:presidente do sportingcp,entidade:José Godinho Lopes,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:presidente,contexto:presidente do sporting c.p,entidade:José Godinho Lopes,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:presidente,contexto:presidente do sporting c p,entidade:José Godinho Lopes,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:presidente,contexto:presidente do sporting cp,entidade:José Godinho Lopes,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:presidente,contexto:presidente dos leões,entidade:José Godinho Lopes,tipo:alcunha,POL:0,ambiguidade:0.5
+nucleo:presidente,contexto:presidente dos lagartos,entidade:José Godinho Lopes,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:presidente,contexto:presidente da lagartagem,entidade:José Godinho Lopes,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:presidente,contexto:presidente das osgas,entidade:José Godinho Lopes,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:presidente,contexto:presidente dos submissos clube do porto,entidade:José Godinho Lopes,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:presidente,contexto:presidente dos submissos,entidade:José Godinho Lopes,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:presidente,contexto:presidente do zbordem,entidade:José Godinho Lopes,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:presidente,contexto:presidente do zbording,entidade:José Godinho Lopes,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:presidente,contexto:presidente sportinguista,entidade:José Godinho Lopes,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:presidente,contexto:presidente verde,entidade:José Godinho Lopes,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:jorge,contexto:jorge jesus,entidade:Jorge Jesus,tipo:nome,POL:0,ambiguidade:0
+nucleo:jj,contexto:jj,entidade:Jorge Jesus,tipo:sigla,POL:0,ambiguidade:0.5
+nucleo:mister,contexto:mister do slb,entidade:Jorge Jesus,tipo:sigla,POL:0,ambiguidade:0
+nucleo:mister,contexto:mister do s.l.b,entidade:Jorge Jesus,tipo:sigla,POL:0,ambiguidade:0
+nucleo:mister,contexto:mister do s l b,entidade:Jorge Jesus,tipo:sigla,POL:0,ambiguidade:0
+nucleo:mister,contexto:mister do sport lisboa e benfica,entidade:Jorge Jesus,tipo:nome,POL:0,ambiguidade:0
+nucleo:mister,contexto:mister do benfica,entidade:Jorge Jesus,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:mister,contexto:mister do s.l.benfica,entidade:Jorge Jesus,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:mister,contexto:mister do s.l benfica,entidade:Jorge Jesus,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:mister,contexto:mister do s l benfica,entidade:Jorge Jesus,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:mister,contexto:mister do sl benfica,entidade:Jorge Jesus,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:mister,contexto:mister do slbenfica,entidade:Jorge Jesus,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:mister,contexto:mister do glorioso,entidade:Jorge Jesus,tipo:alcunha,POL:1,ambiguidade:0.5
+nucleo:mister,contexto:mister do clube da luz,entidade:Jorge Jesus,tipo:alcunha,POL:0,ambiguidade:0
+nucleo:mister,contexto:mister do clube encarnado,entidade:Jorge Jesus,tipo:alcunha,POL:0,ambiguidade:0.5
+nucleo:mister,contexto:mister das águias,entidade:Jorge Jesus,tipo:alcunha,POL:0,ambiguidade:0.5
+nucleo:mister,contexto:mister das gaivotas,entidade:Jorge Jesus,tipo:alcunha,POL:-1,ambiguidade:0.75
+nucleo:mister,contexto:mister das gayvotas,entidade:Jorge Jesus,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:mister,contexto:mister do benfilixo,entidade:Jorge Jesus,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:mister,contexto:mister dos lampiões,entidade:Jorge Jesus,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:mister,contexto:mister jesus,entidade:Jorge Jesus,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:mister,contexto:mister jorge jesus,entidade:Jorge Jesus,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador do slb,entidade:Jorge Jesus,tipo:sigla,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador do s.l.b,entidade:Jorge Jesus,tipo:sigla,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador do s l b,entidade:Jorge Jesus,tipo:sigla,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador do sport lisboa e benfica,entidade:Jorge Jesus,tipo:nome,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador do benfica,entidade:Jorge Jesus,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:treinador,contexto:treinador do s.l.benfica,entidade:Jorge Jesus,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador do s.l benfica,entidade:Jorge Jesus,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador do s l benfica,entidade:Jorge Jesus,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador do sl benfica,entidade:Jorge Jesus,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador do slbenfica,entidade:Jorge Jesus,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador do glorioso,entidade:Jorge Jesus,tipo:alcunha,POL:1,ambiguidade:0.5
+nucleo:treinador,contexto:treinador do clube da luz,entidade:Jorge Jesus,tipo:alcunha,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador do clube encarnado,entidade:Jorge Jesus,tipo:alcunha,POL:0,ambiguidade:0.5
+nucleo:treinador,contexto:treinador das águias,entidade:Jorge Jesus,tipo:alcunha,POL:0,ambiguidade:0.5
+nucleo:treinador,contexto:treinador das gaivotas,entidade:Jorge Jesus,tipo:alcunha,POL:-1,ambiguidade:0.75
+nucleo:treinador,contexto:treinador das gayvotas,entidade:Jorge Jesus,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:treinador,contexto:treinador do benfilixo,entidade:Jorge Jesus,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:treinador,contexto:treinador dos lampiões,entidade:Jorge Jesus,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:treinador,contexto:treinador jesus,entidade:Jorge Jesus,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador jorge jesus,entidade:Jorge Jesus,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador benfiquista,entidade:Jorge Jesus,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador encarnado,entidade:Jorge Jesus,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:vitor,contexto:vítor pereira,entidade:Vítor Pereira,tipo:nome,POL:0,ambiguidade:0.5
+nucleo:mister,contexto:mister vítor pereira,entidade:Vítor Pereira,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:mister,contexto:mister pereira,entidade:Vítor Pereira,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:mister,contexto:mister do fcp,entidade:Vítor Pereira,tipo:sigla,POL:0,ambiguidade:0
+nucleo:mister,contexto:mister do f.c.p,entidade:Vítor Pereira,tipo:sigla,POL:0,ambiguidade:0
+nucleo:mister,contexto:mister do f c p,entidade:Vítor Pereira,tipo:sigla,POL:0,ambiguidade:0
+nucleo:mister,contexto:mister do futebol clube do porto,entidade:Vítor Pereira,tipo:nome,POL:0,ambiguidade:0
+nucleo:mister,contexto:mister do porto,entidade:Vítor Pereira,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:mister,contexto:mister do f.c.porto,entidade:Vítor Pereira,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:mister,contexto:mister do f.c porto,entidade:Vítor Pereira,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:mister,contexto:mister do f c porto,entidade:Vítor Pereira,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:mister,contexto:mister do fc porto,entidade:Vítor Pereira,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:mister,contexto:mister do fcporto,entidade:Vítor Pereira,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:mister,contexto:mister dos dragões,entidade:Vítor Pereira,tipo:alcunha,POL:0,ambiguidade:0.5
+nucleo:mister,contexto:mister dos dragays,entidade:Vítor Pereira,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:mister,contexto:mister do clube corrupto,entidade:Vítor Pereira,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:mister,contexto:mister do clube da fruta,entidade:Vítor Pereira,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:mister,contexto:mister do clube do café com leite,entidade:Vítor Pereira,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:mister,contexto:mister do fruta corrupção e putedo,entidade:Vítor Pereira,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:treinador,contexto:treinador vítor pereira,entidade:Vítor Pereira,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador pereira,entidade:Vítor Pereira,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador do fcp,entidade:Vítor Pereira,tipo:sigla,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador do f.c.p,entidade:Vítor Pereira,tipo:sigla,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador do f c p,entidade:Vítor Pereira,tipo:sigla,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador do futebol clube do porto,entidade:Vítor Pereira,tipo:nome,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador do porto,entidade:Vítor Pereira,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:treinador,contexto:treinador do f.c.porto,entidade:Vítor Pereira,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador do f.c porto,entidade:Vítor Pereira,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador do f c porto,entidade:Vítor Pereira,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador do fc porto,entidade:Vítor Pereira,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador do fcporto,entidade:Vítor Pereira,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador dos dragões,entidade:Vítor Pereira,tipo:alcunha,POL:0,ambiguidade:0.5
+nucleo:treinador,contexto:treinador dos dragays,entidade:Vítor Pereira,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:treinador,contexto:treinador do clube corrupto,entidade:Vítor Pereira,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:treinador,contexto:treinador do clube da fruta,entidade:Vítor Pereira,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:treinador,contexto:treinador do clube do café com leite,entidade:Vítor Pereira,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:treinador,contexto:treinador do fruta corrupção e putedo,entidade:Vítor Pereira,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:treinador,contexto:treinador portista,entidade:Vítor Pereira,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador azul,entidade:Vítor Pereira,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:domingos,contexto:domingos paciencia,entidade:Domingos Paciencia,tipo:nome,POL:0,ambiguidade:0
+nucleo:mister,contexto:mister domingos paciencia,entidade:Domingos Paciencia,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:mister,contexto:mister domingos,entidade:Domingos Paciencia,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:mister,contexto:mister do scp,entidade:Domingos Paciencia,tipo:sigla,POL:0,ambiguidade:0
+nucleo:mister,contexto:mister do s.c.p,entidade:Domingos Paciencia,tipo:sigla,POL:0,ambiguidade:0
+nucleo:mister,contexto:mister do s c p,entidade:Domingos Paciencia,tipo:sigla,POL:0,ambiguidade:0
+nucleo:mister,contexto:mister do sporting clube de portugal,entidade:Domingos Paciencia,tipo:nome,POL:0,ambiguidade:0
+nucleo:mister,contexto:mister do sporting,entidade:Domingos Paciencia,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:mister,contexto:mister do sporting lisboa,entidade:Domingos Paciencia,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:mister,contexto:mister do sporting.c.p,entidade:Domingos Paciencia,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:mister,contexto:mister do sportingcp,entidade:Domingos Paciencia,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:mister,contexto:mister do sporting c.p,entidade:Domingos Paciencia,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:mister,contexto:mister do sporting c p,entidade:Domingos Paciencia,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:mister,contexto:mister do sporting cp,entidade:Domingos Paciencia,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:mister,contexto:mister dos leões,entidade:Domingos Paciencia,tipo:alcunha,POL:0,ambiguidade:0.5
+nucleo:mister,contexto:mister dos lagartos,entidade:Domingos Paciencia,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:mister,contexto:mister da lagartagem,entidade:Domingos Paciencia,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:mister,contexto:mister das osgas,entidade:Domingos Paciencia,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:mister,contexto:mister dos submissos clube do porto,entidade:Domingos Paciencia,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:mister,contexto:mister dos submissos,entidade:Domingos Paciencia,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:mister,contexto:mister do zbordem,entidade:Domingos Paciencia,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:mister,contexto:mister do zbording,entidade:Domingos Paciencia,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:treinador,contexto:treinador domingos paciencia,entidade:Domingos Paciencia,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador domingos,entidade:Domingos Paciencia,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador do scp,entidade:Domingos Paciencia,tipo:sigla,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador do s.c.p,entidade:Domingos Paciencia,tipo:sigla,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador do s c p,entidade:Domingos Paciencia,tipo:sigla,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador do sporting clube de portugal,entidade:Domingos Paciencia,tipo:nome,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador do sporting,entidade:Domingos Paciencia,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:treinador,contexto:treinador do sporting lisboa,entidade:Domingos Paciencia,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador do sporting.c.p,entidade:Domingos Paciencia,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador do sportingcp,entidade:Domingos Paciencia,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador do sporting c.p,entidade:Domingos Paciencia,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador do sporting c p,entidade:Domingos Paciencia,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador do sporting cp,entidade:Domingos Paciencia,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador dos leões,entidade:Domingos Paciencia,tipo:alcunha,POL:0,ambiguidade:0.5
+nucleo:treinador,contexto:treinador dos lagartos,entidade:Domingos Paciencia,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:treinador,contexto:treinador da lagartagem,entidade:Domingos Paciencia,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:treinador,contexto:treinador das osgas,entidade:Domingos Paciencia,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:treinador,contexto:treinador dos submissos clube do porto,entidade:Domingos Paciencia,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:treinador,contexto:treinador dos submissos,entidade:Domingos Paciencia,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:treinador,contexto:treinador do zbordem,entidade:Domingos Paciencia,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:treinador,contexto:treinador do zbording,entidade:Domingos Paciencia,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:treinador,contexto:treinador sportinguista,entidade:Domingos Paciencia,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:treinador,contexto:treinador verde,entidade:Domingos Paciencia,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:choramingas,contexto:choramingas paciencia,entidade:Domingos Paciencia,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:choramingas,contexto:choramingas,entidade:Domingos Paciencia,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:pablo,contexto:pablo aimar,entidade:Pablo Aimar,tipo:nome,POL:0,ambiguidade:0
+nucleo:pablo,contexto:pablo,entidade:Pablo Aimar,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:aimar,contexto:aimar,entidade:Pablo Aimar,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:pablito,contexto:pablito aimar,entidade:Pablo Aimar,tipo:alternativo,POL:1,ambiguidade:0
+nucleo:pablito,contexto:pablito,entidade:Pablo Aimar,tipo:alternativo,POL:1,ambiguidade:0.5
+nucleo:mago,contexto:mago,entidade:Pablo Aimar,tipo:alternativo,POL:1,ambiguidade:0.5
+nucleo:luisao,contexto:luisão,entidade:Luisão,tipo:nome,POL:0,ambiguidade:0
+nucleo:girafa,contexto:girafa,entidade:Luisão,tipo:alcunha,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do slb,entidade:Luisão,tipo:sigla,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do s.l.b,entidade:Luisão,tipo:sigla,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do s l b,entidade:Luisão,tipo:sigla,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do sport lisboa e benfica,entidade:Luisão,tipo:nome,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do benfica,entidade:Luisão,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do s.l.benfica,entidade:Luisão,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do s.l benfica,entidade:Luisão,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do s l benfica,entidade:Luisão,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do sl benfica,entidade:Luisão,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do slbenfica,entidade:Luisão,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do glorioso,entidade:Luisão,tipo:alcunha,POL:1,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do clube da luz,entidade:Luisão,tipo:alcunha,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do clube encarnado,entidade:Luisão,tipo:alcunha,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão das águias,entidade:Luisão,tipo:alcunha,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão das gaivotas,entidade:Luisão,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:capitao,contexto:capitão das gayvotas,entidade:Luisão,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do benfilixo,entidade:Luisão,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:capitao,contexto:capitão dos lampiões,entidade:Luisão,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:capitao,contexto:capitão encarnado,entidade:Luisão,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão benfiquista,entidade:Luisão,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:oscar,contexto:oscar cardozo,entidade:Oscar Cardozo,tipo:nome,POL:0,ambiguidade:0
+nucleo:oscar,contexto:oscar tacuara cardozo,entidade:Oscar Cardozo,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:oscar,contexto:oscar takuara cardozo,entidade:Oscar Cardozo,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:oscar,contexto:oscar tacuara,entidade:Oscar Cardozo,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:oscar,contexto:oscar takuara,entidade:Oscar Cardozo,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:tacuara,contexto:tacuara cardozo,entidade:Oscar Cardozo,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:takuara,contexto:takuara cardozo,entidade:Oscar Cardozo,tipo:alternativo,POL:0,ambiguidade:0
+nucleo:tacuara,contexto:tacuara,entidade:Oscar Cardozo,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:takuara,contexto:takuara,entidade:Oscar Cardozo,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:cardozo,contexto:tacuara cardozo,entidade:Oscar Cardozo,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:cristian,contexto:cristian rodríguez,entidade:Cristian Rodríguez,tipo:nome,POL:0,ambiguidade:0
+nucleo:rodriguez,contexto:rodríguez,entidade:Cristian Rodríguez,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:cebola,contexto:cebola,entidade:Cristian Rodríguez,tipo:alcunha,POL:0,ambiguidade:0.5
+nucleo:helton,contexto:helton,entidade:Helton,tipo:nome,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do fcp,entidade:Helton,tipo:sigla,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do f.c.p,entidade:Helton,tipo:sigla,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do f c p,entidade:Helton,tipo:sigla,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do futebol clube do porto,entidade:Helton,tipo:nome,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do porto,entidade:Helton,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do f.c.porto,entidade:Helton,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do f.c porto,entidade:Helton,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do f c porto,entidade:Helton,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do fc porto,entidade:Helton,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do fcporto,entidade:Helton,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão dos dragões,entidade:Helton,tipo:alcunha,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão dos dragays,entidade:Helton,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do clube corrupto,entidade:Helton,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do clube da fruta,entidade:Helton,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do clube do café com leite,entidade:Helton,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do fruta corrupção e putedo,entidade:Helton,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:hulk,contexto:hulk,entidade:Hulk,tipo:nome,POL:0,ambiguidade:0.5
+nucleo:incrivel,contexto:o incrivel hulk,entidade:Hulk,tipo:alternativo,POL:1,ambiguidade:0.5
+nucleo:givanildo,contexto:givanildo,entidade:Hulk,tipo:alternativo,POL:-1,ambiguidade:0.5
+nucleo:holk,contexto:holk,entidade:holk,tipo:alcunha,POL:-1,ambiguidade:0
+nucleo:diego,contexto:diego capel,entidade:Diego Capel,tipo:nome,POL:0,ambiguidade:0.5
+nucleo:capel,contexto:capel,entidade:Diego Capel,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:polga,contexto:polga,entidade:Polga,tipo:nome,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do scp,entidade:Polga,tipo:sigla,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do s.c.p,entidade:Polga,tipo:sigla,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do s c p,entidade:Polga,tipo:sigla,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do sporting clube de portugal,entidade:Polga,tipo:nome,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do sporting,entidade:Polga,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do sporting lisboa,entidade:Polga,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do sporting.c.p,entidade:Polga,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do sportingcp,entidade:Polga,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do sporting c.p,entidade:Polga,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do sporting c p,entidade:Polga,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do sporting cp,entidade:Polga,tipo:alternativo,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão dos leões,entidade:Polga,tipo:alcunha,POL:0,ambiguidade:0.5
+nucleo:capitao,contexto:capitão dos lagartos,entidade:Polga,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:capitao,contexto:capitão da lagartagem,entidade:Polga,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:capitao,contexto:capitão das osgas,entidade:Polga,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:capitao,contexto:capitão dos submissos clube do porto,entidade:Polga,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:capitao,contexto:capitão dos submissos,entidade:Polga,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do zbordem,entidade:Polga,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:capitao,contexto:capitão do zbording,entidade:Polga,tipo:alcunha,POL:-1,ambiguidade:0.5
+nucleo:elias,contexto:elias,entidade:elias,tipo:nome,POL:0,ambiguidade:0.5
+nucleo:futebol,contexto:futebol,entidade:desporto,tipo:topico,POL:0,ambiguidade:0
+nucleo:jogador,contexto:jogador,entidade:desporto,tipo:topico,POL:0,ambiguidade:0
+nucleo:capitao,contexto:capitão,entidade:desporto,tipo:topico,POL:0,ambiguidade:0.5
+nucleo:defesa,contexto:defesa,entidade:desporto,tipo:topico,POL:0,ambiguidade:0.5
+nucleo:medio,contexto:medio,entidade:desporto,tipo:topico,POL:0,ambiguidade:0.5
+nucleo:avancado,contexto:avançado,entidade:desporto,tipo:topico,POL:0,ambiguidade:0
+nucleo:lateral,contexto:lateral,entidade:desporto,tipo:topico,POL:0,ambiguidade:0.5
+nucleo:ala,contexto:ala,entidade:desporto,tipo:topico,POL:0,ambiguidade:0.5
+nucleo:extremo,contexto:extremo,entidade:desporto,tipo:topico,POL:0,ambiguidade:0.5
+nucleo:treinador,contexto:treinador,entidade:desporto,tipo:topico,POL:0,ambiguidade:0
+nucleo:estadio,contexto:estádio,entidade:desporto,tipo:topico,POL:0,ambiguidade:0
+nucleo:clube,contexto:clube,entidade:desporto,tipo:topico,POL:0,ambiguidade:0.5
+nucleo:mister,contexto:mister,entidade:desporto,tipo:topico,POL:0,ambiguidade:0
+nucleo:sport,contexto:sport,entidade:desporto,tipo:topico,POL:0,ambiguidade:0
+nucleo:claque,contexto:claque,entidade:desporto,tipo:topico,POL:0,ambiguidade:0
+nucleo:adeptos,contexto:adeptos,entidade:desporto,tipo:topico,POL:0,ambiguidade:0
+nucleo:sporting,contexto:sporting,entidade:desporto,tipo:topico,POL:0,ambiguidade:0.5
