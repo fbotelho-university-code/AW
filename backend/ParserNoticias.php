@@ -60,7 +60,7 @@
 					//rela‹o entre noticiaEClubes
 					$rel = NoticiasClubes::find(array("idnoticia" => $noticia->getIdnoticia(), "idclube" => $lexicoClubes->getIdClube())); 
 					if (!$rel){
-						$rel = new NoticiasClubes(); 
+						$rel = new NoticiasClubes($noticia->getIdnoticia(), $); 
 					}
 					$rel->addQualificacao($lexico->getPol()){
 					}

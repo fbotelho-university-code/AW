@@ -323,6 +323,7 @@ class Noticia {
 		$dao = new DAO();
 		$dao->connect();
 		
+		
 		/** Apaga todas as noticias da base de dados associadas à fonte de informação **/
 		if(count($fields) > 0) {
 			$sql = "DELETE FROM noticia WHERE idfonte = ".$fields[0]["idfonte"];
