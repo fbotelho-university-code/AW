@@ -58,8 +58,8 @@ class SapoClient extends Fonte {
 			foreach($items as $news) {
 				$myNew = new Noticia(); 
 	 			$myNew->setIdfonte($this->idfonte);
-	 			$myNew->setData_pub(isset($news["title"]) ?
-	 									addslashes($news["title"])
+	 			$myNew->setData_pub(isset($news["dataPub"]) ?
+	 									Util::formatDateToDB($news["dataPub"])
 	 									: "");
 	 			$myNew->setAssunto(isset($news["title"]) ?
 	 									addslashes($news["title"])
@@ -73,7 +73,9 @@ class SapoClient extends Fonte {
 				$myNew->setUrl(isset($news["link"]) ?
 										addslashes($news["link"])
 										: ""); 
-					
+				
+				//ParserNoticia::parseNoticia($myNew);
+				var_dump($myNew);
 				$results[] = $myNew;
 			}
 		}
