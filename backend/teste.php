@@ -4,11 +4,15 @@ require_once "./lib/Util.php";
 require_once "./classes/DAO.php";
 require_once "./classes/Noticia.php";
 require_once "./classes/Clube.php";
+require_once "./classes/Local.php";
+require_once "ParserNoticias.php";
 
-$c = new Clube();
+$n = new Noticia();
 
-$clubes = $c->getAll();
+$n->getObjectById(1);
 
-var_dump($clubes);
+ParserNoticias::parseNoticia($n);
+
+
 
 ?>
