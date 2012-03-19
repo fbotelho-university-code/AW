@@ -7,7 +7,7 @@ class DAO extends ADOConnection {
 	private $mysgbd = "mysql";
 	private $myserver = "localhost";
 	private $myuser = "root";
-	private $mypassword = "pcdamf06";
+	private $mypassword = "fabiim";
 	private $mydbName = "aw";
 	
 	public $db;

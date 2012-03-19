@@ -241,6 +241,7 @@ class Noticia extends DAO{
 	public function setVisivel($v) {
 		$this->visivel = $v;
 	}
+
 }
 
 ?>

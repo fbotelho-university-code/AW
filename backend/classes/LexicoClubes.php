@@ -9,10 +9,12 @@
 	private $idclube; 
 	private $idlexico; 
 	
+	
 	public function getIdClube(){return $this->idclube;}  
 	public function getIdLexico() {return $this->idlexico; }
 	public function setIdClube($p) {$this->idclube = $p; }
 	public function setIdLexico($p) {$this->idlexico = $p; }
+	
 	
  		public static function find ($fields){
 			$sql = 'select * from clubes_lexico where ';
@@ -42,14 +44,14 @@
 			
 			while (!$rs->EOF){
 //				echo '<br/> one more <br/>';
-				$values[] = Lexico::fromHash($rs->fields);
+				$values[] = LexicoClubes::fromHash($rs->fields);
 				$rs->MoveNext(); 
 			}
 			return $values;  
 		}
 		
 		public static function fromHash($fields){
-			$ob = new $LexicoClubes(); 
+			$ob = new LexicoClubes(); 
 			$ob->setIdClube($fields["idclube"]); 
 			$ob->setIdLexico($fields["idlexico"]); 
 			return $ob; 
