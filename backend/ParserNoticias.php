@@ -4,14 +4,14 @@
  * TODO - meter este câ€”digo na prâ€”pria classe Noticia 
  */
  
- include ('./classes/Noticia.php'); 
- include ('./classes/Local.php');
- include ('./classes/Lexico.php'); 
- include ('./classes/LexicoClubes.php'); 
- include ('./classes/NoticiasClubes.php');  
- include ('./classes/NoticiasLocais.php'); 
- include ("./adodb/adodb.inc.php");
- include ("./classes/DAO.php");
+ require_once ('./classes/Noticia.php'); 
+ require_once ('./classes/Local.php');
+ require_once ('./classes/Lexico.php'); 
+ require_once ('./classes/LexicoClubes.php'); 
+ require_once ('./classes/NoticiasClubes.php');  
+ require_once ('./classes/Noticia_locais.php'); 
+ require_once ("./adodb/adodb.inc.php");
+ require_once ("./classes/DAO.php");
 
 
 /*
@@ -30,31 +30,29 @@
 			//lexico de futebol
 			//Clubes/integrantes
 			//referencias espacial
-			$noticia->save();
-			
-			//TODO - criar rela‹o Noticia/Locais 
+			$idnoticia = $noticia->add();
+			$noticia->setIdnoticia($idnoticia);
+			ParserNoticias::findLocais($noticia);
+			//TODO - criar relaï¿½ï¿½o Noticia/Locais 
 			//	ParserNoticias::findLocais($noticia);
 			
-			ParserNoticias::findClubes($noticia); 
+			//ParserNoticias::findClubes($noticia); 
 			//referencias temporal 
 		}
 		
 		private static function findLocais($noticia){
-<<<<<<< HEAD
-			//TODO - ir buscar isto de cada vez Å½ um bocado desperdicio. 
-			$locais = Local::getAll();
-			
-=======
-			//TODO - ir buscar isto de cada vez Ž um bocado desperdicio de computa‹o 
-			$locais = Local::getAll();			
->>>>>>> origin/master
+
+			$l = new Local();
+			$locais = $l->getAll();
 			$textoNoticia = $noticia->getTexto();
-			
 			foreach ($locais as $local){
 				$nome_local = ' ' . $local->getNome_local() . ' ';   // para encontrar palavra exacta e nao no meio de outra palavra 
-				$pos = stripos($textoNoticia , $local->getNome_local());
+				$pos = stripos($textoNoticia , $nome_local);
 				if ($pos !== false){
-					NoticiasLocais::insertByObject($noticia, $local);
+					$n_l = new Noticia_locais();
+					$n_l->setIdnoticia($noticia->getIdNoticia());
+					$n_l->setIdlocal($local->getIdlocal());
+					$n_l->add();
 				} 
 			}
 		}
@@ -67,7 +65,7 @@
 				$pos = stripos($textoNoticia, $lexico->getContexto());
 				if ($pos !== false){
 					//Find the clube associated with lexico. 
-<<<<<<< HEAD
+
 					//TODO - lexico poderia estar associado a mais que um clube !  
 					//Assumindo que sâ€” vai ser associado a um: 
 					$lexClubes = LexicoClubes::find(array("idlexico" => $lexico->getIdlexico()));
@@ -78,15 +76,15 @@
 						//$rel = new NoticiasClubes($noticia->getIdnoticia(), $); 
 					}
 					//$rel->addQualificacao($lexico->getPol()){
-=======
+
 					//TODO - lexico poderia estar associado a mais que um clube !
 					//TODO - lexico pode nao estar associado a nenhum clube   
-					//Assumindo que s— vai ser associado a um: 
+					//Assumindo que sï¿½ vai ser associado a um: 
 					$lexClubes = LexicoClubes::find(array("idlexico" => $lexico->getIdlexico()));
 					if (count(lexClubes) > 0){
 						$lexClube = $lexClubes[0]; 
 						var_dump($lexClube); 
-						//rela‹o entre noticiaEClubes
+						//relaï¿½ï¿½o entre noticiaEClubes
 						$rel = NoticiasClubes::find(array("idnoticia" => $noticia->getIdnoticia(), "idclube" => $lexClube->getIdClube())); 
 						var_dump($rel); 
 						
@@ -100,21 +98,11 @@
 						
 						$rel->addQualificacao($lexico->getPol());
 						$rel->update(); 
->>>>>>> origin/master
 					}
 				}
 			}
 		}
 		
-<<<<<<< HEAD
-		//private static function findIntegrantes($noticia){
-				
-		//} 
-		
-		//private static function findTemporal($noticia){
-			
-		//}
-=======
 			
 		private static function findIntegrantes($noticia){
 		
@@ -123,11 +111,10 @@
 		private static function findTemporal($noticia){
 		
 		}
->>>>>>> origin/master
 		
-    //}
+}
 
-$dao = new DAO(); 
+/*$dao = new DAO(); 
 $dao->connect(); 
 $dao->execute("truncate table noticia"); 
 $noticia = new Noticia();
@@ -135,5 +122,5 @@ $noticia = new Noticia();
 $noticia->setIdnoticia(32);
 $noticia->setIdfonte(1); 
 $noticia->setTexto(file_get_contents("./exemploNoticia.html")); 
-ParserNoticias::parseNoticia($noticia);      
+ParserNoticias::parseNoticia($noticia); */     
 ?>

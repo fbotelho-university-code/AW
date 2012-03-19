@@ -1,6 +1,6 @@
 <?php
 
-
+require_once "classes/DAO.php";
 
 /**
 * Classe que representa um local. Pode ser um Distrito, Ilha ou Concelho de Portugal
@@ -11,43 +11,32 @@
 * @package backend.classes
 * @version 1.0 20120305
 */
-class Local {
-	/**
-	 * Criar instancia Local a partir de um array Associativo
-	 * @param $map O array associativo com todos os campos de local 
-	 * @return O Objecto local correspondente 
-	 */
-	 
-	public static function fromHash( $map){
-		$l = new Local(); 
-		$l->setIdlocal($map["idlocal"]);
-		$l->setNome_local($map["nome_local"]); 
-		$l->setCoordenadas($map["coordenadas"]);
-		return $l;   	
-	}
+class Local extends DAO{
 	
 	/**
 	* Identificador do local
 	* @var int
 	*/
-	private $idlocal;
+	var $idlocal;
 	
 	/**
 	* Nome do local
 	* @var String
 	*/
-	private $nome_local;
+	var $nome_local;
 	
 	/**
 	* Coordenadas do local
 	* @var String
 	*/
-	private $coordenadas;
+	var $coordenadas;
 	
 	/**
 	* Contrutor da classe.
 	*/
-	public function __contruct() {}
+	public function __construct() {
+		parent::__construct();
+	}
 	
 	/**
 	* Retorna o identificador do local
@@ -104,67 +93,6 @@ class Local {
 		if ($this->nome_local) $str .= ' Nome : ' . $this->nome_local;  
 		if ($this->coordenadas) $str .= ' Coordenadas : ' . $this->coordenadas;
 		return $str; 
-	}
-	
-	/**
-	* Insere um local na Base de Dados
-	* @param Array $fields Array com os locais recolhidos da fonte de informação Geo-Net-PT
-	* 					   O parâmetro deve ser uma array associativo, onde  as chaves devem 
-	*                      representar o nome de todas as coluna da tabela 'local' e o valor 
-	*                      associado a chave deve ser o valor a ser inserido na tabela.
-	* @return String $msg Mensagem sobre a execução da operação
-	*/
-	public function insert($fields) {
-		
-		/** Mesnagem de Retorno **/
-		$msg = "";
-		
-		/** Conexão com a Base de Dados **/
-		$dao = new DAO();
-		$dao->connect();
-		
-		//Apaga todas as noticias da fonte de informação
-		$sql = "TRUNCATE TABLE local";
-		$rs = $dao->db->Execute($sql) or die($dao->db->ErrorMsg());
-		
-		//Insere todos os locais
-		foreach ($fields as $local) {
-			$rs = $dao->db->AutoExecute("local", $local, "INSERT") or die($dao->db->ErrorMsg());
-			if(!$rs) {
-				$msg = "Erro na inserção de local<br>";
-			}
-		}
-		$dao->disconnect();
-		$msg = "Foram inseridos ".count($fields)." locais.";
-		return $msg;
-	}
-	
-	/**
-	 * Consultar lista de todos os locais existentes
-	 * @return Um array de objectos Local
-	 */
-	 
-	public static function getAll(){
-		$dao = new DAO(); 
-		$dao->connect(); 
-		
-		$sql = "SELECT  * FROM local"; 
-		$rs = $dao->db->execute($sql);
-		
-		if (!$rs){
-		   die ($dao->db->ErrorMsg()); 
-		}
-		
-		$locais = array(); // array de locais para retornar
-		
-		while (!$rs->EOF){
-				$locais[] = Local::fromHash($rs->fields);
-				$rs->MoveNext();
-		}
-		
-		$rs->Close(); 
-		$dao->disconnect();
-		return $locais;
 	}
 }
 /*

@@ -7,7 +7,7 @@ class DAO extends ADOConnection {
 	private $mysgbd = "mysql";
 	private $myserver = "localhost";
 	private $myuser = "root";
-	private $mypassword = "fabiim";
+	private $mypassword = "pcdamf06";
 	private $mydbName = "aw";
 	
 	public $db;
@@ -88,10 +88,11 @@ class DAO extends ADOConnection {
 		$objects = array();
 		while(!$rs->EOF) {
 			$arrayAssoc = $rs->fields;
+			$obj = new $table;
 			foreach($arrayAssoc as $key => $value) {
-				$this->$key = $value;
+				$obj->$key = $value;
 			}
-			$objects[] = $this;
+			$objects[] = $obj;
 			$rs->MoveNext();
 		}
 		return $objects;

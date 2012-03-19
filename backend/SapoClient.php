@@ -1,11 +1,12 @@
 <?php
 
-require "lib/rss_php.php";
-include "lib/Util.php";
-include "lib/simple_html_dom.php";
-include "./classes/DAO.php";
-include "./classes/Noticia.php";
-include "./classes/Fonte.php";
+require_once "lib/rss_php.php";
+require_once "lib/Util.php";
+require_once "lib/simple_html_dom.php";
+require_once "./classes/DAO.php";
+require_once "./classes/Noticia.php";
+require_once "./classes/Fonte.php";
+require_once "ParserNoticias.php";
 
 /**
  * 
@@ -71,8 +72,8 @@ class SapoClient extends Fonte {
 										addslashes($news["link"])
 										: "");
 				//TODO Caracterização Semantica da Notícia				
-				//ParserNoticia::parseNoticia($myNew);
-				var_dump($myNew);
+				ParserNoticias::parseNoticia($myNew);
+				//var_dump($myNew);
 			}
 		}
 	}
