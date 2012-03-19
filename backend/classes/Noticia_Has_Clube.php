@@ -47,7 +47,9 @@ require_once("DAO.php");
 			else {
 				$query = "insert into noticia_has_clube values (" . $this->idnoticia . "," . $this->idclube . ", " . $this->qualificacao . ")";
 			}
+			
 			$rs = $ado->execute($query);
+			
 			//TODO check if failed. 
 		}
 		

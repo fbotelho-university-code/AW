@@ -8,11 +8,11 @@ include "./classes/Fonte.php";
 //ini_set('default_charset','UTF-8');
 
 /**
-* Classe responsável pelo consulta ao Serviço Geo-Net-PT para armazenamento das referências espaciais
+* Classe responsï¿½vel pelo consulta ao Serviï¿½o Geo-Net-PT para armazenamento das referï¿½ncias espaciais
 *
 * @author Anderson Barretto - Nr 42541
-* @author Fábio Botelho 	 - Nr 41625
-* @author José Lopes		 - Nr 42437
+* @author Fï¿½bio Botelho 	 - Nr 41625
+* @author Josï¿½ Lopes		 - Nr 42437
 * @author Nuno Marques		 - Nr 42809
 * @package backend
 * @version 1.0 20120305
@@ -29,9 +29,9 @@ class GeoNetPtClient extends Fonte {
 	}
 	
 	/**
-	 * Busca informções sobre as referências espaciais na fonte Geo-Net-PT
+	 * Busca informï¿½ï¿½es sobre as referï¿½ncias espaciais na fonte Geo-Net-PT
 	 * @param Array $parameters Array com queries SparQL
-	 * @return Array $places Array com informações sobre os locais (nome e corrdenadas)
+	 * @return Array $places Array com informaï¿½ï¿½es sobre os locais (nome e corrdenadas)
 	 */
 	public function search($parameters) {
 		foreach($parameters as $query) {

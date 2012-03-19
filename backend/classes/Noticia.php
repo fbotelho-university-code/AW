@@ -25,10 +25,9 @@ class Noticia extends DAO{
 	var $idfonte;
 	
 	/**
-	 * Identificador de uma referencia local da notícia
 	 * @var int
 	 */
-	var $idlocal;
+
 	
 	/**
 	 * Data de publicação da notícia
@@ -42,7 +41,6 @@ class Noticia extends DAO{
 	 * Formato: AAAA-MM-DD HH:MM:SS
 	 * @var Date
 	 */
-	var $data_noticia;
 	
 	/**
 	 * Assunto da notícia
@@ -89,7 +87,7 @@ class Noticia extends DAO{
 	public function getIdnoticia() {
 		return $this->idnoticia;
 	}
-	
+		
 	/**
 	 * Altera o valor do identificador da notícia {@link $idnoticia}
 	 * @param int $id
@@ -115,22 +113,6 @@ class Noticia extends DAO{
 	}
 	
 	/**
-	* Retorna o identificador da referencia espacial da notícia
-	* @return int {@link $idlocal}
-	*/
-	public function getIdlocal() {
-		return $this->idlocal;
-	}
-	
-	/**
-	 * Altera o valor do identificador da referencia espacial da notícia {@link $idlocal}
-	 * @param int $id
-	 */
-	public function setIdlocal($id) {
-		$this->idlocal = $id;
-	}
-	
-	/**
 	 * Retorna a data de publicação da notícia
 	 * @return Date {@link $data_pub}
 	 */
@@ -147,20 +129,6 @@ class Noticia extends DAO{
 	}
 	
 	/**
-	 * Retorna uma data presente em uma notícia
-	 * @return Date {@link $data_noticia}
-	 */
-	public function getData_noticia() {
-		return $this->data_noticia;
-	}
-	
-	/**
-	* Altera o valor de uma data presente em uma notícia {@link $data_noticia}
-	* @param Date $date
-	*/
-	public function setData_noticia($date) {
-		$this->data_noticia = $date;
-	}
 	
 	/**
 	* Retorna o assunto da notícia

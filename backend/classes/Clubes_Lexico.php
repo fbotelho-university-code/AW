@@ -9,8 +9,7 @@ require_once("DAO.php");
  class Clubes_Lexico extends DAO{
 	var $idclube; 
 	var $idlexico; 
-	
-	
+
 	public function getIdClube(){return $this->idclube;}  
 	public function getIdLexico() {return $this->idlexico; }
 	public function setIdClube($p) {$this->idclube = $p; }

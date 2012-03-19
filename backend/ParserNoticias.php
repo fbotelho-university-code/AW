@@ -12,8 +12,10 @@
  require_once ('./classes/Noticia_locais.php'); 
  require_once ("./adodb/adodb.inc.php");
  require_once ("./classes/DAO.php");
+ require_once ('./classes/Noticia_Has_Integrante.php');
+ require_once ("./classes/Integrantes_Lexico.php"); 
 
-
+ 
 /*
  * Created on Mar 10, 2012
  *
@@ -43,7 +45,7 @@
 		
 		private static function findLocais($noticia){
 			$l = new Local();
-			$locais = $l->getAll(); // TODO  tirar getAll daqui. Tirar classe est‡tica. 
+			$locais = $l->getAll(); // TODO  tirar getAll daqui. Tirar classe estï¿½tica. 
 			$textoNoticia = $noticia->getTexto();
 			foreach ($locais as $local){
 				$nome_local = ' ' . $local->getNome_local() . ' ';   // para encontrar palavra exacta e nao no meio de outra palavra 
@@ -61,47 +63,53 @@
 			$Lexico = new Lexico();
 			$Clubes_Lexico = new Clubes_Lexico(); 
 			$Noticias_Clube = new Noticia_Has_Clube(); 
-			 
+			$Integrantes_Lexico = new Integrantes_Lexico(); 
+                        $Noticia_Integrante = new Noticia_Has_Integrante(); 
 			$textoNoticia = $noticia->getTexto(); 
+                        
 			$lexicos = $Lexico->getAll();
-			
+			                        
 			foreach($lexicos as $lexico){
 				$pos = stripos($textoNoticia, " " . $lexico->getContexto() . " ");
 				if ($pos !== false){
 					//Find the clube associated with lexico. 
 					//TODO - lexico poderia estar associado a mais que um clube !  
 					//Assumindo que sâ€” vai ser associado a um: 
-					echo '<br/> Found : ' . $lexico->getContexto(); 
+
 					$lexClubes = $Clubes_Lexico->findFirst(array("idlexico" => $lexico->getIdlexico()));
-					echo '<br/> ';
-					 
-					var_dump($lexClubes); 
-					echo '<br/>'; 
-					//TODO - e se nao houver 
-					
+					$lexIntegrantes = $Integrantes_Lexico->findFirst(array ("idlexico => $lexico->getIdlexico())")); 
 					if ($lexClubes){					
-						//rela‹o entre noticiaEClubes
+						//relaï¿½ï¿½o entre noticiaEClubes
 						$rel = $Noticias_Clube->findFirst(array("idnoticia" => $noticia->getIdnoticia(), "idclube" => $lexClubes->getIdClube()));
 
 						if (!$rel){
 							$rel = new Noticia_Has_Clube($noticia->getIdnoticia(), $lexClubes->getIdClube());
-							echo '<br/> AQUI: '; 
-							var_dump($rel); 
 							$rel->add();  
-							echo 'after';  
+							
 						}
 						$rel->addQualificacao($lexico->getPol());
-						//echo 'aqui';  
 						$rel->update();
-						//echo 'done';  
+					echo 'phase 1 <br/>';  
 					}
+                  if ($lexIntegrantes){
+                  	echo 'going to find first <br/>'; 
+                     $rel = $Noticia_Integrante->findFirst(array ("idnoticia" => $noticia->getIdnoticia(), "idintegrante" => $lexIntegrantes->getIdIntegrante())); 
+                     
+                     if (!$rel){
+                     	echo 'going to create relation <br/>'; 
+                          $rel = new Noticia_Has_Integrante($noticia->getIdnoticia(), $lexIntegrantes->getIdIntegrante()); 
+                          //echo '<br/> aqui <br/>';
+                          echo 'Printing id ' . $rel->getIdNoticia();  
+
+                          $rel->add(); 
+                          //echo '<br/> done <br/>';
+                      }
+                      $rel->addQualificacao($lexico->getPol()); 
+                      $rel->update(); 
+                   }
 				}
 			}
 		}
-		
-		private static function findIntegrantes($noticia){
-		
-		} 
 		
 		private static function findTemporal($noticia){
 					$regexes = array(
@@ -111,13 +119,13 @@
 /*4*/			'/\d{1,2}(\/|\-)(Jan|Fev|Mar|Abr|Mai|Jun|Jul|Ago|Set|Out|Nov|Dez)(\/|\-)\d{2}/',
 /*5*/			'/\d{1,2}(\/|\-)(Jan|Fev|Mar|Abr|Mai|Jun|Jul|Ago|Set|Out|Nov|Dez)(\/|\-)\d{4}/',
 /*6*/			'/\d{4}(\/|\-)(Jan|Fev|Mar|Abr|Mai|Jun|Jul|Ago|Set|Out|Nov|Dez)(\/|\-)\d{1,2}/',
-/*7*/			'/\d{1,2}(\ de\ |,\ ){0,1}(Janeiro|Fevereiro|Maro|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)(\ de\ |,\ ){0,1}\d{2}/',
-/*8*/			'/\d{1,2}(\ de\ |,\ ){0,1}(Janeiro|Fevereiro|Maro|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)(\ de\ |,\ ){0,1}\d{4}/',
-/*9*/			'/(Janeiro|Fevereiro|Maro|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)\ \d{1,2}(\ de\ |\ ){0,1}\d{2}/',
-/*10*/			'/(Janeiro|Fevereiro|Maro|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)\ \d{1,2}(\ de\ |,\ ){0,1}\d{4}/',
-/*11*/			'/(Janeiro|Fevereiro|Maro|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)\ \d{1,2}/',
-/*12*/			'/(Janeiro|Fevereiro|Maro|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)\ \d{4}/',
-/*13*/			'/(Janeiro|Fevereiro|Maro|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)/',
+/*7*/			'/\d{1,2}(\ de\ |,\ ){0,1}(Janeiro|Fevereiro|Marï¿½o|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)(\ de\ |,\ ){0,1}\d{2}/',
+/*8*/			'/\d{1,2}(\ de\ |,\ ){0,1}(Janeiro|Fevereiro|Marï¿½o|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)(\ de\ |,\ ){0,1}\d{4}/',
+/*9*/			'/(Janeiro|Fevereiro|MarÃ§o|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)\ \d{1,2}(\ de\ |\ ){0,1}\d{2}/',
+/*10*/			'/(Janeiro|Fevereiro|MarÃ§o|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)\ \d{1,2}(\ de\ |,\ ){0,1}\d{4}/',
+/*11*/			'/(Janeiro|Fevereiro|MarÃ§o|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)\ \d{1,2}/',
+/*12*/			'/(Janeiro|Fevereiro|MarÃ§o|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)\ \d{4}/',
+/*13*/			'/(Janeiro|Fevereiro|MarÃ§o|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)/',
 /*14*/			'/\d{4}/'
 			);
 		
@@ -146,6 +154,6 @@ $noticia = new Noticia();
 
 
 $noticia->setIdfonte(1); 
-$noticia->setTexto(file_get_contents("./exemploNoticia.html")); 
+$noticia->setTexto(addslashes(file_get_contents("./exemploNoticia.html"))); 
 ParserNoticias::parseNoticia($noticia);      
 ?>

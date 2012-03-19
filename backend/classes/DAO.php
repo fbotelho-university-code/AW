@@ -102,10 +102,7 @@ class DAO extends ADOConnection {
 	public function findFirst($fields){
 		$res = $this->find ($fields);
 
-		foreach ($res as $r){
-			echo '<br/>' . $r . '<br/>'; 			
-		}
-		
+
 		if (count($res) > 0 ) return $res[0]; 
 		return null;  
 	}
@@ -120,10 +117,12 @@ class DAO extends ADOConnection {
 			
 			$sql .= ';'; 
 
-			echo $sql; 
+			
 			$dao = new DAO(); 
-			$dao->connect(); 
+			$dao->connect();
+			echo "<br/>" . $sql . "<br/>";  
 			$rs = $dao->execute($sql);
+
 
 			if (!$rs){
 				
