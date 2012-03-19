@@ -18,6 +18,23 @@
 	public function setIdNoticia($p) {$this->idnoticia = $p; }
 	public function setQualificacao($p) {$this->qualificao = $p; }
 	
+	public function __construct($idNoticia, $idClube,$qualificao = 0){
+		$this->idclube = $idClube; 
+		$this->idnoticia = $idNoticia; 		
+		$this->qualificacao = $qualificao; 
+	}
+	
+	public function save(){
+		$values = NoticiasClubes::toHash($this); 
+		$dao = new DAO(); 
+		$dao->connect(); 
+		
+		$rs = $dao->db->AutoExecute("noticia_has_clube", $values, "INSERT"); 
+		
+		if (!$rs){
+			die ($dao->db->ErrorMsg()); 
+		}
+	}
  		public static function find ($fields){
 			$sql = 'select * from noticia_has_clube where ';
 			$i = 0;  
@@ -81,6 +98,11 @@
 			//TODO check if failed. 
 			 
 		}
-				
+	public static function toHash($objNoticiasClubes){
+		$array = array(); 
+		$array["idclube"] = $objNoticiasClubes->getIdClube(); 
+		$array["idnoticia"] = $obNoticiasClubes->getIdNoticia(); 
+		$array["qualificacao"] = $obNoticiasClubes->getQualificacao(); 
+	}			
  }	
  ?>

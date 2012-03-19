@@ -315,7 +315,6 @@ class Noticia {
 	 * @return String $msg Mensagem com informações sobre a execução da operação
 	 */
 	public function insert($fields) {
-		
 		/** Mensagemn de retorno **/
 		$msg = "";
 		

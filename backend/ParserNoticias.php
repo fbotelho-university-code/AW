@@ -18,7 +18,6 @@
  */
 
     class ParserNoticias {
-    	
     	/**
     	 * Efectua parsing de noticias
     	 * Efectua mudanas directamente na base de dados relativa ˆ noticia  
@@ -49,25 +48,30 @@
 		private static function findClubes($noticia){
 			$textoNoticia = $noticia->getTexto(); 
 			$lexicos = Lexico::getAll(); 
+		
 			foreach($lexicos as $lexico){
 				$pos = stripos($textoNoticia, $lexico->getContexto());
 				if ($pos !== false){
 					//Find the clube associated with lexico. 
-					//TODO - lexico poderia estar associado a mais que um clube !  
+					//TODO - lexico poderia estar associado a mais que um clube !
+					//TODO - lexico pode nao estar associado a nenhum clube   
 					//Assumindo que s— vai ser associado a um: 
+					 
 					$lexClubes = LexicoClubes::find(array("idlexico" => $lexico->getIdlexico()));
-					
-					//rela‹o entre noticiaEClubes
-					$rel = NoticiasClubes::find(array("idnoticia" => $noticia->getIdnoticia(), "idclube" => $lexicoClubes->getIdClube())); 
-					if (!$rel){
-						$rel = new NoticiasClubes($noticia->getIdnoticia(), $); 
-					}
-					$rel->addQualificacao($lexico->getPol()){
+					if (count(lexClubes) > 0){
+						//rela‹o entre noticiaEClubes
+						$rel = NoticiasClubes::find(array("idnoticia" => $noticia->getIdnoticia(), "idclube" => $lexClubes[0]->getIdClube())); 
+						if (!$rel){
+							$rel = new NoticiasClubes($noticia->getIdnoticia(), $lexClubes[0]->getIdClube());
+							$rel->save(); 
+						}
+						$rel->addQualificacao($lexico->getPol()); 
+						$rel->update(); 
 					}
 				}
 			}
 		}
-		
+			
 		private static function findIntegrantes($noticia){
 				
 		} 
