@@ -13,7 +13,7 @@ $dao = new DAO();
 $dao->connect();
 
 echo "Apagando todas as entradas da tabela 'integrante'...<br>";
-$sql = "TRUNCATE TABLE integrante";
+$sql = "DELETE FROM integrante WHERE 1";
 $dao->db->Execute($sql) or die($dao->db->ErrorMsg());
 echo "Tabela 'integrante' apagada!<br><br>";
 

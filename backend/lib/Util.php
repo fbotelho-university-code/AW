@@ -23,9 +23,14 @@ class Util {
  	* @return String //data em formato AAAA-MM-DD HH:MM:SS
  	*/
 	public static function formatDateToDB($stringDate) {
-		$date_db = substr($stringDate,5,20);
-		$date_db = explode(" ", $date_db);
-		$date_db_formated = $date_db[2]."-".Util::$meses[$date_db[1]]."-".$date_db[0]." ".$date_db[3];
+		if($stringDate == "") {
+			$date_db_formated = "0000-00-00 00:00:00";
+		}
+		else {
+			$date_db = substr($stringDate,5,20);
+			$date_db = explode(" ", $date_db);
+			$date_db_formated = $date_db[2]."-".Util::$meses[$date_db[1]]."-".$date_db[0]." ".$date_db[3];
+		}
 		return $date_db_formated;
 	}
 
@@ -65,7 +70,33 @@ class Util {
     	}
 
    	 	return $text;
-	}	
+	}
+	
+	/**
+	 * Busca todos os parâmetros para realizar pesquisas em fontes de informação.
+	 * Os parâmetros são todos os nomes de clube e de integrantes cadastrados no banco de dados
+	 * @return String[] $param
+	 */
+	public static function getSearchParameters() {
+		$dao = new DAO();
+		$param = array();
+		
+		$sqlClube = "SELECT nome_clube FROM clube";
+		$rs = $dao->execute($sqlClube);
+		while(!$rs->EOF) {
+			$param[] = $rs->fields["nome_clube"];
+			$rs->MoveNext();
+		}
+		
+		/*$sqlIntegrante = "SELECT nome_integrante FROM integrante";
+		$rs = $dao->execute($sqlIntegrante);
+		while(!$rs->EOF) {
+			$param[] = $rs->fields["nome_integrante"];
+			$rs->MoveNext();
+		}*/
+		
+		return $param;
+	}
 }
 
 ?>

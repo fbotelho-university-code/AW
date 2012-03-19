@@ -5,6 +5,7 @@ include "lib/Util.php";
 include "./classes/DAO.php";
 include "./classes/Noticia.php";
 include "./classes/Fonte.php";
+//include "./ParserNoticias.php";
 
 ini_set('default_charset','UTF-8');
 
@@ -13,7 +14,7 @@ ini_set('default_charset','UTF-8');
  * Classe responsável pelo leitura e consulta no Arquivo da Web Portuguesa
  */
 
-class WebPortClientClient extends Fonte {
+class WebPortClient extends Fonte {
 	
 	private $rss;		// Objecto da classe rss_php
 	
@@ -24,7 +25,7 @@ class WebPortClientClient extends Fonte {
 	 *  - URL principal da fonte {@link $main_url} 
 	 */	
 	public function __construct() {
-		parent::__construct("Arquivo da Web Portuguesa", "http://arquivo.pt/opensearch?query=");
+		parent::__construct("Arquivo da Web Portuguesa");
 		$this->rss = new rss_php();
 	}
 	
@@ -35,6 +36,9 @@ class WebPortClientClient extends Fonte {
 	 * 			Array com palavras a serem pesquisadas nos itens RSS
 	 */ 
 	public function search($parameters) {
+		//Array com as noticias encontradas
+		$results = array();
+		
 		foreach($parameters as $query) {
 			//prepara query
 			$encode = urldecode($query);
@@ -46,39 +50,43 @@ class WebPortClientClient extends Fonte {
 			//Cria array com itens presentes no RSS consultado
 			$items = $this->rss->getItems();
 			
-			//Array com as noticias encontradas
-			$results = array();
-			
 			/** DEBUG **/
 			//print_r($items);
 			//echo "<hr>";
 			
 			foreach($items as $news) {
-				$myNew = new Notica(); 
-				$myNew->setIdFonte($this->idfonte); 				//identificador da fonte
-				$myNew->setIdLocal(1);							//@todo buscar ref espacial
-				$myNew->setData_pub(Util::formatTstampToDb($news["pwa:tstamp"]));
-				$myNew->setData_noticia("");					//@todo buscar ref temporal
-				$myNew->setAssunto(addslashes($news["title"]));
-				$myNew->setDescricao(addslashes($news["pwa:digest"]));
-				$myNew->setTexto("");							//@todo buscar texto da noticia
-				$myNew->setUrl($news["link"]);
-				
-				
-				//ParserNoticia::parserNoticia($myNew);			//@todo
-				///$myNew["entidade"] = $parameters[$j];			//@todo inserir identidicador da identidade
+				$myNew = new Noticia(); 
+				$myNew->setIdFonte($this->idfonte); 
+				$myNew->setData_pub(isset($news["title"]) ?
+									Util::formatTstampToDb($news["pwa:tstamp"])
+									: "");
+				$myNew->setAssunto(isset($news["title"]) ?
+									addslashes($news["title"])
+									: "");
+				$myNew->setDescricao(isset($news["pwa:digest"]) ?
+									addslashes($news["pwa:digest"])
+									: "");
+				@$myNew->setTexto(isset($news["link"]) ?
+										addslashes(file_get_contents($news["link"]))
+										: "");
+				$myNew->setUrl(isset($news["link"]) ?
+										addslashes($news["link"])
+										: ""); 
+								
+				//ParserNoticia::parseNoticia($myNew);
+				var_dump($myNew);
 				$results[] = $myNew;
 			}
 		}
 		return $results;
 	}
 }
-/*
-$arq = new WebPortClientClient();
-$clubes = array("Benfica", "Porto", "Sporting");
-$news = $arq->search($clubes);
-$n = new Noticia();
-$msg = $n->insert($news);
-echo $msg;
-*/
+
+$arq = new WebPortClient();
+$parameters = Util::getSearchParameters();
+$news = $arq->search($parameters);
+//$n = new Noticia();
+//$msg = $n->insert($news);
+echo(count($news));
+
 ?>
