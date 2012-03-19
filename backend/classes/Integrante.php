@@ -1,12 +1,14 @@
 <?php
 
+require_once "DAO.php";
 
-class Integrante {
+class Integrante extends DAO {
 	
-	private $idintegrante='';
-	private $idclube;
-	private $idfuncao;
-	private $nome_integrante;
+	var $idintegrante='';
+	var $idclube;
+	var $idfuncao;
+	var $nome_integrante;
+	
 	public function __construct() {
 		
 	}
@@ -80,7 +82,7 @@ class Integrante {
 	 * Get all integrantes from the database. 
 	 * @returns An array of objects Integrante. 
 	 */
-	public static function getAll(){
+	/*public static function getAll(){
 		$dao = new DAO(); 
 		$dao->connect(); 
 		
@@ -103,7 +105,7 @@ class Integrante {
 		$rs->Close(); 
 		$dao->disconnect();
 		return $integrantes;		
-	}
+	}*/
 
 	/**
 	 * 	Convert Integrante from Hash Table 

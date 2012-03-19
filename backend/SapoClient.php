@@ -7,9 +7,6 @@ include "./classes/DAO.php";
 include "./classes/Noticia.php";
 include "./classes/Fonte.php";
 
-//ini_set('default_charset','UTF-8');
-// $tts = utf8_encode($tts);
-
 /**
  * 
  * Classe responsável pelo leitura e consulta dos RSS do Serviço Sapo News
@@ -72,20 +69,15 @@ class SapoClient extends Fonte {
 										: "");
 				$myNew->setUrl(isset($news["link"]) ?
 										addslashes($news["link"])
-										: ""); 
-				
+										: "");
+				//TODO Caracterização Semantica da Notícia				
 				//ParserNoticia::parseNoticia($myNew);
 				var_dump($myNew);
-				$results[] = $myNew;
 			}
 		}
-		return $results;
 	}
 }
 
 $sapo = new SapoClient();
 $parameters = Util::getSearchParameters();
-$news = $sapo->search($parameters);
-//$n = new Noticia();
-//$msg = $n->insert($news);
-echo(count($news));
+$sapo->search($parameters);

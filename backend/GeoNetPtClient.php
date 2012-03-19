@@ -25,7 +25,7 @@ class GeoNetPtClient extends Fonte {
 	*  - URL principal da fonte {@link $main_url}
 	*/
 	public function __construct() {
-		parent::__construct("Geo-Net-PT", "http://dmir.inesc-id.pt/resolve/geonetpt02/sparql.psp");
+		parent::__construct("Geo-Net-PT");
 	}
 	
 	/**

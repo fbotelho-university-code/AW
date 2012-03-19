@@ -72,21 +72,16 @@ class WebPortClient extends Fonte {
 				$myNew->setUrl(isset($news["link"]) ?
 										addslashes($news["link"])
 										: ""); 
-								
+				//TODO Caracterização Semantica da Notícia				
 				//ParserNoticia::parseNoticia($myNew);
 				var_dump($myNew);
-				$results[] = $myNew;
 			}
 		}
-		return $results;
 	}
 }
 
 $arq = new WebPortClient();
 $parameters = Util::getSearchParameters();
-$news = $arq->search($parameters);
-//$n = new Noticia();
-//$msg = $n->insert($news);
-echo(count($news));
+$arq->search($parameters);
 
 ?>

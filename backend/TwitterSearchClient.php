@@ -1,9 +1,11 @@
 <?php
 
-require_once 'classes/Fonte.php'; 
-require_once 'lib/rss_php.php'; 
-require_once 'classes/Noticia.php'; 
-require_once 'lib/Util.php'; 
+include 'classes/Fonte.php';
+include "classes/DAO.php";  
+include "classes/Noticia.php"; 
+include "lib/Util.php";
+include "lib/rss_php.php";
+
 /*
  * Created on Mar 7, 2012
  *
@@ -18,7 +20,7 @@ class TwitterSearchClient extends Fonte{
 	 * Construtor 
 	 */	
 	public function __construct(){  
-		 parent::__construct("TwitterSearch", "http://search.twitter.com/search.rss");
+		 parent::__construct("TwitterSearch");
 	}
 	
 	public function search($parameters){
@@ -30,8 +32,6 @@ class TwitterSearchClient extends Fonte{
 			$url_search .= $encode;    
 			$url_search .= '&include_entities=true&result_type=mixed';
 			  
-			echo $url_search;
-			
 			$ch = curl_init($url_search);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			$data = curl_exec($ch);
@@ -47,15 +47,14 @@ class TwitterSearchClient extends Fonte{
 					foreach($tag as $key => $value){
 						if ($key == "item"){
 							$noticia = new Noticia(); 
-							$noticia->setIdnoticia(null); 
 							$noticia->setIdFonte($this->idfonte);
 							
-							//TODO referencia espacial;  
-							$noticia->setIdlocal(1);  
 							foreach($value as $keyy => $valuee){
 								$this->readNewAsRssItem($keyy, $valuee, $noticia);
 							}
-							$noticias[] = $noticia; 
+							//TODO Caracterização Semantica da Notícia				
+							//ParserNoticia::parseNoticia($myNew);
+							var_dump($noticia); 
 						}
 					}
 				}
@@ -90,11 +89,12 @@ function readNewAsRssItem($key, $value, $noticia){
 	}
 }
 
-/*
-$myself = new TwitterSearchClient(); 
-$clubes = array("Benfica", "Porto", "Sporting");
-$noticias = $myself->search($clubes);
 
+$myself = new TwitterSearchClient(); 
+$parameters = Util::getSearchParameters();
+$myself->search($parameters);
+
+/*
  foreach ($noticias as $n){
 	$n->add(); 
   }

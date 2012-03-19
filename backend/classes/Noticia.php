@@ -1,5 +1,6 @@
 <?php
 
+require_once "DAO.php";
 /**
  * Classe que representa uma notícia recuperada de fontes de informações da Web
  *  (Google News, Sapo News, Twitter, etc.)
@@ -8,76 +9,77 @@
  * @author José Lopes		 - Nr 42437
  * @author Nuno Marques		 - Nr 42809
  * @package backend.classes
- * @version 1.0 20120305
  */ 
-class Noticia {
+class Noticia extends DAO{
 	
 	/**
 	 * Identificador da noticia
 	 * @var int
 	 */
-	private $idnoticia = null;
+	var $idnoticia = null;
 	
 	/**
 	 * Identificador da fonte da notícia
 	 * @var int
 	 */
-	private $idfonte;
+	var $idfonte;
 	
 	/**
 	 * Identificador de uma referencia local da notícia
 	 * @var int
 	 */
-	private $idlocal;
+	var $idlocal;
 	
 	/**
 	 * Data de publicação da notícia
 	 * Formato: AAAA-MM-DD HH:MM:SS
 	 * @var Date
 	 */
-	private $data_pub;
+	var $data_pub;
 	
 	/**
 	 * Data presente no corpo da notícia
 	 * Formato: AAAA-MM-DD HH:MM:SS
 	 * @var Date
 	 */
-	private $data_noticia;
+	var $data_noticia;
 	
 	/**
 	 * Assunto da notícia
 	 * @var String
 	 */
-	private $assunto;
+	var $assunto;
 	
 	/**
 	 * Breve resumo da mensagem
 	 * @var String
 	 */
-	private $descricao;
+	var $descricao;
 	
 	/**
 	 * Texto completo da notícia
 	 * @var String
 	 */
-	private $texto;
+	var $texto;
 	
 	/**
 	 * URL contendo a íntegra da notícia
 	 * @var String
 	 */
-	private $url;
+	var $url;
 	
 	/**
 	 * Define se uma notícia deve estar visível para o utilizador
 	 * @var boolean
 	 */
-	private $visivel = true;
+	var $visivel = true;
 		
 	/**
 	 * Contrutor da classe. 
 	 */
-	public function __construct() {	}
+	public function __construct() {
+		parent::__construct();
+	}
 	
 	/**
 	* Retorna o identificador da notícia
@@ -173,7 +175,7 @@ class Noticia {
 	 * @param String $as
 	 */
 	public function setAssunto($as) {
-		$this->assunto = $as;
+		$this->assunto = utf8_encode($as);
 	}
 	
 	/**
@@ -189,7 +191,7 @@ class Noticia {
 	 * @param String $desc
 	 */
 	public function setDescricao($desc) {
-		$this->descricao = $desc;
+		$this->descricao = utf8_encode($desc);
 	}
 	
 	/**
@@ -205,7 +207,7 @@ class Noticia {
 	 * @param String $t
 	 */
 	public function setTexto($t) {
-		$this->texto = $t;
+		$this->texto = utf8_encode($t);
 	}
 	
 	/**
@@ -221,7 +223,7 @@ class Noticia {
 	 * @param String $u
 	 */
 	public function setUrl($u) {
-		$this->url = $u;
+		$this->url = utf8_encode($u);
 	}
 	
 	/**
@@ -238,126 +240,6 @@ class Noticia {
 	 */
 	public function setVisivel($v) {
 		$this->visivel = $v;
-	}
-	
-
-	/**
-	 * Cria uma array associativo preparado para entregar ao aodb.    
-	 * @return Map de campos de noticia para array indexado pelos nomes dos campos de Noticia na bd.  
-	 */
-
-	public function toHash(){
-		$myNew = array(); 
-		$myNew["idnoticia"] = $this->idnoticia; 						//campo auto increment
-		$myNew["idfonte"] = $this->idfonte;         				//identificador da fonte 
-		$myNew["idlocal"] = $this->idlocal;					        //@todo buscar ref espacial
-		$myNew["data_pub"] = $this->data_pub; 
-		$myNew["data_noticia"] = $this->data_noticia;					//@todo buscar ref tempora podem ser v‡rias
-		$myNew["assunto"] = $this->assunto;                 
-		$myNew["descricao"] = $this->descricao;
-		$myNew["texto"] = $this->texto; 
-		$myNew["url"] = $this->url; 
-		$myNew["visivel"] = $this->visivel;
-		return $myNew; 			
-	}
-	
-	
-	/**
-	 * Transforma um array associativo de uma tabela de Noticia para um objecto noticia
-	 * @param noticia Array associativo indexados pelos campos da tabela noticia
-	 * @return Um objecto noticia. 
-	 */
-	public static function fromHash($noticia){
-		$n = new Noticia(); 
-		$n->setIdnoticia($noticia["idnoticia"]); 
-		$n->setIdfonte($noticia["idfonte"]); 
-		$n->setIdLocal($noticia["idLocal"]);
-		$n->setData_pub($noticia["data_pub"]);
-		$n->setData_noticia($noticia["data_noticia"]); 
-		$n->setAssunto($noticia["assunto"]); 
-		$n->setDescricao($noticia["descricao"]);
-		$n->setTexto($noticia["texto"]);
-		$n->setUrl($noticia["url"]); 
-		$n->setVisivel($noticia["visivel"]); 
-	}
-	
-	/**
-	 * Adiciona Noticia n‹o existente anteriormente ˆ base de dados
-	 * 
-	 */
-	public function add(){
-		$dao = new DAO();
-		$dao->connect(); 
-		
-		$fields = $this->toHash(); 
-		var_dump ($fields); 
-		echo '<br/> inserting in bd <br/>';
-		
-		$rs = $dao->db->AutoExecute("noticia", $fields, "INSERT");
-		if (!$rs){
-			//echo $dao->db->ErrorMsg(); 
-		    die ($dao->db->ErrorMsg()); 
-		}
-	}
-	
-	/**
-	 * Insere uma notícia na Base de Dados
-	 * @param Array $fields Array com as notícias recolhidas da fonte de informação.
-	 *                      O parâmetro deve ser uma array associativo, onde  as chaves devem 
-	*                       representar o nome de todas as coluna da tabela 'noticia' e o valor 
-	*                       associado a chave deve ser o valor a ser inserido na tabela.
-	 * @return String $msg Mensagem com informações sobre a execução da operação
-	 */
-	public function insert($fields) {
-		
-		/** Mensagemn de retorno **/
-		$msg = "";
-		
-		/** Conexão com a base de dados */
-		$dao = new DAO();
-		$dao->connect();
-		
-		
-		/** Apaga todas as noticias da base de dados associadas à fonte de informação **/
-		if(count($fields) > 0) {
-			$sql = "DELETE FROM noticia WHERE idfonte = ".$fields[0]["idfonte"];
-			$rs = $dao->db->Execute($sql) or die($dao->db->ErrorMsg());
-		}
-		else {
-			$msg = "<b>Não existem notícias a inserir</b>";
-		}
-		
-		
-		/** Insere as notícias recuperadas da fonte de informação **/
-		foreach ($fields as $new) {
-			$rs = $dao->db->AutoExecute("noticia", $new, "INSERT");
-			if($rs) {
-				//echo "Noticia \"<b>".$new["assunto"]."</b>\" inserida com sucesso!<br>";
-			}
-			else {
-				$msg = "Erro ao inserir noticia!<br>";
-				return $msg;
-			}
-		}
-		$dao->disconnect();
-		$msg = "Foram inseridas ".count($fields)." mensagens.";
-		return $msg;
-	}
-	
-	/**
-	 * Função para apagar todas as entradas da tabela noticia na Base de Dados
-	 */
-	public function clear() {
-		$dao = new DAO();
-		$dao->connect();
-		$sql = "TRUNCATE TABLE noticia";
-		$rs = $dao->db->Execute($sql) or die($dao->db->ErrorMsg());
-		$dao->disconnect();
-		echo "Tabela noticia apagada com sucesso!";
-	}
-	
-	public function getClube(){
-			
 	}
 }
 

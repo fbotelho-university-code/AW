@@ -1,7 +1,7 @@
 <?php
 /**
  * Classe para fazer parsing ao texto da noticia.
- * TODO - meter este c—digo na pr—pria classe Noticia 
+ * TODO - meter este câ€”digo na prâ€”pria classe Noticia 
  */
  
  include ('./classes/Noticia.php'); 
@@ -21,7 +21,7 @@
     	
     	/**
     	 * Efectua parsing de noticias
-    	 * Efectua mudanas directamente na base de dados relativa ˆ noticia  
+    	 * Efectua mudanï¿½as directamente na base de dados relativa Ë† noticia  
     	 */
 		public static function parseNoticia($noticia){
 			//lexico de futebol
@@ -32,7 +32,7 @@
 		}
 		
 		private static function findLocais($noticia){
-			//TODO - ir buscar isto de cada vez Ž um bocado desperdicio. 
+			//TODO - ir buscar isto de cada vez Å½ um bocado desperdicio. 
 			$locais = Local::getAll();
 			
 			$textoNoticia = $noticia->getTexto();
@@ -54,29 +54,29 @@
 				if ($pos !== false){
 					//Find the clube associated with lexico. 
 					//TODO - lexico poderia estar associado a mais que um clube !  
-					//Assumindo que s— vai ser associado a um: 
+					//Assumindo que sâ€” vai ser associado a um: 
 					$lexClubes = LexicoClubes::find(array("idlexico" => $lexico->getIdlexico()));
 					
-					//rela‹o entre noticiaEClubes
+					//relaï¿½â€¹o entre noticiaEClubes
 					$rel = NoticiasClubes::find(array("idnoticia" => $noticia->getIdnoticia(), "idclube" => $lexicoClubes->getIdClube())); 
 					if (!$rel){
-						$rel = new NoticiasClubes($noticia->getIdnoticia(), $); 
+						//$rel = new NoticiasClubes($noticia->getIdnoticia(), $); 
 					}
-					$rel->addQualificacao($lexico->getPol()){
+					//$rel->addQualificacao($lexico->getPol()){
 					}
 				}
 			}
 		}
 		
-		private static function findIntegrantes($noticia){
+		//private static function findIntegrantes($noticia){
 				
-		} 
+		//} 
 		
-		private static function findTemporal($noticia){
+		//private static function findTemporal($noticia){
 			
-		}
+		//}
 		
-    }
+    //}
 
 $noticia = new Noticia(); 
 $noticia->setIdnoticia(32); 

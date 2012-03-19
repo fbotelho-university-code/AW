@@ -4,7 +4,6 @@ include "lib/Util.php";
 include "./classes/DAO.php";
 include "./classes/Noticia.php";
 include "./classes/Fonte.php";
-ini_set('default_charset','UTF-8');
 
 /**
 * Classe responsável pelo leitura e consulta dos RSS do Google News
@@ -26,8 +25,7 @@ class GNewsClient extends Fonte {
 	*  - URL principal da fonte {@link $main_url}
 	*/
 	public function __construct() {
-		parent::__construct("RSS Google News", "https://ajax.googleapis.com/ajax/services/search/news?v=1.0&q=");
-		//parent::__construct("RSS Google News", "https://ajax.googleapis.com/ajax/services/feed/find?v=1.0&output=json&q=");
+		parent::__construct("RSS Google News");
 	}
 	
 	public function search($parameters) {
@@ -36,26 +34,32 @@ class GNewsClient extends Fonte {
 			$url_search = $this->main_url.$encode;
 			$result_json = $this->execSearch($url_search);
 			$output = json_decode($result_json);
-			print_r($output);
+			//var_dump($output);
 			$results = array();
 			
-			foreach($output->responseData->entries as $news) {
+			foreach($output->responseData->results as $news) {
 				$myNew = new Noticia(); 
-				//$myNew["idnoticia"] = null;						//campo auto increment
-				$myNew->setIdfonte($this->idfonte);				//identificador da Sapo News
-				$myNew->setIdLocal(1);							//@todo buscar ref espacial
-				$myNew->setData_pub(Util::formatDateToDB($news->publishedDate)); 
-				$myNew->setData_noticia(""); 
-				$myNew->setAssunto(addslashes($news->titleNoFormatting));
-				$myNew->setDescricao(addslashes($news->content));
-				$myNew->setTexto(file_get_contents($news->unescapedUrl));  //@todo buscar texto da noticia
-				$myNew->setUrl($news->unescapedUrl); 
-				
-				//$myNew["entidade"] = $parameters[$j];			//@todo inserir identidicador da identidade
-				$results[] = $myNew;
+				$myNew->setIdfonte($this->idfonte);
+				$myNew->setData_pub(isset($news->publishedDate) ?
+									Util::formatDateToDB($news->publishedDate)
+									: "");
+				$myNew->setAssunto(isset($news->titleNoFormatting) ?
+									addslashes($news->titleNoFormatting)
+									: "");
+				$myNew->setDescricao(isset($news->content) ?
+									addslashes($news->content)
+									: "");
+				@$myNew->setTexto(isset($news->unescapedUrl) ?
+									addslashes(file_get_contents($news->unescapedUrl))
+									: "");
+				$myNew->setUrl(isset($news->unescapedUrl) ?
+									addslashes($news->unescapedUrl)
+									: ""); 
+				//TODO Caracterização Semantica da Notícia
+				//ParserNoticia::parseNoticia($myNew);
+				var_dump($myNew);
 			}
 		}
-		return $results;
 	}
 	
 	private function execSearch($url) {
@@ -69,11 +73,9 @@ class GNewsClient extends Fonte {
 		return $result;
 	}
 }
-$gn = new GNewsClient();
-$clubes = array("Benfica", "Porto", "Sporting");
-$news = $gn->search($clubes);
-//print_r($news);
-$n = new Noticia();
-$msg = $n->insert($news);
-echo $msg;
+
+$gnc = new GNewsClient();
+$parameters = Util::getSearchParameters();
+$gnc->search($parameters);
+
 ?>
