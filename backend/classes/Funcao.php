@@ -1,11 +1,13 @@
 <?php
 
-class Funcao {
+require_once "DAO.php"; 
+class Funcao extends DAO{
 	
-	private $id;
-	private $funcao;
+	var $id;
+	var $funcao;
 	
 	function __construct() {
+		parent::__construct(); 
 		$this->id = 0;
 		$this->funcao = "";
 	}

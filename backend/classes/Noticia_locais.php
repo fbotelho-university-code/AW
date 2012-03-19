@@ -1,6 +1,6 @@
 <?php
 
-require_once "classes/DAO.php";
+require_once "DAO.php";
  
  /**
   * Classe que representa a rela�‹o Noticias Locais

@@ -7,8 +7,8 @@
  require_once ('./classes/Noticia.php'); 
  require_once ('./classes/Local.php');
  require_once ('./classes/Lexico.php'); 
- require_once ('./classes/LexicoClubes.php'); 
- require_once ('./classes/NoticiasClubes.php');  
+ require_once ('./classes/Clubes_Lexico.php'); 
+ require_once ('./classes/Noticia_Has_Clube.php');  
  require_once ('./classes/Noticia_locais.php'); 
  require_once ("./adodb/adodb.inc.php");
  require_once ("./classes/DAO.php");
@@ -21,6 +21,7 @@
  * Window - Preferences - PHPeclipse - PHP - Code Templates
  */
 
+	
     class ParserNoticias {
     	/**
     	 * Efectua parsing de noticias
@@ -32,18 +33,17 @@
 			//referencias espacial
 			$idnoticia = $noticia->add();
 			$noticia->setIdnoticia($idnoticia);
-			ParserNoticias::findLocais($noticia);
+			//ParserNoticias::findLocais($noticia);
 			//TODO - criar relaï¿½ï¿½o Noticia/Locais 
 			//	ParserNoticias::findLocais($noticia);
 			
-			//ParserNoticias::findClubes($noticia); 
+			ParserNoticias::findClubes($noticia); 
 			//referencias temporal 
 		}
 		
 		private static function findLocais($noticia){
-
 			$l = new Local();
-			$locais = $l->getAll();
+			$locais = $l->getAll(); // TODO  tirar getAll daqui. Tirar classe est‡tica. 
 			$textoNoticia = $noticia->getTexto();
 			foreach ($locais as $local){
 				$nome_local = ' ' . $local->getNome_local() . ' ';   // para encontrar palavra exacta e nao no meio de outra palavra 
@@ -58,52 +58,47 @@
 		}
 		 	
 		private static function findClubes($noticia){
-			$textoNoticia = $noticia->getTexto(); 
-			$lexicos = Lexico::getAll();
+			$Lexico = new Lexico();
+			$Clubes_Lexico = new Clubes_Lexico(); 
+			$Noticias_Clube = new Noticia_Has_Clube(); 
 			 
+			$textoNoticia = $noticia->getTexto(); 
+			$lexicos = $Lexico->getAll();
+			
 			foreach($lexicos as $lexico){
-				$pos = stripos($textoNoticia, $lexico->getContexto());
+				$pos = stripos($textoNoticia, " " . $lexico->getContexto() . " ");
 				if ($pos !== false){
 					//Find the clube associated with lexico. 
-
 					//TODO - lexico poderia estar associado a mais que um clube !  
 					//Assumindo que sâ€” vai ser associado a um: 
-					$lexClubes = LexicoClubes::find(array("idlexico" => $lexico->getIdlexico()));
+					echo '<br/> Found : ' . $lexico->getContexto(); 
+					$lexClubes = $Clubes_Lexico->findFirst(array("idlexico" => $lexico->getIdlexico()));
+					echo '<br/> ';
+					 
+					var_dump($lexClubes); 
+					echo '<br/>'; 
+					//TODO - e se nao houver 
 					
-					//relaï¿½â€¹o entre noticiaEClubes
-					$rel = NoticiasClubes::find(array("idnoticia" => $noticia->getIdnoticia(), "idclube" => $lexicoClubes->getIdClube())); 
-					if (!$rel){
-						//$rel = new NoticiasClubes($noticia->getIdnoticia(), $); 
-					}
-					//$rel->addQualificacao($lexico->getPol()){
+					if ($lexClubes){					
+						//rela‹o entre noticiaEClubes
+						$rel = $Noticias_Clube->findFirst(array("idnoticia" => $noticia->getIdnoticia(), "idclube" => $lexClubes->getIdClube()));
 
-					//TODO - lexico poderia estar associado a mais que um clube !
-					//TODO - lexico pode nao estar associado a nenhum clube   
-					//Assumindo que sï¿½ vai ser associado a um: 
-					$lexClubes = LexicoClubes::find(array("idlexico" => $lexico->getIdlexico()));
-					if (count(lexClubes) > 0){
-						$lexClube = $lexClubes[0]; 
-						var_dump($lexClube); 
-						//relaï¿½ï¿½o entre noticiaEClubes
-						$rel = NoticiasClubes::find(array("idnoticia" => $noticia->getIdnoticia(), "idclube" => $lexClube->getIdClube())); 
-						var_dump($rel); 
-						
 						if (!$rel){
-							$rel = new NoticiasClubes($noticia->getIdnoticia(), $lexClubes[0]->getIdClube());
-							$rel->save();
-							var_dump($rel);  
+							$rel = new Noticia_Has_Clube($noticia->getIdnoticia(), $lexClubes->getIdClube());
+							echo '<br/> AQUI: '; 
+							var_dump($rel); 
+							$rel->add();  
+							echo 'after';  
 						}
-						
-						var_dump($rel); 
-						
 						$rel->addQualificacao($lexico->getPol());
-						$rel->update(); 
+						//echo 'aqui';  
+						$rel->update();
+						//echo 'done';  
 					}
 				}
 			}
 		}
 		
-			
 		private static function findIntegrantes($noticia){
 		
 		} 
@@ -143,13 +138,14 @@
 		
 }
 
-/*$dao = new DAO(); 
+$dao = new DAO(); 
 $dao->connect(); 
-$dao->execute("truncate table noticia"); 
+$dao->execute("truncate table noticia");
+$dao->execute("truncate table noticia_has_clube");  
 $noticia = new Noticia();
 
-$noticia->setIdnoticia(32);
+
 $noticia->setIdfonte(1); 
 $noticia->setTexto(file_get_contents("./exemploNoticia.html")); 
-ParserNoticias::parseNoticia($noticia); */     
+ParserNoticias::parseNoticia($noticia);      
 ?>

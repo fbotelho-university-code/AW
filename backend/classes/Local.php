@@ -1,6 +1,6 @@
 <?php
 
-require_once "classes/DAO.php";
+require_once "DAO.php";
 
 /**
 * Classe que representa um local. Pode ser um Distrito, Ilha ou Concelho de Portugal
@@ -95,12 +95,5 @@ class Local extends DAO{
 		return $str; 
 	}
 }
-/*
-$l= new Local();
-$rs = $l->getAll(); 
 
-foreach($rs as $ll){
-	echo $ll . '<br/>'; 
-}
-*/
 ?>

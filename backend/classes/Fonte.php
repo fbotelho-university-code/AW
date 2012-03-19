@@ -19,25 +19,25 @@ abstract class Fonte {
 	* Identificador da fonte
 	* @var int
 	*/
-	protected $idfonte;
+	var $idfonte;
 	
 	/**
 	* Nome da fonte
 	* @var String
 	*/
-	protected $nome;
+	var $nome;
 	
 	/**
 	* URL principal da fonte
 	* @var String
 	*/
-	protected $main_url;
+	var $main_url;
 	
 	/**
 	* Visibilidade das notícias recolhidas da fonte
 	* @var boolean
 	*/
-	protected $ligado;
+	var $ligado;
 	
 	/**
 	 * Contrutor da classe. Inicializa os atributos da classe.
@@ -46,6 +46,7 @@ abstract class Fonte {
 	 * @param String $u URL principal da fonte
 	 */
 	public function __construct($n) {
+		parent::__construct(); 
 		$this->nome = $n;
 		$this->retrieveFonte();
 	}
