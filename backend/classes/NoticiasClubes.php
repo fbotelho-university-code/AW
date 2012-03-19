@@ -8,27 +8,28 @@
  class NoticiasClubes{
  	private $idclube; 
 	private $idnoticia; 
-	private $qualificacao; 
+	private $qualificacao =0; 
 	
 	public function getIdClube(){return $this->idclube;}  
 	public function getIdNoticia() {return $this->idnoticia; }
-	public function getQualificacao() {return $this->qualificao; }
+	public function getQualificacao() {return $this->qualificacao; }
 	
 	public function setIdClube($p) {$this->idclube = $p; }
 	public function setIdNoticia($p) {$this->idnoticia = $p; }
 	public function setQualificacao($p) {$this->qualificao = $p; }
-	
-	public function __construct($idNoticia, $idClube,$qualificao = 0){
+		
+	public function __construct($idNoticia, $idClube,$qualificacao = 0){
 		$this->idclube = $idClube; 
 		$this->idnoticia = $idNoticia; 		
-		$this->qualificacao = $qualificao; 
+		$this->qualificacao = $qualificacao; 
 	}
 	
 	public function save(){
 		$values = NoticiasClubes::toHash($this); 
 		$dao = new DAO(); 
 		$dao->connect(); 
-		
+		echo '<br/> dumping the values : <br/>'; 
+		var_dump($values); 
 		$rs = $dao->db->AutoExecute("noticia_has_clube", $values, "INSERT"); 
 		
 		if (!$rs){
@@ -62,15 +63,15 @@
 			//			var_dump($rs->fields);
 			
 			while (!$rs->EOF){
-//				echo '<br/> one more <br/>';
 				$values[] = Lexico::fromHash($rs->fields);
+				$values[] = 
 				$rs->MoveNext(); 
 			}
 			return $values;  
 		}
 		
 		public static function fromHash($fields){
-			$ob = new $LexicoClubes(); 
+			$ob = new $NoticiasClubess(); 
 			$ob->setIdClube($fields["idclube"]); 
 			$ob->setIdNoticia($fields["idnoticia"]);
 			$ob->setQualificacao($fields["qualificacao"]);  
@@ -101,8 +102,14 @@
 	public static function toHash($objNoticiasClubes){
 		$array = array(); 
 		$array["idclube"] = $objNoticiasClubes->getIdClube(); 
-		$array["idnoticia"] = $obNoticiasClubes->getIdNoticia(); 
-		$array["qualificacao"] = $obNoticiasClubes->getQualificacao(); 
+		$array["idnoticia"] = $objNoticiasClubes->getIdNoticia(); 
+		$array["qualificacao"] = $objNoticiasClubes->getQualificacao(); 
+		return $array; 
 	}			
+	
+	public function addQualificacao($qual){
+		$this->qualificacao += $qual; 
+	}
+	
  }	
  ?>

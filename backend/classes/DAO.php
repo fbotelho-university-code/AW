@@ -7,7 +7,7 @@ class DAO extends ADOConnection {
 	private $mysgbd = "mysql";
 	private $myserver = "localhost";
 	private $myuser = "root";
-	private $mypassword = "pcdamf06";
+	private $mypassword = "fabiim";
 	private $mydbName = "aw";
 	
 	public $db;
@@ -32,7 +32,10 @@ class DAO extends ADOConnection {
 
 	function execute($sql) {
 		$this->connect();
-		$rs = $this->db->Execute($sql) or die(ErrorMsg());
+		$rs = $this->db->Execute($sql); //or  die($this->db->ErrorMsg());  
+		if (!$rs) { 
+			var_dump(debug_backtrace());  
+		}
 		$this->disconnect();
 		return $rs;
 	}

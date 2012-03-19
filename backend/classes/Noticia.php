@@ -285,13 +285,13 @@ class Noticia {
 	 * Adiciona Noticia n‹o existente anteriormente ˆ base de dados
 	 * 
 	 */
-	public function add(){
+	public function save(){
 		$dao = new DAO();
 		$dao->connect(); 
 		
 		$fields = $this->toHash(); 
-		var_dump ($fields); 
-		echo '<br/> inserting in bd <br/>';
+		//var_dump ($fields); 
+		//echo '<br/> inserting in bd <br/>';
 		
 		$rs = $dao->db->AutoExecute("noticia", $fields, "INSERT");
 		if (!$rs){
@@ -355,9 +355,7 @@ class Noticia {
 		echo "Tabela noticia apagada com sucesso!";
 	}
 	
-	public function getClube(){
-			
-	}
+	
 }
 
 ?>
