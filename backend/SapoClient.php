@@ -1,27 +1,21 @@
 <?php
 
-require_once "lib/rss_php.php";
-require_once "lib/Util.php";
-require_once "lib/simple_html_dom.php";
-require_once "./classes/DAO.php";
-require_once "./classes/Noticia.php";
-require_once "./classes/Fonte.php";
+require_once "includes.php";
 require_once "ParserNoticias.php";
 
 /**
- * 
  * Classe responsável pelo leitura e consulta dos RSS do Serviço Sapo News
  */
-
 class SapoClient extends Fonte {
 	
-	private $rss;		// Objecto da classe rss_php
+	/**
+	* Objeto da classe rss_php
+	* @var rss_php
+	*/
+	private $rss;
 	
 	/**
-	 * Contrutor da Classe SapoClient. Inicializa os atributos do objecto.
-	 * Chama construtor da superclasse para inicializar:
-	 *  - Nome da fonte: {@link $nome}
-	 *  - URL principal da fonte {@link $main_url} 
+	 * Contrutor da Classe
 	 */	
 	public function __construct() {
 		parent::__construct("RSS Sapo Notícias");
@@ -29,15 +23,11 @@ class SapoClient extends Fonte {
 	}
 	
 	/**
-	 * 
-	 * Busca das notícias publicadas no RSS com palavras presentes no RSS Feed
+	 * Busca das notícias publicadas no RSS com palavras presentes no parametro de pesquisa
 	 * @param String[] $parameters
 	 * 			Array com palavras a serem pesquisadas nos itens RSS
 	 */ 
 	public function search($parameters) {
-		//Array com as noticias encontradas
-		$results = array();
-		
 		foreach($parameters as $query) {
 			//prepara query
 			$encode = urldecode($query);
@@ -53,6 +43,7 @@ class SapoClient extends Fonte {
 			//var_dump($items);
 			//echo "<hr>";
 				
+			//Insere na Base de Dados e caracteriza semanticamente cada noticia encontrada
 			foreach($items as $news) {
 				$myNew = new Noticia(); 
 	 			$myNew->setIdfonte($this->idfonte);
@@ -71,9 +62,7 @@ class SapoClient extends Fonte {
 				$myNew->setUrl(isset($news["link"]) ?
 										addslashes($news["link"])
 										: "");
-				//TODO Caracterização Semantica da Notícia				
 				ParserNoticias::parseNoticia($myNew);
-				//var_dump($myNew);
 			}
 		}
 	}

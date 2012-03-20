@@ -3,15 +3,10 @@
 require_once "DAO.php";
 
 /**
-* Classe que representa um local. Pode ser um Distrito, Ilha ou Concelho de Portugal
-* @author Anderson Barretto - Nr 42541
-* @author Fábio Botelho 	 - Nr 41625
-* @author José Lopes		 - Nr 42437
-* @author Nuno Marques		 - Nr 42809
-* @package backend.classes
-* @version 1.0 20120305
-*/
-class Local extends DAO{
+  * Classe que representa um local.
+  * Pode ser um Distrito, Ilha ou Concelho de Portugal
+  */
+class Local extends DAO {
 	
 	/**
 	* Identificador do local
@@ -86,14 +81,6 @@ class Local extends DAO{
 		$this->coordenadas = $c;
 	}
 	
-	
-	public function __toString(){
-		$str = 'Local - ';
-		if ($this->idlocal) $str .=  ' IdLocal : ' . $this->idlocal;  
-		if ($this->nome_local) $str .= ' Nome : ' . $this->nome_local;  
-		if ($this->coordenadas) $str .= ' Coordenadas : ' . $this->coordenadas;
-		return $str; 
-	}
 }
 
 ?>

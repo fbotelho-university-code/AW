@@ -1,28 +1,25 @@
 <?php
 
-include 'classes/Fonte.php';
-include "classes/DAO.php";  
-include "classes/Noticia.php"; 
-include "lib/Util.php";
-include "lib/rss_php.php";
+require_once "includes.php";
+require_once "ParserNoticias.php";
 
-/*
- * Created on Mar 7, 2012
- *
- * To change the template for this generated file go to
- * Window - Preferences - PHPeclipse - PHP - Code Templates
- */
-
-ini_set('default_charset','UTF-8');
-
+/**
+* Classe responsável pela consulta do Serviço do Twitter
+*/
 class TwitterSearchClient extends Fonte{
+	
 	/**
-	 * Construtor 
+	 * Contrutor da Classe
 	 */	
 	public function __construct(){  
 		 parent::__construct("TwitterSearch");
 	}
 	
+	/**
+	* Busca dos comentários publicadas no Twitter com palavras presentes no parametro de pesquisa
+	* @param String[] $parameters
+	* 			Array com palavras a serem pesquisadas
+	*/
 	public function search($parameters){
 		$noticias = array();
 		 
@@ -53,8 +50,8 @@ class TwitterSearchClient extends Fonte{
 								$this->readNewAsRssItem($keyy, $valuee, $noticia);
 							}
 							//TODO Caracterização Semantica da Notícia				
-							//ParserNoticia::parseNoticia($myNew);
-							var_dump($noticia); 
+							ParserNoticias::parseNoticia($myNew);
+							 
 						}
 					}
 				}
@@ -94,9 +91,4 @@ $myself = new TwitterSearchClient();
 $parameters = Util::getSearchParameters();
 $myself->search($parameters);
 
-/*
- foreach ($noticias as $n){
-	$n->add(); 
-  }
-*/
 ?>

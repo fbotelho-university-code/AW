@@ -1,17 +1,11 @@
 <?php
 
-require_once("DAO.php");
+require_once "DAO.php";
 
 /**
-* Classe que representa um clube de futebol
-*  Ex: Benfica, Porto, Sporting, etc.
-* @author Anderson Barretto - Nr 42541
-* @author Fábio Botelho 	 - Nr 41625
-* @author José Lopes		 - Nr 42437
-* @author Nuno Marques		 - Nr 42809
-* @package backend.classes
-*/
-
+ * Classe que representa um clube de futebol
+ *  (Ex: Benfica, Porto, Sporting, etc.)
+ */
 class Clube extends DAO {
 	
 	/**
@@ -39,14 +33,13 @@ class Clube extends DAO {
 	var $nome_clube;
 	
 	/**
-	 * Construtor da classe. Inicializa o nome do clube {@link $nome_clube}
+	 * Construtor da classe. Inicializa o nome do clube, se houver {@link $nome_clube}
 	 * @param String $n
 	 */	
 	public function __construct($n ='') {
 		parent::__construct();
 		if ($n != '' ){
 			$this->nome_clube = $n;
-			$this->getClubeByNome();
 		}
 	}
 	
@@ -64,13 +57,6 @@ class Clube extends DAO {
 	*/
 	public function setIdclube($id) {
 		$this->idclube = $id;
-	}
-	
-	/**
-	 * Altera valor do id do clube
-	 */
-	public function setId($id){
-		$this->idclube = $id; 
 	}
 	
 	/**
@@ -98,7 +84,7 @@ class Clube extends DAO {
 	}
 	
 	/**
-	* Altera o valor do identificador da competicao do clube{@link $idcompeticao}
+	* Altera o valor do identificador da competicao do clube {@link $idcompeticao}
 	* @param int $id
 	*/
 	public function setIdcompeticao($id) {
@@ -119,15 +105,6 @@ class Clube extends DAO {
 	*/
 	public function setNome_clube($n) {
 		$this->nome_clube = $n;
-	}
-	
-	public function __toString(){
-		$str = 'Clube - '; 
-		if ($this->nome_clube ) $str .= ' Nome : ' . $this->nome_clube; 
-		if ($this->idclube ) $str .= ' ID Clube : ' . $this->idclube; 
-		if ($this->idlocal ) $str .= ' ID local : ' . $this->idlocal; 
-		if ($this->idcompeticao ) $str .= ' ID competicao: ' . $this->idcompeticao; 
-	    return $str; 
 	}
 }
 

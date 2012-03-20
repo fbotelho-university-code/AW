@@ -4,7 +4,6 @@ require_once "DAO.php";
  
  /**
   * Classe que representa a rela�‹o Noticias Locais
-  * 
   */
   class Noticia_locais extends DAO{
   

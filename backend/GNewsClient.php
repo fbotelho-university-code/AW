@@ -1,42 +1,38 @@
 <?php
 
-include "lib/Util.php";
-include "./classes/DAO.php";
-include "./classes/Noticia.php";
-include "./classes/Fonte.php";
+require_once "includes.php";
+require_once "ParserNoticias.php";
 
 /**
 * Classe responsável pelo leitura e consulta dos RSS do Google News
-* 
-* @author Anderson Barretto - Nr 42541
-* @author Fábio Botelho 	 - Nr 41625
-* @author José Lopes		 - Nr 42437
-* @author Nuno Marques		 - Nr 42809
-* @package backend
-* @version 1.0 20120305
 */
-
 class GNewsClient extends Fonte {
 	
 	/**
-	* Contrutor da Classe GNewsClient. Inicializa os atributos do objecto.
-	* Chama construtor da superclasse para inicializar:
-	*  - Nome da fonte: {@link $nome}
-	*  - URL principal da fonte {@link $main_url}
+	* Contrutor da Classe
 	*/
 	public function __construct() {
 		parent::__construct("RSS Google News");
 	}
 	
+	/**
+	* Busca das notícias publicadas no RSS com palavras presentes no prametro de pesquisa
+	* @param String[] $parameters
+	* 			Array com palavras a serem pesquisadas nos itens RSS
+	*/
 	public function search($parameters) {
 		foreach($parameters as $searchWord) {
+			//prepara query
 			$encode = urlencode($searchWord);
 			$url_search = $this->main_url.$encode;
-			$result_json = $this->execSearch($url_search);
-			$output = json_decode($result_json);
-			//var_dump($output);
-			$results = array();
 			
+			//carrega RSS
+			$result_json = $this->execSearch($url_search);
+			
+			//Cria array com itens presentes no RSS consultado
+			$output = json_decode($result_json);
+			
+			//Insere na Base de Dados e caracteriza semanticamente cada noticia encontrada
 			foreach($output->responseData->results as $news) {
 				$myNew = new Noticia(); 
 				$myNew->setIdfonte($this->idfonte);
@@ -55,9 +51,7 @@ class GNewsClient extends Fonte {
 				$myNew->setUrl(isset($news->unescapedUrl) ?
 									addslashes($news->unescapedUrl)
 									: ""); 
-				//TODO Caracterização Semantica da Notícia
-				//ParserNoticia::parseNoticia($myNew);
-				var_dump($myNew);
+				ParserNoticias::parseNoticia($myNew);
 			}
 		}
 	}

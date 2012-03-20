@@ -1,34 +1,61 @@
 <?php
 
 require_once "DAO.php"; 
-class Funcao extends DAO{
+
+/**
+  * Classe que representa uma funcao de um integrante em um clube
+  * (Ex: Presidente, Treinador, Jogador, etc.)
+  */
+class Funcao extends DAO {
 	
-	var $id;
+	/**
+	 * Identificador da Função
+	 * @var int
+	 */
+	var $idfuncao;
+	
+	/**
+	 * Nome da Função
+	 * @var String
+	 */
 	var $funcao;
 	
+	/**
+	 * Construtor da Classe
+	 * Chama o construtor da classe pai
+	 */
 	function __construct() {
-		parent::__construct(); 
-		$this->id = 0;
-		$this->funcao = "";
+		parent::__construct();
 	}
 	
-	function __construct($i, $f) {
-		$this->id = $i;
-		$this->funcao = $f;
+	/**
+	* Retorna o identificador da função
+	* @return int {@link $idfuncao}
+	*/
+	function getIdfuncao() {
+		return $this->idfuncao;
 	}
 	
-	function getId() {
-		return $this->id;
+	/**
+	* Altera o valor do identificador da função {@link $idfuncao}
+	* @param int $id
+	*/
+	function setIdFuncao($id) {
+		$this->idfuncao = $id;
 	}
 	
-	function setId($i) {
-		$this->id = $i;
-	}
-	
+	/**
+	* Retorna o nome da função
+	* @return String {@link $funcao}
+	*/
 	function getFuncao() {
 		return $this->funcao();
 	}
 	
+	/**
+	* Altera o valor do nome da funcao {@link $funcao}
+	* @param String $f
+	*/
 	function setFuncao($f) {
 		$this->funcao = $f;
 	}

@@ -1,14 +1,11 @@
 <?php
-require_once ("DAO.php"); 
-/*
- * Created on Mar 15, 2012
 
- *
- * To change the template for this generated file go to
- * Window - Preferences - PHPeclipse - PHP - Code Templates
- */
+require_once "DAO.php"; 
 
-class Lexico extends DAO{
+/**
+  * Classe que representa o lexico utilizado na aplicacao
+  */
+class Lexico extends DAO {
 		
 		 
 		var $nucleo; 

@@ -1,14 +1,10 @@
 <?php
 
 require_once "DAO.php";
+
 /**
  * Classe que representa uma notícia recuperada de fontes de informações da Web
  *  (Google News, Sapo News, Twitter, etc.)
- * @author Anderson Barretto - Nr 42541
- * @author Fábio Botelho 	 - Nr 41625
- * @author José Lopes		 - Nr 42437
- * @author Nuno Marques		 - Nr 42809
- * @package backend.classes
  */ 
 class Noticia extends DAO{
 	
@@ -23,11 +19,6 @@ class Noticia extends DAO{
 	 * @var int
 	 */
 	var $idfonte;
-	
-	/**
-	 * @var int
-	 */
-
 	
 	/**
 	 * Data de publicação da notícia
@@ -83,7 +74,6 @@ class Noticia extends DAO{
 	* Retorna o identificador da notícia
 	* @return int {@link $idnoticia}
 	*/
-	
 	public function getIdnoticia() {
 		return $this->idnoticia;
 	}
@@ -127,8 +117,6 @@ class Noticia extends DAO{
 	public function setData_pub($date) {
 		$this->data_pub = $date;
 	}
-	
-	/**
 	
 	/**
 	* Retorna o assunto da notícia

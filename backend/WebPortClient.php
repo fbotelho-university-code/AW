@@ -1,28 +1,22 @@
 <?php
 
-require "lib/rss_php.php";
-include "lib/Util.php";
-include "./classes/DAO.php";
-include "./classes/Noticia.php";
-include "./classes/Fonte.php";
-//include "./ParserNoticias.php";
-
-ini_set('default_charset','UTF-8');
+require_once "includes.php";
+require_once "ParserNoticias.php";
 
 /**
- * 
  * Classe responsável pelo leitura e consulta no Arquivo da Web Portuguesa
  */
 
 class WebPortClient extends Fonte {
 	
-	private $rss;		// Objecto da classe rss_php
+	/**
+	 * Objeto da classe rss_php
+	 * @var rss_php
+	 */
+	private $rss;
 	
 	/**
-	 * Contrutor da Classe WebPortClientClient. Inicializa os atributos do objecto.
-	 * Chama construtor da superclasse para inicializar:
-	 *  - Nome da fonte: {@link $nome}
-	 *  - URL principal da fonte {@link $main_url} 
+	 * Contrutor da Classe
 	 */	
 	public function __construct() {
 		parent::__construct("Arquivo da Web Portuguesa");
@@ -30,15 +24,11 @@ class WebPortClient extends Fonte {
 	}
 	
 	/**
-	 * 
-	 * Busca das notícias publicadas no RSS com palavras presentes no RSS Feed
+	 * Busca das notícias publicadas no RSS com palavras presentes no prametro de pesquisa
 	 * @param String[] $parameters
 	 * 			Array com palavras a serem pesquisadas nos itens RSS
 	 */ 
 	public function search($parameters) {
-		//Array com as noticias encontradas
-		$results = array();
-		
 		foreach($parameters as $query) {
 			//prepara query
 			$encode = urldecode($query);
@@ -50,10 +40,7 @@ class WebPortClient extends Fonte {
 			//Cria array com itens presentes no RSS consultado
 			$items = $this->rss->getItems();
 			
-			/** DEBUG **/
-			//print_r($items);
-			//echo "<hr>";
-			
+			//Insere na Base de Dados e caracteriza semanticamente cada noticia encontrada
 			foreach($items as $news) {
 				$myNew = new Noticia(); 
 				$myNew->setIdFonte($this->idfonte); 
@@ -72,9 +59,7 @@ class WebPortClient extends Fonte {
 				$myNew->setUrl(isset($news["link"]) ?
 										addslashes($news["link"])
 										: ""); 
-				//TODO Caracterização Semantica da Notícia				
-				//ParserNoticia::parseNoticia($myNew);
-				var_dump($myNew);
+				ParserNoticias::parseNoticia($myNew);
 			}
 		}
 	}

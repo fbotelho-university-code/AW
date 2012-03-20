@@ -1,6 +1,6 @@
 <?php
 
-include "./classes/Noticia.php";
+require_once "includes.php";
 
 
 $n = new Noticia();

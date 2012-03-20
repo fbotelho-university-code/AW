@@ -7,13 +7,9 @@
  * Window - Preferences - PHPeclipse - PHP - Code Templates
  */
  
-  include ("./classes/Integrante.php"); 
-  include ("./classes/Clube.php");
-  include ("./adodb/adodb.inc.php");
-  include ("./classes/Lexico.php"); 
-  include ("./classes/DAO.php");
+ require_once "includes.php";
  
- ini_set('default_charset','UTF-8');
+ //ini_set('default_charset','UTF-8');
  
  try{
  $lines = file( "./static/lexico.futebol.txt", FILE_IGNORE_NEW_LINES);
@@ -27,7 +23,7 @@
  $ado->execute("truncate table clubes_lexico"); 
  $ado->execute("truncate table integrantes_lexico");
   
- $relacoes  = array(); // Array para guardar actualiza›es finais de rela›es .
+ $relacoes  = array(); // Array para guardar actualizaï¿½â€ºes finais de relaï¿½â€ºes .
  
  foreach ($lines as $line ){
  	//Para cada entry da bd 
@@ -40,19 +36,22 @@
  	}
  	$val = $ado->AutoExecute("lexico", $map , "INSERT");
  }
- $jogadores = Integrante::getAll();
- $clubes = Clube::getAll(); 
- foreach ($clubes as $cl){
- 	echo '<br/>'. $cl . '<br/>';
- }
+ $jogador = new Integrante();
+ $jogadores = $jogador->getAll();
+ $clube = new Clube();
+ $clubes = $clube->getAll(); 
+ //foreach ($clubes as $cl){
+ 	//echo '<br/>'. $cl . '<br/>';
+ //}
  
- $lexicos = Lexico::getAll();
+ $lex = new Lexico();
+ $lexicos = $lex->getAll();
   
  foreach ($lexicos as $lexico){
   	
-  	//TODO - ser‡ a melhor maneira de comparar? 
+  	//TODO - serâ€¡ a melhor maneira de comparar? 
   	if ($lexico->getTipo() == "nome"){
-  		$tabela_relacao = null ; //indica tabela de relaao (lexico_integrantes ou lexico_clubes)
+  		$tabela_relacao = null ; //indica tabela de relaï¿½ao (lexico_integrantes ou lexico_clubes)
   		$values_lexico = array();
   		$tabela_to_inserir = null;
   		 
@@ -73,7 +72,7 @@
 		if ($tabela_to_inserir != null ){
 			//Encontrar todos os lexicos dessa entidade
 			$lexicoFind =array('entidade' => $lexico->getEntidade());  
-			$lexicosEntidade = Lexico::find($lexicoFind);
+			$lexicosEntidade = $lex->find($lexicoFind);
 			//var_dump($lexicosEntidade); 
 			foreach ($lexicosEntidade as $lexico2relation){
 				//echo 'here'; 

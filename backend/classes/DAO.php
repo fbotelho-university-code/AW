@@ -2,16 +2,54 @@
 
 include ("./adodb/adodb.inc.php");
 
+/**
+ * Classe que representa uma abstracao para acesso a base de dados.
+ * Usada com superclasse de todas as classes do Modelo
+ */
 class DAO extends ADOConnection {
 	
+	/**
+	 * SGBD utilizado pela aplicacao
+	 * @var String
+	 */
 	private $mysgbd = "mysql";
+	
+	/**
+	 * Nome ou IP do servidor na qual encontra-se instalada a Base de Dados
+	 * @var String
+	 */
 	private $myserver = "localhost";
+	
+	/**
+	 * Nome do usuario para acesso à Base de Dados
+	 * @var String
+	 */
 	private $myuser = "root";
-	private $mypassword = "fabiim";
+	
+	/**
+	 * 
+	 * Palavra-passe para acesso à Base de Dados
+	 * @var String
+	 */
+	private $mypassword = "pcdamf06";
+	
+	/**
+	 * Nome da Base de Dados a ser utilizada
+	 * @var String
+	 */
 	private $mydbName = "aw";
 	
+	/**
+	 * Objeto para acesso à Base de Dados
+	 * @var ADONewConnection
+	 */
 	public $db;
 	
+	/**
+	 * Construtor da Classe
+	 * Configura o SGBD a ser utilizado
+	 * @uses {@link $mysgbd}
+	 */
 	function __construct() {
 		
 		$this->db = &ADONewConnection($this->mysgbd);
@@ -22,6 +60,7 @@ class DAO extends ADOConnection {
 	
 	/**
 	 * Conecta com a base de dados
+	 * Usa os atributos da classe para estabelecar uma ligação com o SGBD
 	 */
 	function connect() {
 		$this->db->Connect($this->myserver, $this->myuser, $this->mypassword, $this->mydbName) or die($this->db->ErrorMsg());
@@ -50,7 +89,6 @@ class DAO extends ADOConnection {
 	 * Insere um objeto na base de dados
 	 * @return int $id Identificador do registo inserido
 	 */
-	
 	public function add(){
 		$this->connect();
 		$table = get_class($this);
@@ -101,14 +139,14 @@ class DAO extends ADOConnection {
 	 */
 	public function findFirst($fields){
 		$res = $this->find ($fields);
-
-
-		if (count($res) > 0 ) return $res[0]; 
+		if (count($res) > 0) return $res[0]; 
 		return null;  
 	}
-	/* 
+	
+	/**
 	 * Retorna um array de objectos que satisfazem um dado criterio. 
-	 * @fields O array associativo com os atributos e valores pelo qual desejam filtrar a pesquisa. Os campos apenas podem ser strings ou numericos. sen‹o d‡ asneira. 
+	 * @param String[] $fields - O array associativo com os atributos e valores pelo qual desejam filtrar a pesquisa. 
+	 *                           Os campos apenas podem ser strings ou numericos.
 	 */
 	public  function find ($fields){
 			$table = get_class($this); 
@@ -120,7 +158,7 @@ class DAO extends ADOConnection {
 			
 			$dao = new DAO(); 
 			$dao->connect();
-			echo "<br/>" . $sql . "<br/>";  
+			//echo "<br/>" . $sql . "<br/>";  
 			$rs = $dao->execute($sql);
 
 
@@ -161,7 +199,7 @@ class DAO extends ADOConnection {
 	 */
 	private function createWhereClause($arrayAssoc){
 		$sql = '';
-		$sql .= (count(fields) > 0 ) ? ' where ' : ''; //check to see if they are where clausules 
+		$sql .= (count($arrayAssoc) > 0 ) ? ' where ' : ''; //check to see if they are where clausules 
 
 		$i = 0;  
 		foreach ($arrayAssoc as $key=>$value){
@@ -176,7 +214,11 @@ class DAO extends ADOConnection {
 		return $sql; 
 	}
 	
-	// Simple function alters objs attributes.
+	/**
+	 * Transforma Array associaticvo em Objeto, de acordo com a subclasse chamadora
+	 * @param String[] $arrayAssoc
+	 * @param Object $obj - Objecto da subclasse chamadora
+	 */
 	private function setObj($arrayAssoc, $obj){
 
 	 foreach($arrayAssoc as $key => $value) {
@@ -185,4 +227,3 @@ class DAO extends ADOConnection {
 	}
 	
 }
-

@@ -1,10 +1,6 @@
 <?php
 
-include "lib/Util.php";
-include "lib/simple_html_dom.php";
-include "./classes/DAO.php";
-include "./classes/Local.php";
-include "./classes/Fonte.php";
+require_once "includes.php";
 //ini_set('default_charset','UTF-8');
 
 /**
@@ -56,14 +52,19 @@ class GeoNetPtClient extends Fonte {
 				$tmp[] = addslashes(trim(substr($val,4,-5)));
 			
 				/* Fill the entry with the respective values */
-				$entry['nome_local'] = $tmp[0];
-				$entry['coordenadas'] = $tmp[1].";".$tmp[2];
+				$l = new Local();
+				$l->setIdlocal(null);
+				$l->setNome_local($tmp[0]);
+				$l->setCoordenadas($tmp[1].";".$tmp[2]);
+				$l->add();
+				//$entry['nome_local'] = $tmp[0];
+				//$entry['coordenadas'] = ;
 				
 				/* Add the new entry to the $places array */
-				$places[] = $entry;
+				//$places[] = $entry;
 			}
 		}
-		return $places;
+		//return $places;
 	}
 }
 
@@ -75,10 +76,12 @@ $queryCons = '?default-graph-uri=http%3A%2F%2Fdmir.inesc-id.pt%2Fpub%2Fpublicati
 $queryDist = '?default-graph-uri=http%3A%2F%2Fdmir.inesc-id.pt%2Fpub%2Fpublications%2F2009%2F10%2Fgeonetpt02&query=PREFIX+dcterms%3A+%3Chttp%3A%2F%2Fpurl.org%2Fdc%2Fterms%2F%3E%0D%0APREFIX+geo%3A+%3Chttp%3A%2F%2Fwww.w3.org%2F2003%2F01%2Fgeo%2Fwgs84_pos%23%3E%0D%0APREFIX+gn%3A+%3Chttp%3A%2F%2Fdmir.inesc-id.pt%2Fpub%2Fpublications%2F2009%2F10%2Fgeo-net%23%3E%0D%0APREFIX+gnpt%3A+%3Chttp%3A%2F%2Fdmir.inesc-id.pt%2Fpub%2Fpublications%2F2009%2F10%2Fgeo-net-pt%23%3E%0D%0APREFIX+gnpt02%3A+%3Chttp%3A%2F%2Fdmir.inesc-id.pt%2Fpub%2Fpublications%2F2009%2F10%2Fgeo-net-pt-02%23%3E%0D%0ASELECT+%3Ftitle%2C+%3Flatitude%2C+%3Flongitude+where+%7B%0D%0A++%3Fentity+gn%3Atype+gnpt02%3Adistrito-ATDST+.%0D%0A++%3Fentity+dcterms%3Atitle+%3Ftitle+.%0D%0A++%3Fentity+gn%3Afootprint+%3Ffootprint+.%0D%0A++%3Ffootprint+geo%3Alat+%3Flatitude+.%0D%0A++%3Ffootprint+geo%3Along+%3Flongitude+.%0D%0A%7D+ORDER+BY+%3Ftitle&format=text%2Fhtml&debug=off';
 
 $queries = array($queryIlha, $queryCons, $queryDist);
+$l = new Local();
+$l->clear();
 
 $result = $geo->search($queries);
 
-$l = new Local();
-$msg = $l->insert($result);
-echo $msg;
+
+//$msg = $l->insert($result);
+//echo $msg;
 ?>

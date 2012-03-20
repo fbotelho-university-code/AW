@@ -1,19 +1,12 @@
 <?php
 
-
+require_once "DAO.php";
 
 /**
-* Classe que representa uma fonte de informações da Web
-*  (Google News, Sapo News, Twitter, etc.)
-* @author Anderson Barretto - Nr 42541
-* @author Fábio Botelho 	 - Nr 41625
-* @author José Lopes		 - Nr 42437
-* @author Nuno Marques		 - Nr 42809
-* @package backend.classes
-* @version 1.0 20120305
-*/
-
-abstract class Fonte {
+ * Classe que representa uma fonte de informações da Web
+ *  (Google News, Sapo News, Twitter, etc.)
+ */
+class Fonte extends DAO {
 	
 	/**
 	* Identificador da fonte
@@ -40,15 +33,15 @@ abstract class Fonte {
 	var $ligado;
 	
 	/**
-	 * Contrutor da classe. Inicializa os atributos da classe.
-	 * @param int $id Identificador da fonte
-	 * @param String $n Nome da fonte
-	 * @param String $u URL principal da fonte
+	 * Contrutor da classe.
 	 */
-	public function __construct($n) {
-		parent::__construct(); 
-		$this->nome = $n;
-		$this->retrieveFonte();
+	public function __construct($n = '') {
+		parent::__construct();
+		if($n != "") {
+			$this->nome = $n;
+			$where = array("nome_fonte" => $n);
+			$this->findFirst($where);
+		}
 	}
 	
 	/**
@@ -60,27 +53,11 @@ abstract class Fonte {
 	}
 	
 	/**
-	 * Pesquisa por uma determina express‹o  na fonte determinada. 
-	 * @param search_str A express‹o a pesquisa
-	 * @return Um array de objectos Noticia criados pela pesquisa.  
-	 */
-	abstract public function search($search_str);
-	 
-	/**
-	* Recupera o valor do identificador da fonte {@link $idfonte} da base de dados
-	* @uses {@link $main_url} Usa a URL principal da fonte para busca na base de dados
+	* Altera o valor do identificador da fonte {@link $idfonte}
+	* @param int $id
 	*/
-	public function setIdfonte() {
-		$dao = new DAO();
-		$dao->connect();
-		$sql = "SELECT idfonte FROM fonte WHERE main_url = '".$this->main_url."'";
-		$rs = $dao->db->Execute($sql) or die($dao->db->ErrorMsg());
-		if(count($rs->fields) == 1) {
-			$this->idfonte = $rs->fields["idfonte"];
-		}
-		else {
-			die("Erro ao buscar identificador da fonte de informa�ao!");
-		}
+	public function setIdfonte($id) {
+		$this->idfonte =$id;
 	}
 	
 	/**
@@ -116,27 +93,21 @@ abstract class Fonte {
 	}
 	
 	/**
-	 * Recupera fonte cadastrada no BD usando o nome da fonte.
-	 * Altera os atributos do objeto de acordo com a base de dados
-	 * @uses {@link $idfonte}
-	 * @uses {@link $main_url}
-	 */
-	public function retrieveFonte() {
-		$sql = "SELECT * FROM fonte WHERE nome = '".$this->nome."'";
-		$dao = new DAO();
-		$rs = $dao->execute($sql);
-		$this->mountFonte($rs->fields);
+	* Retorna a visibilidade da fonte
+	* @return Boolean {@link $ligado}
+	*/
+	public function getLigado() {
+		return $this->ligado;
 	}
 	
 	/**
-	 * Monta um objeto integrante com resposta de consulta à base de dados
+	 * Altera o valor da visibilidade da fonte {@link $ligado}
+	 * @param Boolean $l Nova visibilidade da fonte
 	 */
-	private function mountFonte($fields) {
-		$this->idfonte = $fields["idfonte"];
-		$this->nome = $fields["nome"];
-		$this->main_url = $fields["main_url"];
-		$this->ligado = $fields["ligado"];
+	public function setLigado($l) {
+		$this->ligado = $l;
 	}
+
 }
 
 ?>

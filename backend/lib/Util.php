@@ -2,7 +2,10 @@
 
 class Util {
 
-	// Array com a correlação dos meses do ano em formato [A-Z]2[a-z] para 2[00-12]
+	/**
+	 * Array com a correlação dos meses do ano em formato [A-Z]2[a-z] para 2[00-12]
+	 * @var String[] 
+	 */ 
 	static $meses = array( "Jan" => "01",
 				"Feb" => "02", 
 				"Mar" => "03",
@@ -35,7 +38,7 @@ class Util {
 	}
 
 	/**
- 	* Converte o formato de Data de AAAAMMDDHHMMSS000
+ 	* Converte o formato de Data de AAAAMMDDHHMMSS -000
  	* @param unknown_type $tstmp
  	*/
 	public static function formatTstampToDb($tstmp) {

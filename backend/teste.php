@@ -1,11 +1,6 @@
 <?php
 
-require_once "./lib/Util.php";
-require_once "./classes/DAO.php";
-require_once "./classes/Noticia.php";
-require_once "./classes/Clube.php";
-require_once "./classes/Local.php";
-require_once "ParserNoticias.php";
+require_once "includes.php";
 
 $n = new Noticia();
 
