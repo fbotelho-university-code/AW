@@ -51,9 +51,7 @@ class Noticia_Has_Integrante extends DAO{
         $rs = $ado->execute($query);
         //TODO check if failed. 
     }
-		
-        
-
+    
         public function __toString(){
 		$res = "Noticia Has Integrante : "; 
 		if ($this->idnoticia)  $res .= "ID Noticia :" . $this->idnoticia . " |"; 

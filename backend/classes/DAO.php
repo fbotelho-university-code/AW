@@ -31,7 +31,7 @@ class DAO extends ADOConnection {
 	 * Palavra-passe para acesso à Base de Dados
 	 * @var String
 	 */
-	private $mypassword = "pcdamf06";
+	private $mypassword = "fabiim";
 	
 	/**
 	 * Nome da Base de Dados a ser utilizada
@@ -142,7 +142,9 @@ class DAO extends ADOConnection {
 	 */
 	public function findFirst($fields){
 		$table = get_class($this);
+		echo 'calling'; 
 		$res = $this->find ($fields);
+		echo 'pass';
 		if (count($res) > 0) return $res[0]; 
 		return null;  
 	}
@@ -164,7 +166,9 @@ class DAO extends ADOConnection {
 		}
 		
 		$sql = 'select * from ' . $table;
-		$sql .= $this->createWhereClause($fields);
+		$sql .= $this->createWhereClause($fields) . ';';
+		
+		echo $sql; 
 		$rs = $this->execute($sql);
 		$values = array();
 		while (!$rs->EOF){
@@ -194,14 +198,17 @@ class DAO extends ADOConnection {
 	 * S— suporta strings e numericos. 
 	 * @returns a String a dizer where key0 = $arrayAssoc[key0] AND $key1 = 'arrayAssoc[key1]' ou entao a string vazia caso o array esteja vazio.
 	 */
+	 //TODO is_string not working. 
 	private function createWhereClause($arrayAssoc){
+		var_dump($arrayAssoc); 
 		$sql = '';
 		$sql .= (count($arrayAssoc) > 0 ) ? ' where ' : ''; //check to see if they are where clausules 
 
 		$i = 0;  
 		foreach ($arrayAssoc as $key=>$value){
 			$sql .= ' '  . $key . '='; 
-			$sql .= (is_string($value)) ?  '\'' . $value  . '\' ': $value; 
+			$sql .= '\'' . $value  . '\''; 
+			//$sql .= (is_string($value)) ?  '\'' . $value  . '\' ': $value;
 			$i +=1;
 			//se for ultimo adicionar and para proxima clausula 
 			if ($i < count($arrayAssoc)){
