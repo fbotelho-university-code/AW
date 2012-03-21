@@ -80,7 +80,7 @@ class DAO extends ADOConnection {
 	 */
 	function execute($sql) {
 		$this->connect();
-		$rs = $this->db->Execute($sql) or die($this->db->ErrorMsg());
+		$rs = $this->db->Execute($sql) or die($this->db->ErrorMsg() . "<br>SQL: ".$sql);
 		$this->disconnect();
 		return $rs;
 	}
@@ -93,7 +93,7 @@ class DAO extends ADOConnection {
 		$this->connect();
 		$table = get_class($this);
 		$fields = get_object_vars($this);
-		$rs = $this->db->AutoExecute($table, $fields, "INSERT") or die($this->db->ErrorMsg());
+		$rs = $this->db->AutoExecute($table, $fields, "INSERT") or die($this->db->ErrorMsg() . "<br>SQL: ".$sql);
 		$id = $this->db->Insert_ID();
 		$this->disconnect();
 		return $id;
@@ -138,6 +138,7 @@ class DAO extends ADOConnection {
 	 * Retorna o primeiro objecto resultante do find. Ou null
 	 */
 	public function findFirst($fields){
+		$table = get_class($this);
 		$res = $this->find ($fields);
 		if (count($res) > 0) return $res[0]; 
 		return null;  
@@ -149,12 +150,17 @@ class DAO extends ADOConnection {
 	 *                           Os campos apenas podem ser strings ou numericos.
 	 */
 	public  function find ($fields){
-			$table = get_class($this); 
-			$sql = 'select * from ' . $table; 
+			
+			if(is_subclass_of($this, "fonte")) {
+				$table = "fonte";
+			}
+			else {
+				$table = get_class($this);
+			}
+			$sql = 'select * from ' . $table;
 			$sql .= $this->createWhereClause($fields);
 			
 			$sql .= ';'; 
-
 			
 			$dao = new DAO(); 
 			$dao->connect();
@@ -204,7 +210,7 @@ class DAO extends ADOConnection {
 		$i = 0;  
 		foreach ($arrayAssoc as $key=>$value){
 			$sql .= ' '  . $key . '='; 
-			$sql .= (gettype($value) == "string") ?  '\'' . $value  . '\' ': $value; 
+			$sql .= (is_string($value)) ?  '\'' . $value  . '\' ': $value; 
 			$i +=1;
 			//se for ultimo adicionar and para proxima clausula 
 			if ($i < count($arrayAssoc)){

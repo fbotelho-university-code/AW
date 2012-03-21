@@ -27,10 +27,16 @@ class Clube extends DAO {
 	var $idcompeticao;
 	
 	/**
-	 * Nome do clube
+	 * Nome do clube. Usado para pesquisa nas fontes de informação
 	 * @var String
 	 */
 	var $nome_clube;
+	
+	/**
+	* Nome oficial do clube. Usado para relacionamento com o lexico
+	* @var String
+	*/
+	var $nome_oficial;
 	
 	/**
 	 * Construtor da classe. Inicializa o nome do clube, se houver {@link $nome_clube}
@@ -105,6 +111,22 @@ class Clube extends DAO {
 	*/
 	public function setNome_clube($n) {
 		$this->nome_clube = $n;
+	}
+	
+	/**
+	* Retorna o nome oficial do clube
+	* @return String {@link $nome_oficial}
+	*/
+	public function getNome_oficial() {
+		return $this->nome_oficial;
+	}
+	
+	/**
+	 * Altera o valor do nome oficial do clube {@link $nome_oficial}
+	 * @param String $n
+	 */
+	public function setNome_oficial($n) {
+		$this->nome_oficial = $n;
 	}
 }
 

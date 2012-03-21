@@ -25,7 +25,7 @@ require_once "includes.php";
 			//referencias espacial
 			$idnoticia = $noticia->add();
 			$noticia->setIdnoticia($idnoticia);
-			//ParserNoticias::findLocais($noticia);
+			//ParserNoticias::findLocais($noticia);	//OK
 			//TODO - criar rela��o Noticia/Locais 
 			//	ParserNoticias::findLocais($noticia);
 			

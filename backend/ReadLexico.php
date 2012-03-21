@@ -94,7 +94,7 @@
  
  function findClube($array, $needle){
  	foreach ($array as $elem){
- 		if (stripos($elem->getNome_clube(),  $needle) !== false){
+ 		if (stripos($elem->getNome_oficial(),  $needle) !== false){
  			return $elem; 
  		}
  	}

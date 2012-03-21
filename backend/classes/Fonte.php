@@ -35,12 +35,15 @@ class Fonte extends DAO {
 	/**
 	 * Contrutor da classe.
 	 */
-	public function __construct($n = '') {
+	public function __construct($n = "") {
 		parent::__construct();
 		if($n != "") {
-			$this->nome = $n;
-			$where = array("nome_fonte" => $n);
-			$this->findFirst($where);
+			$this->nome = $n; 
+			$where = array("nome" => $this->nome);
+			$obj = $this->findFirst($where);
+			$this->setIdfonte($obj->idfonte);
+			$this->setMain_url($obj->main_url);
+			$this->setLigado($obj->ligado);
 		}
 	}
 	
@@ -106,6 +109,29 @@ class Fonte extends DAO {
 	 */
 	public function setLigado($l) {
 		$this->ligado = $l;
+	}
+	
+	/**
+	* Recupera fonte cadastrada no BD usando o nome da fonte.
+	* Altera os atributos do objeto de acordo com a base de dados
+	* @uses {@link $idfonte}
+	* @uses {@link $main_url}
+	*/
+	public function retrieveFonte() {
+		$sql = "SELECT * FROM fonte WHERE nome = '".$this->nome."'";
+		$dao = new DAO();
+		$rs = $dao->execute($sql);
+		$this->mountFonte($rs->fields);
+	}
+	
+	/**
+	 * Monta um objeto integrante com resposta de consulta à base de dados
+	 */
+	private function mountFonte($fields) {
+		$this->idfonte = $fields["idfonte"];
+		$this->nome = $fields["nome"];
+		$this->main_url = $fields["main_url"];
+		$this->ligado = $fields["ligado"];
 	}
 
 }

@@ -57,11 +57,13 @@ $idLigaZon = $comp->add();
 $comp->setNome_competicao("Liga Orangina");
 $idLigaOran = $comp->add();
 echo "Ok!<hr>";
+
 //----------------------------- LOCAL ---------------------------------------------------------//
 echo "Inicialização da Tabela <b>local</b>... ";
 $l = new Local();
 include "GeoNetPtClient.php";
 echo "Ok!<hr>";
+
 //----------------------------- CLUBE ----------------------------------------------------------//
 echo "Inicialização da Tabela <b>clube</b>... ";
 $c = new Clube();
@@ -72,6 +74,7 @@ $where = array("nome_local" => "Lisboa");
 $idlocalLisboa = $l->findFirst($where)->getIdlocal();
 $c->setIdlocal($idlocalLisboa);
 $c->setIdcompeticao($idLigaZon);
+$c->setNome_oficial("sport lisboa e benfica");
 $idBenfica = $c->add();
 
 $c->setNome_clube("Porto");
@@ -79,11 +82,13 @@ $where = array("nome_local" => "Porto");
 $idlocalPorto = $l->findFirst($where)->getIdlocal();
 $c->setIdlocal($idlocalPorto);
 $c->setIdcompeticao($idLigaZon);
+$c->setNome_oficial("futebol clube do porto");
 $idPorto = $c->add();
 
 $c->setNome_clube("Sporting");
 $c->setIdlocal($idlocalLisboa);
 $c->setIdcompeticao($idLigaZon);
+$c->setNome_oficial("sporting clube de portugal");
 $idSporting = $c->add();
 
 $c->setNome_clube("Braga");
@@ -91,6 +96,7 @@ $where = array("nome_local" => "Braga");
 $idlocalBraga = $l->findFirst($where)->getIdlocal();
 $c->setIdlocal($idlocalBraga);
 $c->setIdcompeticao($idLigaZon);
+$c->setNome_oficial("sporting clube de braga");
 $idBraga = $c->add();
 
 $c->setNome_clube("Nacional");
@@ -98,6 +104,7 @@ $where = array("nome_local" => "Funchal");
 $idlocalFunchal = $l->findFirst($where)->getIdlocal();
 $c->setIdlocal($idlocalFunchal);
 $c->setIdcompeticao($idLigaZon);
+$c->setNome_oficial("clube desportivo nacional");
 $idNacional = $c->add();
 echo "Ok!<hr>";
 //----------------------------- FUNCAO ----------------------------------------------------------//
