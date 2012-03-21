@@ -24,7 +24,7 @@ require_once "includes.php";
 			$noticia->setIdnoticia($idnoticia);
 			
 			ParserNoticias::findRefEspacial($noticia);
-		//	ParserNoticias::findRefTemporal($noticia); 
+		    ParserNoticias::findRefTemporal($noticia); 
 			ParserNoticias::findRefClubesAndIntegrantes($noticia); 
 		}
 		
@@ -121,20 +121,31 @@ require_once "includes.php";
 			for($i=0;$i<count($regexes);$i++){
 				if(preg_match_all($regexes[$i], $texto, $matches)){
 					$j=0;
-					foreach($matches as $m){
-						if ($matches[0][$j] != ''){
-							echo $j . '<br/>'; 
+					
+					foreach($matches as $arrays){
+							foreach ($arrays as $m){
+								echo $m; 
+							}							
+							
+					}
+				}
+			}
+//						echo '<br/>' . $m . '<br/>';
+/*
+						//if ($matches[0][$j] != ''){
+							echo '<br/> J: ' . $j . '<br/>'; 
 							var_dump($matches); 
 							echo ($i+1).' Found '.$matches[0][$j];
 							$rel  = new Noticia_Data($noticia->getIdnoticia(), $matches[0][$j]); $j++; 
 							$rel->add();  
 							// save $matches[0][$j++]; 
-// 	      					echo '<br>';
-						}
-					}					
+// 	      					echo '<br>';*/
+						//}
+	//				}					
 				}
-			}
-		}
+				
+		//	}
+//		}
 }
 /*
 $dao = new DAO(); 
