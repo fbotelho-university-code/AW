@@ -27,7 +27,7 @@ require_once "includes.php";
 			$noticia->setIdnoticia($idnoticia);
 			//ParserNoticias::findLocais($noticia);	//OK
 			//TODO - criar rela��o Noticia/Locais 
-			//	ParserNoticias::findLocais($noticia);
+				ParserNoticias::findLocais($noticia);
 			
 			ParserNoticias::findClubes($noticia); 
 			//referencias temporal 
