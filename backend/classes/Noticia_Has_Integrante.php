@@ -20,17 +20,18 @@ class Noticia_Has_Integrante extends DAO{
 	public function setQualificacao($p) { $this->qualificacao = $p; }
     public function addQualificacao($p) { $this->qualificacao += $p; }
         
-   public function __construct($idnoticia=0, $idintegrante=0, $qualificacao=0){
+   public function __construct($idnoticia=0, $idintegrante=0, $qualificacao=0,  $idlexico = 0){
     	parent::__construct(); 
     	$this->idnoticia = $idnoticia; 
     	$this->idintegrante= $idintegrante;
     	$this->qualificacao = $qualificacao; 
+    	$this->idlexico = $idlexico;
     }
 
 
     //TODO - clean up and generalize update function
 	public function update() {
-        $sql_where_key = " where idnoticia = " . $this->idnoticia . " AND idintegrante = " . $this->integrante;
+        $sql_where_key = " where idnoticia = " . $this->idnoticia . " AND idintegrante = " . $this->idintegrante;
         $query = "select * from noticia_has_integrante" . $sql_where_key;
 
         $ado = new DAO();
@@ -44,7 +45,7 @@ class Noticia_Has_Integrante extends DAO{
         if ($rs->RecordCount() > 0) {
             $query = "update noticia_has_integrante SET qualificacao = " . $this->qualificacao . $sql_where_key;
         } else {
-            $query = "insert into noticia_has_integrante values (" . $this->idnoticia . "," . $this->idintegrante . ", " . $this->qualificacao . ")";
+            $query = "insert into noticia_has_integrante values (" . $this->idnoticia . "," . $this->idintegrante . ", " . $this->qualificacao . "," . $this->idlexico .")";
 
         }
         
@@ -56,7 +57,8 @@ class Noticia_Has_Integrante extends DAO{
 		$res = "Noticia Has Integrante : "; 
 		if ($this->idnoticia)  $res .= "ID Noticia :" . $this->idnoticia . " |"; 
 		if ($this->idintegrante)  $res .= "ID Integrante:" . $this->idintegrante  . " |";
-		if ($this->qualificacao)  $res .= "Qualificacao:" . $this->qualificacao ;
+		if ($this->qualificacao)  $res .= "Qualificacao:" . $this->qualificacao . " |" ;
+		if ($this->idlexico) $rs .= 'ID LEXICO : ' . $this->idlexico;
 		
 		return $res; 
 	}

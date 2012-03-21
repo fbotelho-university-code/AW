@@ -9,22 +9,27 @@ require_once("DAO.php");
  class Noticia_Has_Clube extends DAO{
  	var $idclube; 
 	var $idnoticia; 
-	var $qualificacao =0; 
+	var $qualificacao =0;
+	var $idlexico; 
 	
 	public function getIdClube(){return $this->idclube;}  
 	public function getIdNoticia() {return $this->idnoticia; }
 	public function getQualificacao() {return $this->qualificacao; }
+	public function getIdLexico() {return $this->idlexico; }
 	
 	public function setIdClube($p) {$this->idclube = $p; }
 	public function setIdNoticia($p) {$this->idnoticia = $p; }
 	public function setQualificacao($p) {$this->qualificao = $p; }
+	public function setIdLexico() {return $this->idlexico;	}
 			
-	public function __construct($idNoticia=0, $idClube=0,$qualificacao = 0){
+	
+	public function __construct($idNoticia=0, $idClube=0,$qualificacao = 0, $idlexico = 0){
 		parent::__construct(); 
 		//var_dump(debug_backtrace()); 
 		$this->idclube = $idClube; 
 		$this->idnoticia = $idNoticia; 		
 		$this->qualificacao = $qualificacao; 
+		$this->idlexico = $idlexico;
 	}
 	
 	
@@ -45,7 +50,7 @@ require_once("DAO.php");
 				$query = "update noticia_has_clube SET qualificacao = " . $this->qualificacao . $sql_where_key; 
 			}
 			else {
-				$query = "insert into noticia_has_clube values (" . $this->idnoticia . "," . $this->idclube . ", " . $this->qualificacao . ")";
+				$query = "insert into noticia_has_clube values (" . $this->idnoticia . "," . $this->idclube . ", " . $this->qualificacao . "," . $this->idlexico .")";
 			}
 			
 			$rs = $ado->execute($query);
@@ -61,7 +66,8 @@ require_once("DAO.php");
 		$res = 'NoticiaCLubes : '; 
 		if ($this->idclube) $res .= ' ID CLUBE : ' . $this->idclube . ' |';
 		if ($this->idnoticia) $res .= ' ID NOTICIA : ' . $this->idnoticia . ' |';
-		if ($this->qualificacao) $res .= ' QUALIFICACAO: ' . $this->idnoticia ;
+		if ($this->qualificacao) $res .= ' QUALIFICACAO: ' . $this->idnoticia . ' | ' ;
+		if ($this->idlexico) $rs .= 'ID LEXICO : ' . $this->idlexico;
 		return $res; 
 	}
 	
