@@ -26,7 +26,7 @@ $f->setMain_url("http://arquivo.pt/opensearch?query=");
 $f->add();
 
 $f->setNome("RSS Sapo Notícias");
-$f->setMain_url("http://services.sapo.pt/Search/RSS?q=");
+$f->setMain_url("http://pesquisa.sapo.pt/?barra=noticias&location=pt&format=rss&q=");
 $f->add();
 
 $f->setNome("Geo-Net-PT");
