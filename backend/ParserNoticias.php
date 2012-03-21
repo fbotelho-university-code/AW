@@ -20,20 +20,15 @@ require_once "includes.php";
     	 * Efectua mudan�as directamente na base de dados relativa ˆ noticia  
     	 */
 		public static function parseNoticia($noticia){
-			//lexico de futebol
-			//Clubes/integrantes
-			//referencias espacial
-			$idnoticia = $noticia->add();
+	     	$idnoticia = $noticia->add();
 			$noticia->setIdnoticia($idnoticia);
-			//ParserNoticias::findLocais($noticia);	//OK
-			//TODO - criar rela��o Noticia/Locais 
-				ParserNoticias::findLocais($noticia);
 			
-			ParserNoticias::findClubes($noticia); 
-			//referencias temporal 
+			ParserNoticias::findRefEspacial($noticia);
+		//	ParserNoticias::findRefTemporal($noticia); 
+			ParserNoticias::findRefClubesAndIntegrantes($noticia); 
 		}
 		
-		private static function findLocais($noticia){
+		private static function findRefEspacial($noticia){
 			$l = new Local();
 			$locais = $l->getAll(); // TODO  tirar getAll daqui. Tirar classe est�tica. 
 			$textoNoticia = $noticia->getTexto();
@@ -49,7 +44,11 @@ require_once "includes.php";
 			}
 		}
 		 	
-		private static function findClubes($noticia){
+		 	/*private static function findRefTemporal; 
+			 	private static function findRefClubesAndIntegrantes();
+		 	 */
+		 	 
+		private static function findRefClubesAndIntegrantes($noticia){
 			$Lexico = new Lexico();
 			$Clubes_Lexico = new Clubes_Lexico();
 			$Noticias_Clube = new Noticia_Has_Clube(); 
@@ -78,20 +77,20 @@ require_once "includes.php";
 						}
 						$rel->addQualificacao($lexico->getPol());
 						$rel->update();
-					echo 'phase 1 <br/>';  
+					//echo 'phase 1 <br/>';  
 					}
                   if ($lexIntegrantes){
-                  	echo 'going to find first ' . $lexIntegrantes->getIdIntegrante() .'<br/>'; 
+                  	//echo 'going to find first ' . $lexIntegrantes->getIdIntegrante() .'<br/>'; 
                      $rel = $Noticia_Integrante->findFirst(array ("idnoticia" => $noticia->getIdnoticia(), "idintegrante" => $lexIntegrantes->getIdIntegrante())); 
                      
                      if (!$rel){
-                     	echo 'going to create relation <br/>'; 
+                     //	echo 'going to create relation <br/>'; 
                           $rel = new Noticia_Has_Integrante($noticia->getIdnoticia(), $lexIntegrantes->getIdIntegrante()); 
                           //echo '<br/> aqui <br/>';
-                          echo 'Printing id ' . $rel->getIdNoticia();  
+                       //   echo 'Printing id ' . $rel->getIdNoticia();  
 
                           $rel->add(); 
-                          echo '<br/> done <br/>';
+                         // echo '<br/> done <br/>';
                       }
                       $rel->addQualificacao($lexico->getPol()); 
                       $rel->update(); 
@@ -100,8 +99,9 @@ require_once "includes.php";
 			}
 		}
 		
-		private static function findTemporal($noticia){
-					$regexes = array(
+		private static function findRefTemporal($noticia){
+				$texto = $noticia->getTexto(); 
+				$regexes = array(
 /*1*/			'/\d{1,2}((\ )*\/(\ )*|(\ )*\-(\ )*)\d{1,2}((\ )*\/(\ )*|(\ )*\-(\ )*)\d{2}/',
 /*2*/			'/\d{1,2}(\/|\-)\d{1,2}(\/|\-)\d{4}/',
 /*3*/			'/\d{4}(\/|\-)\d{1,2}(\/|\-)\d{1,2}/',
@@ -119,31 +119,33 @@ require_once "includes.php";
 			);
 		
 			$matches = array();
-				
 			for($i=0;$i<count($regexes);$i++){
-				if(preg_match_all($regexes[$i], $noticia, $matches)){
+				if(preg_match_all($regexes[$i], $texto, $matches)){
 					$j=0;
 					foreach($matches as $match){
 						if ($matches[0][$j] != ''){
 							echo ($i+1).' Found '.$matches[0][$j++];
+							// save $matches[0][$j++]; 
  	      					echo '<br>';
 						}
 					}					
 				}
 			}
 		}
-		
 }
-
+/*
 $dao = new DAO(); 
 $dao->connect(); 
 $dao->execute("truncate table noticia");
 $dao->execute("truncate table noticia_has_clube"); 
 $dao->execute("truncate table noticia_locais");
+$dao->execute("truncate table noticia_has_integrante"); 
+
 $noticia = new Noticia();
 
 
 $noticia->setIdfonte(1); 
 $noticia->setTexto(addslashes(file_get_contents("./exemploNoticia.html"))); 
-ParserNoticias::parseNoticia($noticia);      
+ParserNoticias::parseNoticia($noticia);   
+*/   
 ?>
