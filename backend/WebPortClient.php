@@ -2,6 +2,7 @@
 
 require_once "includes.php";
 require_once "ParserNoticias.php";
+require_once "lib/rss_php.php"; 
 
 /**
  * Classe responsável pelo leitura e consulta no Arquivo da Web Portuguesa
