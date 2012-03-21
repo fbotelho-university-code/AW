@@ -135,7 +135,10 @@ class DAO extends ADOConnection {
 	}
 	
 	/**
-	 * Retorna o primeiro objecto resultante do find. Ou null
+	 * Retorna o primeiro objecto resultante da pesquisa à Base de Dados.
+	 * @param String[] $fields - O array associativo com os atributos e valores pelo qual desejam filtrar a pesquisa. 
+	 *                           Os campos apenas podem ser strings ou numericos.
+	 * @return Object $res[0] - Objecto da classe chamadora refletindo resultado da pesquisa à Base de Dados 
 	 */
 	public function findFirst($fields){
 		$table = get_class($this);
@@ -148,42 +151,30 @@ class DAO extends ADOConnection {
 	 * Retorna um array de objectos que satisfazem um dado criterio. 
 	 * @param String[] $fields - O array associativo com os atributos e valores pelo qual desejam filtrar a pesquisa. 
 	 *                           Os campos apenas podem ser strings ou numericos.
+	 * @return Object[] $values - Array com objectos da classe chamadora refletindo resultado da pesquisa à Base de Dados
 	 */
 	public  function find ($fields){
-			
-			if(is_subclass_of($this, "fonte")) {
-				$table = "fonte";
-			}
-			else {
-				$table = get_class($this);
-			}
-			$sql = 'select * from ' . $table;
-			$sql .= $this->createWhereClause($fields);
-			
-			$sql .= ';'; 
-			
-			$dao = new DAO(); 
-			$dao->connect();
-			//echo "<br/>" . $sql . "<br/>";  
-			$rs = $dao->execute($sql);
-
-
-			if (!$rs){
-				
-				die ($dao->db->ErrorMsg());
-				//return null; 
-			}
-			 
-			$values = array();
-			
-			while (!$rs->EOF){
-				$ob = new $table;
-				$this->setObj($rs->fields, $ob);
-				$values[] = $ob; 
-				$rs->MoveNext(); 
-			}
-			return $values;  
+		
+		//Subclasses de Fonte devem usar tabela da classe pai (fonte)	
+		if(is_subclass_of($this, "fonte")) {
+			$table = "fonte";
 		}
+		else {
+			$table = get_class($this);
+		}
+		
+		$sql = 'select * from ' . $table;
+		$sql .= $this->createWhereClause($fields);
+		$rs = $this->execute($sql);
+		$values = array();
+		while (!$rs->EOF){
+			$ob = new $table;
+			$this->setObj($rs->fields, $ob);
+			$values[] = $ob; 
+			$rs->MoveNext(); 
+		}
+		return $values;  
+	}
 		
 	/**
 	 * Recupera um objecto da base de dados pelo seu id
@@ -200,7 +191,7 @@ class DAO extends ADOConnection {
 	
 	/**
 	 * Cria uma clausula where bem formada a partir de um ArrayAssociativo com ANDS 
-	 * S— suporta strings e numericos. Datas e outros que tais t‡ no mato. 
+	 * S— suporta strings e numericos. 
 	 * @returns a String a dizer where key0 = $arrayAssoc[key0] AND $key1 = 'arrayAssoc[key1]' ou entao a string vazia caso o array esteja vazio.
 	 */
 	private function createWhereClause($arrayAssoc){
