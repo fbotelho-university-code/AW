@@ -71,9 +71,8 @@ require_once "includes.php";
 						$rel = $Noticias_Clube->findFirst(array("idnoticia" => $noticia->getIdnoticia(), "idclube" => $lexClubes->getIdClube()));
 
 						if (!$rel){
-							$rel = new Noticia_Has_Clube($noticia->getIdnoticia(), $lexClubes->getIdClube());
+							$rel = new Noticia_Has_Clube($noticia->getIdnoticia(), $lexClubes->getIdClube(), 0 , $lexico->getIdLexico());
 							$rel->add();  
-							
 						}
 						$rel->addQualificacao($lexico->getPol());
 						$rel->update();
@@ -85,7 +84,7 @@ require_once "includes.php";
                      
                      if (!$rel){
                      //	echo 'going to create relation <br/>'; 
-                          $rel = new Noticia_Has_Integrante($noticia->getIdnoticia(), $lexIntegrantes->getIdIntegrante()); 
+                          $rel = new Noticia_Has_Integrante($noticia->getIdnoticia(), $lexIntegrantes->getIdIntegrante(), 0 ,$lexico->getIdLexico()); 
                           //echo '<br/> aqui <br/>';
                        //   echo 'Printing id ' . $rel->getIdNoticia();  
 
