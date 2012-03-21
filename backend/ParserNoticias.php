@@ -116,16 +116,20 @@ require_once "includes.php";
 /*13*/			'/(Janeiro|Fevereiro|Março|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)/',
 /*14*/			'/\d{4}/'
 			);
-		
+
 			$matches = array();
 			for($i=0;$i<count($regexes);$i++){
 				if(preg_match_all($regexes[$i], $texto, $matches)){
 					$j=0;
-					foreach($matches as $match){
+					foreach($matches as $m){
 						if ($matches[0][$j] != ''){
-							echo ($i+1).' Found '.$matches[0][$j++];
+							echo $j . '<br/>'; 
+							var_dump($matches); 
+							echo ($i+1).' Found '.$matches[0][$j];
+							$rel  = new Noticia_Data($noticia->getIdnoticia(), $matches[0][$j]); $j++; 
+							$rel->add();  
 							// save $matches[0][$j++]; 
- 	      					echo '<br>';
+// 	      					echo '<br>';
 						}
 					}					
 				}
