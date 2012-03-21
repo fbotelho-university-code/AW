@@ -13,7 +13,7 @@ require_once "includes.php";
  * Window - Preferences - PHPeclipse - PHP - Code Templates
  */
 
-	
+
     class ParserNoticias {
     	/**
     	 * Efectua parsing de noticias
@@ -51,10 +51,10 @@ require_once "includes.php";
 		 	
 		private static function findClubes($noticia){
 			$Lexico = new Lexico();
-			$Clubes_Lexico = new Clubes_Lexico(); 
+			$Clubes_Lexico = new Clubes_Lexico();
 			$Noticias_Clube = new Noticia_Has_Clube(); 
 			$Integrantes_Lexico = new Integrantes_Lexico(); 
-                        $Noticia_Integrante = new Noticia_Has_Integrante(); 
+            $Noticia_Integrante = new Noticia_Has_Integrante(); 
 			$textoNoticia = $noticia->getTexto(); 
                         
 			$lexicos = $Lexico->getAll();
@@ -65,9 +65,8 @@ require_once "includes.php";
 					//Find the clube associated with lexico. 
 					//TODO - lexico poderia estar associado a mais que um clube !  
 					//Assumindo que s— vai ser associado a um: 
-
 					$lexClubes = $Clubes_Lexico->findFirst(array("idlexico" => $lexico->getIdlexico()));
-					$lexIntegrantes = $Integrantes_Lexico->findFirst(array ("idlexico => $lexico->getIdlexico())")); 
+					$lexIntegrantes = $Integrantes_Lexico->findFirst(array ("idlexico" => $lexico->getIdlexico())); 
 					if ($lexClubes){					
 						//rela��o entre noticiaEClubes
 						$rel = $Noticias_Clube->findFirst(array("idnoticia" => $noticia->getIdnoticia(), "idclube" => $lexClubes->getIdClube()));
@@ -82,7 +81,7 @@ require_once "includes.php";
 					echo 'phase 1 <br/>';  
 					}
                   if ($lexIntegrantes){
-                  	echo 'going to find first <br/>'; 
+                  	echo 'going to find first ' . $lexIntegrantes->getIdIntegrante() .'<br/>'; 
                      $rel = $Noticia_Integrante->findFirst(array ("idnoticia" => $noticia->getIdnoticia(), "idintegrante" => $lexIntegrantes->getIdIntegrante())); 
                      
                      if (!$rel){
