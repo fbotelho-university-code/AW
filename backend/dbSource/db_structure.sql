@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tempo de Geração: Mar 19, 2012 as 10:08 PM
+-- Tempo de Geração: Mar 21, 2012 as 07:32 PM
 -- Versão do Servidor: 5.5.8
 -- Versão do PHP: 5.3.5
 
@@ -25,14 +25,14 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- Estrutura da tabela `clube`
 --
 
-DROP TABLE IF EXISTS `clube`;
 CREATE TABLE IF NOT EXISTS `clube` (
   `idclube` int(11) NOT NULL AUTO_INCREMENT,
   `idlocal` int(11) NOT NULL,
   `idcompeticao` int(11) NOT NULL,
   `nome_clube` varchar(100) CHARACTER SET latin1 DEFAULT NULL,
+  `nome_oficial` varchar(100) NOT NULL,
   PRIMARY KEY (`idclube`,`idlocal`,`idcompeticao`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Esta tabela representa ....' AUTO_INCREMENT=6 ;
 
 -- --------------------------------------------------------
 
@@ -40,7 +40,6 @@ CREATE TABLE IF NOT EXISTS `clube` (
 -- Estrutura da tabela `clubes_lexico`
 --
 
-DROP TABLE IF EXISTS `clubes_lexico`;
 CREATE TABLE IF NOT EXISTS `clubes_lexico` (
   `idclube` int(11) NOT NULL,
   `idlexico` int(11) NOT NULL,
@@ -54,7 +53,6 @@ CREATE TABLE IF NOT EXISTS `clubes_lexico` (
 -- Estrutura da tabela `competicao`
 --
 
-DROP TABLE IF EXISTS `competicao`;
 CREATE TABLE IF NOT EXISTS `competicao` (
   `idcompeticao` int(11) NOT NULL AUTO_INCREMENT,
   `nome_competicao` varchar(100) CHARACTER SET latin1 DEFAULT NULL,
@@ -67,14 +65,13 @@ CREATE TABLE IF NOT EXISTS `competicao` (
 -- Estrutura da tabela `fonte`
 --
 
-DROP TABLE IF EXISTS `fonte`;
 CREATE TABLE IF NOT EXISTS `fonte` (
   `idfonte` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(45) CHARACTER SET latin1 DEFAULT NULL,
   `main_url` varchar(100) CHARACTER SET latin1 DEFAULT NULL,
   `ligado` tinyint(1) NOT NULL,
   PRIMARY KEY (`idfonte`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 -- --------------------------------------------------------
 
@@ -82,7 +79,6 @@ CREATE TABLE IF NOT EXISTS `fonte` (
 -- Estrutura da tabela `fonte_has_parametros`
 --
 
-DROP TABLE IF EXISTS `fonte_has_parametros`;
 CREATE TABLE IF NOT EXISTS `fonte_has_parametros` (
   `idfonte` int(11) NOT NULL,
   `idparametros` int(11) NOT NULL,
@@ -95,7 +91,6 @@ CREATE TABLE IF NOT EXISTS `fonte_has_parametros` (
 -- Estrutura da tabela `funcao`
 --
 
-DROP TABLE IF EXISTS `funcao`;
 CREATE TABLE IF NOT EXISTS `funcao` (
   `idfuncao` int(11) NOT NULL AUTO_INCREMENT,
   `funcao` varchar(45) CHARACTER SET latin1 DEFAULT NULL,
@@ -108,7 +103,6 @@ CREATE TABLE IF NOT EXISTS `funcao` (
 -- Estrutura da tabela `integrante`
 --
 
-DROP TABLE IF EXISTS `integrante`;
 CREATE TABLE IF NOT EXISTS `integrante` (
   `idintegrante` int(11) NOT NULL AUTO_INCREMENT,
   `idclube` int(11) NOT NULL,
@@ -123,7 +117,6 @@ CREATE TABLE IF NOT EXISTS `integrante` (
 -- Estrutura da tabela `integrantes_lexico`
 --
 
-DROP TABLE IF EXISTS `integrantes_lexico`;
 CREATE TABLE IF NOT EXISTS `integrantes_lexico` (
   `idintegrante` int(11) NOT NULL,
   `idlexico` int(11) NOT NULL,
@@ -137,7 +130,6 @@ CREATE TABLE IF NOT EXISTS `integrantes_lexico` (
 -- Estrutura da tabela `lexico`
 --
 
-DROP TABLE IF EXISTS `lexico`;
 CREATE TABLE IF NOT EXISTS `lexico` (
   `nucleo` varchar(255) NOT NULL,
   `contexto` varchar(255) NOT NULL,
@@ -155,7 +147,6 @@ CREATE TABLE IF NOT EXISTS `lexico` (
 -- Estrutura da tabela `local`
 --
 
-DROP TABLE IF EXISTS `local`;
 CREATE TABLE IF NOT EXISTS `local` (
   `idlocal` int(11) NOT NULL AUTO_INCREMENT,
   `nome_local` varchar(100) CHARACTER SET latin1 DEFAULT NULL,
@@ -169,7 +160,6 @@ CREATE TABLE IF NOT EXISTS `local` (
 -- Estrutura da tabela `noticia`
 --
 
-DROP TABLE IF EXISTS `noticia`;
 CREATE TABLE IF NOT EXISTS `noticia` (
   `idnoticia` int(11) NOT NULL AUTO_INCREMENT,
   `idfonte` int(11) NOT NULL,
@@ -181,7 +171,7 @@ CREATE TABLE IF NOT EXISTS `noticia` (
   `url` text CHARACTER SET latin1,
   `visivel` tinyint(1) NOT NULL,
   PRIMARY KEY (`idnoticia`,`idfonte`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=263 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
 
@@ -189,7 +179,6 @@ CREATE TABLE IF NOT EXISTS `noticia` (
 -- Estrutura da tabela `noticia_has_clube`
 --
 
-DROP TABLE IF EXISTS `noticia_has_clube`;
 CREATE TABLE IF NOT EXISTS `noticia_has_clube` (
   `idnoticia` int(11) NOT NULL,
   `idclube` int(11) NOT NULL,
@@ -203,10 +192,10 @@ CREATE TABLE IF NOT EXISTS `noticia_has_clube` (
 -- Estrutura da tabela `noticia_has_integrante`
 --
 
-DROP TABLE IF EXISTS `noticia_has_integrante`;
 CREATE TABLE IF NOT EXISTS `noticia_has_integrante` (
   `idnoticia` int(11) NOT NULL,
   `idintegrante` int(11) NOT NULL,
+  `qualificacao` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`idnoticia`,`idintegrante`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -216,7 +205,6 @@ CREATE TABLE IF NOT EXISTS `noticia_has_integrante` (
 -- Estrutura da tabela `noticia_locais`
 --
 
-DROP TABLE IF EXISTS `noticia_locais`;
 CREATE TABLE IF NOT EXISTS `noticia_locais` (
   `idnoticia` int(11) NOT NULL,
   `idlocal` int(11) NOT NULL,
@@ -231,26 +219,8 @@ CREATE TABLE IF NOT EXISTS `noticia_locais` (
 -- Estrutura da tabela `parametros`
 --
 
-DROP TABLE IF EXISTS `parametros`;
 CREATE TABLE IF NOT EXISTS `parametros` (
   `idparametros` int(11) NOT NULL,
   `nome_parametro` varchar(100) CHARACTER SET latin1 DEFAULT NULL,
   PRIMARY KEY (`idparametros`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Restrições para as tabelas dumpadas
---
-
---
--- Restrições para a tabela `clubes_lexico`
---
-ALTER TABLE `clubes_lexico`
-  ADD CONSTRAINT `clubes_lexico_ibfk_1` FOREIGN KEY (`idclube`) REFERENCES `clube` (`idclube`) ON DELETE CASCADE,
-  ADD CONSTRAINT `clubes_lexico_ibfk_2` FOREIGN KEY (`idlexico`) REFERENCES `lexico` (`idlexico`) ON DELETE CASCADE;
-
---
--- Restrições para a tabela `integrantes_lexico`
---
-ALTER TABLE `integrantes_lexico`
-  ADD CONSTRAINT `integrantes_lexico_ibfk_4` FOREIGN KEY (`idlexico`) REFERENCES `lexico` (`idlexico`) ON DELETE CASCADE;
