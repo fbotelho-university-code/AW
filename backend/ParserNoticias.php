@@ -91,7 +91,7 @@ require_once "includes.php";
                           echo 'Printing id ' . $rel->getIdNoticia();  
 
                           $rel->add(); 
-                          //echo '<br/> done <br/>';
+                          echo '<br/> done <br/>';
                       }
                       $rel->addQualificacao($lexico->getPol()); 
                       $rel->update(); 
@@ -138,7 +138,8 @@ require_once "includes.php";
 $dao = new DAO(); 
 $dao->connect(); 
 $dao->execute("truncate table noticia");
-$dao->execute("truncate table noticia_has_clube");  
+$dao->execute("truncate table noticia_has_clube"); 
+$dao->execute("truncate table noticia_locais");
 $noticia = new Noticia();
 
 

@@ -31,7 +31,7 @@ class DAO extends ADOConnection {
 	 * Palavra-passe para acesso à Base de Dados
 	 * @var String
 	 */
-	private $mypassword = "fabiim";
+	private $mypassword = "pcdamf06";
 	
 	/**
 	 * Nome da Base de Dados a ser utilizada
@@ -93,7 +93,7 @@ class DAO extends ADOConnection {
 		$this->connect();
 		$table = get_class($this);
 		$fields = get_object_vars($this);
-		$rs = $this->db->AutoExecute($table, $fields, "INSERT") or die($this->db->ErrorMsg() . "<br>SQL: ".$sql);
+		$rs = $this->db->AutoExecute($table, $fields, "INSERT") or die($this->db->ErrorMsg() . "<br>SQL: ".var_dump($fields). " - Table: ".$table);
 		$id = $this->db->Insert_ID();
 		$this->disconnect();
 		return $id;
@@ -142,9 +142,7 @@ class DAO extends ADOConnection {
 	 */
 	public function findFirst($fields){
 		$table = get_class($this);
-		echo 'calling'; 
 		$res = $this->find ($fields);
-		echo 'pass';
 		if (count($res) > 0) return $res[0]; 
 		return null;  
 	}
@@ -168,7 +166,7 @@ class DAO extends ADOConnection {
 		$sql = 'select * from ' . $table;
 		$sql .= $this->createWhereClause($fields) . ';';
 		
-		echo $sql; 
+		//echo $sql; 
 		$rs = $this->execute($sql);
 		$values = array();
 		while (!$rs->EOF){
@@ -200,7 +198,7 @@ class DAO extends ADOConnection {
 	 */
 	 //TODO is_string not working. 
 	private function createWhereClause($arrayAssoc){
-		var_dump($arrayAssoc); 
+		
 		$sql = '';
 		$sql .= (count($arrayAssoc) > 0 ) ? ' where ' : ''; //check to see if they are where clausules 
 
