@@ -71,9 +71,8 @@ require_once "includes.php";
 						$rel = $Noticias_Clube->findFirst(array("idnoticia" => $noticia->getIdnoticia(), "idclube" => $lexClubes->getIdClube()));
 
 						if (!$rel){
-							$rel = new Noticia_Has_Clube($noticia->getIdnoticia(), $lexClubes->getIdClube());
+							$rel = new Noticia_Has_Clube($noticia->getIdnoticia(), $lexClubes->getIdClube(), 0 , $lexico->getIdLexico());
 							$rel->add();  
-							
 						}
 						$rel->addQualificacao($lexico->getPol());
 						$rel->update();
@@ -85,7 +84,7 @@ require_once "includes.php";
                      
                      if (!$rel){
                      //	echo 'going to create relation <br/>'; 
-                          $rel = new Noticia_Has_Integrante($noticia->getIdnoticia(), $lexIntegrantes->getIdIntegrante()); 
+                          $rel = new Noticia_Has_Integrante($noticia->getIdnoticia(), $lexIntegrantes->getIdIntegrante(), 0 ,$lexico->getIdLexico()); 
                           //echo '<br/> aqui <br/>';
                        //   echo 'Printing id ' . $rel->getIdNoticia();  
 
@@ -117,16 +116,20 @@ require_once "includes.php";
 /*13*/			'/(Janeiro|Fevereiro|Março|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)/',
 /*14*/			'/\d{4}/'
 			);
-		
+
 			$matches = array();
 			for($i=0;$i<count($regexes);$i++){
 				if(preg_match_all($regexes[$i], $texto, $matches)){
 					$j=0;
-					foreach($matches as $match){
+					foreach($matches as $m){
 						if ($matches[0][$j] != ''){
-							echo ($i+1).' Found '.$matches[0][$j++];
+							echo $j . '<br/>'; 
+							var_dump($matches); 
+							echo ($i+1).' Found '.$matches[0][$j];
+							$rel  = new Noticia_Data($noticia->getIdnoticia(), $matches[0][$j]); $j++; 
+							$rel->add();  
 							// save $matches[0][$j++]; 
- 	      					echo '<br>';
+// 	      					echo '<br>';
 						}
 					}					
 				}
