@@ -26,9 +26,9 @@ class Noticia_Has_Integrante extends DAO{
     	$this->idintegrante= $idintegrante;
     	$this->qualificacao = $qualificacao; 
     }
-    
-    
-	//TODO - clean up and generalize update function
+
+
+    //TODO - clean up and generalize update function
 	public function update() {
         $sql_where_key = " where idnoticia = " . $this->idnoticia . " AND idintegrante = " . $this->idintegrante;
         $query = "select * from noticia_has_integrante" . $sql_where_key;
