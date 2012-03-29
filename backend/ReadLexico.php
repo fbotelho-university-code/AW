@@ -39,14 +39,14 @@
  $jogador = new Integrante();
  $jogadores = $jogador->getAll();
  $clube = new Clube();
- $clubes = $clube->getAll(); 
- //foreach ($clubes as $cl){
+  $clubes = $clube->getAll();
+  //foreach ($clubes as $cl){
  	//echo '<br/>'. $cl . '<br/>';
  //}
  
  $lex = new Lexico();
  $lexicos = $lex->getAll();
-  
+ 
  foreach ($lexicos as $lexico){
   	
   	//TODO - ser‡ a melhor maneira de comparar? 

@@ -119,14 +119,11 @@ require_once "includes.php";
 
 			$matches = array();
 			for($i=0;$i<count($regexes);$i++){
-				if(preg_match_all($regexes[$i], $texto, $matches)){
-					$j=0;
+				if(preg_match($regexes[$i], $texto, $matches)){
 					
-					foreach($matches as $arrays){
-							foreach ($arrays as $m){
-								echo $m; 
+					$rel  = new Noticia_Data($noticia->getIdnoticia(), $matches[0]); 
+					$rel->add();  
 							}							
-							
 					}
 				}
 			}
@@ -136,17 +133,14 @@ require_once "includes.php";
 							echo '<br/> J: ' . $j . '<br/>'; 
 							var_dump($matches); 
 							echo ($i+1).' Found '.$matches[0][$j];
-							$rel  = new Noticia_Data($noticia->getIdnoticia(), $matches[0][$j]); $j++; 
-							$rel->add();  
 							// save $matches[0][$j++]; 
 // 	      					echo '<br>';*/
 						//}
 	//				}					
-				}
 				
 		//	}
 //		}
-}
+
 /*
 $dao = new DAO(); 
 $dao->connect(); 

@@ -50,7 +50,7 @@ class TwitterSearchClient extends Fonte{
 								$this->readNewAsRssItem($keyy, $valuee, $noticia);
 							}
 							//TODO Caracterização Semantica da Notícia				
-							ParserNoticias::parseNoticia($myNew);
+							ParserNoticias::parseNoticia($noticia);
 							 
 						}
 					}
