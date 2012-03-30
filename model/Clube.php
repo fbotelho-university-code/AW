@@ -1,12 +1,12 @@
 <?php
 
-require_once "DAO.php";
+require_once "Model.php";
 
 /**
  * Classe que representa um clube de futebol
  *  (Ex: Benfica, Porto, Sporting, etc.)
  */
-class Clube extends DAO {
+class Clube extends Model {
 	
 	/**
 	* Identificador do clube
@@ -128,6 +128,18 @@ class Clube extends DAO {
 	public function setNome_oficial($n) {
 		$this->nome_oficial = $n;
 	}
+	
+	
+	public function __toString(){
+		$res = 'Clube'; 
+		if ($this->idclube) $res .= ' ID CLUBE : ' . $this->idclube . ' |';
+		if ($this->idlocal) $res .= ' ID LOCAL : ' . $this->idlocal . ' |';
+		if ($this->idcompeticao) $res .= ' ID COMPETICAO: ' . $this->idcompeticao . ' | ' ;
+		if ($this->nome_clube) $rs .= 'ID  : ' . $this->nome_clube . ' | ';
+		if ($this->nome_oficial) $rs .= 'NOME OFICIAL  : ' . $this->nome_oficial . ' | ';
+		return $res; 
+	}
+	
 }
 
 ?>

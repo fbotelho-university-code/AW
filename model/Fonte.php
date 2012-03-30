@@ -1,12 +1,12 @@
 <?php
 
-require_once "DAO.php";
+require_once "Model.php";
 
 /**
  * Classe que representa uma fonte de informações da Web
  *  (Google News, Sapo News, Twitter, etc.)
  */
-class Fonte extends DAO {
+class Fonte extends Model {
 	
 	/**
 	* Identificador da fonte

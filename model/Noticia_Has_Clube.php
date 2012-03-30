@@ -1,5 +1,5 @@
 <?php
-require_once("DAO.php"); 
+require_once("Model.php"); 
 /*
  * Created on Mar 15, 2012
  *

@@ -1,11 +1,11 @@
 <?php
 
-require_once "DAO.php"; 
+require_once "Model.php"; 
 
 /**
   * Classe que representa o lexico utilizado na aplicacao
   */
-class Lexico extends DAO {
+class Lexico extends Model{
 		
 		 
 		var $nucleo; 

@@ -5,9 +5,9 @@
  * To change the template for this generated file go to
  * Window - Preferences - PHPeclipse - PHP - Code Templates
  */
-require_once('DAO.php'); 
+require_once('Model.php'); 
 
-class Integrantes_Lexico extends DAO{
+class Integrantes_Lexico extends Model{
 	var $idintegrante; 
 	var $idlexico; 
 	

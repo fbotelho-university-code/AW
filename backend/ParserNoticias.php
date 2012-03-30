@@ -156,4 +156,5 @@ $noticia->setIdfonte(1);
 $noticia->setTexto(addslashes(file_get_contents("./exemploNoticia.html"))); 
 ParserNoticias::parseNoticia($noticia);   
 */   
+
 ?>

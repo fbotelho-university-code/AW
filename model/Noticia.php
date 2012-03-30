@@ -1,12 +1,12 @@
 <?php
 
-require_once "DAO.php";
+require_once "Model.php";
 
 /**
  * Classe que representa uma notícia recuperada de fontes de informações da Web
  *  (Google News, Sapo News, Twitter, etc.)
  */ 
-class Noticia extends DAO{
+class Noticia extends Model{
 	
 	/**
 	 * Identificador da noticia

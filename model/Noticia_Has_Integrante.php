@@ -5,9 +5,9 @@
  * To change the template for this generated file go to
  * Window - Preferences - PHPeclipse - PHP - Code Templates
  */
-require_once ("DAO.php"); 
+require_once ("Model.php"); 
 
-class Noticia_Has_Integrante extends DAO{
+class Noticia_Has_Integrante extends Model{
 	var $idnoticia; 
 	var $idintegrante; 
 	var $qualificacao; 

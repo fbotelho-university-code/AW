@@ -1,11 +1,11 @@
 <?php
 
-require_once "DAO.php";
+require_once "Model.php";
 
 /**
   * Classe que representa um Integrante de um clube
   */
-class Integrante extends DAO {
+class Integrante extends Model{
 	
 	/**
 	* Identificador do integrante
@@ -101,7 +101,14 @@ class Integrante extends DAO {
 	public function setNome_integrante($nome) {
 		$this->nome_integrante = $nome;
 	}
-	
+	public function __toString(){
+		$res = 'Integrante'; 
+		if ($this->idclube) $res .= ' ID CLUBE : ' . $this->idclube . ' |';
+		if ($this->idfuncao) $res .= ' ID FUNCAO : ' . $this->idfuncao . ' |';
+		if ($this->nome_integrante) $res .= ' NOME: ' . $this->nome_integrante . ' | ' ;
+		if ($this->idintegrante) $rs .= 'ID  : ' . $this->idintegrante;
+		return $res; 
+	}
 }
 
 ?>

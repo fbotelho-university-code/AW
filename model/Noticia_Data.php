@@ -6,7 +6,7 @@
  * Window - Preferences - PHPeclipse - PHP - Code Templates
  */
  
- require_once("DAO.php");
+ require_once("Model.php");
   
  class Noticia_data extends DAO{
  

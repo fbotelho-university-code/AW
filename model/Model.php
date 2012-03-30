@@ -1,87 +1,30 @@
 <?php
-
-include ("./adodb/adodb.inc.php");
-
-/**
- * Classe que representa uma abstracao para acesso a base de dados.
- * Usada com superclasse de todas as classes do Modelo
+/*
+ * Created on Mar 29, 2012
+ *
+ * To change the template for this generated file go to
+ * Window - Preferences - PHPeclipse - PHP - Code Templates
  */
-class DAO extends ADOConnection {
-	
-	/**
-	 * SGBD utilizado pela aplicacao
-	 * @var String
-	 */
-	private $mysgbd = "mysql";
-	
-	/**
-	 * Nome ou IP do servidor na qual encontra-se instalada a Base de Dados
-	 * @var String
-	 */
-	private $myserver = "localhost";
-	
-	/**
-	 * Nome do usuario para acesso à Base de Dados
-	 * @var String
-	 */
-	private $myuser = "root";
-	
-	/**
-	 * 
-	 * Palavra-passe para acesso à Base de Dados
-	 * @var String
-	 */
-	private $mypassword = "pcdamf06";
-	
-	/**
-	 * Nome da Base de Dados a ser utilizada
-	 * @var String
-	 */
-	private $mydbName = "aw";
-	
-	/**
-	 * Objeto para acesso à Base de Dados
-	 * @var ADONewConnection
-	 */
-	public $db;
-	
-	/**
-	 * Construtor da Classe
-	 * Configura o SGBD a ser utilizado
-	 * @uses {@link $mysgbd}
-	 */
-	function __construct() {
-		
-		$this->db = &ADONewConnection($this->mysgbd);
-		
-		/* Ativa Associação dos nomes das colunas das tabelas da BD com as chaves dos arrays de retorno de consulta */
-		$this->db->SetFetchMode(ADODB_FETCH_ASSOC);
-	}
-	
-	/**
-	 * Conecta com a base de dados
-	 * Usa os atributos da classe para estabelecar uma ligação com o SGBD
-	 */
-	function connect() {
-		$this->db->Connect($this->myserver, $this->myuser, $this->mypassword, $this->mydbName) or die($this->db->ErrorMsg());
-	}
-	
-	/**
-	 * Disconecta com a base de dados
-	 */
-	function disconnect() {
-		$this->db->Close();
-	}
+ require_once ('DAO.php'); 
 
+class Model{
+	
+	private $dao; 
+	
+	public function __construct(){
+		$this->dao = new DAO(); 
+	}
+	 
 	/**
 	 * Executa uma SQL
 	 * @param String $sql
 	 * @return ResultSet $rs Resultado da SQL executada
 	 */
+	 
 	function execute($sql) {
-		$this->connect();
-		$rs = $this->db->Execute($sql) or die($this->db->ErrorMsg() . "<br>SQL: ".$sql);
-		$this->disconnect();
+		$this->dao->connect();
+		$rs = $this->dao->db->Execute($sql) or die($this->dao->db->ErrorMsg() . "<br>SQL: ".$sql);
+		$this->dao->disconnect();
 		return $rs;
 	}
 	
@@ -90,12 +33,12 @@ class DAO extends ADOConnection {
 	 * @return int $id Identificador do registo inserido
 	 */
 	public function add(){
-		$this->connect();
+		$this->dao->connect();
 		$table = get_class($this);
 		$fields = get_object_vars($this);
-		$rs = $this->db->AutoExecute($table, $fields, "INSERT") or die($this->db->ErrorMsg() . "<br>SQL: ".var_dump($fields). " - Table: ".$table);
-		$id = $this->db->Insert_ID();
-		$this->disconnect();
+		$rs = $this->dao->db->AutoExecute($table, $fields, "INSERT") or die($this->dao->db->ErrorMsg() . "<br>SQL: ".var_dump($fields). " - Table: ".$table);
+		$id = $this->dao->db->Insert_ID();
+		$this->dao->disconnect();
 		return $id;
 	}
 	
@@ -106,7 +49,7 @@ class DAO extends ADOConnection {
 	public function clear() {
 		$table = get_class($this);
 		$sql = "TRUNCATE TABLE ". $table;
-		$rs = $this->execute($sql);
+		$rs = $this->dao->db->execute($sql);
 		if($rs) {
 			return true;
 		}
@@ -119,11 +62,31 @@ class DAO extends ADOConnection {
 	 * Retorna todos os registos da base de dados de uma tabela
 	 * @return Object[] $objects Array de Objectos com atributos da base de dados
 	 */
-	public  function getAll(){
+	public  function getAll($fields =null){
 		$table = get_class($this);
-		$sql = "SELECT  * FROM ". $table;
-		$rs = $this->execute($sql);
+		$sql = "SELECT "; 
+				
+		if (isset($fields)){
+			$count = count($fields); 
+			$i = 0; 
+			foreach ($fields as $f){
+				$sql .= $f;
+				$i++;
+				if ($i < $count){
+					$sql .= ', ';  
+				} 
+			}
+		}
+		else{
+			$sql .= ' * '; 
+		}
+		$sql .= ' FROM ' . $table . ';';
+		
+		$this->dao->connect(); 
+		$rs = $this->dao->db->execute($sql) or die ($this->dao->db->ErrorMsg());
 		$objects = array();
+		
+		
 		while(!$rs->EOF) {
 			$arrayAssoc = $rs->fields;
 			$obj = new $table;
@@ -131,6 +94,7 @@ class DAO extends ADOConnection {
 			$objects[] = $obj;
 			$rs->MoveNext();
 		}
+		$this->dao->disconnect(); 
 		return $objects;
 	}
 	
@@ -166,8 +130,8 @@ class DAO extends ADOConnection {
 		$sql = 'select * from ' . $table;
 		$sql .= $this->createWhereClause($fields) . ';';
 		
-		//echo $sql; 
-		$rs = $this->execute($sql);
+		$this->dao->connect(); 
+		$rs = $this->dao->db->execute($sql);
 		$values = array();
 		while (!$rs->EOF){
 			$ob = new $table;
@@ -175,6 +139,7 @@ class DAO extends ADOConnection {
 			$values[] = $ob; 
 			$rs->MoveNext(); 
 		}
+		$this->dao->disconnect(); 
 		return $values;  
 	}
 		
@@ -185,10 +150,12 @@ class DAO extends ADOConnection {
 	public function getObjectById($id) {
 		$table = get_class($this);
 		$sql = "SELECT * FROM ".$table. " WHERE id".$table." = ".$id;
-		$rs = $this->execute($sql);
+		$this->dao->connect();
+		$rs = $this->dao->db->execute($sql);
 		foreach($rs->fields as $key => $value) {
 			$this->$key = $value;
 		}
+		$this->dao->disconnect(); 
 	}
 	
 	/**
@@ -198,7 +165,6 @@ class DAO extends ADOConnection {
 	 */
 	 //TODO is_string not working. 
 	private function createWhereClause($arrayAssoc){
-		
 		$sql = '';
 		$sql .= (count($arrayAssoc) > 0 ) ? ' where ' : ''; //check to see if they are where clausules 
 
@@ -222,10 +188,10 @@ class DAO extends ADOConnection {
 	 * @param Object $obj - Objecto da subclasse chamadora
 	 */
 	private function setObj($arrayAssoc, $obj){
-
+	
 	 foreach($arrayAssoc as $key => $value) {
 			$obj->$key = $value;
 		}
 	}
-	
 }
+?>
