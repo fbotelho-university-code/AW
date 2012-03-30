@@ -46,7 +46,11 @@ class TwitterSearchClient extends Fonte{
 							foreach($value as $keyy => $valuee){
 								$this->readNewAsRssItem($keyy, $valuee, $noticia);
 							}
+<<<<<<< HEAD
 							
+=======
+							//TODO Caracterização Semantica da Notícia				
+>>>>>>> origin/master
 							ParserNoticias::parseNoticia($noticia);
 							 
 						}

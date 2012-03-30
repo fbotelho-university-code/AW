@@ -110,6 +110,7 @@ class ParserNoticias {
 
 			$matches = array();
 			for($i=0;$i<count($regexes);$i++){
+<<<<<<< HEAD
 				if(preg_match_all($regexes[$i], $texto, $matches)){
 					if ($matches[0][0] != ''){
 						// retira valores duplicados no array, sem alterar as chaves originais
@@ -126,6 +127,30 @@ class ParserNoticias {
 			}
 		}
 }
+=======
+				if(preg_match($regexes[$i], $texto, $matches)){
+					
+					$rel  = new Noticia_Data($noticia->getIdnoticia(), $matches[0]); 
+					$rel->add();  
+							}							
+					}
+				}
+			}
+//						echo '<br/>' . $m . '<br/>';
+/*
+						//if ($matches[0][$j] != ''){
+							echo '<br/> J: ' . $j . '<br/>'; 
+							var_dump($matches); 
+							echo ($i+1).' Found '.$matches[0][$j];
+							// save $matches[0][$j++]; 
+// 	      					echo '<br>';*/
+						//}
+	//				}					
+				
+		//	}
+//		}
+
+>>>>>>> origin/master
 /*
 $dao = new DAO(); 
 $dao->connect(); 
