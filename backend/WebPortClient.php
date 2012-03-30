@@ -63,8 +63,10 @@ class WebPortClient extends Fonte {
 				ParserNoticias::parseNoticia($myNew);
 			}
 		}
+		echo "Foram inseridas notícias da Fonte ".$this->getNome()." com sucesso.";
 	}
 }
+
 
 $arq = new WebPortClient();
 $parameters = Util::getSearchParameters();

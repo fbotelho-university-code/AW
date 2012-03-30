@@ -75,7 +75,7 @@ class DAO extends ADOConnection {
 
 	/**
 	 * Executa uma SQL
-	 * @param String $sql
+	 * @param String $sql - SQL a ser executada
 	 * @return ResultSet $rs Resultado da SQL executada
 	 */
 	function execute($sql) {
@@ -86,8 +86,8 @@ class DAO extends ADOConnection {
 	}
 	
 	/**
-	 * Insere um objeto na base de dados
-	 * @return int $id Identificador do registo inserido
+	 * Insere um objeto na base de dados. Requer nome da classe do objecto igual ao nome da tabela na Base de Dados
+	 * @return int $id Identificador do registo inserido, reepresentado na Base de Dados pelo campo AUTO INCREMENT
 	 */
 	public function add(){
 		$this->connect();
@@ -100,13 +100,25 @@ class DAO extends ADOConnection {
 	}
 	
 	/**
-	 * Apaga todos os registos de uma tabela na base de dados
-	 * @return boolean
+	 * Apaga todos os registos de uma tabela na base de dados. Tabelas com relacionamentos também são apagadas.
+	 * @return boolean 
 	 */
 	public function clear() {
 		$table = get_class($this);
-		$sql = "TRUNCATE TABLE ". $table;
-		$rs = $this->execute($sql);
+		$rs = true;
+		if($table == "Noticia") {
+			$this->db->BeginTrans();
+			$this->execute("TRUNCATE TABLE noticia_data");
+			$this->execute("TRUNCATE TABLE noticia_locais");
+			$this->execute("TRUNCATE TABLE noticia_has_clube");
+			$this->execute("TRUNCATE TABLE noticia_has_integrante");
+			$this->db->Execute("TRUNCATE TABLE noticia");
+			$rs = $this->db->CommitTrans();
+		}
+		else {
+			$sql = "TRUNCATE TABLE ". $table;
+			$rs = $this->execute($sql);
+		}
 		if($rs) {
 			return true;
 		}
@@ -117,7 +129,7 @@ class DAO extends ADOConnection {
 	
 	/**
 	 * Retorna todos os registos da base de dados de uma tabela
-	 * @return Object[] $objects Array de Objectos com atributos da base de dados
+	 * @return Object[] $objects Array de Objectos com atributos relacionados com os campos da base de dados
 	 */
 	public  function getAll(){
 		$table = get_class($this);
@@ -192,11 +204,9 @@ class DAO extends ADOConnection {
 	}
 	
 	/**
-	 * Cria uma clausula where bem formada a partir de um ArrayAssociativo com ANDS 
-	 * S— suporta strings e numericos. 
-	 * @returns a String a dizer where key0 = $arrayAssoc[key0] AND $key1 = 'arrayAssoc[key1]' ou entao a string vazia caso o array esteja vazio.
-	 */
-	 //TODO is_string not working. 
+	 * Cria uma clausula WHERE bem formada a partir de um ArrayAssociativo 
+	 * @return String $were - Ex: key0 = $arrayAssoc[key0] AND $key1 = 'arrayAssoc[key1]' ou entao a string vazia caso o array esteja vazio.
+	 */ 
 	private function createWhereClause($arrayAssoc){
 		
 		$sql = '';

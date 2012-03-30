@@ -40,10 +40,6 @@ class SapoClient extends Fonte {
 			//Cria array com itens presentes no RSS consultado
 			$items = $this->rss->getItems();
 				
-			/** DEBUG **/
-			//var_dump($items);
-			//echo "<hr>";
-				
 			//Insere na Base de Dados e caracteriza semanticamente cada noticia encontrada
 			foreach($items as $news) {
 				$myNew = new Noticia(); 
@@ -66,6 +62,7 @@ class SapoClient extends Fonte {
 				ParserNoticias::parseNoticia($myNew);
 			}
 		}
+		echo "Foram inseridas notícias da Fonte ".$this->getNome()." com sucesso.";
 	}
 }
 

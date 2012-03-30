@@ -2,24 +2,15 @@
 
 require_once "includes.php";
 require_once "lib/simple_html_dom.php";
-//ini_set('default_charset','UTF-8');
 
 /**
-* Classe respons�vel pelo consulta ao Servi�o Geo-Net-PT para armazenamento das refer�ncias espaciais
-*
-* @author Anderson Barretto - Nr 42541
-* @author F�bio Botelho 	 - Nr 41625
-* @author Jos� Lopes		 - Nr 42437
-* @author Nuno Marques		 - Nr 42809
-* @package backend
-* @version 1.0 20120305
+* Classe responsavel pelo consulta ao Servico Geo-Net-PT para armazenamento das referencias espaciais
 */
 class GeoNetPtClient extends Fonte {
 	/**
 	* Contrutor da Classe GeoNetPtClient. Inicializa os atributos do objecto.
 	* Chama construtor da superclasse para inicializar:
-	*  - Nome da fonte: {@link $nome}
-	*  - URL principal da fonte {@link $main_url}
+	* @uses {@link $nome}
 	*/
 	public function __construct() {
 		parent::__construct("Geo-Net-PT");
@@ -58,14 +49,8 @@ class GeoNetPtClient extends Fonte {
 				$l->setNome_local($tmp[0]);
 				$l->setCoordenadas($tmp[1].";".$tmp[2]);
 				$l->add();
-				//$entry['nome_local'] = $tmp[0];
-				//$entry['coordenadas'] = ;
-				
-				/* Add the new entry to the $places array */
-				//$places[] = $entry;
 			}
 		}
-		//return $places;
 	}
 }
 
@@ -82,7 +67,4 @@ $l->clear();
 
 $result = $geo->search($queries);
 
-
-//$msg = $l->insert($result);
-//echo $msg;
 ?>

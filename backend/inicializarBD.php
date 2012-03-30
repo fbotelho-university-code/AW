@@ -6,9 +6,9 @@ echo "<center><h1>Inicialização da Base de Dados</h1></center>";
 //-------------------------- LIMPANDO BASE DE DADOS -------------------------------------------//
 echo "Limpando a Base de Dados... ";
 $dao = new DAO();
-$rs = $dao->execute("SHOW TABLES");
+$rs = $dao->execute("SELECT table_name FROM information_schema.tables WHERE table_schema = 'aw' AND table_name NOT LIKE 'view_%';");
 while(!$rs->EOF) {
-	$table = $rs->fields["Tables_in_aw"];
+	$table = $rs->fields["table_name"];
 	$sql = "TRUNCATE TABLE ". $table;
 	$dao->execute($sql);
 	$rs->MoveNext();
@@ -26,7 +26,7 @@ $f->setMain_url("http://arquivo.pt/opensearch?query=");
 $f->add();
 
 $f->setNome("RSS Sapo Notícias");
-$f->setMain_url("http://pesquisa.sapo.pt/?barra=noticias&location=pt&format=rss&q=");
+$f->setMain_url("http://pesquisa.sapo.pt/?barra=noticia&format=rss&q=");
 $f->add();
 
 $f->setNome("Geo-Net-PT");
