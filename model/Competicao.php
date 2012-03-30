@@ -58,7 +58,7 @@ class Competicao extends Model {
 	public function setNome_competicao($n) {
 		$this->nome_competicao = $n;
 	}
-	
+		
 }
 
 ?>

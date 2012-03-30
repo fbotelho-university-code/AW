@@ -1,28 +1,23 @@
 <?php
-/**
- * Classe para fazer parsing ao texto da noticia.
- * TODO - meter este c—digo na pr—pria classe Noticia 
- */
  
 require_once "includes.php";
  
-/*
- * Created on Mar 10, 2012
- *
- * To change the template for this generated file go to
- * Window - Preferences - PHPeclipse - PHP - Code Templates
- */
+/**
+* Classe para fazer parsing ao texto da noticia.
+* Busca referencias temporais, espaciais e relacionamento com clubes e integrantes
+*/
 
-
-    class ParserNoticias {
+class ParserNoticias {
     	/**
     	 * Efectua parsing de noticias
     	 * Efectua mudan�as directamente na base de dados relativa ˆ noticia  
     	 */
 		public static function parseNoticia($noticia){
-	     	$idnoticia = $noticia->add();
+	     	//Armazenamento da noticia na Base de Dados
+			$idnoticia = $noticia->add();
 			$noticia->setIdnoticia($idnoticia);
 			
+			// Caracterização Semântica da Notícia
 			ParserNoticias::findRefEspacial($noticia);
 		    ParserNoticias::findRefTemporal($noticia); 
 			ParserNoticias::findRefClubesAndIntegrantes($noticia); 
@@ -43,11 +38,7 @@ require_once "includes.php";
 				} 
 			}
 		}
-		 	
-		 	/*private static function findRefTemporal; 
-			 	private static function findRefClubesAndIntegrantes();
-		 	 */
-		 	 
+				 	 
 		private static function findRefClubesAndIntegrantes($noticia){
 			$Lexico = new Lexico();
 			$Clubes_Lexico = new Clubes_Lexico();
@@ -113,12 +104,30 @@ require_once "includes.php";
 /*10*/			'/(Janeiro|Fevereiro|Março|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)\ \d{1,2}(\ de\ |,\ ){0,1}\d{4}/',
 /*11*/			'/(Janeiro|Fevereiro|Março|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)\ \d{1,2}/',
 /*12*/			'/(Janeiro|Fevereiro|Março|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)\ \d{4}/',
-/*13*/			'/(Janeiro|Fevereiro|Março|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)/',
-/*14*/			'/\d{4}/'
+/*13*/			//'/(Janeiro|Fevereiro|Março|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)/'
+/*14*/			//'/\d{4}/'
 			);
 
 			$matches = array();
 			for($i=0;$i<count($regexes);$i++){
+<<<<<<< HEAD
+				if(preg_match_all($regexes[$i], $texto, $matches)){
+					if ($matches[0][0] != ''){
+						// retira valores duplicados no array, sem alterar as chaves originais
+						$dates = array_unique($matches[0]);
+						// reordena as chaves do array sem valores duplicados
+						$dates = array_values($dates);
+						//criação e armazenamento dos objetos noticia_data
+						for($j=0; $j<count($dates); $j++) {
+							$rel  = new Noticia_Data($noticia->getIdnoticia(), $dates[$j]);
+							$rel->add();
+						}
+					}	
+				}
+			}
+		}
+}
+=======
 				if(preg_match($regexes[$i], $texto, $matches)){
 					
 					$rel  = new Noticia_Data($noticia->getIdnoticia(), $matches[0]); 
@@ -141,6 +150,7 @@ require_once "includes.php";
 		//	}
 //		}
 
+>>>>>>> origin/master
 /*
 $dao = new DAO(); 
 $dao->connect(); 

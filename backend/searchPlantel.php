@@ -1,6 +1,7 @@
 <?php
 
 require_once "includes.php";
+require_once "lib/simple_html_dom.php";
 
 //ini_set('default_charset','UTF-8');
 

@@ -33,9 +33,6 @@ class TwitterSearchClient extends Fonte{
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			$data = curl_exec($ch);
 			curl_close($ch);
-			if (!$data){
-				//TODO ERROR
-			}
 			
 			
 			$doc = new SimpleXmlElement($data, LIBXML_NOCDATA);
@@ -49,7 +46,11 @@ class TwitterSearchClient extends Fonte{
 							foreach($value as $keyy => $valuee){
 								$this->readNewAsRssItem($keyy, $valuee, $noticia);
 							}
+<<<<<<< HEAD
+							
+=======
 							//TODO Caracterização Semantica da Notícia				
+>>>>>>> origin/master
 							ParserNoticias::parseNoticia($noticia);
 							 
 						}
@@ -60,12 +61,17 @@ class TwitterSearchClient extends Fonte{
 				die ("error reading rss "); 
 			}
 		}
-	return $noticias; 
+		echo "Foram inseridas notícias da Fonte ".$this->getNome()." com sucesso.";
   }
 
 	
-	
-function readNewAsRssItem($key, $value, $noticia){
+	/**
+	 * Associa os valores retornados pela consulta ao WebService da Fonte com os atributos do objecto
+	 * @param String $key - nome do atributo
+	 * @param String $value - valor do atributo
+	 * @param Noticia $noticia - Objecto Notícia
+	 */
+	private function readNewAsRssItem($key, $value, $noticia){
 	if ($value != ""){
 			switch($key){
 				case "pubDate":
@@ -75,14 +81,14 @@ function readNewAsRssItem($key, $value, $noticia){
 					$noticia->setAssunto(addslashes($value)); 
 					break; 
 				case "description":
-					$noticia->setDescricao(addslashes($value)); 
+					$noticia->setDescricao(addslashes($value));
+					$noticia->setTexto(addslashes($value));
 					break; 
 				case "link":
 					$noticia->setUrl($value);
 					break;    
 				}
-		}	
-	//echo $noticia . ' @readNewAsRss <br/>'; 
+		}
 	}
 }
 

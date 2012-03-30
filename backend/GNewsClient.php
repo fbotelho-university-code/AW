@@ -26,7 +26,7 @@ class GNewsClient extends Fonte {
 			$encode = urlencode($searchWord);
 			$url_search = $this->main_url.$encode;
 			
-			//carrega RSS
+			//carrega JSON 
 			$result_json = $this->execSearch($url_search);
 			
 			//Cria array com itens presentes no RSS consultado
@@ -54,6 +54,7 @@ class GNewsClient extends Fonte {
 				ParserNoticias::parseNoticia($myNew);
 			}
 		}
+		echo "Foram inseridas notícias da Fonte ".$this->getNome()." com sucesso.";
 	}
 	
 	private function execSearch($url) {

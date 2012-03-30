@@ -1,12 +1,15 @@
 -- phpMyAdmin SQL Dump
--- version 3.2.4
+-- version 3.3.9
 -- http://www.phpmyadmin.net
 --
--- Host: localhost
--- Generation Time: Mar 16, 2012 at 04:44 PM
--- Server version: 5.1.44
--- PHP Version: 5.3.1
+-- Servidor: localhost
+-- Tempo de Geração: Mar 26, 2012 as 10:31 PM
+-- Versão do Servidor: 5.5.8
+-- Versão do PHP: 5.3.5
 
+--
+-- Dump da Base de Dados inicial do Backend
+--
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
 
@@ -16,40 +19,47 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `aw`
+-- Banco de Dados: `aw`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `clube`
+-- Estrutura da tabela `clube`
+--
+-- Criação: Mar 16, 2012 as 08:47 PM
 --
 
+DROP TABLE IF EXISTS `clube`;
 CREATE TABLE IF NOT EXISTS `clube` (
   `idclube` int(11) NOT NULL AUTO_INCREMENT,
   `idlocal` int(11) NOT NULL,
   `idcompeticao` int(11) NOT NULL,
   `nome_clube` varchar(100) CHARACTER SET latin1 DEFAULT NULL,
+  `nome_oficial` varchar(100) NOT NULL,
   PRIMARY KEY (`idclube`,`idlocal`,`idcompeticao`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Esta tabela representa ....' AUTO_INCREMENT=6 ;
 
 --
--- Dumping data for table `clube`
+-- Extraindo dados da tabela `clube`
 --
 
-INSERT INTO `clube` (`idclube`, `idlocal`, `idcompeticao`, `nome_clube`) VALUES
-(1, 1, 1, 'Sport Lisboa e Benfica'),
-(2, 2, 1, 'Futebol Clube do Porto'),
-(3, 1, 1, 'Sporting Clube de Portugal'),
-(4, 3, 1, 'Sporting Clube de Braga'),
-(5, 4, 1, 'Clube Desportivo Nacional');
+INSERT INTO `clube` (`idclube`, `idlocal`, `idcompeticao`, `nome_clube`, `nome_oficial`) VALUES
+(1, 133, 1, 'Benfica', 'sport lisboa e benfica'),
+(2, 217, 1, 'Porto', 'futebol clube do porto'),
+(3, 133, 1, 'Sporting', 'sporting clube de portugal'),
+(4, 62, 1, 'Braga', 'sporting clube de braga'),
+(5, 114, 1, 'Nacional', 'clube desportivo nacional');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `clubes_lexico`
+-- Estrutura da tabela `clubes_lexico`
+--
+-- Criação: Mar 16, 2012 as 08:47 PM
 --
 
+DROP TABLE IF EXISTS `clubes_lexico`;
 CREATE TABLE IF NOT EXISTS `clubes_lexico` (
   `idclube` int(11) NOT NULL,
   `idlexico` int(11) NOT NULL,
@@ -58,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `clubes_lexico` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `clubes_lexico`
+-- Extraindo dados da tabela `clubes_lexico`
 --
 
 INSERT INTO `clubes_lexico` (`idclube`, `idlexico`) VALUES
@@ -119,9 +129,12 @@ INSERT INTO `clubes_lexico` (`idclube`, `idlexico`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `competicao`
+-- Estrutura da tabela `competicao`
+--
+-- Criação: Mar 16, 2012 as 08:47 PM
 --
 
+DROP TABLE IF EXISTS `competicao`;
 CREATE TABLE IF NOT EXISTS `competicao` (
   `idcompeticao` int(11) NOT NULL AUTO_INCREMENT,
   `nome_competicao` varchar(100) CHARACTER SET latin1 DEFAULT NULL,
@@ -129,7 +142,7 @@ CREATE TABLE IF NOT EXISTS `competicao` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
--- Dumping data for table `competicao`
+-- Extraindo dados da tabela `competicao`
 --
 
 INSERT INTO `competicao` (`idcompeticao`, `nome_competicao`) VALUES
@@ -139,35 +152,41 @@ INSERT INTO `competicao` (`idcompeticao`, `nome_competicao`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `fonte`
+-- Estrutura da tabela `fonte`
+--
+-- Criação: Mar 16, 2012 as 08:47 PM
 --
 
+DROP TABLE IF EXISTS `fonte`;
 CREATE TABLE IF NOT EXISTS `fonte` (
   `idfonte` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(45) CHARACTER SET latin1 DEFAULT NULL,
   `main_url` varchar(100) CHARACTER SET latin1 DEFAULT NULL,
   `ligado` tinyint(1) NOT NULL,
   PRIMARY KEY (`idfonte`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
--- Dumping data for table `fonte`
+-- Extraindo dados da tabela `fonte`
 --
 
 INSERT INTO `fonte` (`idfonte`, `nome`, `main_url`, `ligado`) VALUES
 (1, 'Arquivo da Web Portuguesa', 'http://arquivo.pt/opensearch?query=', 1),
-(2, 'RSS Sapo Notícias', 'http://noticias.sapo.pt/rss/news/', 1),
+(2, 'RSS Sapo Notícias', 'http://pesquisa.sapo.pt/?barra=noticia&format=rss&q=', 1),
 (3, 'Geo-Net-PT', 'http://dmir.inesc-id.pt/resolve/geonetpt02/sparql.psp', 1),
 (4, 'RSS Google News', 'https://ajax.googleapis.com/ajax/services/search/news?v=1.0&q=', 1),
-(6, 'Google Maps', 'http://maps.google.com', 1),
-(8, 'TwitterSearch', 'http://search.twitter.com/search.rss', 1);
+(5, 'Google Maps', 'http://maps.google.com', 1),
+(6, 'TwitterSearch', 'http://search.twitter.com/search.rss', 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `fonte_has_parametros`
+-- Estrutura da tabela `fonte_has_parametros`
+--
+-- Criação: Mar 16, 2012 as 08:47 PM
 --
 
+DROP TABLE IF EXISTS `fonte_has_parametros`;
 CREATE TABLE IF NOT EXISTS `fonte_has_parametros` (
   `idfonte` int(11) NOT NULL,
   `idparametros` int(11) NOT NULL,
@@ -175,16 +194,19 @@ CREATE TABLE IF NOT EXISTS `fonte_has_parametros` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `fonte_has_parametros`
+-- Extraindo dados da tabela `fonte_has_parametros`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `funcao`
+-- Estrutura da tabela `funcao`
+--
+-- Criação: Mar 16, 2012 as 08:47 PM
 --
 
+DROP TABLE IF EXISTS `funcao`;
 CREATE TABLE IF NOT EXISTS `funcao` (
   `idfuncao` int(11) NOT NULL AUTO_INCREMENT,
   `funcao` varchar(45) CHARACTER SET latin1 DEFAULT NULL,
@@ -192,7 +214,7 @@ CREATE TABLE IF NOT EXISTS `funcao` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
--- Dumping data for table `funcao`
+-- Extraindo dados da tabela `funcao`
 --
 
 INSERT INTO `funcao` (`idfuncao`, `funcao`) VALUES
@@ -203,72 +225,214 @@ INSERT INTO `funcao` (`idfuncao`, `funcao`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `integrante`
+-- Estrutura da tabela `integrante`
+--
+-- Criação: Mar 16, 2012 as 08:47 PM
 --
 
+DROP TABLE IF EXISTS `integrante`;
 CREATE TABLE IF NOT EXISTS `integrante` (
   `idintegrante` int(11) NOT NULL AUTO_INCREMENT,
   `idclube` int(11) NOT NULL,
   `idfuncao` int(11) NOT NULL,
   `nome_integrante` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`idintegrante`,`idclube`,`idfuncao`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=44 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=180 ;
 
 --
--- Dumping data for table `integrante`
+-- Extraindo dados da tabela `integrante`
 --
 
 INSERT INTO `integrante` (`idintegrante`, `idclube`, `idfuncao`, `nome_integrante`) VALUES
-(1, 1, 3, 'Artur Moraes'),
-(2, 1, 3, 'Emerson'),
-(3, 1, 3, 'LuisÃ£o'),
-(4, 1, 3, 'Javi GarcÃ­a'),
-(5, 1, 3, 'Ã“scar Cardozo'),
-(6, 1, 3, 'Bruno CÃ©sar'),
-(7, 1, 3, 'Nolito'),
-(8, 1, 3, 'Pablo Aimar'),
-(9, 1, 3, 'Yannick DjalÃ³'),
-(10, 1, 3, 'Maxi Pereira'),
-(11, 1, 3, 'NÃ©lson Oliveira'),
-(12, 1, 3, 'Rodrigo'),
-(13, 1, 3, 'Nico GaitÃ¡n'),
-(14, 1, 3, 'Matic'),
-(15, 1, 3, 'Ezequiel Garay'),
-(16, 1, 3, 'Miguel VÃ­tor'),
-(17, 1, 3, 'Witsel'),
-(18, 1, 3, 'Saviola'),
-(19, 1, 3, 'Jardel'),
-(20, 1, 3, 'AndrÃ© Almeida'),
-(21, 1, 3, 'Luis Martins'),
-(22, 1, 3, 'RÃºben Pinto'),
-(23, 1, 3, 'Capdevila'),
-(24, 1, 3, 'Mika'),
-(25, 1, 3, 'Eduardo'),
-(26, 1, 2, 'Jorge Jesus'),
-(27, 2, 2, 'Vítor Pereira'),
-(28, 1, 3, 'Raúl José'),
-(29, 1, 3, 'Miguel Quaresma'),
-(30, 2, 3, 'Paulinho Santos'),
-(31, 2, 3, 'Semedo'),
-(32, 2, 3, 'Rui Quinta'),
-(33, 1, 3, 'Minervino Pietra'),
-(34, 1, 4, 'Mário Monteiro'),
-(35, 2, 4, 'António Dias'),
-(36, 1, 5, 'Hugo Oliveira'),
-(37, 2, 5, 'Wil Coort'),
-(38, 1, 6, 'Bento Leitão'),
-(39, 2, 6, 'José Carlos Esteves'),
-(40, 1, 6, 'António Martins'),
-(41, 2, 6, 'Nélson Puga'),
-(42, 2, 1, 'Pinto da Costa'),
-(43, 1, 7, 'Duarte Pinto');
+(1, 1, 3, 'Artur'),
+(2, 1, 3, 'Mika'),
+(3, 1, 3, 'Eduardo'),
+(4, 1, 3, 'JosÃ© Costa'),
+(5, 1, 3, 'Varela'),
+(6, 1, 3, 'Emerson'),
+(7, 1, 3, 'LuisÃ£o'),
+(8, 1, 3, 'Maxi'),
+(9, 1, 3, 'Garay'),
+(10, 1, 3, 'Miguel Vitor'),
+(11, 1, 3, 'Jardel'),
+(12, 1, 3, 'A.Almeida'),
+(13, 1, 3, 'L.Martins'),
+(14, 1, 3, 'Capdevila'),
+(15, 1, 3, 'B. Gaspar'),
+(16, 1, 3, 'J.Cancelo'),
+(17, 1, 3, 'Javi Garcia'),
+(18, 1, 3, 'Bruno CÃ©sar'),
+(19, 1, 3, 'Nolito'),
+(20, 1, 3, 'Aimar'),
+(21, 1, 3, 'Nico Gaitan'),
+(22, 1, 3, 'Matic'),
+(23, 1, 3, 'Witsel'),
+(24, 1, 3, 'R.Pinto'),
+(25, 1, 3, 'H.Costa'),
+(26, 1, 3, 'Diego'),
+(27, 1, 3, 'A. Gomes'),
+(28, 1, 3, 'Ivan'),
+(29, 1, 3, 'Sancidino'),
+(30, 1, 3, 'Cardozo'),
+(31, 1, 3, 'Yannick'),
+(32, 1, 3, 'N. Oliveira'),
+(33, 1, 3, 'Rodrigo'),
+(34, 1, 3, 'Saviola'),
+(35, 2, 3, 'Helton'),
+(36, 2, 3, 'Bracali'),
+(37, 2, 3, 'Kadu'),
+(38, 2, 3, 'JoÃ£o Costa'),
+(39, 2, 3, 'Danilo'),
+(40, 2, 3, 'Maicon'),
+(41, 2, 3, 'Alvaro'),
+(42, 2, 3, 'Rolando'),
+(43, 2, 3, 'Sapunaru'),
+(44, 2, 3, 'Mangala'),
+(45, 2, 3, 'Alex Sandro'),
+(46, 2, 3, 'Otamendi'),
+(47, 2, 3, 'Tiago'),
+(48, 2, 3, 'LuÃ­s Rafael'),
+(49, 2, 3, 'Lucho'),
+(50, 2, 3, 'J. Moutinho'),
+(51, 2, 3, 'Fernando R.'),
+(52, 2, 3, 'Iturbe'),
+(53, 2, 3, 'Defour'),
+(54, 2, 3, 'Tomas'),
+(55, 2, 3, 'Mikel'),
+(56, 2, 3, 'Ebo'),
+(57, 2, 3, 'Alves'),
+(58, 2, 3, 'AntÃ³nio J.'),
+(59, 2, 3, 'C. Rodriguez'),
+(60, 2, 3, 'KlÃ©ber'),
+(61, 2, 3, 'Hulk'),
+(62, 2, 3, 'Varela'),
+(63, 2, 3, 'James'),
+(64, 2, 3, 'Djalma'),
+(65, 2, 3, 'Janko'),
+(66, 2, 3, 'AndrÃ© Silva'),
+(67, 2, 3, 'FÃ¡bio'),
+(68, 2, 3, 'PaciÃªncia'),
+(69, 2, 3, 'FrÃ©dÃ©ric'),
+(70, 2, 3, 'Vion'),
+(71, 2, 3, 'Lupeta'),
+(72, 3, 3, 'R. PatrÃ­cio'),
+(73, 3, 3, 'Marcelo'),
+(74, 3, 3, 'Tiago'),
+(75, 3, 3, 'Rodriguez'),
+(76, 3, 3, 'D.CarriÃ§o'),
+(77, 3, 3, 'A.Polga'),
+(78, 3, 3, 'Onyewu'),
+(79, 3, 3, 'Evaldo'),
+(80, 3, 3, 'S.Arias'),
+(81, 3, 3, 'Ilori'),
+(82, 3, 3, 'JoÃ£o Pereira'),
+(83, 3, 3, 'Insua'),
+(84, 3, 3, 'XandÃ£o'),
+(85, 3, 3, 'Schaars'),
+(86, 3, 3, 'Izmaylov'),
+(87, 3, 3, 'Diego Capel'),
+(88, 3, 3, 'Matias'),
+(89, 3, 3, 'F.Rinaudo'),
+(90, 3, 3, 'B.Pereirinha'),
+(91, 3, 3, 'A.Santos'),
+(92, 3, 3, 'A.Martins'),
+(93, 3, 3, 'R. Neto'),
+(94, 3, 3, 'Elias'),
+(95, 3, 3, 'V. Wolfswinkel'),
+(96, 3, 3, 'Jeffren'),
+(97, 3, 3, 'A.Carrillo'),
+(98, 3, 3, 'Seba'),
+(99, 3, 3, 'Diego Rubio'),
+(100, 4, 3, 'Quim'),
+(101, 4, 3, 'Berni'),
+(102, 4, 3, 'R. Vieira'),
+(103, 4, 3, 'Bruno'),
+(104, 4, 3, 'Nuno Coelho'),
+(105, 4, 3, 'Ewerton'),
+(106, 4, 3, 'Miguel Lopes'),
+(107, 4, 3, 'Baiano'),
+(108, 4, 3, 'Elderson'),
+(109, 4, 3, 'Imorou'),
+(110, 4, 3, 'P. Vinicius'),
+(111, 4, 3, 'AndrÃ© C.'),
+(112, 4, 3, 'DouglÃ£o'),
+(113, 4, 3, 'Palmeira'),
+(114, 4, 3, 'Cardoso'),
+(115, 4, 3, 'Hugo Lopes'),
+(116, 4, 3, 'Samuel'),
+(117, 4, 3, 'Matheus'),
+(118, 4, 3, 'Kanu'),
+(119, 4, 3, 'Luis Alberto'),
+(120, 4, 3, 'Artur Jorge'),
+(121, 4, 3, 'Vinicius'),
+(122, 4, 3, 'Mossoro'),
+(123, 4, 3, 'H. Barbosa'),
+(124, 4, 3, 'Djamal'),
+(125, 4, 3, 'Salino'),
+(126, 4, 3, 'Custodio'),
+(127, 4, 3, 'Hugo Viana'),
+(128, 4, 3, 'Nuno'),
+(129, 4, 3, 'Nani'),
+(130, 4, 3, 'Veiga'),
+(131, 4, 3, 'T. Ribeiro'),
+(132, 4, 3, 'Wanderson'),
+(133, 4, 3, 'R.Amorim'),
+(134, 4, 3, 'Ukra'),
+(135, 4, 3, 'Paulo Cesar'),
+(136, 4, 3, 'Rivera'),
+(137, 4, 3, 'Lima'),
+(138, 4, 3, 'Nuno Gomes'),
+(139, 4, 3, 'Alan'),
+(140, 4, 3, 'Erivaldo'),
+(141, 4, 3, 'Romulo'),
+(142, 4, 3, 'Nygel'),
+(143, 4, 3, 'Emre'),
+(144, 4, 3, 'Julian'),
+(145, 4, 3, 'CarlÃ£o'),
+(146, 4, 3, 'Ze Manel'),
+(147, 5, 3, 'Marcelo'),
+(148, 5, 3, 'Vladan'),
+(149, 5, 3, 'Igor'),
+(150, 5, 3, 'Claudemir'),
+(151, 5, 3, 'Danielson'),
+(152, 5, 3, 'N.Pinto'),
+(153, 5, 3, 'Todorovic'),
+(154, 5, 3, 'Moreno'),
+(155, 5, 3, 'Deni'),
+(156, 5, 3, 'Neto'),
+(157, 5, 3, 'Mayko'),
+(158, 5, 3, 'Diogo'),
+(159, 5, 3, 'MarÃ§al'),
+(160, 5, 3, 'Stojanovic'),
+(161, 5, 3, 'Mihelic'),
+(162, 5, 3, 'Skolnic'),
+(163, 5, 3, 'Juliano'),
+(164, 5, 3, 'Jota'),
+(165, 5, 3, 'A.Madrid'),
+(166, 5, 3, 'T.Gentil'),
+(167, 5, 3, 'M.Madeira'),
+(168, 5, 3, 'Diogo Coelho'),
+(169, 5, 3, 'Elizeu'),
+(170, 5, 3, 'Keita'),
+(171, 5, 3, 'Mateus'),
+(172, 5, 3, 'Diego'),
+(173, 5, 3, 'Candeias'),
+(174, 5, 3, 'Rondon'),
+(175, 5, 3, 'Edgar Costa'),
+(176, 5, 3, 'J.AurÃ©lio'),
+(177, 5, 3, 'Oliver'),
+(178, 5, 3, 'A.Recife'),
+(179, 5, 3, 'Pecnik');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `integrantes_lexico`
+-- Estrutura da tabela `integrantes_lexico`
+--
+-- Criação: Mar 16, 2012 as 08:47 PM
 --
 
+DROP TABLE IF EXISTS `integrantes_lexico`;
 CREATE TABLE IF NOT EXISTS `integrantes_lexico` (
   `idintegrante` int(11) NOT NULL,
   `idlexico` int(11) NOT NULL,
@@ -277,89 +441,19 @@ CREATE TABLE IF NOT EXISTS `integrantes_lexico` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `integrantes_lexico`
+-- Extraindo dados da tabela `integrantes_lexico`
 --
 
-INSERT INTO `integrantes_lexico` (`idintegrante`, `idlexico`) VALUES
-(26, 199),
-(26, 200),
-(26, 201),
-(26, 202),
-(26, 203),
-(26, 204),
-(26, 205),
-(26, 206),
-(26, 207),
-(26, 208),
-(26, 209),
-(26, 210),
-(26, 211),
-(26, 212),
-(26, 213),
-(26, 214),
-(26, 215),
-(26, 216),
-(26, 217),
-(26, 218),
-(26, 219),
-(26, 220),
-(26, 221),
-(26, 222),
-(26, 223),
-(26, 224),
-(26, 225),
-(26, 226),
-(26, 227),
-(26, 228),
-(26, 229),
-(26, 230),
-(26, 231),
-(26, 232),
-(26, 233),
-(26, 234),
-(26, 235),
-(26, 236),
-(26, 237),
-(26, 238),
-(26, 239),
-(26, 240),
-(26, 241),
-(26, 242),
-(8, 329),
-(8, 330),
-(8, 331),
-(8, 332),
-(8, 333),
-(8, 334),
-(3, 335),
-(3, 336),
-(3, 337),
-(3, 338),
-(3, 339),
-(3, 340),
-(3, 341),
-(3, 342),
-(3, 343),
-(3, 344),
-(3, 345),
-(3, 346),
-(3, 347),
-(3, 348),
-(3, 349),
-(3, 350),
-(3, 351),
-(3, 352),
-(3, 353),
-(3, 354),
-(3, 355),
-(3, 356);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `lexico`
+-- Estrutura da tabela `lexico`
+--
+-- Criação: Mar 16, 2012 as 08:47 PM
 --
 
+DROP TABLE IF EXISTS `lexico`;
 CREATE TABLE IF NOT EXISTS `lexico` (
   `nucleo` varchar(255) NOT NULL,
   `contexto` varchar(255) NOT NULL,
@@ -372,7 +466,7 @@ CREATE TABLE IF NOT EXISTS `lexico` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=431 ;
 
 --
--- Dumping data for table `lexico`
+-- Extraindo dados da tabela `lexico`
 --
 
 INSERT INTO `lexico` (`nucleo`, `contexto`, `entidade`, `tipo`, `pol`, `ambiguidade`, `idlexico`) VALUES
@@ -810,9 +904,12 @@ INSERT INTO `lexico` (`nucleo`, `contexto`, `entidade`, `tipo`, `pol`, `ambiguid
 -- --------------------------------------------------------
 
 --
--- Table structure for table `local`
+-- Estrutura da tabela `local`
+--
+-- Criação: Mar 16, 2012 as 08:47 PM
 --
 
+DROP TABLE IF EXISTS `local`;
 CREATE TABLE IF NOT EXISTS `local` (
   `idlocal` int(11) NOT NULL AUTO_INCREMENT,
   `nome_local` varchar(100) CHARACTER SET latin1 DEFAULT NULL,
@@ -821,7 +918,7 @@ CREATE TABLE IF NOT EXISTS `local` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=338 ;
 
 --
--- Dumping data for table `local`
+-- Extraindo dados da tabela `local`
 --
 
 INSERT INTO `local` (`idlocal`, `nome_local`, `coordenadas`) VALUES
@@ -1166,99 +1263,101 @@ INSERT INTO `local` (`idlocal`, `nome_local`, `coordenadas`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `noticia`
+-- Estrutura da tabela `noticia`
+--
+-- Criação: Mar 16, 2012 as 08:47 PM
 --
 
+DROP TABLE IF EXISTS `noticia`;
 CREATE TABLE IF NOT EXISTS `noticia` (
   `idnoticia` int(11) NOT NULL AUTO_INCREMENT,
   `idfonte` int(11) NOT NULL,
   `data_pub` datetime DEFAULT NULL,
-  `data_noticia` datetime DEFAULT NULL,
   `assunto` varchar(100) CHARACTER SET latin1 DEFAULT NULL,
   `descricao` varchar(250) CHARACTER SET latin1 DEFAULT NULL,
   `texto` longtext CHARACTER SET latin1,
   `url` text CHARACTER SET latin1,
   `visivel` tinyint(1) NOT NULL,
   PRIMARY KEY (`idnoticia`,`idfonte`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=62 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `noticia`
+-- Extraindo dados da tabela `noticia`
 --
 
-INSERT INTO `noticia` (`idnoticia`, `idfonte`, `data_pub`, `data_noticia`, `assunto`, `descricao`, `texto`, `url`, `visivel`) VALUES
-(32, 8, '2012-03-09 16:03:39', NULL, 'â€œ@daaniloluiz: Porto 25 graus! Ta ruim? Rsrsâ€ santos 30, ta ruim ?', 'â€œ@<a class=\\" \\" href=\\"http://twitter.com/daaniloluiz\\">daaniloluiz</a>: <em>Porto</em> 25 graus! Ta ruim? Rsrsâ€ santos 30, ta ruim ?', NULL, 'http://twitter.com/NeyJunior_92/statuses/178149055006908418', 1),
-(33, 8, '2012-03-09 15:53:25', NULL, 'Estamos construindo o maior e mais eficiente complexo porto indÃºstria da AmÃ©rica Latina e o maior ', 'Estamos construindo o maior e mais eficiente complexo <em>porto</em> indÃºstria da AmÃ©rica Latina e o maior estaleiro das AmÃ©ricas <a href=\\"http://search.twitter.com/search?q=%23EquipedoEike\\" title=\\"#EquipedoEike\\" class=\\" \\">#EquipedoEike</a>', NULL, 'http://twitter.com/eikebatista/statuses/178146481990144001', 1),
-(34, 8, '2012-03-09 17:12:07', NULL, 'Porto Alegre dia 22 de abril! Vamo aeee!?!?!?!', '<em>Porto</em> Alegre dia 22 de abril! Vamo aeee!?!?!?!', NULL, 'http://twitter.com/abrilrock/statuses/178166288357666817', 1),
-(35, 8, '2012-03-09 22:00:02', NULL, 'SimpÃ³sio de AtualizaÃ§Ã£o da SBD 2012 - Diabetes na GestaÃ§Ã£o (Porto Alegre/RS)\nhttp://t.co/5z1G0i', 'SimpÃ³sio de AtualizaÃ§Ã£o da SBD 2012 - Diabetes na GestaÃ§Ã£o (<em>Porto</em> Alegre/RS)\n<a href=\\"http://t.co/5z1G0i9x\\">http://t.co/5z1G0i9x</a> <a href=\\"http://search.twitter.com/search?q=%23nutricao\\" title=\\"#nutricao\\" class=\\" \\">#nutricao<', NULL, 'http://twitter.com/nutricaoemfoco/statuses/178238744372068353', 1),
-(36, 8, '2012-03-09 21:59:57', NULL, '@LeeMattosOFC man eu nem sei se vou amanha pro porto, sla  provavelmente qe nao  !', '@<a class=\\" \\" href=\\"http://twitter.com/LeeMattosOFC\\">LeeMattosOFC</a> man eu nem sei se vou amanha pro <em>porto</em>, sla  provavelmente qe nao  !', NULL, 'http://twitter.com/Corturatto/statuses/178238720598753280', 1),
-(37, 8, '2012-03-09 21:59:55', NULL, 'Quaresmanin futboluna Porto\\''daki yillarindan beri hayranim ama maales Porto disinda hicbiryerde bas', 'Quaresmanin futboluna <em>Porto</em>\\''daki yillarindan beri hayranim ama maales <em>Porto</em> disinda hicbiryerde basarili olamadi,hepde ayni nedenlerden', NULL, 'http://twitter.com/el_brus/statuses/178238714940620800', 1),
-(38, 8, '2012-03-09 21:59:55', NULL, '@chaymiaire Eu sou de Porto Alegre :S', '@<a class=\\" \\" href=\\"http://twitter.com/chaymiaire\\">chaymiaire</a> Eu sou de <em>Porto</em> Alegre :S', NULL, 'http://twitter.com/MeninaaRebeldee/statuses/178238712583421952', 1),
-(39, 8, '2012-03-09 21:59:54', NULL, '34.E justin? ora vado da lui e lo porto qui in italia a calci in culo. HAHAHHA', '34.E justin? ora vado da lui e lo <em>porto</em> qui in italia a calci in culo. HAHAHHA', NULL, 'http://twitter.com/ximharryswife/statuses/178238708791779329', 1),
-(40, 8, '2012-03-09 21:59:53', NULL, '@Vmoora jajajajajajajajajajajajajajajajjajajajajaajaja dele yo aquÃ­ me portÃ³ mal jiji.<<JAJAJA DEL', '@<a class=\\" \\" href=\\"http://twitter.com/Vmoora\\">Vmoora</a> jajajajajajajajajajajajajajajajjajajajajaajaja dele yo aquÃ­ me <em>portÃ³</em> mal jiji.<<JAJAJA DELE JAJAJAJA :*', NULL, 'http://twitter.com/09Franciscoo/statuses/178238705583144960', 1),
-(41, 8, '2012-03-09 21:59:49', NULL, 'O sorriso mais lindo, o olhar mais sincero, o meu porto seguro a pessoa mais linda do mundo', 'O sorriso mais lindo, o olhar mais sincero, o meu <em>porto</em> seguro a pessoa mais linda do mundo', NULL, 'http://twitter.com/_CaarolBr/statuses/178238688310984704', 1),
-(42, 8, '2012-03-09 21:59:44', NULL, 'I\\''m at Onibus Guaiba Executivo (Porto Alegre, RS) http://t.co/vNRAN8VS', 'I\\''m at Onibus Guaiba Executivo (<em>Porto</em> Alegre, RS) <a href=\\"http://t.co/vNRAN8VS\\">http://t.co/vNRAN8VS</a>', NULL, 'http://twitter.com/alexbittencurt/statuses/178238667880534016', 1),
-(43, 8, '2012-03-09 21:59:43', NULL, 'EU TÃ” VENDO UMA POSSIBILIDADE DA GNT IR PRA PORTO SEGURO OU SALVADOOR ;P;P', 'EU TÃ” VENDO UMA POSSIBILIDADE DA GNT IR PRA <em>PORTO</em> SEGURO OU SALVADOOR ;P;P', NULL, 'http://twitter.com/sabrinamv_03/statuses/178238664105672704', 1),
-(44, 8, '2012-03-09 21:59:40', NULL, 'E minha mae nem pra passa na academia, projeto porto!', 'E minha mae nem pra passa na academia, projeto <em>porto</em>!', NULL, 'http://twitter.com/LucassVolpato/statuses/178238651459846144', 1),
-(45, 8, '2012-03-09 21:59:36', NULL, 'que calooooooooooor Ã© esse aqui em porto alegre ? nossa tchÃª', 'que calooooooooooor Ã© esse aqui em <em>porto</em> alegre ? nossa tchÃª', NULL, 'http://twitter.com/Luuan_foreveer/statuses/178238634888151040', 1),
-(46, 8, '2012-03-09 21:59:35', NULL, '@vinniciusss @thiagomunhoz_1 eu vo colar la depois tambem, fala com o rafa porto e dps vo pro r1', '@<a class=\\" \\" href=\\"http://twitter.com/vinniciusss\\">vinniciusss</a> @<a class=\\" \\" href=\\"http://twitter.com/thiagomunhoz_1\\">thiagomunhoz_1</a> eu vo colar la depois tambem, fala com o rafa <em>porto</em> e dps vo pro r1', NULL, 'http://twitter.com/lucascostii/statuses/178238631469776896', 1),
-(47, 8, '2012-03-08 18:23:41', NULL, '#SCP 0-0 #MCFC: 21.Sporting break away and it\\''s 4 on 3. @MCFC temporarily escape punishment and sho', '<a href=\\"http://search.twitter.com/search?q=%23SCP\\" title=\\"#SCP\\" class=\\" \\">#SCP</a> 0-0 <a href=\\"http://search.twitter.com/search?q=%23MCFC\\" title=\\"#MCFC\\" class=\\" \\">#MCFC</a>: 21.<em>Sporting</em> break away and it\\''s 4 on 3. @<a class=\\"', NULL, 'http://twitter.com/MCFC/statuses/177821910229454849', 1),
-(48, 8, '2012-03-09 10:22:56', NULL, 'Manolo Preciado demanda al Sporting y reclama mÃ¡s de 1\\''3 millones: http://t.co/aivhywY9', 'Manolo Preciado demanda al <em>Sporting</em> y reclama mÃ¡s de 1\\''3 millones: <a href=\\"http://t.co/aivhywY9\\">http://t.co/aivhywY9</a>', NULL, 'http://twitter.com/sportyou/statuses/178063310720204800', 1),
-(49, 8, '2012-03-08 19:53:14', NULL, 'FINAL DO JOGO - 1/8 Final (1Âª mÃ£o) Liga Europa\n\nSporting Clube de Portugal 1-0 Man. City\n\nPartilha', 'FINAL DO JOGO - 1/8 Final (1Âª mÃ£o) Liga Europa\n\n<em>Sporting</em> Clube de Portugal 1-0 Man. City\n\nPartilha o teu orgulho! SPOOOOORTING!!', NULL, 'http://twitter.com/Sporting_CP/statuses/177844445478268928', 1),
-(50, 8, '2012-03-09 21:59:58', NULL, 'I\\''m at Dick\\''s Sporting Goods (Manhattan, Kansas) http://t.co/X8O5Q1e6', 'I\\''m at Dick\\''s <em>Sporting</em> Goods (Manhattan, Kansas) <a href=\\"http://t.co/X8O5Q1e6\\">http://t.co/X8O5Q1e6</a>', NULL, 'http://twitter.com/berickson45/statuses/178238727099916288', 1),
-(51, 8, '2012-03-09 21:59:31', NULL, '@BigMikeWill17 Go to a concert or sporting event', '@<a class=\\" \\" href=\\"http://twitter.com/BigMikeWill17\\">BigMikeWill17</a> Go to a concert or <em>sporting</em> event', NULL, 'http://twitter.com/thetimkelly/statuses/178238614868733952', 1),
-(52, 8, '2012-03-09 21:59:29', NULL, '@28CGiroux in about a week, I will be sporting your winter classic jersey/sweater, my first NHL jers', '@<a class=\\" \\" href=\\"http://twitter.com/28CGiroux\\">28CGiroux</a> in about a week, I will be <em>sporting</em> your winter classic jersey/sweater, my first NHL jersey! <a href=\\"http://search.twitter.com/search?q=%23flyers\\" title=\\"#flyers\\" class', NULL, 'http://twitter.com/NancyPants28/statuses/178238605095993346', 1),
-(53, 8, '2012-03-09 21:59:23', NULL, 'Can\\''t wait!!! RT @QuicksBarBQ: Be one of the first 25 people to buy a $2 beer tomorrow night and yo', 'Can\\''t wait!!! RT @<a class=\\" \\" href=\\"http://twitter.com/QuicksBarBQ\\">QuicksBarBQ</a>: Be one of the first 25 people to buy a $2 beer tomorrow night and you can keep the <em>Sporting</em> glass!', NULL, 'http://twitter.com/treyrey86/statuses/178238577325510656', 1),
-(54, 8, '2012-03-09 21:59:10', NULL, 'Does Reese Witherspoon look pregnant to you or is she just sporting \\"poofy\\" clothing for style? Th', 'Does Reese Witherspoon look pregnant to you or is she just <em>sporting</em> \\"poofy\\" clothing for style? The rumors are swirling!...', NULL, 'http://twitter.com/997now/statuses/178238523307081729', 1),
-(55, 8, '2012-03-09 21:59:08', NULL, 'I\\''m at Modell\\''s Sporting Goods (Willow Grove, PA) http://t.co/HeBtGZeS', 'I\\''m at Modell\\''s <em>Sporting</em> Goods (Willow Grove, PA) <a href=\\"http://t.co/HeBtGZeS\\">http://t.co/HeBtGZeS</a>', NULL, 'http://twitter.com/oh_kaykaykayy/statuses/178238516092870656', 1),
-(56, 8, '2012-03-09 21:58:48', NULL, 'ROBERTO MOSQUERA NUEVO DT DE SPORTING CRISTAL 2012 http://t.co/hxEIVTlQ', 'ROBERTO MOSQUERA NUEVO DT DE <em>SPORTING</em> CRISTAL 2012 <a href=\\"http://t.co/hxEIVTlQ\\">http://t.co/hxEIVTlQ</a>', NULL, 'http://twitter.com/juancprado/statuses/178238433024688129', 1),
-(57, 8, '2012-03-09 21:58:43', NULL, '@Wonderbread77 - 25 = times you combed your hair today.  8 = number of times you\\''ve adjussted the s', '@<a class=\\" \\" href=\\"http://twitter.com/Wonderbread77\\">Wonderbread77</a> - 25 = times you combed your hair today.  8 = number of times you\\''ve adjussted the shawl youre certainly <em>sporting</em>!!', NULL, 'http://twitter.com/RustyGundrum/statuses/178238412946546688', 1),
-(58, 8, '2012-03-09 21:58:41', NULL, '*runs to nearest sporting goods store* RT @MarauderJames: http://t.co/ed1u7pqu this video inspired m', '*runs to nearest <em>sporting</em> goods store* RT @<a class=\\" \\" href=\\"http://twitter.com/MarauderJames\\">MarauderJames</a>: <a href=\\"http://t.co/ed1u7pqu\\">http://t.co/ed1u7pqu</a> this video inspired me to go get a fitness ball <a href=\\"http:/', NULL, 'http://twitter.com/BrianTooFlyy/statuses/178238404700540930', 1),
-(59, 8, '2012-03-09 21:58:40', NULL, 'Sporting de volta aos treinos http://t.co/sBR6C0SV', '<em>Sporting</em> de volta aos treinos <a href=\\"http://t.co/sBR6C0SV\\">http://t.co/sBR6C0SV</a>', NULL, 'http://twitter.com/EspiritoLeonino/statuses/178238400032280577', 1),
-(60, 8, '2012-03-09 21:58:21', NULL, '@petermayavi why is nameless still sporting du-rags? #smh', '@<a class=\\" \\" href=\\"http://twitter.com/petermayavi\\">petermayavi</a> why is nameless still <em>sporting</em> du-rags? <a href=\\"http://search.twitter.com/search?q=%23smh\\" title=\\"#smh\\" class=\\" \\">#smh</a>', NULL, 'http://twitter.com/comeupshuffle/statuses/178238318872494080', 1),
-(61, 8, '2012-03-09 21:58:10', NULL, 'Easton-Bell Sports Scores with Bats in Q4; FY Net Up 23% - Sporting Goods Intelligence (registration', 'Easton-Bell Sports Scores with Bats in Q4; FY Net Up 23% - <em>Sporting</em> Goods Intelligence (registration) <a href=\\"http://t.co/HTlDA5Ln\\">http://t.co/HTlDA5Ln</a>', NULL, 'http://twitter.com/BigAllieGill/statuses/178238274488377344', 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `noticia_has_clube`
+-- Estrutura da tabela `noticia_data`
+--
+-- Criação: Mar 22, 2012 as 12:26 AM
 --
 
+DROP TABLE IF EXISTS `noticia_data`;
+CREATE TABLE IF NOT EXISTS `noticia_data` (
+  `idnoticia` int(11) NOT NULL,
+  `tempo` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `noticia_data`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `noticia_has_clube`
+--
+-- Criação: Mar 16, 2012 as 08:47 PM
+--
+
+DROP TABLE IF EXISTS `noticia_has_clube`;
 CREATE TABLE IF NOT EXISTS `noticia_has_clube` (
   `idnoticia` int(11) NOT NULL,
   `idclube` int(11) NOT NULL,
   `qualificacao` int(1) NOT NULL,
+  `idlexico` int(11) NOT NULL,
   PRIMARY KEY (`idnoticia`,`idclube`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `noticia_has_clube`
+-- Extraindo dados da tabela `noticia_has_clube`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `noticia_has_integrante`
+-- Estrutura da tabela `noticia_has_integrante`
+--
+-- Criação: Mar 16, 2012 as 08:47 PM
 --
 
+DROP TABLE IF EXISTS `noticia_has_integrante`;
 CREATE TABLE IF NOT EXISTS `noticia_has_integrante` (
   `idnoticia` int(11) NOT NULL,
   `idintegrante` int(11) NOT NULL,
+  `qualificacao` int(11) NOT NULL DEFAULT '0',
+  `idlexico` int(11) NOT NULL,
   PRIMARY KEY (`idnoticia`,`idintegrante`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `noticia_has_integrante`
+-- Extraindo dados da tabela `noticia_has_integrante`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `noticia_locais`
+-- Estrutura da tabela `noticia_locais`
+--
+-- Criação: Mar 16, 2012 as 08:47 PM
 --
 
+DROP TABLE IF EXISTS `noticia_locais`;
 CREATE TABLE IF NOT EXISTS `noticia_locais` (
   `idnoticia` int(11) NOT NULL,
   `idlocal` int(11) NOT NULL,
@@ -1268,22 +1367,19 @@ CREATE TABLE IF NOT EXISTS `noticia_locais` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `noticia_locais`
+-- Extraindo dados da tabela `noticia_locais`
 --
 
-INSERT INTO `noticia_locais` (`idnoticia`, `idlocal`) VALUES
-(32, 10),
-(32, 133),
-(32, 217),
-(32, 329),
-(32, 331);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `parametros`
+-- Estrutura da tabela `parametros`
+--
+-- Criação: Mar 16, 2012 as 08:47 PM
 --
 
+DROP TABLE IF EXISTS `parametros`;
 CREATE TABLE IF NOT EXISTS `parametros` (
   `idparametros` int(11) NOT NULL,
   `nome_parametro` varchar(100) CHARACTER SET latin1 DEFAULT NULL,
@@ -1291,30 +1387,112 @@ CREATE TABLE IF NOT EXISTS `parametros` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `parametros`
+-- Extraindo dados da tabela `parametros`
 --
 
 
---
--- Constraints for dumped tables
---
+-- --------------------------------------------------------
 
 --
--- Constraints for table `clubes_lexico`
+-- Estrutura stand-in para visualizar `view_noticia_clube`
 --
-ALTER TABLE `clubes_lexico`
-  ADD CONSTRAINT `clubes_lexico_ibfk_1` FOREIGN KEY (`idclube`) REFERENCES `clube` (`idclube`) ON DELETE CASCADE,
-  ADD CONSTRAINT `clubes_lexico_ibfk_2` FOREIGN KEY (`idlexico`) REFERENCES `lexico` (`idlexico`) ON DELETE CASCADE;
+DROP VIEW IF EXISTS `view_noticia_clube`;
+CREATE TABLE IF NOT EXISTS `view_noticia_clube` (
+`idnoticia` int(11)
+,`assunto` varchar(100)
+,`nome_clube` varchar(100)
+);
+-- --------------------------------------------------------
 
 --
--- Constraints for table `integrantes_lexico`
+-- Estrutura stand-in para visualizar `view_noticia_clube_lexico`
 --
-ALTER TABLE `integrantes_lexico`
-  ADD CONSTRAINT `integrantes_lexico_ibfk_3` FOREIGN KEY (`idintegrante`) REFERENCES `integrante` (`idintegrante`) ON DELETE CASCADE,
-  ADD CONSTRAINT `integrantes_lexico_ibfk_4` FOREIGN KEY (`idlexico`) REFERENCES `lexico` (`idlexico`) ON DELETE CASCADE;
+DROP VIEW IF EXISTS `view_noticia_clube_lexico`;
+CREATE TABLE IF NOT EXISTS `view_noticia_clube_lexico` (
+`idnoticia` int(11)
+,`assunto` varchar(100)
+,`nome_clube` varchar(100)
+,`contexto` varchar(255)
+,`pol` int(10)
+,`ambiguidade` int(10)
+);
+-- --------------------------------------------------------
 
 --
--- Constraints for table `local`
+-- Estrutura stand-in para visualizar `view_noticia_data`
 --
-ALTER TABLE `local`
-  ADD CONSTRAINT `local_ibfk_1` FOREIGN KEY (`idlocal`) REFERENCES `local` (`idlocal`);
+DROP VIEW IF EXISTS `view_noticia_data`;
+CREATE TABLE IF NOT EXISTS `view_noticia_data` (
+`idnoticia` int(11)
+,`assunto` varchar(100)
+,`data_pub` datetime
+,`tempo` varchar(100)
+);
+-- --------------------------------------------------------
+
+--
+-- Estrutura stand-in para visualizar `view_noticia_integrante`
+--
+DROP VIEW IF EXISTS `view_noticia_integrante`;
+CREATE TABLE IF NOT EXISTS `view_noticia_integrante` (
+`idnoticia` int(11)
+,`assunto` varchar(100)
+,`funcao` varchar(45)
+,`nome_integrante` varchar(100)
+);
+-- --------------------------------------------------------
+
+--
+-- Estrutura stand-in para visualizar `view_noticia_local`
+--
+DROP VIEW IF EXISTS `view_noticia_local`;
+CREATE TABLE IF NOT EXISTS `view_noticia_local` (
+`idnoticia` int(11)
+,`assunto` varchar(100)
+,`nome_local` varchar(100)
+,`coordenadas` varchar(45)
+);
+-- --------------------------------------------------------
+
+--
+-- Estrutura para visualizar `view_noticia_clube`
+--
+DROP TABLE IF EXISTS `view_noticia_clube`;
+
+CREATE ALGORITHM=TEMPTABLE DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_noticia_clube` AS select `n`.`idnoticia` AS `idnoticia`,`n`.`assunto` AS `assunto`,`c`.`nome_clube` AS `nome_clube` from ((`noticia` `n` join `clube` `c`) join `noticia_has_clube` `nc`) where ((`n`.`idnoticia` = `nc`.`idnoticia`) and (`c`.`idclube` = `nc`.`idclube`)) order by `n`.`idnoticia`;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para visualizar `view_noticia_clube_lexico`
+--
+DROP TABLE IF EXISTS `view_noticia_clube_lexico`;
+
+CREATE ALGORITHM=TEMPTABLE DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_noticia_clube_lexico` AS select `n`.`idnoticia` AS `idnoticia`,`n`.`assunto` AS `assunto`,`c`.`nome_clube` AS `nome_clube`,`l`.`contexto` AS `contexto`,`l`.`pol` AS `pol`,`l`.`ambiguidade` AS `ambiguidade` from ((((`noticia` `n` join `clube` `c`) join `noticia_has_clube` `nc`) join `lexico` `l`) join `clubes_lexico` `cl`) where ((`n`.`idnoticia` = `nc`.`idnoticia`) and (`c`.`idclube` = `nc`.`idclube`) and (`l`.`idlexico` = `nc`.`idlexico`) and (`cl`.`idclube` = `c`.`idclube`) and (`cl`.`idlexico` = `l`.`idlexico`)) order by `n`.`idnoticia`;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para visualizar `view_noticia_data`
+--
+DROP TABLE IF EXISTS `view_noticia_data`;
+
+CREATE ALGORITHM=TEMPTABLE DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_noticia_data` AS select `n`.`idnoticia` AS `idnoticia`,`n`.`assunto` AS `assunto`,`n`.`data_pub` AS `data_pub`,`nd`.`tempo` AS `tempo` from (`noticia` `n` join `noticia_data` `nd`) where (`n`.`idnoticia` = `nd`.`idnoticia`) order by `n`.`idnoticia`;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para visualizar `view_noticia_integrante`
+--
+DROP TABLE IF EXISTS `view_noticia_integrante`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_noticia_integrante` AS select `n`.`idnoticia` AS `idnoticia`,`n`.`assunto` AS `assunto`,`f`.`funcao` AS `funcao`,`i`.`nome_integrante` AS `nome_integrante` from (((`noticia` `n` join `funcao` `f`) join `integrante` `i`) join `noticia_has_integrante` `ni`) where ((`n`.`idnoticia` = `ni`.`idnoticia`) and (`i`.`idintegrante` = `ni`.`idintegrante`) and (`f`.`idfuncao` = `i`.`idfuncao`)) order by `n`.`idnoticia`;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para visualizar `view_noticia_local`
+--
+DROP TABLE IF EXISTS `view_noticia_local`;
+
+CREATE ALGORITHM=TEMPTABLE DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_noticia_local` AS select `n`.`idnoticia` AS `idnoticia`,`n`.`assunto` AS `assunto`,`l`.`nome_local` AS `nome_local`,`l`.`coordenadas` AS `coordenadas` from ((`noticia` `n` join `local` `l`) join `noticia_locais` `nl`) where ((`n`.`idnoticia` = `nl`.`idnoticia`) and (`l`.`idlocal` = `nl`.`idlocal`)) order by `n`.`idnoticia`;
