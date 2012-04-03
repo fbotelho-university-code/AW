@@ -1,0 +1,83 @@
+<?php
+
+include ("adodb/adodb.inc.php");
+
+/**
+ * Classe que representa uma abstracao para acesso a base de dados.
+ * Usada com superclasse de todas as classes do Modelo
+ */
+class DAO extends ADOConnection {
+	
+	/**
+	 * SGBD utilizado pela aplicacao
+	 * @var String
+	 */
+	private $mysgbd = "mysql";
+	
+	/**
+	 * Nome ou IP do servidor na qual encontra-se instalada a Base de Dados
+	 * @var String
+	 */
+	private $myserver = "localhost";
+	
+	/**
+	 * Nome do usuario para acesso à Base de Dados
+	 * @var String
+	 */
+	private $myuser = "root";
+	
+	/**
+	 * 
+	 * Palavra-passe para acesso à Base de Dados
+	 * @var String
+	 */
+	private $mypassword = "pcdamf06";
+	
+	/**
+	 * Nome da Base de Dados a ser utilizada
+	 * @var String
+	 */
+	private $mydbName = "aw";
+	
+	/**
+	 * Objeto para acesso à Base de Dados
+	 * @var ADONewConnection
+	 */
+	public $db;
+	
+	/**
+	 * Construtor da Classe
+	 * Configura o SGBD a ser utilizado
+	 * @uses {@link $mysgbd}
+	 */
+	function __construct(){
+		
+		$this->db = &ADONewConnection($this->mysgbd);
+		/* Ativa Associação dos nomes das colunas das tabelas da BD com as chaves dos arrays de retorno de consulta */
+		$this->db->SetFetchMode(ADODB_FETCH_ASSOC);
+	}
+	
+	/**
+	 * Conecta com a base de dados
+	 * Usa os atributos da classe para estabelecar uma ligação com o SGBD
+	 */
+	function connect() {
+		$this->db->Connect($this->myserver, $this->myuser, $this->mypassword, $this->mydbName) or die($this->db->ErrorMsg());
+	}
+	
+	/**
+	 * Disconecta com a base de dados
+	 */
+	function disconnect() {
+		$this->db->Close();
+	}
+	
+		 
+	function execute($sql) {
+		$this->connect();
+		$rs = $this->db->Execute($sql) or die($this->dao->db->ErrorMsg() . "<br>SQL: ".$sql);
+		$this->disconnect();
+		return $rs;
+	}
+	
+}

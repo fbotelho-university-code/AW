@@ -43,6 +43,8 @@
 	  	case 1:
 	  		processNews($req);
 	  		break;  
+	  	default:
+	  	//TODO - send bad content 
 	  } 
 	  
 	// Process resource head (/noticias) requests. Accepts GET/POST/HEAD
@@ -110,6 +112,25 @@
 		//TODO - send malformed request response
 	}
 	
+	/**
+	 * Post to /noticias . 
+	 * Must create new news and return the identifier  of that news  
+	 * 
+	 */
+	function postRoot($req){
+		$n = Noticia::fromXml($req->getData());
+		if (!$n) { 
+			RestUtils::sendResponse(400);
+			exit;  
+		}
+		$id = $n->add();
+		if (!$id){
+			//database could not
+			RestUtils::sendResponse(500);	
+		} 
+//		if ($id = )
+		//RestUtils::sendResponse(200, null, $req->getData()); 
+	}
 	//Process resource (/noticias/{idnoticia}) requests. Accepts GET/PUT/HEAD/DELETE
 /*
  * TODO: 
