@@ -3,14 +3,14 @@
 require_once "Model.php";
 
 /**
- * Classe que representa uma notÌcia recuperada de fontes de informaÁıes da Web
+ * Classe que representa uma not√≠cia recuperada de fontes de informa√ß√µes da Web
  *  (Google News, Sapo News, Twitter, etc.)
  */ 
 class Noticia extends Model{
 	
 	/**
 	 * Retorna uma nova noticia a partir de um XML bem formado
-	 * senão estiver bem formado retorna null 
+	 * sen‚Äπo estiver bem formado retorna null 
 	 */
 	 
 	//TODO - SQL Injection.  			
@@ -21,26 +21,31 @@ class Noticia extends Model{
 			
 			//check if tags is defined
 			if ( $nxml->newNoticia){
-				//get descricaçao 
+				//get descricaÔøΩao 
 				if ($nxml->newNoticia->descricao) 
 					$n->descricao = addslashes($nxml->newNoticia->descricao);  
 				else  return null;
 				
-				//get data de publicação
+				//get data de publicaÔøΩ‚Äπo
 				if ($nxml->newNoticia->data_pub) {
 					$n->data_pub ($nxml->newNoticia->data_pub); 							
 				}
 				
 				//get url 
 				if ($nxml->newNoticia->url){
-					//se tiver url vamos buscar o texto lá
+					//se tiver url vamos buscar o texto l‚Ä°
 				   $n->url= addslashes($nxml->newNoticia->url);
 				   //TODO check url is well formed. 
 				   $n->text = Noticia::fetchTexto($n->url); 
 				}
 				else {
-					// se nao tiver url então devia ter o corpo da noticia. 
-					if ($nxml->newNoticia->texto) $n->texto = addslashes($nxml->newNoticia->texto) else return null;	
+					// se nao tiver url ent‚Äπo devia ter o corpo da noticia. 
+					if ($nxml->newNoticia->texto)
+					{ 
+						$n->texto = addslashes($nxml->newNoticia->texto); 
+					} else { 
+						return null;
+					}	
 				}
 			}
 		}catch (Exception $e){
@@ -54,12 +59,12 @@ class Noticia extends Model{
 	}
 	
 	/**
-	 * Função para ir buscar o texto de noticia a partir de um url
+	 * FunÔøΩ‚Äπo para ir buscar o texto de noticia a partir de um url
 	 * @param url O url da noticia.  
 	 */
 	public static function fetchTexto($url){
-		// TODO - usar curl, meter null em caso de o url tá dead. 
-		// TODO - usar parser html do prof e fazer cenas... (ir buscar só o body)
+		// TODO - usar curl, meter null em caso de o url t‚Ä° dead. 
+		// TODO - usar parser html do prof e fazer cenas... (ir buscar s‚Äî o body)
 		return addslashes(file_get_contents($url)); 
 	}
 	 
@@ -70,26 +75,26 @@ class Noticia extends Model{
 	var $idnoticia = null;
 	
 	/**
-	 * Identificador da fonte da notÌcia
+	 * Identificador da fonte da not√≠cia
 	 * @var int
 	 */
 	var $idfonte;
 	
 	/**
-	 * Data de publicaÁ„o da notÌcia
+	 * Data de publica√ß√£o da not√≠cia
 	 * Formato: AAAA-MM-DD HH:MM:SS
 	 * @var Date
 	 */
 	var $data_pub;
 	
 	/**
-	 * Data presente no corpo da notÌcia
+	 * Data presente no corpo da not√≠cia
 	 * Formato: AAAA-MM-DD HH:MM:SS
 	 * @var Date
 	 */
 	
 	/**
-	 * Assunto da notÌcia
+	 * Assunto da not√≠cia
 	 * @var String
 	 */
 	var $assunto;
@@ -101,19 +106,19 @@ class Noticia extends Model{
 	var $descricao;
 	
 	/**
-	 * Texto completo da notÌcia
+	 * Texto completo da not√≠cia
 	 * @var String
 	 */
 	var $texto;
 	
 	/**
-	 * URL contendo a Ìntegra da notÌcia
+	 * URL contendo a √≠ntegra da not√≠cia
 	 * @var String
 	 */
 	var $url;
 	
 	/**
-	 * Define se uma notÌcia deve estar visÌvel para o utilizador
+	 * Define se uma not√≠cia deve estar vis√≠vel para o utilizador
 	 * @var boolean
 	 */
 	var $visivel = true;
@@ -126,7 +131,7 @@ class Noticia extends Model{
 	}
 	
 	/**
-	* Retorna o identificador da notÌcia
+	* Retorna o identificador da not√≠cia
 	* @return int {@link $idnoticia}
 	*/
 	public function getIdnoticia() {
@@ -134,7 +139,7 @@ class Noticia extends Model{
 	}
 		
 	/**
-	 * Altera o valor do identificador da notÌcia {@link $idnoticia}
+	 * Altera o valor do identificador da not√≠cia {@link $idnoticia}
 	 * @param int $id
 	 */
 	public function setIdnoticia($id) {
@@ -142,7 +147,7 @@ class Noticia extends Model{
 	}
 	
 	/**
-	* Retorna o identificador da fonte da notÌcia
+	* Retorna o identificador da fonte da not√≠cia
 	* @return int {@link $idfonte}
 	*/
 	public function getIdfonte() {
@@ -150,7 +155,7 @@ class Noticia extends Model{
 	}
 	
 	/**
-	 * Altera o valor do identificador da fonte da notÌcia {@link $idfonte}
+	 * Altera o valor do identificador da fonte da not√≠cia {@link $idfonte}
 	 * @param int $id
 	 */
 	public function setIdfonte($id) {
@@ -158,7 +163,7 @@ class Noticia extends Model{
 	}
 	
 	/**
-	 * Retorna a data de publicaÁ„o da notÌcia
+	 * Retorna a data de publica√ß√£o da not√≠cia
 	 * @return Date {@link $data_pub}
 	 */
 	public function getData_pub() {
@@ -166,7 +171,7 @@ class Noticia extends Model{
 	}
 	
 	/**
-	 * Altera o valor da data da notÌcia {@link $data_pub}
+	 * Altera o valor da data da not√≠cia {@link $data_pub}
 	 * @param Date $date
 	 */
 	public function setData_pub($date) {
@@ -174,7 +179,7 @@ class Noticia extends Model{
 	}
 	
 	/**
-	* Retorna o assunto da notÌcia
+	* Retorna o assunto da not√≠cia
 	* @return String {@link $assunto}
 	*/
 	public function getAssunto() {
@@ -182,7 +187,7 @@ class Noticia extends Model{
 	}
 	
 	/**
-	 * Altera o valor do assunto da notÌcia {@link $assunto}
+	 * Altera o valor do assunto da not√≠cia {@link $assunto}
 	 * @param String $as
 	 */
 	public function setAssunto($as) {
@@ -190,7 +195,7 @@ class Noticia extends Model{
 	}
 	
 	/**
-	* Retorna a descriÁ„o da notÌcia
+	* Retorna a descri√ß√£o da not√≠cia
 	* @return String {@link $descricao}
 	*/
 	public function getDescricao() {
@@ -198,7 +203,7 @@ class Noticia extends Model{
 	}
 	
 	/**
-	 * Altera o valor da descriÁ„o da notÌcia {@link $descricao}
+	 * Altera o valor da descri√ß√£o da not√≠cia {@link $descricao}
 	 * @param String $desc
 	 */
 	public function setDescricao($desc) {
@@ -206,7 +211,7 @@ class Noticia extends Model{
 	}
 	
 	/**
-	* Retorna o texto da notÌcia
+	* Retorna o texto da not√≠cia
 	* @return String {@link $texto}
 	*/
 	public function getTexto() {
@@ -214,7 +219,7 @@ class Noticia extends Model{
 	}
 	
 	/**
-	 * Altera o valor do texto da notÌcia {@link $texto}
+	 * Altera o valor do texto da not√≠cia {@link $texto}
 	 * @param String $t
 	 */
 	public function setTexto($t) {
@@ -222,7 +227,7 @@ class Noticia extends Model{
 	}
 	
 	/**
-	* Retorna a URL da notÌcia
+	* Retorna a URL da not√≠cia
 	* @return String {@link $url}
 	*/
 	public function getUrl() {
@@ -230,7 +235,7 @@ class Noticia extends Model{
 	}
 	
 	/**
-	 * Altera o valor da URL da notÌcia {@link $url}
+	 * Altera o valor da URL da not√≠cia {@link $url}
 	 * @param String $u
 	 */
 	public function setUrl($u) {
@@ -238,7 +243,7 @@ class Noticia extends Model{
 	}
 	
 	/**
-	* Retorna a visibilidade da notÌcia
+	* Retorna a visibilidade da not√≠cia
 	* @return boolean {@link $visivel}
 	*/
 	public function getVisivel() {
@@ -246,7 +251,7 @@ class Noticia extends Model{
 	}
 	
 	/**
-	 * Altera o valor da URL da notÌcia {@link $url}
+	 * Altera o valor da URL da not√≠cia {@link $url}
 	 * @param String $url
 	 */
 	public function setVisivel($v) {
