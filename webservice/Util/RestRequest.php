@@ -10,7 +10,7 @@
  	
  	
  	private $request_vars;   //request variables in uri. (TODO: what about request variables in content? Not restfull i know... )
- 	private $data;         //content in http body ? Not decided yet.
+ 	private $data;         //content in http body ?
  	private $http_accept;  //response format. 
  	private $method;  //get, put, head, post...
 	private $path_info;  //array of path parameters. 

@@ -19,6 +19,10 @@ class Integrantes_Lexico extends Model{
  	 */
 	var $idlexico; 
 	
+		public function checkValidity(){
+		return true; 
+	}
+	 
 	/**
 	* Retorna o identificador do integrante
 	* @return int {@link $idintegrante}

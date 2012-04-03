@@ -64,6 +64,27 @@
 		}			
 	}
 	 
+	 /**
+	  * 
+	  */
+	
+	function postRoot($req){
+		$espaco = new Local();
+		$result = $espaco->fromXml($req->getData());
+		if ($result->checkValidity() == true){
+			$id = $result->add(); 
+			if (!$id){
+				RestUtils::sendResponse(500);
+				exit; 
+			}
+			RestUtils::sendResponse(201, null, $id, 'text'); 
+		}
+		else{
+			
+			RestUtils::sendResponse(200, null , $result->coordenadas, 'text'); 
+		} 		 
+	}
+	
 	/**
 	 * Listar todas os espaços 
 	 * Representação em XML, JSON que devem conter apontadores para o recurso de cada local.  

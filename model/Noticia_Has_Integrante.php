@@ -10,6 +10,10 @@ require_once ("Model.php");
 class Noticia_Has_Integrante extends Model{
 	var $idnoticia; 
 	
+		public function checkValidity(){
+		return true; 
+	}
+	 
 	/**
 	* Identificador do integrante
 	* @var int

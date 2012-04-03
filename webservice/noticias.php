@@ -4,7 +4,8 @@
  require_once ('Util/RestRequest.php'); 
  require_once ('Util/XML/Serializer.php'); 
  require_once ('../model/Noticia.php');
-
+ require_once ('../model/includes.php'); 
+ require_once ('Util.php');    
   
  /*
   * Documenta‹o dos mŽtodos suportados neste url: 
@@ -14,8 +15,8 @@
 
 	/idNoticia | GET | Retorna o conteudo e informa‹o relativa a uma noticia, incluindo rela›es como referencias temporais, referencias espaciais, clubes , etc., A representa‹o ser‡ em XML, JSON e XHTML. 
  **/
- 
- 	 $options = array(
+
+    $options = array(
       "indent"          => "    ",
       "linebreak"       => "\n",
       "typeHints"       => false,
@@ -71,6 +72,7 @@
 		}			
 	}
 	
+	
 	/**
 	 * Listar todas as noticias. 
 	 * Representa‹o em XML, JSON que devem conter apontadores para o recurso de cada noticia.  
@@ -93,7 +95,6 @@
 		
 		$xmlSerializer =  new XML_Serializer($options); 
 		
-		//var_dump($news); 
 		$result = $xmlSerializer->serialize($news);
 		
 		if ($result == true){
@@ -118,20 +119,34 @@
 	 * 
 	 */
 	function postRoot($req){
-		$n = Noticia::fromXml($req->getData());
+		$noticia = new Noticia(); 
+
+		$n = $noticia->fromXml($req->getData());
+		if (!$n->texto) $n->texto =  Noticia::fetchTexto($n->url);
+		 
+		$n->idfonte = Util::getIdWebServiceAsFonte();
+		 
 		if (!$n) { 
 			RestUtils::sendResponse(400);
 			exit;  
 		}
 		$id = $n->add();
 		if (!$id){
-			//database could not
-			RestUtils::sendResponse(500);	
-		} 
+			// database could not   
+			RestUtils::sendResponse(500);
+			exit; 
+		}
+		else {
+			//TODO - create response url 
+			RestUtils::sendResponse(201, null, $id, 'text'); 
+		}
 //		if ($id = )
 		//RestUtils::sendResponse(200, null, $req->getData()); 
 	}
+	
+	
 	//Process resource (/noticias/{idnoticia}) requests. Accepts GET/PUT/HEAD/DELETE
+
 /*
  * TODO: 
  * PUT
@@ -139,11 +154,15 @@
  * DELETE
  */
 	function processNews($req){
+	//TODO : make it safe to access path_info[0]. Prevent sql injection please.
+	$path_info = req->getPathInfo();  
+	$id = $path_info[1];
 		switch($req->getMethod()){
 			case 'GET': 
-			getNews($req);
+			getNews($req, $id);
 			break; 
 			case 'PUT':
+			putNews($req, $id); 
 			break;
 			case 'HEAD':
 			break; 
@@ -155,11 +174,20 @@
 		}
 	}
 	
-	function getNews($req){
-		//TODO : make it safe to access path_info[0]. Prevent sql injection please. 
-		$path_info = $req->getPathInfo();
-		//var_dump($path_info); 
-		$id = $path_info[1]; 
+	function putNews($req, $id){
+		$noticia = new Noticia(); 
+		$noticia->getObjectById($id);
+		
+		if (!$noticia) {
+			RestUtils::sendResponse(404); 	
+		}
+		
+		$nova_noticia = $noticia->fromXml($req->getData());
+		if (!$n->texto) $n->texto =  Noticia::fetchTexto($n->url);
+		$n->idfonte = Util::getIdWebServiceAsFonte();
+	}
+	
+	function getNews($req, $id){
 		$noticia = new Noticia(); 
 		$n = $noticia->findFirst(array ("idnoticia" => $id));
 		if (!$n){
