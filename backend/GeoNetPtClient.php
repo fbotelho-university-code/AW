@@ -56,6 +56,23 @@ class GeoNetPtClient extends Fonte {
 
 $geo = new GeoNetPtClient();
 
+/* Query SPARQL
+ * 
+ * PREFIX dcterms: <http://purl.org/dc/terms/>
+ * PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+ * PREFIX gn: <http://dmir.inesc-id.pt/pub/publications/2009/10/geo-net#>
+ * PREFIX gnpt: <http://dmir.inesc-id.pt/pub/publications/2009/10/geo-net-pt#>
+ * PREFIX gnpt02: <http://dmir.inesc-id.pt/pub/publications/2009/10/geo-net-pt-02#>
+ * SELECT ?title, ?latitude, ?longitude where {
+ *  ?entity gn:type gnpt02:concelho-ATCON .
+ *  ?entity dcterms:title ?title .
+ *  ?entity gn:footprint ?footprint .
+ *  ?footprint geo:lat ?latitude .
+ *  ?footprint geo:long ?longitude .
+ * }ORDER BY ?title
+ * 
+ */
+
 /* URIs to query Geo-Net-PT (order: Ilhas, Concelhos and Distrito) */
 $queryIlha = '?default-graph-uri=http%3A%2F%2Fdmir.inesc-id.pt%2Fpub%2Fpublications%2F2009%2F10%2Fgeonetpt02&query=PREFIX+dcterms%3A+%3Chttp%3A%2F%2Fpurl.org%2Fdc%2Fterms%2F%3E%0D%0APREFIX+geo%3A+%3Chttp%3A%2F%2Fwww.w3.org%2F2003%2F01%2Fgeo%2Fwgs84_pos%23%3E%0D%0APREFIX+gn%3A+%3Chttp%3A%2F%2Fdmir.inesc-id.pt%2Fpub%2Fpublications%2F2009%2F10%2Fgeo-net%23%3E%0D%0APREFIX+gnpt%3A+%3Chttp%3A%2F%2Fdmir.inesc-id.pt%2Fpub%2Fpublications%2F2009%2F10%2Fgeo-net-pt%23%3E%0D%0APREFIX+gnpt02%3A+%3Chttp%3A%2F%2Fdmir.inesc-id.pt%2Fpub%2Fpublications%2F2009%2F10%2Fgeo-net-pt-02%23%3E%0D%0ASELECT+%3Ftitle%2C+%3Flatitude%2C+%3Flongitude+where+%7B%0D%0A++%3Fentity+gn%3Atype+gnpt02%3Ailha-ATILH+.%0D%0A++%3Fentity+dcterms%3Atitle+%3Ftitle+.%0D%0A++%3Fentity+gn%3Afootprint+%3Ffootprint+.%0D%0A++%3Ffootprint+geo%3Alat+%3Flatitude+.%0D%0A++%3Ffootprint+geo%3Along+%3Flongitude+.%0D%0A%7D+ORDER+BY+%3Ftitle&format=text%2Fhtml&debug=off';
 $queryConc = '?default-graph-uri=http%3A%2F%2Fdmir.inesc-id.pt%2Fpub%2Fpublications%2F2009%2F10%2Fgeonetpt02&query=PREFIX+dcterms%3A+%3Chttp%3A%2F%2Fpurl.org%2Fdc%2Fterms%2F%3E%0D%0APREFIX+geo%3A+%3Chttp%3A%2F%2Fwww.w3.org%2F2003%2F01%2Fgeo%2Fwgs84_pos%23%3E%0D%0APREFIX+gn%3A+%3Chttp%3A%2F%2Fdmir.inesc-id.pt%2Fpub%2Fpublications%2F2009%2F10%2Fgeo-net%23%3E%0D%0APREFIX+gnpt%3A+%3Chttp%3A%2F%2Fdmir.inesc-id.pt%2Fpub%2Fpublications%2F2009%2F10%2Fgeo-net-pt%23%3E%0D%0APREFIX+gnpt02%3A+%3Chttp%3A%2F%2Fdmir.inesc-id.pt%2Fpub%2Fpublications%2F2009%2F10%2Fgeo-net-pt-02%23%3E%0D%0ASELECT+%3Ftitle%2C+%3Flatitude%2C+%3Flongitude+where+%7B%0D%0A++%3Fentity+gn%3Atype+gnpt02%3Aconcelho-ATCON+.%0D%0A++%3Fentity+dcterms%3Atitle+%3Ftitle+.%0D%0A++%3Fentity+gn%3Afootprint+%3Ffootprint+.%0D%0A++%3Ffootprint+geo%3Alat+%3Flatitude+.%0D%0A++%3Ffootprint+geo%3Along+%3Flongitude+.%0D%0A%7D+ORDER+BY+%3Ftitle&format=text%2Fhtml&debug=off';
