@@ -22,10 +22,8 @@ class Noticia extends Model{
 			//check if tags is defined
 			if ( $nxml->newNoticia){
 				//get descricaao 
-				if ($nxml->newNoticia->descricao) 
-					$n->descricao = addslashes($nxml->newNoticia->descricao);  
-				else  return null;
-				
+				if ($nxml->newNoticia->descricao) $n->descricao = addslashes($nxml->newNoticia->descricao);  else  return null;
+
 				//get data de publica‹o
 				if ($nxml->newNoticia->data_pub) {
 					$n->data_pub ($nxml->newNoticia->data_pub); 							
@@ -40,7 +38,7 @@ class Noticia extends Model{
 				}
 				else {
 					// se nao tiver url ent‹o devia ter o corpo da noticia. 
-					if ($nxml->newNoticia->texto) $n->texto = addslashes($nxml->newNoticia->texto) else return null;	
+					if ($nxml->newNoticia->texto) $n->texto = addslashes($nxml->newNoticia->texto);  else return null;	
 				}
 			}
 		}catch (Exception $e){

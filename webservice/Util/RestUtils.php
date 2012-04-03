@@ -61,16 +61,16 @@ class RestUtils{
 		//should hold query variables.  COOKIE is removed. No cookies in rest. 
 		$return_obj->setRequestVars(array_diff($_REQUEST, $_COOKIE));
 		//TODO - clean up. Do not care if get/post, etc. data should care for http content probably. not request variables encoded in the uri.   
+
 		switch($request_method){
 			case 'GET': 
 				//$data = $_GET; 
 				break; 
 			case 'POST':
-				//$data = $_POST; 
+				$data = file_get_contents('php://input'); 
 				break; 
 			case 'PUT':
-				parse_str(file_get_contents('php://input'), $put_vars);
-				$data = $put_vars;
+				$data = file_get_contents('php://input'); 
 				break;  
 		}
 		
@@ -102,10 +102,10 @@ class RestUtils{
 		switch($status){
 			case 400: 
 				$message = 'The request could not be understood';
-				if (!isset($vars['unrecognized_req_vars'])){
-					die ("Web service error, failed to comply to standards"); 
-				}  
-				$message = 'The following variables are not recognized: ' . implode(" ", $vars['unrecognized_req_vars']); 
+				//if (!isset($vars['unrecognized_req_vars'])){
+//					die ("Web service error, failed to comply to standards"); 
+//				}  
+//				$message = 'The following variables are not recognized: ' . implode(" ", $vars['unrecognized_req_vars']); 
 				break;
 			case 401: 
 				$message = 'You must be authorized to view this page';
