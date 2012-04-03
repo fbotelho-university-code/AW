@@ -26,7 +26,7 @@ class Noticia extends Model{
 
 				//get data de publica‹o
 				if ($nxml->newNoticia->data_pub) {
-					$n->data_pub ($nxml->newNoticia->data_pub); 							
+					$n->data_pub = Noticia::checkAndGetDate($nxml->newNoticia->data_pub); 							
 				}
 				
 				//get url 
@@ -41,6 +41,7 @@ class Noticia extends Model{
 					if ($nxml->newNoticia->texto) $n->texto = addslashes($nxml->newNoticia->texto);  else return null;	
 				}
 			}
+			else return null; 
 		}catch (Exception $e){
 			return null; 
 		}

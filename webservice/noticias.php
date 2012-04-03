@@ -128,6 +128,7 @@
 			//database could not
 			RestUtils::sendResponse(500);	
 		} 
+//		if ($id = )
 		//RestUtils::sendResponse(200, null, $req->getData()); 
 	}
 	//Process resource (/noticias/{idnoticia}) requests. Accepts GET/PUT/HEAD/DELETE
