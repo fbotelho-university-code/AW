@@ -1,16 +1,13 @@
 <?php
+/*
+ * Created on Mar 19, 2012
+ *
+ * To change the template for this generated file go to
+ * Window - Preferences - PHPeclipse - PHP - Code Templates
+ */
+require_once ("Model.php"); 
 
-require_once ("DAO.php"); 
-
-/**
-* Classe que representa o relacionamento entre notícias e clubes
-*/
-class Noticia_Has_Integrante extends DAO{
-	
-	/**
-	* Identificador da noticia
-	* @var int
-	*/
+class Noticia_Has_Integrante extends Model{
 	var $idnoticia; 
 	
 	/**

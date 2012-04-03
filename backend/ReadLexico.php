@@ -16,6 +16,7 @@
  }catch(Exception $e){
  	echo "Exception : " . $e->getMessage() . "\n";  
  }
+
  
  $ado = new DAO(); 
  $ado->connect();

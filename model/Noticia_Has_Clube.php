@@ -1,11 +1,12 @@
 <?php
-
-require_once("DAO.php"); 
-
-/**
- * Classe que representa o relacionamento entre notícias e clubes
+require_once("Model.php"); 
+/*
+ * Created on Mar 15, 2012
+ *
+ * To change the template for this generated file go to
+ * Window - Preferences - PHPeclipse - PHP - Code Templates
  */
- class Noticia_Has_Clube extends DAO{
+ class Noticia_Has_Clube extends Model{
  	
  	/**
  	* Identificador do clube

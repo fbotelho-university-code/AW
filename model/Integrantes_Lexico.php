@@ -1,12 +1,11 @@
 <?php
-
-require_once('DAO.php'); 
-
-
-/**
- * Classe que representa o relacionamento de Clubes com o Lexico
+/*
+ * Created on Mar 19, 2012
+ *
+ * To change the template for this generated file go to
+ * Window - Preferences - PHPeclipse - PHP - Code Templates
  */
-class Integrantes_Lexico extends DAO{
+class Integrantes_Lexico extends Model{
 	
 	/**
 	* Identificador do integrante

@@ -1,12 +1,12 @@
 <?php
 
-require_once "DAO.php"; 
+require_once "Model.php"; 
 
 /**
   * Classe que representa uma funcao de um integrante em um clube
   * (Ex: Presidente, Treinador, Jogador, etc.)
   */
-class Funcao extends DAO {
+class Funcao extends Model{
 	
 	/**
 	 * Identificador da Função

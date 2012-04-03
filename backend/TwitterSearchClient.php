@@ -16,7 +16,7 @@ class TwitterSearchClient extends Fonte{
 	}
 	
 	/**
-	* Busca dos comentários publicadas no Twitter com palavras presentes no parametro de pesquisa
+	* Busca dos coment‡rios publicadas no Twitter com palavras presentes no parametro de pesquisa
 	* @param String[] $parameters
 	* 			Array com palavras a serem pesquisadas
 	*/
@@ -34,8 +34,8 @@ class TwitterSearchClient extends Fonte{
 			$data = curl_exec($ch);
 			curl_close($ch);
 			
-			
 			$doc = new SimpleXmlElement($data, LIBXML_NOCDATA);
+			
 			if ($doc){
 				foreach ($doc as $tag){
 					foreach($tag as $key => $value){
@@ -46,13 +46,7 @@ class TwitterSearchClient extends Fonte{
 							foreach($value as $keyy => $valuee){
 								$this->readNewAsRssItem($keyy, $valuee, $noticia);
 							}
-<<<<<<< HEAD
-							
-=======
-							//TODO Caracterização Semantica da Notícia				
->>>>>>> origin/master
 							ParserNoticias::parseNoticia($noticia);
-							 
 						}
 					}
 				}
@@ -91,7 +85,6 @@ class TwitterSearchClient extends Fonte{
 		}
 	}
 }
-
 
 $myself = new TwitterSearchClient(); 
 $parameters = Util::getSearchParameters();

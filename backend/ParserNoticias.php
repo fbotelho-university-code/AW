@@ -107,10 +107,9 @@ class ParserNoticias {
 /*13*/			//'/(Janeiro|Fevereiro|Março|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)/'
 /*14*/			//'/\d{4}/'
 			);
-
+			
 			$matches = array();
 			for($i=0;$i<count($regexes);$i++){
-<<<<<<< HEAD
 				if(preg_match_all($regexes[$i], $texto, $matches)){
 					if ($matches[0][0] != ''){
 						// retira valores duplicados no array, sem alterar as chaves originais
@@ -127,30 +126,7 @@ class ParserNoticias {
 			}
 		}
 }
-=======
-				if(preg_match($regexes[$i], $texto, $matches)){
-					
-					$rel  = new Noticia_Data($noticia->getIdnoticia(), $matches[0]); 
-					$rel->add();  
-							}							
-					}
-				}
-			}
-//						echo '<br/>' . $m . '<br/>';
-/*
-						//if ($matches[0][$j] != ''){
-							echo '<br/> J: ' . $j . '<br/>'; 
-							var_dump($matches); 
-							echo ($i+1).' Found '.$matches[0][$j];
-							// save $matches[0][$j++]; 
-// 	      					echo '<br>';*/
-						//}
-	//				}					
-				
-		//	}
-//		}
 
->>>>>>> origin/master
 /*
 $dao = new DAO(); 
 $dao->connect(); 
@@ -158,12 +134,10 @@ $dao->execute("truncate table noticia");
 $dao->execute("truncate table noticia_has_clube"); 
 $dao->execute("truncate table noticia_locais");
 $dao->execute("truncate table noticia_has_integrante"); 
-
 $noticia = new Noticia();
-
-
 $noticia->setIdfonte(1); 
 $noticia->setTexto(addslashes(file_get_contents("./exemploNoticia.html"))); 
 ParserNoticias::parseNoticia($noticia);   
 */   
+
 ?>

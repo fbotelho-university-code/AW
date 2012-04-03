@@ -1,11 +1,11 @@
 <?php
 
-require_once "DAO.php";
+require_once "Model.php";
 
 /**
  * Classe que representa uma Competição do Futebol Português
  */
-class Competicao extends DAO {
+class Competicao extends Model {
 	
 	/**
 	 * Identificador da Competicao

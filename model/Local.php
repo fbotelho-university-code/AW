@@ -1,12 +1,12 @@
 <?php
 
-require_once "DAO.php";
+require_once "Model.php";
 
 /**
   * Classe que representa um local.
   * Pode ser um Distrito, Ilha ou Concelho de Portugal
   */
-class Local extends DAO {
+class Local extends Model{
 	
 	/**
 	* Identificador do local

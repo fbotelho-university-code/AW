@@ -1,11 +1,17 @@
 <?php
-
-require_once("DAO.php");
+/*
+ * Created on Mar 21, 2012
+ *
+ * To change the template for this generated file go to
+ * Window - Preferences - PHPeclipse - PHP - Code Templates
+ */
+ 
+ require_once("Model.php");
   
 /**
 * Classe que representa as referências temporais das noticias
 */
-class Noticia_data extends DAO{
+class Noticia_data extends Model{
 	/**
 	* Identificador da notícia
 	* @var int

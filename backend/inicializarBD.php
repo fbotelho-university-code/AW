@@ -6,7 +6,9 @@ echo "<center><h1>Inicialização da Base de Dados</h1></center>";
 //-------------------------- LIMPANDO BASE DE DADOS -------------------------------------------//
 echo "Limpando a Base de Dados... ";
 $dao = new DAO();
+
 $rs = $dao->execute("SELECT table_name FROM information_schema.tables WHERE table_schema = 'aw' AND table_name NOT LIKE 'view_%';");
+
 while(!$rs->EOF) {
 	$table = $rs->fields["table_name"];
 	$sql = "TRUNCATE TABLE ". $table;
@@ -44,6 +46,10 @@ $f->add();
 $f->setNome("TwitterSearch");
 $f->setMain_url("http://search.twitter.com/search.rss");
 $f->add();
+
+$f->setNome"WebService";
+$f->setMain_url("");
+$f->add(); 
 
 echo "Ok!<hr>";
 
@@ -131,5 +137,6 @@ echo "Ok!<hr>";
 echo "Inicialização da Tabela <b>lexico</b>... ";
 require_once ("ReadLexico.php");
 echo "Ok!<hr>";
+echo 'The end'; 
 
 ?>

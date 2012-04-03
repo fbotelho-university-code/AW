@@ -1,11 +1,11 @@
 <?php
 
-require_once "DAO.php";
+require_once "Model.php";
  
  /**
   * Classe que representa a rela�‹o Noticias Locais
   */
-  class Noticia_locais extends DAO{
+  class Noticia_locais extends Model{
   
   	/**
   	* Identificador da noticia
