@@ -9,6 +9,61 @@ require_once "Model.php";
 class Noticia extends Model{
 	
 	/**
+	 * Retorna uma nova noticia a partir de um XML bem formado
+	 * senão estiver bem formado retorna null 
+	 */
+	 
+	//TODO - SQL Injection.  			
+	public static function fromXml($xml){
+		try { 
+			$n = new Noticia(); //nova noticia para criar  
+			$nxml = new SimpleXMLElement($xml);
+			
+			//check if tags is defined
+			if ( $nxml->newNoticia){
+				//get descricaçao 
+				if ($nxml->newNoticia->descricao) 
+					$n->descricao = addslashes($nxml->newNoticia->descricao);  
+				else  return null;
+				
+				//get data de publicação
+				if ($nxml->newNoticia->data_pub) {
+					$n->data_pub ($nxml->newNoticia->data_pub); 							
+				}
+				
+				//get url 
+				if ($nxml->newNoticia->url){
+					//se tiver url vamos buscar o texto lá
+				   $n->url= addslashes($nxml->newNoticia->url);
+				   //TODO check url is well formed. 
+				   $n->text = Noticia::fetchTexto($n->url); 
+				}
+				else {
+					// se nao tiver url então devia ter o corpo da noticia. 
+					if ($nxml->newNoticia->texto) $n->texto = addslashes($nxml->newNoticia->texto) else return null;	
+				}
+			}
+		}catch (Exception $e){
+			return null; 
+		}
+	}	
+	
+	public static function checkAndGetDate($date){
+			//TODO - parse date from String
+			return $date; 
+	}
+	
+	/**
+	 * Função para ir buscar o texto de noticia a partir de um url
+	 * @param url O url da noticia.  
+	 */
+	public static function fetchTexto($url){
+		// TODO - usar curl, meter null em caso de o url tá dead. 
+		// TODO - usar parser html do prof e fazer cenas... (ir buscar só o body)
+		return addslashes(file_get_contents($url)); 
+	}
+	 
+	/**
 	 * Identificador da noticia
 	 * @var int
 	 */

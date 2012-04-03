@@ -4,6 +4,7 @@
  require_once ('Util/RestRequest.php'); 
  require_once ('Util/XML/Serializer.php'); 
  require_once ('../model/Noticia.php');
+
   
  /*
   * Documenta‹o dos mŽtodos suportados neste url: 
@@ -13,6 +14,7 @@
 
 	/idNoticia | GET | Retorna o conteudo e informa‹o relativa a uma noticia, incluindo rela›es como referencias temporais, referencias espaciais, clubes , etc., A representa‹o ser‡ em XML, JSON e XHTML. 
  **/
+ 
  	 $options = array(
       "indent"          => "    ",
       "linebreak"       => "\n",
@@ -42,8 +44,7 @@
 	  		processNews($req);
 	  		break;  
 	  } 
-	       
-
+	  
 	// Process resource head (/noticias) requests. Accepts GET/POST/HEAD
 	
 	/*
@@ -66,7 +67,7 @@
 				RestUtils::sendResponse(405, array('allow' => "HEAD", "GET", "POST"));
 				exit; 
 		}			
-	} 
+	}
 	
 	/**
 	 * Listar todas as noticias. 
@@ -74,7 +75,6 @@
 	 * Por parametro (search=SEARCH_STRING) Ž possivel especificar palavras chaves de forma a filtrar os resultados (i.e., permitir escolher noticias que referem o clube X.).
 	 * TODO : filtrar pesquisa. 
 	 **/
-	 
 	function getRoot($req){
 		$noticia = new Noticia(); 
 		$news =$noticia->getAll(array("idnoticia","data_pub", "assunto", "descricao", "url"));

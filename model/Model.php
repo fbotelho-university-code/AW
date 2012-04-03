@@ -20,13 +20,7 @@ class Model{
 	 * @param String $sql
 	 * @return ResultSet $rs Resultado da SQL executada
 	 */
-	 
-	function execute($sql) {
-		$this->dao->connect();
-		$rs = $this->dao->db->Execute($sql) or die($this->dao->db->ErrorMsg() . "<br>SQL: ".$sql);
-		$this->dao->disconnect();
-		return $rs;
-	}
+
 	
 	/**
 	 * Insere um objeto na base de dados
@@ -49,7 +43,7 @@ class Model{
 	public function clear() {
 		$table = get_class($this);
 		$sql = "TRUNCATE TABLE ". $table;
-		$rs = $this->dao->db->execute($sql);
+		$rs = $this->dao->execute($sql);
 		if($rs) {
 			return true;
 		}
@@ -82,8 +76,7 @@ class Model{
 		}
 		$sql .= ' FROM ' . $table . ';';
 		
-		$this->dao->connect(); 
-		$rs = $this->dao->db->execute($sql) or die ($this->dao->db->ErrorMsg());
+		$rs = $this->dao->execute($sql) or die ($this->dao->db->ErrorMsg());
 		$objects = array();
 		
 		
@@ -94,7 +87,7 @@ class Model{
 			$objects[] = $obj;
 			$rs->MoveNext();
 		}
-		$this->dao->disconnect(); 
+
 		return $objects;
 	}
 	
@@ -130,8 +123,7 @@ class Model{
 		$sql = 'select * from ' . $table;
 		$sql .= $this->createWhereClause($fields) . ';';
 		
-		$this->dao->connect(); 
-		$rs = $this->dao->db->execute($sql);
+		$rs = $this->dao->execute($sql);
 		$values = array();
 		while (!$rs->EOF){
 			$ob = new $table;
@@ -139,7 +131,7 @@ class Model{
 			$values[] = $ob; 
 			$rs->MoveNext(); 
 		}
-		$this->dao->disconnect(); 
+		
 		return $values;  
 	}
 		
@@ -150,12 +142,10 @@ class Model{
 	public function getObjectById($id) {
 		$table = get_class($this);
 		$sql = "SELECT * FROM ".$table. " WHERE id".$table." = ".$id;
-		$this->dao->connect();
-		$rs = $this->dao->db->execute($sql);
+		$rs = $this->dao->execute($sql);
 		foreach($rs->fields as $key => $value) {
 			$this->$key = $value;
 		}
-		$this->dao->disconnect(); 
 	}
 	
 	/**
