@@ -15,6 +15,10 @@ class Lexico extends Model{
 	var $ambiguidade; //int
 	var $idlexico ; //int  
 	
+	public function checkValidity(){
+		return true; 
+	}
+	 
 	public function getNucleo() { return $this->nucleo; }
 	public function getContexto() { return $this->contexto; }
 	public function getEntidade() { return $this->entidade; }

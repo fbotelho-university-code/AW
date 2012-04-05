@@ -155,7 +155,7 @@
  */
 	function processNews($req){
 	//TODO : make it safe to access path_info[0]. Prevent sql injection please.
-	$path_info = req->getPathInfo();  
+	$path_info = $req->getPathInfo();  
 	$id = $path_info[1];
 		switch($req->getMethod()){
 			case 'GET': 
