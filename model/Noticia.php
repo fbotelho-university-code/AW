@@ -21,19 +21,19 @@ class Noticia extends Model{
 			
 			//check if tags is defined
 			if ( $nxml->newNoticia){
-<<<<<<< HEAD
+
 				//get descricaï¿½ao 
 				if ($nxml->newNoticia->descricao) 
 					$n->descricao = addslashes($nxml->newNoticia->descricao);  
 				else  return null;
 				
 				//get data de publicaï¿½â€¹o
-=======
-				//get descricaao 
+
+				//get descricaï¿½ao 
 				if ($nxml->newNoticia->descricao) $n->descricao = addslashes($nxml->newNoticia->descricao);  else  return null;
 
-				//get data de publica‹o
->>>>>>> origin/master
+				//get data de publicaï¿½ï¿½o
+
 				if ($nxml->newNoticia->data_pub) {
 					$n->data_pub = Noticia::checkAndGetDate($nxml->newNoticia->data_pub); 							
 				}
@@ -46,7 +46,7 @@ class Noticia extends Model{
 				   $n->text = Noticia::fetchTexto($n->url); 
 				}
 				else {
-<<<<<<< HEAD
+
 					// se nao tiver url entâ€¹o devia ter o corpo da noticia. 
 					if ($nxml->newNoticia->texto)
 					{ 
@@ -54,10 +54,10 @@ class Noticia extends Model{
 					} else { 
 						return null;
 					}	
-=======
-					// se nao tiver url ent‹o devia ter o corpo da noticia. 
+
+					// se nao tiver url entï¿½o devia ter o corpo da noticia. 
 					if ($nxml->newNoticia->texto) $n->texto = addslashes($nxml->newNoticia->texto);  else return null;	
->>>>>>> origin/master
+
 				}
 			}
 			else return null; 

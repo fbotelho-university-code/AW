@@ -81,6 +81,66 @@ class Local extends Model{
 		$this->coordenadas = $c;
 	}
 	
+	/**
+	 * Transforma um ficheiro xXML em um Objecto da classe
+	 * @param String $xml
+	 */
+	public static function fromXml($xml){
+		
+		$xml = simplexml_load_string($xml);
+		var_dump($xml);
+		
+		/**try {
+			$n = new Noticia(); //nova noticia para criar
+			$nxml = new SimpleXMLElement($xml);
+				
+			//check if tags is defined
+			if ( $nxml->newNoticia){
+	
+				//get descrica�ao
+				if ($nxml->newNoticia->descricao)
+				$n->descricao = addslashes($nxml->newNoticia->descricao);
+				else  return null;
+	
+				//get data de publica�‹o
+	
+				//get descrica�ao
+				if ($nxml->newNoticia->descricao) $n->descricao = addslashes($nxml->newNoticia->descricao);  else  return null;
+	
+				//get data de publica��o
+	
+				if ($nxml->newNoticia->data_pub) {
+					$n->data_pub = Noticia::checkAndGetDate($nxml->newNoticia->data_pub);
+				}
+	
+				//get url
+				if ($nxml->newNoticia->url){
+					//se tiver url vamos buscar o texto l‡
+					$n->url= addslashes($nxml->newNoticia->url);
+					//TODO check url is well formed.
+					$n->text = Noticia::fetchTexto($n->url);
+				}
+				else {
+	
+					// se nao tiver url ent‹o devia ter o corpo da noticia.
+					if ($nxml->newNoticia->texto)
+					{
+						$n->texto = addslashes($nxml->newNoticia->texto);
+					} else {
+						return null;
+					}
+	
+					// se nao tiver url ent�o devia ter o corpo da noticia.
+					if ($nxml->newNoticia->texto) $n->texto = addslashes($nxml->newNoticia->texto);  else return null;
+	
+				}
+			}
+			else return null;
+		}catch (Exception $e){
+			return null;
+		}**/
+	}
+	
 }
 
 ?>
