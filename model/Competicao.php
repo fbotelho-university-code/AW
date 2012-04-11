@@ -7,6 +7,10 @@ require_once "Model.php";
  */
 class Competicao extends Model {
 	
+	public function checkValidity(){
+		return true; 
+	}
+	 
 	/**
 	 * Identificador da Competicao
 	 * @var int

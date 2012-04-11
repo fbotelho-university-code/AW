@@ -149,6 +149,7 @@
 				getEntidade($req, $entidade);
 			break; 
 			case 'POST':
+			$foo = 'post' . $entidade; $foo($req, $entidade);
 			break;
 			case 'HEAD':
 			break; 
@@ -157,7 +158,30 @@
 			 exit;  
 		}
  }
-	
+
+	function postClube($req){
+		$clubeClass = new Clube(); 
+		$result = $clubeClass->fromXml($req->getData()); 
+		$id = $result->add(); 
+		
+		if (!$id){
+			RestUtils::sendResponse(500);
+			exit;  
+		}
+		RestUtils::sendResponse(201, null, $id, 'text'); 
+	}
+	 
+	//TODO - este mŽtodo Ž igual ao postClube. fus‹o. 
+	function postIntegrante($req){
+		$integranteClass = new Integrante(); 
+		$result = $integranteClass->fromXml($req->getData()); 
+		$id = $result->add(); 
+		if (!$id){
+			RestUtils::sendResponse(500);
+			exit;  
+		}
+		RestUtils::sendResponse(201, null, $id, 'text'); 
+	}
 	
 	function getEntidade($req, $entidade){
 		$bdEnt = new $entidade(); 
@@ -169,8 +193,6 @@
 			$en->follow = "url/" . $entidade . "/" . $id;  
 		}
 
-		
-		
 		
 		if ($req->getHttpAccept() == 'json'){
 			RestUtils::sendResponse(200, null, json_encode($entrys)); 

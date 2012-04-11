@@ -7,10 +7,15 @@
  */
  require_once ('DAO.php'); 
 
-class Model{
+abstract class Model{
 	
 	private $dao; 
 	
+	/**
+	 * Should check the validity of the data it is composed.
+	 *  
+	 */
+	public abstract function checkValidity(); 
 	public function __construct(){
 		$this->dao = new DAO(); 
 	}
@@ -35,6 +40,20 @@ class Model{
 		$this->dao->disconnect();
 		return $id;
 	}
+	
+	/**
+	 * Cria-te um objecto a partir de uma string xml.
+	 */
+	public  function fromXml($xmlString){
+		$ob =  simplexml_load_string($xmlString);
+		$class = get_class($this); 
+	    $return_obj  = new $class; 
+	    $this->setObj(get_object_vars($ob), $return_obj);
+	    return $return_obj;  	
+	
+		
+	}
+	
 	
 	/**
 	 * Apaga todos os registos de uma tabela na base de dados
@@ -171,6 +190,8 @@ class Model{
 		}
 		return $sql; 
 	}
+	
+	
 	
 	/**
 	 * Transforma Array associaticvo em Objeto, de acordo com a subclasse chamadora

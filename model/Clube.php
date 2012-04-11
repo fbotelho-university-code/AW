@@ -14,6 +14,10 @@ class Clube extends Model {
 	*/
 	var $idclube;
 	
+	public function checkValidity(){
+		return true; 
+	}
+	 
 	/**
 	 * Identificador do local do clube
 	 * @var int

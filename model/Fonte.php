@@ -8,6 +8,10 @@ require_once "Model.php";
  */
 class Fonte extends Model {
 	
+	public function checkValidity(){
+		return true; 
+	}
+	 
 	/**
 	* Identificador da fonte
 	* @var int
@@ -47,6 +51,7 @@ class Fonte extends Model {
 		}
 	}
 	
+
 	/**
 	* Retorna o identificador da fonte
 	* @return int {@link $idfonte}

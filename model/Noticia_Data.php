@@ -18,6 +18,10 @@ class Noticia_data extends Model{
 	*/
 	var $idnoticia; 
  
+ 	public function checkValidity(){
+		return true; 
+	}
+	 
 	/**
 	 * Referencia temporal da noticia.
 	 * @var String - Data presente no texto da notícia

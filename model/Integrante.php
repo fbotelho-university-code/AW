@@ -13,6 +13,11 @@ class Integrante extends Model{
 	*/
 	var $idintegrante;
 	
+	public function checkValidity(){
+		return true; 
+	}
+	 
+	
 	/**
 	* Identificador do clube do integrante
 	* @var int

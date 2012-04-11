@@ -13,6 +13,10 @@ require_once("Model.php");
 	 */
  	var $idclube; 
 	
+	public function checkValidity(){
+		return true; 
+	}
+	 
  	/**
  	 * Identificador do lexico
  	 * @var int

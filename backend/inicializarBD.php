@@ -45,9 +45,8 @@ $f->add();
 
 $f->setNome("TwitterSearch");
 $f->setMain_url("http://search.twitter.com/search.rss");
-$f->add();
 
-$f->setNome"WebService";
+$f->setNome("WebService");
 $f->setMain_url("");
 $f->add(); 
 

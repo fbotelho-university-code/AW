@@ -8,6 +8,10 @@ require_once "Model.php";
   */
 class Funcao extends Model{
 	
+	public function checkValidity(){
+		return true; 
+	}
+	 
 	/**
 	 * Identificador da Função
 	 * @var int

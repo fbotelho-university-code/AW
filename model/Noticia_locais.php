@@ -7,6 +7,10 @@ require_once "Model.php";
   */
   class Noticia_locais extends Model{
   
+  	public function checkValidity(){
+		return true; 
+	}
+	 
   	/**
   	* Identificador da noticia
   	* @var int
