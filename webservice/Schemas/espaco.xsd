@@ -5,7 +5,7 @@
     
 
 
-    <complexType name="espaco">
+    <complexType name="espacoT">
     	<sequence>
     		<element name="idlocal" type="int"></element>
     		<element name="nome_local">
@@ -19,5 +19,5 @@
     	</sequence>
     </complexType>
 
-    <element name="espaco" type="tns:espaco"></element>
+    <element name="espaco" type="tns:espacoT"></element>
 </schema>

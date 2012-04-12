@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/clube" xmlns:tns="http://www.example.org/clube" elementFormDefault="qualified">
+
+    <complexType name="clubeT">
+    	<sequence>
+    		<element name="idclube" type="int"></element>
+    		<element name="idlocal" type="int"></element>
+    		<element name="idcompeticao" type="int"></element>
+    		<element name="nome_clube">
+    			<simpleType>
+    				<restriction base="string">
+    					<maxLength value="100"></maxLength>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    		<element name="nome_oficial">
+    			<simpleType>
+    				<restriction base="string">
+    					<maxLength value="100"></maxLength>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    	</sequence>
+    </complexType>
+
+    <element name="clube" type="tns:clubeT"></element>
+</schema>
