@@ -12,6 +12,10 @@ class Funcao extends Model{
 		return true; 
 	}
 	 
+	 public function getKeyFields(){
+		return array ('idfuncao'); 
+	}
+	
 	/**
 	 * Identificador da Função
 	 * @var int

@@ -17,6 +17,10 @@ class Local extends Model{
 			return true; 
 	}
 	 
+	public function getKeyFields(){
+		return array ('idlocal'); 
+	}
+	 
 	/**
 	* Identificador do local
 	* @var int

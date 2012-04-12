@@ -17,6 +17,11 @@ class Integrante extends Model{
 		return true; 
 	}
 	 
+	 	 
+	public function getKeyFields(){
+		return array ('idintegrante'); 
+	}
+	 
 	
 	/**
 	* Identificador do clube do integrante

@@ -17,6 +17,10 @@ class Clube extends Model {
 	public function checkValidity(){
 		return true; 
 	}
+	
+	public function getKeyFields(){
+		return array ('idclube'); 
+	}
 	 
 	/**
 	 * Identificador do local do clube

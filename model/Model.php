@@ -7,15 +7,45 @@
  */
  require_once ('DAO.php'); 
 
+
 abstract class Model{
 	
 	private $dao; 
+	
 	
 	/**
 	 * Should check the validity of the data it is composed.
 	 *  
 	 */
-	public abstract function checkValidity(); 
+	public abstract function checkValidity();
+	
+	/**
+	 * Remote DAO from get_object vars
+	 * Also allows the filtering of the vars in the returning associative array. 
+	 * Useful when used with the primary key. 
+	 */
+	function my_get_object_vars($filter =null){
+	
+	$array = get_object_vars($this);
+	if (isset($array['dao'])){
+		unset($array['dao']);
+	}
+	
+	if ($filter != null){
+		foreach($array as $k => $field){
+			if (array_search($k, $filter) === false ){
+				unset($array[$k]);
+			}
+		}
+	}		
+	return $array;  	 
+	}
+	
+	
+	/**
+	 * Methods should override this and return an array of the primary key identifiers. 
+	 */
+	public abstract function getKeyFields();  
 	public function __construct(){
 		$this->dao = new DAO(); 
 	}
@@ -34,11 +64,41 @@ abstract class Model{
 	public function add(){
 		$this->dao->connect();
 		$table = get_class($this);
-		$fields = get_object_vars($this);
+		$fields = $this->my_get_object_vars();
 		$rs = $this->dao->db->AutoExecute($table, $fields, "INSERT") or die($this->dao->db->ErrorMsg() . "<br>SQL: ".var_dump($fields). " - Table: ".$table);
 		$id = $this->dao->db->Insert_ID();
 		$this->dao->disconnect();
 		return $id;
+	}
+		
+	public function del(){
+		$table = get_class($this); 
+		$sql = 'delete from ' . $table   . $this->getPrimaryKeyWhere(); 
+		$this->dao->execute($sql);
+	}
+
+/**
+ * Return the Where statement selecting this object in the database.
+ */
+	public function getPrimaryKeyWhere(){
+		return $this->createWhereClause($this->my_get_object_vars($this->getKeyFields())); 
+	}		
+	
+	public function update(){
+		$table = get_class($this); 
+		$fields = $this->my_get_object_vars();
+		foreach ($this->getKeyFields() as $key){
+			if (isset($fields[$key]))
+				unset($fields[$key]); 
+		}
+		
+		$sql = 'update '. $table . $this->createWhereClause($fields, 'SET');
+		
+		//Filter the primary key.
+		$sql .= $this->getPrimaryKeyWhere();
+		
+		echo $sql; 
+		$this->dao->execute($sql);
 	}
 	
 	/**
@@ -46,12 +106,10 @@ abstract class Model{
 	 */
 	public  function fromXml($xmlString){
 		$ob =  simplexml_load_string($xmlString);
-		$class = get_class($this); 
+		$class = get_class($this);
 	    $return_obj  = new $class; 
 	    $this->setObj(get_object_vars($ob), $return_obj);
 	    return $return_obj;  	
-	
-		
 	}
 	
 	
@@ -98,7 +156,6 @@ abstract class Model{
 		$rs = $this->dao->execute($sql) or die ($this->dao->db->ErrorMsg());
 		$objects = array();
 		
-		
 		while(!$rs->EOF) {
 			$arrayAssoc = $rs->fields;
 			$obj = new $table;
@@ -130,7 +187,6 @@ abstract class Model{
 	 * @return Object[] $values - Array com objectos da classe chamadora refletindo resultado da pesquisa à Base de Dados
 	 */
 	public  function find ($fields){
-		
 		//Subclasses de Fonte devem usar tabela da classe pai (fonte)	
 		if(is_subclass_of($this, "fonte")) {
 			$table = "fonte";
@@ -141,7 +197,6 @@ abstract class Model{
 		
 		$sql = 'select * from ' . $table;
 		$sql .= $this->createWhereClause($fields) . ';';
-		
 		$rs = $this->dao->execute($sql);
 		$values = array();
 		while (!$rs->EOF){
@@ -162,6 +217,7 @@ abstract class Model{
 		$table = get_class($this);
 		$sql = "SELECT * FROM ".$table. " WHERE id".$table." = ".$id;
 		$rs = $this->dao->execute($sql);
+		if (!$rs->fields) return null; 
 		foreach($rs->fields as $key => $value) {
 			$this->$key = $value;
 		}
@@ -172,26 +228,27 @@ abstract class Model{
 	 * S— suporta strings e numericos. 
 	 * @returns a String a dizer where key0 = $arrayAssoc[key0] AND $key1 = 'arrayAssoc[key1]' ou entao a string vazia caso o array esteja vazio.
 	 */
-	 //TODO is_string not working. 
-	private function createWhereClause($arrayAssoc){
-		$sql = '';
-		$sql .= (count($arrayAssoc) > 0 ) ? ' where ' : ''; //check to see if they are where clausules 
 
-		$i = 0;  
+
+	 //TODO is_string not working.
+	  
+	private function createWhereClause($arrayAssoc, $connector='where'){
+		$sql = '';
+		$sql .= (count($arrayAssoc) > 0 ) ?  (' ' . $connector . ' ' )  : ''; //check to see if they are where clausules 
+		$i = 0;
+		  
 		foreach ($arrayAssoc as $key=>$value){
-			$sql .= ' '  . $key . '='; 
-			$sql .= '\'' . $value  . '\''; 
-			//$sql .= (is_string($value)) ?  '\'' . $value  . '\' ': $value;
-			$i +=1;
+			$sql .= ' '  . $key . ' = '; 
+			//$sql .= '\'' . $value  . '\''; 
+			$sql .= (!is_numeric($value)) ?  '\'' . $value  . '\' ': $value;
+			$i += 1;
 			//se for ultimo adicionar and para proxima clausula 
 			if ($i < count($arrayAssoc)){
-				$sql .=  'AND '; 
+				$sql .=  ' AND '; 
 			}  
 		}
 		return $sql; 
 	}
-	
-	
 	
 	/**
 	 * Transforma Array associaticvo em Objeto, de acordo com a subclasse chamadora
@@ -199,7 +256,6 @@ abstract class Model{
 	 * @param Object $obj - Objecto da subclasse chamadora
 	 */
 	private function setObj($arrayAssoc, $obj){
-	
 	 foreach($arrayAssoc as $key => $value) {
 			$obj->$key = $value;
 		}

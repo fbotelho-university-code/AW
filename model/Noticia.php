@@ -2,6 +2,8 @@
 
 require_once "Model.php";
 
+require_once 'Util.php'; 
+
 /**
  * Classe que representa uma notícia recuperada de fontes de informações da Web
  *  (Google News, Sapo News, Twitter, etc.)
@@ -15,6 +17,10 @@ class Noticia extends Model{
 	
 	public function checkValidity(){
 		return true; 
+	}
+	
+	public function getKeyFields(){
+		return array('idnoticia'); 		
 	}
 	
 	/**
@@ -44,7 +50,7 @@ class Noticia extends Model{
 	 * Formato: AAAA-MM-DD HH:MM:SS
 	 * @var Date
 	 */
-	var $data_pub;
+	var $data_pub;  
 	
 	/**
 	 * Data presente no corpo da notícia
@@ -87,6 +93,7 @@ class Noticia extends Model{
 	 */
 	public function __construct() {
 		parent::__construct();
+		$this->data_pub = "0000-00-00 00:00:00"; 
 	}
 	
 	/**
@@ -216,6 +223,7 @@ class Noticia extends Model{
 	public function setVisivel($v) {
 		$this->visivel = $v;
 	}
+
 
 }
 

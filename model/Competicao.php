@@ -11,6 +11,10 @@ class Competicao extends Model {
 		return true; 
 	}
 	 
+	 public function getKeyFields(){
+		return array ('idcompeticao'); 
+	}
+	 
 	/**
 	 * Identificador da Competicao
 	 * @var int

@@ -13,6 +13,10 @@ class Noticia_Has_Integrante extends Model{
 		public function checkValidity(){
 		return true; 
 	}
+	
+	public function getKeyFields(){
+		return array ('idnoticia', 'idintegrante' ); 
+	}
 	 
 	/**
 	* Identificador do integrante

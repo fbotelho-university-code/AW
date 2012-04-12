@@ -16,6 +16,10 @@ require_once("Model.php");
 	public function checkValidity(){
 		return true; 
 	}
+		public function getKeyFields(){
+		return array ('idclube', 'idlexico'); 
+	}
+	 
 	 
  	/**
  	 * Identificador do lexico

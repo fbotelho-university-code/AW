@@ -176,15 +176,27 @@
 	
 	function putNews($req, $id){
 		$noticia = new Noticia(); 
+		
 		$noticia->getObjectById($id);
 		
 		if (!$noticia) {
 			RestUtils::sendResponse(404); 	
+		
+		}
+			
+		$nova_noticia = $noticia->fromXml($req->getData());
+		
+		
+		if (!isset($nova_noticia->texto)) $nova_noticia->texto =  Noticia::fetchTexto($nova_noticia->url);
+		$nova_noticia->idfonte = Util::getIdWebServiceAsFonte();
+		$nova_noticia->idnoticia = $id; 
+		try{
+			$nova_noticia->update();
+			 
+		}catch (Exception $e){
+			RestUtils::sendResponse(500); 
 		}
 		
-		$nova_noticia = $noticia->fromXml($req->getData());
-		if (!$n->texto) $n->texto =  Noticia::fetchTexto($n->url);
-		$n->idfonte = Util::getIdWebServiceAsFonte();
 	}
 	
 	function getNews($req, $id){

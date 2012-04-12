@@ -23,6 +23,10 @@ class Integrantes_Lexico extends Model{
 		return true; 
 	}
 	 
+	 public function getKeyFields(){
+		return array ('idintegrante', 'idlexico'); 
+	}
+	 
 	/**
 	* Retorna o identificador do integrante
 	* @return int {@link $idintegrante}

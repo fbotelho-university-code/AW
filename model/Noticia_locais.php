@@ -10,6 +10,10 @@ require_once "Model.php";
   	public function checkValidity(){
 		return true; 
 	}
+	
+	public function getKeyFields(){
+		return array ('idnoticia', 'idlocal' ); 
+	}
 	 
   	/**
   	* Identificador da noticia

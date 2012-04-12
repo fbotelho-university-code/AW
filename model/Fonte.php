@@ -12,6 +12,10 @@ class Fonte extends Model {
 		return true; 
 	}
 	 
+	 public function getKeyFields(){
+		return array ('idfonte'); 
+	}
+	 
 	/**
 	* Identificador da fonte
 	* @var int

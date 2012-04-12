@@ -14,9 +14,14 @@ require_once("Model.php");
  	*/
  	var $idclube; 
 	
-		public function checkValidity(){
+	public function checkValidity(){
 		return true; 
 	}
+	
+	public function getKeyFields(){
+		return array ('idnoticia', 'idclube' ); 
+	}
+	 
 	 
  	/**
  	 * Identificador da noticia

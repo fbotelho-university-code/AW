@@ -18,6 +18,11 @@ class Lexico extends Model{
 	public function checkValidity(){
 		return true; 
 	}
+	
+	public function getKeyFields(){
+		return array ('idlexico'); 
+	}
+	 
 	 
 	public function getNucleo() { return $this->nucleo; }
 	public function getContexto() { return $this->contexto; }

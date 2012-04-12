@@ -21,6 +21,10 @@ class Noticia_data extends Model{
  	public function checkValidity(){
 		return true; 
 	}
+	
+	public function getKeyFields(){
+		return array ('idnoticia', '$data'); 
+	}
 	 
 	/**
 	 * Referencia temporal da noticia.

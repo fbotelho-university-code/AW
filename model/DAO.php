@@ -75,7 +75,7 @@ class DAO extends ADOConnection {
 		 
 	function execute($sql) {
 		$this->connect();
-		$rs = $this->db->Execute($sql) or die($this->dao->db->ErrorMsg() . "<br>SQL: ".$sql);
+		$rs = $this->db->Execute($sql) or die($this->db->ErrorMsg() . "<br>SQL: ".$sql);
 		$this->disconnect();
 		return $rs;
 	}

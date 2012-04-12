@@ -116,10 +116,12 @@ class RestUtils{
 			case 405 : //  
 				//Standards specifies that we must include an ALllow field in the response with the methods supported by this resource. 
 				$message = 'The request method ' . $_SERVER['REQUEST_METHOD'] . ' is not supported on this resource';
-				if (!isset($vars['allow'])){
+				/*if (!isset($vars['allow'])){
 					die ("Web service error, failed to comply to standards."); 
 				}
+				
 				header('Allow:'. implode( " ",$vars['allow'])); 
+				*/
 				break; 
 			case 500: 
 				$message = 'The server encountered an error processing your request.';
