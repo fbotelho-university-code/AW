@@ -1,4 +1,4 @@
-#Tue Apr 03 14:51:21 BST 2012
+#Thu Apr 12 11:51:35 BST 2012
 =\=\=\=\=\=\=
 <<<<<<<=HEAD
 >>>>>>>=origin/master
@@ -6,6 +6,5 @@ eclipse.preferences.version=1
 encoding//backend/ParserNoticias.php=UTF-8
 encoding//backend/ReadLexico.php=UTF-8
 encoding//model/Local.php=UTF-8
-encoding//model/Noticia.php=UTF-8
 encoding//webservice/Util/RestRequest.php=UTF-8
 encoding//webservice/Util/RestUtils.php=UTF-8
