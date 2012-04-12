@@ -96,10 +96,10 @@ class Local extends Model{
 	 */
 	public static function fromXml($xml){
 		
-		$xml = simplexml_load_string($xml);
-		var_dump($xml);
+		//$xml = simplexml_load_string($xml);
+		//var_dump($xml);
 		
-		/**try {
+		try {
 			$n = new Noticia(); //nova noticia para criar
 			$nxml = new SimpleXMLElement($xml);
 				
@@ -147,7 +147,7 @@ class Local extends Model{
 			else return null;
 		}catch (Exception $e){
 			return null;
-		}**/
+		}
 	}
 	
 }

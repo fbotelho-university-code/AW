@@ -1,0 +1,71 @@
+<html> 
+  <head> 
+
+    <title>Projecto de AW</title> 
+
+ 
+    <script language = "javascript">
+      var XMLHttpRequestObject = false; 
+
+      if (window.XMLHttpRequest) {
+        XMLHttpRequestObject = new XMLHttpRequest();
+      } else if (window.ActiveXObject) {
+        XMLHttpRequestObject = new ActiveXObject("Microsoft.XMLHTTP");
+      }
+
+      function getData(dataSource) 
+      { 
+        if(XMLHttpRequestObject) {
+		var obj=document.getElementById("targetDiv");
+          XMLHttpRequestObject.open("GET", dataSource); 
+
+          XMLHttpRequestObject.onreadystatechange = function() 
+          { 
+            if (XMLHttpRequestObject.readyState == 4 && 
+              XMLHttpRequestObject.status == 200) { 
+                eval(XMLHttpRequestObject.responseText);
+            } 
+          } 
+
+          XMLHttpRequestObject.send(null); 
+        }
+      }
+
+     function getSuggest (keyEvent)
+      {
+        keyEvent = (keyEvent) ? keyEvent: window.event;
+        input = (keyEvent.target) ? keyEvent.target : keyEvent.srcElement;
+
+        if (keyEvent.type == "keyup") {
+          if (input.value) {
+            getData("noticias.php?noticia=" + input.value);
+          } 
+          else {
+            var targetDiv = document.getElementById("targetDiv");
+
+            targetDiv.innerHTML = "<div></div>";
+          }
+        }
+      }
+
+ 
+   
+	  
+    </script>
+
+  </head> 
+
+  <body>
+
+    <H1>Pesquisa de noticias de futebol</H1>
+	</br>
+		
+	  Pesquisar por: <input id = "textField" type = "text" name = "textField" onkeyup = "getSuggest(event)">
+
+      <div id = "targetDiv">
+	  <div></div>
+	  </div>
+
+  </body> 
+
+</html>

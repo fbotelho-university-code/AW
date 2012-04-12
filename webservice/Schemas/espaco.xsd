@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/espacoSchema" xmlns:tns="http://www.example.org/espacoSchema" elementFormDefault="qualified">
+
+
+    
+
+
+    <complexType name="espaco">
+    	<sequence>
+    		<element name="idlocal" type="int"></element>
+    		<element name="nome_local">
+    			<simpleType>
+    				<restriction base="string">
+    					<maxLength value="100"></maxLength>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    		<element name="coordenadas" type="string"></element>
+    	</sequence>
+    </complexType>
+
+    <element name="espaco" type="tns:espaco"></element>
+</schema>
