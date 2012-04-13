@@ -44,13 +44,10 @@ class Noticia_data extends Model{
 	 * @param int $idnoticia - Identificador da noticia {@link $idnoticia}
 	 * @param unknown_type $tempo - Referencia Temporal {@link $tempo}
 	 */
-<<<<<<< HEAD
-	
 	
 	public function __construct($idnoticia = 0, $tempo = 0, $dt = 0){
-=======
+
 	public function __construct($idnoticia='', $tempo=''){
->>>>>>> origin/master
 		parent::__construct();
 		$this->idnoticia = $idnoticia;
 		$this->tempo = $tempo;
@@ -89,7 +86,7 @@ class Noticia_data extends Model{
 		$this->tempo = $v;
 	}
 	
-<<<<<<< HEAD
+
 	/**
 	* Retorna uma data presente na noticia, interpretada como AAAA-MM-DD
 	* @return String {@link $data_interpretada}
@@ -104,7 +101,7 @@ class Noticia_data extends Model{
 	 */
 	public function setData_interpretada($v) {
 		$this->data_interpretada = $v;
-=======
+
 	public static function getAllDatas($idNoticia){
 		$class_Noticia_Locais = new Noticia_data(); 
 		$rel = $class_Noticia_Locais->find(array("idnoticia" =>  $idNoticia));
@@ -116,7 +113,7 @@ class Noticia_data extends Model{
 			$data = $ln->getTempo();
 		}
 		return $datas; 
->>>>>>> origin/master
+
 	}
  }
 ?>
