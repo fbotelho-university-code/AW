@@ -18,9 +18,9 @@ class ParserNoticias {
 			$noticia->setIdnoticia($idnoticia);
 			
 			// Caracterização Semântica da Notícia
-			ParserNoticias::findRefEspacial($noticia);
+			//ParserNoticias::findRefEspacial($noticia);
 		    ParserNoticias::findRefTemporal($noticia); 
-			ParserNoticias::findRefClubesAndIntegrantes($noticia); 
+			//ParserNoticias::findRefClubesAndIntegrantes($noticia); 
 		}
 		
 		private static function findRefEspacial($noticia){
@@ -92,22 +92,26 @@ class ParserNoticias {
 		private static function findRefTemporal($noticia){
 				$texto = $noticia->getTexto(); 
 				$regexes = array(
-/*1*/			'/\d{1,2}((\ )*\/(\ )*|(\ )*\-(\ )*)\d{1,2}((\ )*\/(\ )*|(\ )*\-(\ )*)\d{2}/',
-/*2*/			'/\d{1,2}(\/|\-)\d{1,2}(\/|\-)\d{4}/',
-/*3*/			'/\d{4}(\/|\-)\d{1,2}(\/|\-)\d{1,2}/',
-/*4*/			'/\d{1,2}(\/|\-)(Jan|Fev|Mar|Abr|Mai|Jun|Jul|Ago|Set|Out|Nov|Dez)(\/|\-)\d{2}/',
-/*5*/			'/\d{1,2}(\/|\-)(Jan|Fev|Mar|Abr|Mai|Jun|Jul|Ago|Set|Out|Nov|Dez)(\/|\-)\d{4}/',
-/*6*/			'/\d{4}(\/|\-)(Jan|Fev|Mar|Abr|Mai|Jun|Jul|Ago|Set|Out|Nov|Dez)(\/|\-)\d{1,2}/',
-/*7*/			'/\d{1,2}(\ de\ |,\ ){0,1}(Janeiro|Fevereiro|Mar�o|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)(\ de\ |,\ ){0,1}\d{2}/',
-/*8*/			'/\d{1,2}(\ de\ |,\ ){0,1}(Janeiro|Fevereiro|Mar�o|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)(\ de\ |,\ ){0,1}\d{4}/',
-/*9*/			'/(Janeiro|Fevereiro|Março|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)\ \d{1,2}(\ de\ |\ ){0,1}\d{2}/',
-/*10*/			'/(Janeiro|Fevereiro|Março|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)\ \d{1,2}(\ de\ |,\ ){0,1}\d{4}/',
-/*11*/			'/(Janeiro|Fevereiro|Março|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)\ \d{1,2}/',
-/*12*/			'/(Janeiro|Fevereiro|Março|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)\ \d{4}/',
+/*1*/			//'/\d{1,2}((\ )*\/(\ )*|(\ )*\-(\ )*)\d{1,2}((\ )*\/(\ )*|(\ )*\-(\ )*)\d{2}/',
+/*2*/			'/\d{2}(\/)\d{1,2}(\/)\d{4}/',
+/*3*/			'/\d{2}(\-)\d{1,2}(\-)\d{4}/',
+				'/\d{4}(\/)\d{1,2}(\/)\d{2}/',
+				'/\d{4}(\-)\d{1,2}(\-)\d{2}/',
+/*4*/			//'/\d{1,2}(\/|\-)(Jan|Fev|Mar|Abr|Mai|Jun|Jul|Ago|Set|Out|Nov|Dez)(\/|\-)\d{2}/',
+/*5*/			//'/\d{1,2}(\/|\-)(Jan|Fev|Mar|Abr|Mai|Jun|Jul|Ago|Set|Out|Nov|Dez)(\/|\-)\d{4}/',
+/*6*/			//'/\d{4}(\/|\-)(Jan|Fev|Mar|Abr|Mai|Jun|Jul|Ago|Set|Out|Nov|Dez)(\/|\-)\d{1,2}/',
+/*7*/			//'/\d{1,2}(\ de\ |,\ ){0,1}(Janeiro|Fevereiro|Mar�o|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)(\ de\ |,\ ){0,1}\d{2}/',
+/*8*/			'/(\d{2}(\ de\ )){0,1}(Janeiro|Fevereiro|Março|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)(\ de\ )\d{4}/',
+/*9*/			//'/(Janeiro|Fevereiro|Março|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)\ \d{1,2}(\ de\ |\ ){0,1}\d{2}/',
+/*10*/			//'/(Janeiro|Fevereiro|Março|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)\ \d{2}(\ de\ )\d{4}/',
+/*11*/			//'/(Janeiro|Fevereiro|Março|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)\ \d{1,2}/',
+/*12*/			//'/(Janeiro|Fevereiro|Março|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)(\ de\ )\d{4}/',
 /*13*/			//'/(Janeiro|Fevereiro|Março|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)/'
 /*14*/			//'/\d{4}/'
 			);
 			
+			// insere data da publicação na tabela data_noticia
+				
 			$matches = array();
 			for($i=0;$i<count($regexes);$i++){
 				if(preg_match_all($regexes[$i], $texto, $matches)){
@@ -116,14 +120,46 @@ class ParserNoticias {
 						$dates = array_unique($matches[0]);
 						// reordena as chaves do array sem valores duplicados
 						$dates = array_values($dates);
+						$dataInterpretada = "";
 						//criação e armazenamento dos objetos noticia_data
 						for($j=0; $j<count($dates); $j++) {
-							$rel  = new Noticia_Data($noticia->getIdnoticia(), $dates[$j]);
+							//echo $i." - ".$dates[$j]." - ";
+							switch ($i) {
+								case 0:
+									$dataInterpretada = explode("/", $dates[$j]);
+									$dataInterpretada = $dataInterpretada[2]."-".$dataInterpretada[1]."-".$dataInterpretada[0];
+									break;
+								case 1:
+									$dataInterpretada = explode("-", $dates[$j]);
+									$dataInterpretada = $dataInterpretada[2]."-".$dataInterpretada[1]."-".$dataInterpretada[0];
+									break;
+								case 2:
+									$dataInterpretada = explode("/", $dates[$j]);
+									$dataInterpretada = $dataInterpretada[0]."-".$dataInterpretada[1]."-".$dataInterpretada[2];
+									break;
+								case 3:
+									$dataInterpretada = explode("-", $dates[$j]);
+									$dataInterpretada = $dataInterpretada[0]."-".$dataInterpretada[1]."-".$dataInterpretada[2];
+									break;
+								case 4:
+									$dataInterpretada = explode("de", $dates[$j]);
+									if(count($dataInterpretada) == 3) {
+										$dataInterpretada = trim($dataInterpretada[2])."-".Util::$mesesFull[trim($dataInterpretada[1])]."-".trim($dataInterpretada[0]);
+									}
+									else {
+										$dataInterpretada = $dataInterpretada[0]."-".$dataInterpretada[1]."-00";
+									}
+									break;
+							}
+							//echo $dataInterpretada."<br>";
+							$rel  = new Noticia_Data($noticia->getIdnoticia(), $dates[$j], $dataInterpretada);
 							$rel->add();
 						}
 					}	
 				}
 			}
+			$noticiaData = new Noticia_Data();
+			$badDates = $noticiaData->delete(array("data_interpretada" => "0000-00-00"));
 		}
 }
 

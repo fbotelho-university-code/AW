@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/clube" xmlns:tns="http://www.example.org/clube" elementFormDefault="qualified">
+<xsd:schema targetNamespace="http://localhost/AW-3/workspace/Schemas/clube.xsd" elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://localhost/AW-3/workspace/Schemas/clube.xsd">
 
-    <complexType name="clubeT">
-    	<sequence>
-    		<element name="idclube" type="int"></element>
-    		<element name="idlocal" type="int"></element>
-    		<element name="idcompeticao" type="int"></element>
-    		<element name="nome_clube">
-    			<simpleType>
-    				<restriction base="string">
-    					<maxLength value="100"></maxLength>
-    				</restriction>
-    			</simpleType>
-    		</element>
-    		<element name="nome_oficial">
-    			<simpleType>
-    				<restriction base="string">
-    					<maxLength value="100"></maxLength>
-    				</restriction>
-    			</simpleType>
-    		</element>
-    	</sequence>
-    </complexType>
+    <xsd:element name="clube" type="clubeT"></xsd:element>
+    <xsd:complexType name="clubeT">
+    	<xsd:sequence>
+    		<xsd:element name="idclube" type="xsd:int" minOccurs="0"></xsd:element>
+    		<xsd:element name="idlocal" type="xsd:int"></xsd:element>
+    		<xsd:element name="idcompeticao" type="xsd:int"></xsd:element>
+    		<xsd:element name="nome_clube">
+    			<xsd:simpleType>
+    				<xsd:restriction base="xsd:string">
+    					<xsd:maxLength value="100"></xsd:maxLength>
+    				</xsd:restriction>
+    			</xsd:simpleType>
+    		</xsd:element>
+    		<xsd:element name="nome_oficial">
+    			<xsd:simpleType>
+    				<xsd:restriction base="xsd:string">
+    					<xsd:maxLength value="100"></xsd:maxLength>
+    				</xsd:restriction>
+    			</xsd:simpleType>
+    		</xsd:element>
+    	</xsd:sequence>
+    </xsd:complexType>
 
-    <element name="clube" type="tns:clubeT"></element>
-</schema>
+    
+</xsd:schema>

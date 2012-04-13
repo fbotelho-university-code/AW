@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="http://localhost/AW-3/workspace/Schemas/noticia.xsd" elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://localhost/AW-3/workspace/Schemas/noticia.xsd">
+
+    <xsd:complexType name="noticiaT">
+    	<xsd:sequence>
+    		<xsd:element name="idnoticia" type="xsd:int" minOccurs="0" maxOccurs="1"></xsd:element>
+    		<xsd:element name="idfonte" type="xsd:int"></xsd:element>
+    		<xsd:element name="data_pub" type="xsd:dateTime" minOccurs="0"></xsd:element>
+    		<xsd:element name="assunto" minOccurs="0">
+    			<xsd:simpleType>
+    				<xsd:restriction base="xsd:string">
+    					<xsd:maxLength value="100"></xsd:maxLength>
+    				</xsd:restriction>
+    			</xsd:simpleType>
+    		</xsd:element>
+    		<xsd:element name="descricao" minOccurs="0">
+    			<xsd:simpleType>
+    				<xsd:restriction base="xsd:string">
+    					<xsd:maxLength value="250"></xsd:maxLength>
+    				</xsd:restriction>
+    			</xsd:simpleType>
+    		</xsd:element>
+    		<xsd:element name="texto" type="xsd:string" minOccurs="0"></xsd:element>
+    		<xsd:element name="url" type="xsd:string"></xsd:element>
+    		<xsd:element name="visivel">
+    			<xsd:simpleType>
+    				<xsd:restriction base="xsd:int">
+    					<xsd:enumeration value="0"></xsd:enumeration>
+    					<xsd:enumeration value="1"></xsd:enumeration>
+    				</xsd:restriction>
+    			</xsd:simpleType>
+    		</xsd:element>
+    	</xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:element name="noticia" type="tns:noticiaT"></xsd:element>
+</xsd:schema>

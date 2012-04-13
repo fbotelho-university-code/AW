@@ -1,71 +1,120 @@
-<html> 
-  <head> 
 
-    <title>Projecto de AW</title> 
-
- 
-    <script language = "javascript">
-      var XMLHttpRequestObject = false; 
-
-      if (window.XMLHttpRequest) {
-        XMLHttpRequestObject = new XMLHttpRequest();
-      } else if (window.ActiveXObject) {
-        XMLHttpRequestObject = new ActiveXObject("Microsoft.XMLHTTP");
-      }
-
-      function getData(dataSource) 
-      { 
-        if(XMLHttpRequestObject) {
-		var obj=document.getElementById("targetDiv");
-          XMLHttpRequestObject.open("GET", dataSource); 
-
-          XMLHttpRequestObject.onreadystatechange = function() 
-          { 
-            if (XMLHttpRequestObject.readyState == 4 && 
-              XMLHttpRequestObject.status == 200) { 
-                eval(XMLHttpRequestObject.responseText);
-            } 
-          } 
-
-          XMLHttpRequestObject.send(null); 
-        }
-      }
-
-     function getSuggest (keyEvent)
-      {
-        keyEvent = (keyEvent) ? keyEvent: window.event;
-        input = (keyEvent.target) ? keyEvent.target : keyEvent.srcElement;
-
-        if (keyEvent.type == "keyup") {
-          if (input.value) {
-            getData("noticias.php?noticia=" + input.value);
-          } 
-          else {
-            var targetDiv = document.getElementById("targetDiv");
-
-            targetDiv.innerHTML = "<div></div>";
-          }
-        }
-      }
-
- 
-   
-	  
-    </script>
-
-  </head> 
-
-  <body>
-
-    <H1>Pesquisa de noticias de futebol</H1>
-	</br>
+<html>
+	<head>
+		<title> Projecto de AW"</title>
+		<h2> Pesquisa de notícias de futebol</h2>
 		
-	  Pesquisar por: <input id = "textField" type = "text" name = "textField" onkeyup = "getSuggest(event)">
-
-      <div id = "targetDiv">
-	  <div></div>
-	  </div>
-
-  </body> 
-
+			<script language="javascript">
+			
+			    var xmlHttp = createXmlHttpRequestObject(); //Criação do objecto utilizado para comunicar com o servidor
+				
+				function createXmlHttpRequestObject()
+				{
+				var xmlHttp;
+				
+				try {
+				//IE7 ou mais recente ou outros browsers actuais
+				xmlHttp = new XMLHttpRequest();
+				} catch(e) {
+				//IE6 ou mais antigo
+				try {
+				xmlHttp = new ActiveXObject("Microsoft.XMLHttp");
+				} catch(e) {}
+			}
+			//retorna o objecto criado ou apresenta a mensagem de erro
+			if (!xmlHttp)
+				alert ("Erro ao criar objecto XMLHttpRequest.");
+			else
+				return xmlHttp;
+		}
+			
+			//ler um ficheiro do servidor
+			function processa()
+			{
+				//só continua se xmlHttp não é void
+				if (xmlHttp)
+				{
+					xmlHttp.onreadystatechange= function trataResposta() {
+						if (xmlHttp.readyState==4) {
+							handleRequestStateChange();
+						}
+					}
+					//tenta ligar ao servidor
+					try
+					{
+						//inicia a leitura de um ficheiro do servidor
+						var data = "http://localhost/AW-3/webservice/noticias.php/"+document.forms[0].Texto.value
+						
+						xmlHttp.open("GET",data,true); //Abre um Request ao servidor
+						//define o nome do event handler que deve ser chamado quando o valor da propriedade readyState muda
+						
+						xmlHttp.send(null);
+						//Para o browser obter os dados do URL configurado
+					}
+					//apresenta o erro em caso de falha
+					catch (e)
+					{
+						alert("Não é possível comunicar com o servidor:\n");
+					}
+				}
+			}
+			
+			//Função chamada quando muda o estado do HTTP Request
+			function handleRequestStateChange()
+			{
+				
+				if (xmlHttp.status==200)
+					{
+						try
+						{
+						//Utilizar a resposta do servidor
+						handleServerResponse();
+						}
+						catch (e)
+						{
+						//Apresentar mensagem de erro
+						alert("Erro ao ler a resposta: " + e.toString());
+						}
+					}
+					else
+					{
+						//Apresenta a mensagem de estado
+						alert("Houve um problema na obtenção dos dados:\n" + xmlHttp.statusText);
+					}
+				//}
+			}
+		
+		
+		//Função que trata a resposta do servidor
+		function handleServerResponse()
+		{
+			//Ler a mensagem do servidor
+			var xmlResponse=xmlHttp.responseXML;
+			//Obter os elementos do XML
+			xmlRoot=xmlResponse.documentElement;
+			//Obter arrays com assunto e url das noticias
+			assuntoArray=xmlRoot.getElementsByTagName("assunto");
+			urlArray=xmlRoot.getElementsByTagName("url");
+			
+			//Gerar o output HTML
+			var html="";
+			myDiv=document.getElementById('myDivElement');
+			// iterar pelos arrays e criar a estrutura HTML
+			for (var i=0;i<assuntoArray.length;i++)
+				html += "<a href='" + urlArray.item(i).firstChild.data+"'>" + assuntoArray.item(i).firstChild.data + "</a><br/>";
+				myDiv.innerHTML = html;
+		}
+			
+			</script>
+	</head>
+	
+	<body >
+			<form>
+				Assunto a pesquisar: <input type="text" id="Texto">
+				<input type="button" value="Procurar notícias" onClick="processa()">
+			</form>
+		
+		<div id="myDivElement"></div>
+		
+	</body>
 </html>

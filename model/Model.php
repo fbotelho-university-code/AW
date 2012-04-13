@@ -76,6 +76,13 @@ abstract class Model{
 		$sql = 'delete from ' . $table   . $this->getPrimaryKeyWhere(); 
 		$this->dao->execute($sql);
 	}
+	
+	public function delete($fields) {
+		$table = get_class($this);
+		$sql = 'delete from ' . $table;
+		$sql .= $this->createWhereClause($fields) . ';';
+		$this->dao->execute($sql);
+	}
 
 /**
  * Return the Where statement selecting this object in the database.
@@ -110,6 +117,50 @@ abstract class Model{
 	    $return_obj  = new $class; 
 	    $this->setObj(get_object_vars($ob), $return_obj);
 	    return $return_obj;  	
+	}
+	
+	/**
+	 * Valida um XML em formato String usando um ficheiro XML Schema (XSD)
+	 * @param String $xmlString
+	 */
+	public function validateXMLbyXSD($xmlString) {
+		
+		// Transformação da String em DOM
+		$xmlDOM = new DOMDocument();
+		$xmlDOM->loadXML($xmlString);
+		
+		//Manipulação do nome da classe chamadora
+		$class = get_class($this);
+		if($class == "local") {
+			$class = "espaco";
+		}
+		
+		//Alteração do cabeçalho XML para inclusão das referências para o XSD
+		$rootElement = $xmlDOM->getElementsByTagName("clube");
+		
+		$xmlnsAttribute = $xmlDOM->createAttribute("xmlns");
+		$xmlnsAttribute->value = "http://localhost/AW-3/workspace/Schemas/".$class.".xsd";
+		
+		$xmlnsXsiAttribute = $xmlDOM->createAttribute("xmlns:xsi");
+		$xmlnsXsiAttribute->value = "http://www.w3.org/2001/XMLSchema-instance";
+		
+		$schemaLocationAttribute = $xmlDOM->createAttribute("xsi:schemaLocation");
+		$schemaLocationAttribute->value = "http://localhost/AW-3/workspace/Schemas/".$class.".xsd ".$class."xsd ";
+		
+		$rootElement->appendChild($xmlnsAttribute);
+		$rootElement->appendChild($xmlnsXsiAttribute);
+		$rootElement->appendChild($schemaLocationAttribute);
+		$xmlDOM->appendChild($rootElement);
+		
+		//Validação do XML usando o ficheiro XSD
+		$pathToXSD = "../webservice/Schemas/";
+		$pathToXSD .= $class.".xsd";
+		if($xmlDOM->schemaValidate($pathToXSD)) {
+			echo "validated<br>";
+		}
+		else {
+			echo "Error!!<br>";
+		}
 	}
 	
 	
@@ -208,6 +259,8 @@ abstract class Model{
 		
 		return $values;  
 	}
+	
+	
 		
 	/**
 	 * Recupera um objecto da base de dados pelo seu id

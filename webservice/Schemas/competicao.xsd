@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/Competicao" xmlns:tns="http://www.example.org/Competicao" elementFormDefault="qualified">
+<xsd:schema targetNamespace="http://localhost/AW-3/workspace/Schemas/competicao.xsd" elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://localhost/AW-3/workspace/Schemas/competicao.xsd">
 
-    <complexType name="competicaoT">
-    	<sequence>
-    		<element name="idcompeticao" type="int"></element>
-    		<element name="nome_competicao">
-    			<simpleType>
-    				<restriction base="string">
-    					<maxLength value="100"></maxLength>
-    				</restriction>
-    			</simpleType>
-    		</element>
-    	</sequence>
-    </complexType>
+    <xsd:complexType name="competicaoT">
+    	<xsd:sequence>
+    		<xsd:element name="idcompeticao" type="xsd:int" minOccurs="0"></xsd:element>
+    		<xsd:element name="nome_competicao">
+    			<xsd:simpleType>
+    				<xsd:restriction base="xsd:string">
+    					<xsd:maxLength value="100"></xsd:maxLength>
+    				</xsd:restriction>
+    			</xsd:simpleType>
+    		</xsd:element>
+    	</xsd:sequence>
+    </xsd:complexType>
 
-    <element name="competicao" type="tns:competicaoT"></element>
-</schema>
+    <xsd:element name="competicao" type="tns:competicaoT"></xsd:element>
+</xsd:schema>

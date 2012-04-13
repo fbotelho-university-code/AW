@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<tns:espaco xmlns:tns="http://www.example.org/espacoSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.example.org/espacoSchema espacoSchema.xsd ">
-  <tns:idlocal>1</tns:idlocal>
-  <tns:nome_local>Abrantes</tns:nome_local>
-  <tns:coordenadas>39.4263;-8.1578</tns:coordenadas>
-</tns:espaco>

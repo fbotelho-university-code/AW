@@ -30,17 +30,26 @@ class Noticia_data extends Model{
 	 * Referencia temporal da noticia.
 	 * @var String - Data presente no texto da notícia
 	 */
-	var $tempo; 
+	var $tempo;
+	
+	/**
+	 * Interpretação da data encontrada na notícia em formato 0000-00-00
+	 * @var String
+	 */
+	var $data_interpretada;
  
 	/**
 	 * Construtor da classe
 	 * @param int $idnoticia - Identificador da noticia {@link $idnoticia}
 	 * @param unknown_type $tempo - Referencia Temporal {@link $tempo}
 	 */
-	public function __construct($idnoticia, $tempo){
+	
+	
+	public function __construct($idnoticia = 0, $tempo = 0, $dt = 0){
 		parent::__construct();
 		$this->idnoticia = $idnoticia;
 		$this->tempo = $tempo;
+		$this->data_interpretada = $dt;
 	}
 	
 	/**
@@ -73,6 +82,22 @@ class Noticia_data extends Model{
 	*/
 	public function setTempo($v) {
 		$this->tempo = $v;
+	}
+	
+	/**
+	* Retorna uma data presente na noticia, interpretada como AAAA-MM-DD
+	* @return String {@link $data_interpretada}
+	*/
+	public function getData_interpretada() {
+		return $this->data_interpretada;
+	}
+	
+	/**
+	 * Altera uma data presente na noticia, interpretada como AAAA-MM-DD
+	 * @param String $v
+	 */
+	public function setData_interpretada($v) {
+		$this->data_interpretada = $v;
 	}
  }
 ?>

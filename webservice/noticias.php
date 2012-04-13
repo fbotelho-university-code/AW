@@ -8,12 +8,12 @@
  require_once ('Util.php');    
   
  /*
-  * Documentação dos métodos suportados neste url: 
-	/ | GET | Listar todas as noticias. Representação em XML, JSON e XHTML que devem conter apontadores para o recurso de cada noticia.  Por parametro é possivel especificar palavras chaves de forma a filtrar os resultados (i.e., permitir escolher noticias que referem o clube X.).
+  * DocumentaÔøΩ‚Äπo dos m≈Ωtodos suportados neste url: 
+	/ | GET | Listar todas as noticias. RepresentaÔøΩ‚Äπo em XML, JSON e XHTML que devem conter apontadores para o recurso de cada noticia.  Por parametro ≈Ω possivel especificar palavras chaves de forma a filtrar os resultados (i.e., permitir escolher noticias que referem o clube X.).
 
-	/ | POST |  Colocação de  uma noticia nova. O corpo do pedido deve  conter a descrição da noticia em XML . Será retornado o identificador único da noticia decidido pelo serviço.
+	/ | POST |  ColocaÔøΩ‚Äπo de  uma noticia nova. O corpo do pedido deve  conter a descriÔøΩ‚Äπo da noticia em XML . Ser‚Ä° retornado o identificador ≈ìnico da noticia decidido pelo serviÔøΩo.
 
-	/idNoticia | GET | Retorna o conteudo e informação relativa a uma noticia, incluindo relações como referencias temporais, referencias espaciais, clubes , etc., A representação será em XML, JSON e XHTML. 
+	/idNoticia | GET | Retorna o conteudo e informaÔøΩ‚Äπo relativa a uma noticia, incluindo relaÔøΩ‚Ä∫es como referencias temporais, referencias espaciais, clubes , etc., A representaÔøΩ‚Äπo ser‚Ä° em XML, JSON e XHTML. 
  **/
 
     $options = array(
@@ -48,8 +48,8 @@
 	  	//TODO - send bad content 
 	  } 
 	  
-	// Process resource head (/noticias) requests. Accepts GET/POST/HEAD
-	
+	// Process resource head (/noticias) requests. Accepts GET/POST/HEAD  
+	  
 	/*
 	 * TODO: 
 	 * POST
@@ -75,8 +75,8 @@
 	
 	/**
 	 * Listar todas as noticias. 
-	 * Representação em XML, JSON que devem conter apontadores para o recurso de cada noticia.  
-	 * Por parametro (search=SEARCH_STRING) é possivel especificar palavras chaves de forma a filtrar os resultados (i.e., permitir escolher noticias que referem o clube X.).
+	 * RepresentaÔøΩ‚Äπo em XML, JSON que devem conter apontadores para o recurso de cada noticia.  
+	 * Por parametro (search=SEARCH_STRING) ≈Ω possivel especificar palavras chaves de forma a filtrar os resultados (i.e., permitir escolher noticias que referem o clube X.).
 	 * TODO : filtrar pesquisa. 
 	 **/
 	function getRoot($req){

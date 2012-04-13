@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="http://localhost/AW-3/workspace/Schemas/integrante.xsd" elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://localhost/AW-3/workspace/Schemas/integrante.xsd">
+
+    <xsd:complexType name="integranteT">
+    	<xsd:sequence>
+    		<xsd:element name="idintegrante" type="xsd:int" minOccurs="0"></xsd:element>
+    		<xsd:element name="idclube" type="xsd:int"></xsd:element>
+    		<xsd:element name="idfuncao" type="xsd:int"></xsd:element>
+    		<xsd:element name="nome_integrante">
+    			<xsd:simpleType>
+    				<xsd:restriction base="xsd:string">
+    					<xsd:maxLength value="100"></xsd:maxLength>
+    				</xsd:restriction>
+    			</xsd:simpleType>
+    		</xsd:element>
+    	</xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:element name="integrante" type="tns:integranteT"></xsd:element>
+</xsd:schema>
