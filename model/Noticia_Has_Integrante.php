@@ -25,7 +25,7 @@ class Noticia_Has_Integrante extends Model{
 	var $idintegrante; 
 	
 	/**
-	* Qualificação da notícia. Representa se um notícia descreve aspectos positivos (1), neutros (0) e negativos (-1)
+	* Qualificaï¿½ï¿½o da notï¿½cia. Representa se um notï¿½cia descreve aspectos positivos (1), neutros (0) e negativos (-1)
 	* @var int
 	*/
 	var $qualificacao = 0;
@@ -52,7 +52,7 @@ class Noticia_Has_Integrante extends Model{
 	}
 	
 	/**
-	* Retorna o identificador da notícia
+	* Retorna o identificador da notï¿½cia
 	* @return int {@link $idnoticia}
 	*/
 	public function getIdNoticia() {
@@ -60,7 +60,7 @@ class Noticia_Has_Integrante extends Model{
 	}
 	
 	/**
-	 * Altera o valor do identificador da notícia {@link $idnoticia}
+	 * Altera o valor do identificador da notï¿½cia {@link $idnoticia}
 	 * @param int $id
 	 */
 	public function setIdNoticia($p) {
@@ -84,7 +84,7 @@ class Noticia_Has_Integrante extends Model{
 	}
 	
 	/**
-	* Retorna a qualificação da notícia
+	* Retorna a qualificaï¿½ï¿½o da notï¿½cia
 	* @return int {@link $qualificacao}
 	*/
 	public function getQualificacao() {
@@ -92,7 +92,7 @@ class Noticia_Has_Integrante extends Model{
 	}
 	
 	/**
-	 * Altera o valor da qualificacao da notícia {@link $qualificacao}
+	 * Altera o valor da qualificacao da notï¿½cia {@link $qualificacao}
 	 * @param int $q
 	 */
 	public function setQualificacao($q) {
@@ -100,7 +100,7 @@ class Noticia_Has_Integrante extends Model{
 	}
 	
 /**
-	 * Calcula a qualificação da notícia de forma acumulativa
+	 * Calcula a qualificaï¿½ï¿½o da notï¿½cia de forma acumulativa
 	 * @param int $qual
 	 * @uses {@link $qualificacao}
 	 */
@@ -110,7 +110,7 @@ class Noticia_Has_Integrante extends Model{
         
    
    	/**
-	 * Consulta Base de Dados para inserir ou alterar uma relação entre uma noticia e um integrante
+	 * Consulta Base de Dados para inserir ou alterar uma relaï¿½ï¿½o entre uma noticia e um integrante
 	 */
 	 public function update() {
         $sql_where_key = " where idnoticia = " . $this->idnoticia . " AND idintegrante = " . $this->idintegrante;
@@ -124,11 +124,11 @@ class Noticia_Has_Integrante extends Model{
     	if (!$rs) {
             die($dao->db->ErrorMsg());
         }
-        // Relacionamento já existe na base de dados. Alterar registo
+        // Relacionamento jï¿½ existe na base de dados. Alterar registo
         if ($rs->RecordCount() > 0) {
             $query = "update noticia_has_integrante SET qualificacao = " . $this->qualificacao . $sql_where_key;
         }
-        // Relacionamento não existe na base de dados. Inserir registo
+        // Relacionamento nï¿½o existe na base de dados. Inserir registo
         else {
             $query = "insert into noticia_has_integrante values (" . $this->idnoticia . "," . $this->idintegrante . ", " . $this->qualificacao . "," . $this->idlexico .")";
 
@@ -137,7 +137,7 @@ class Noticia_Has_Integrante extends Model{
     }
     
     /**
-    * Retorna o objeto em forma de String. Usado para depuração.
+    * Retorna o objeto em forma de String. Usado para depuraï¿½ï¿½o.
     * @return String $res
     */
     public function __toString(){
@@ -148,6 +148,18 @@ class Noticia_Has_Integrante extends Model{
 		if ($this->idlexico) $rs .= 'ID LEXICO : ' . $this->idlexico;
 		
 		return $res; 
+	}
+	
+		public static function getAllIntegrantes($idnoticia){
+		$class_this = new Noticia_Has_Integrante(); 
+		$rel = $class_this->find(array("idnoticia" => $idnoticia)); 
+		if (!$rel) return null; 
+		$clubes = array();
+		$clube_class = new Integrante();
+		foreach($rel as $rl){
+			$clubes[] = $clube_class->getObjectById($rl->getIdIntegrante()); 
+		}
+		return $clubes; 
 	}
 }
 ?>

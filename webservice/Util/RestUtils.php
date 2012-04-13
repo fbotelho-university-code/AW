@@ -9,27 +9,31 @@
 class RestUtils{
 	
 	public static function processRequest() {
-		
 		//get our verb
-		$request_method = ($_SERVER['REQUEST_METHOD']); 
+		
+		$request_method = ($_SERVER['REQUEST_METHOD']);
+		
 		$return_obj = new RestRequest(); 
 		//we'll store out data here
 		$data = array();
 		
 		//Check if has path parameters
 		$path = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO']:  null;
+		$accept = isset($_SERVER['HTTP_ACCEPT'])  ? $_SERVER['HTTP_ACCEPT'] : null;
+		$etag = isset($_SERVER['HTTP_IF_MATCH'])  ? strtolower($_SERVER['HTTP_If_MATCH']) : null;
 		
-		$accept = isset($_SERVER['HTTP_ACCEPT'])  ? $_SERVER['HTTP_ACCEPT'] : null; 
-		
+		$return_obj->setEtag($etag); 
+			
 		if ($accept){
 			$accept = explode(',', $accept); 
-			
 			if (array_search('json', $accept) !==FALSE){
 				$accept = 'json'; 
 			}
 			else{
 				$accept ='text/xml'; 
 			} 
+			
+	
 			//TODO - fix and test this . 
 			/*
 			else if (array_search('application/xml', $accept) !==FALSE){
@@ -37,6 +41,7 @@ class RestUtils{
 			}*/
 			
 		}
+		 
 		
 		$return_obj->setHttpAccept($accept); 
 		
@@ -44,8 +49,12 @@ class RestUtils{
  			$path_split_array = explode('/',  $path);
  			$i =0; 
  			foreach ($path_split_array as $p){
+ 				
  				if ($p == ''){
  					unset($path_split_array[$i]); 
+ 				}
+ 				else{
+ 					$path_split_array[$i] = strtolower($path_split_array[$i]); 
  				}
  				$i++; 
  			}
@@ -73,7 +82,7 @@ class RestUtils{
 				$data = file_get_contents('php://input'); 
 				break;  
 		}
-		
+
 		//store the method
 		$return_obj->setMethod($request_method); 
 		if (isset($data)){
@@ -83,7 +92,15 @@ class RestUtils{
 		return $return_obj; 
 	}
 	
+	public static function sendResponseHead($etag, $status = 200){
+	   $status_header= 'HTTP/1.1 ' . $status . ' ' . RestUtils::getStatusCodeMessage($status);
+	   header($status_header);
+	   header('Etag: ' . $etag);
+	   echo ''; 
+	   exit;   
+	}
 	public static function sendResponse($status = 200, $vars = array(), $body ='', $content_type = 'text/html'){
+		
 		$status_header= 'HTTP/1.1 ' . $status . ' ' . RestUtils::getStatusCodeMessage($status);
 		//set the status
 		header($status_header); 

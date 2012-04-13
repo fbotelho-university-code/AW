@@ -12,7 +12,6 @@ abstract class Model{
 	
 	private $dao; 
 	
-	
 	/**
 	 * Should check the validity of the data it is composed.
 	 *  
@@ -76,6 +75,7 @@ abstract class Model{
 		$sql = 'delete from ' . $table   . $this->getPrimaryKeyWhere(); 
 		$this->dao->execute($sql);
 	}
+<<<<<<< HEAD
 	
 	public function delete($fields) {
 		$table = get_class($this);
@@ -83,6 +83,9 @@ abstract class Model{
 		$sql .= $this->createWhereClause($fields) . ';';
 		$this->dao->execute($sql);
 	}
+=======
+	public function execute($m){ $this->dao->execute($m); }
+>>>>>>> origin/master
 
 /**
  * Return the Where statement selecting this object in the database.
@@ -99,7 +102,7 @@ abstract class Model{
 				unset($fields[$key]); 
 		}
 		
-		$sql = 'update '. $table . $this->createWhereClause($fields, 'SET');
+		$sql = 'update '. $table . $this->createWhereClause($fields, 'SET', ' , ');
 		
 		//Filter the primary key.
 		$sql .= $this->getPrimaryKeyWhere();
@@ -219,25 +222,26 @@ abstract class Model{
 	}
 	
 	/**
-	 * Retorna o primeiro objecto resultante da pesquisa à Base de Dados.
+	 * Retorna o primeiro objecto resultante da pesquisa ï¿½ Base de Dados.
 	 * @param String[] $fields - O array associativo com os atributos e valores pelo qual desejam filtrar a pesquisa. 
 	 *                           Os campos apenas podem ser strings ou numericos.
-	 * @return Object $res[0] - Objecto da classe chamadora refletindo resultado da pesquisa à Base de Dados 
+	 * @return Object $res[0] - Objecto da classe chamadora refletindo resultado da pesquisa ï¿½ Base de Dados 
 	 */
-	public function findFirst($fields){
+	public function findFirst($fields, $connector =' = '){
 		$table = get_class($this);
-		$res = $this->find ($fields);
+		$res = $this->find ($fields, $connector);
 		if (count($res) > 0) return $res[0]; 
 		return null;  
 	}
-	
+		
 	/**
 	 * Retorna um array de objectos que satisfazem um dado criterio. 
 	 * @param String[] $fields - O array associativo com os atributos e valores pelo qual desejam filtrar a pesquisa. 
 	 *                           Os campos apenas podem ser strings ou numericos.
-	 * @return Object[] $values - Array com objectos da classe chamadora refletindo resultado da pesquisa à Base de Dados
+	 * @return Object[] $values - Array com objectos da classe chamadora refletindo resultado da pesquisa ï¿½ Base de Dados
 	 */
-	public  function find ($fields){
+	 
+	public  function find ($fields, $connector = ' = '){
 		//Subclasses de Fonte devem usar tabela da classe pai (fonte)	
 		if(is_subclass_of($this, "fonte")) {
 			$table = "fonte";
@@ -247,9 +251,13 @@ abstract class Model{
 		}
 		
 		$sql = 'select * from ' . $table;
-		$sql .= $this->createWhereClause($fields) . ';';
+		
+		//This $connector is used for LIKE statements
+		$sql .= $this->createWhereClause($fields, 'where', ' AND ', $connector) . ';';
+
 		$rs = $this->dao->execute($sql);
 		$values = array();
+		
 		while (!$rs->EOF){
 			$ob = new $table;
 			$this->setObj($rs->fields, $ob);
@@ -270,34 +278,36 @@ abstract class Model{
 		$table = get_class($this);
 		$sql = "SELECT * FROM ".$table. " WHERE id".$table." = ".$id;
 		$rs = $this->dao->execute($sql);
-		if (!$rs->fields) return null; 
+		if (!$rs->fields) return null;
+		$result = new $table; 
+		$this->setObj($rs->fields, $result);  
 		foreach($rs->fields as $key => $value) {
 			$this->$key = $value;
 		}
+		return $result; 	
 	}
 	
 	/**
 	 * Cria uma clausula where bem formada a partir de um ArrayAssociativo com ANDS 
-	 * S— suporta strings e numericos. 
+	 * Sï¿½ suporta strings e numericos. 
 	 * @returns a String a dizer where key0 = $arrayAssoc[key0] AND $key1 = 'arrayAssoc[key1]' ou entao a string vazia caso o array esteja vazio.
 	 */
 
 
 	 //TODO is_string not working.
-	  
-	private function createWhereClause($arrayAssoc, $connector='where'){
+	private function createWhereClause($arrayAssoc, $connector='where', $logicalConnector = ' AND ', $equalitySign = ' = '){
 		$sql = '';
 		$sql .= (count($arrayAssoc) > 0 ) ?  (' ' . $connector . ' ' )  : ''; //check to see if they are where clausules 
 		$i = 0;
 		  
 		foreach ($arrayAssoc as $key=>$value){
-			$sql .= ' '  . $key . ' = '; 
+			$sql .= ' '  . $key .  $equalitySign ; 
 			//$sql .= '\'' . $value  . '\''; 
 			$sql .= (!is_numeric($value)) ?  '\'' . $value  . '\' ': $value;
 			$i += 1;
 			//se for ultimo adicionar and para proxima clausula 
 			if ($i < count($arrayAssoc)){
-				$sql .=  ' AND '; 
+				$sql .=  $logicalConnector ; 
 			}  
 		}
 		return $sql; 

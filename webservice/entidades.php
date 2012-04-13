@@ -228,14 +228,41 @@
 				break;
 			case 'HEAD': 
 			 	break; 
-			 case 'PUT': 
+			 case 'PUT':
+			 	putClubeOrIntegrante($req, $id, $ent); 
 			 	break; 
 			 case 'DELETE': 
 			 	break; 
 			 default :
 			 	RestUtils::sendResponse(405, array('allow' => "HEAD", "GET", "PUT", "DELETE"));
 		}
-	} 
+	}
+	
+	function putClubeOrIntegrante($req, $id, $ent){
+		$existent  = new $ent();
+		$existent->getObjectById($id); 
+		
+		if (!$existent){
+			RestUtils::sendResponse(404); 
+		}
+		 
+		$new = $existent->fromXml($req->getData());
+		if ($new){
+	    if (strtolower($ent) == 'clube'){ 
+			$new->idclube = $id; 
+		}
+		else {
+			$new->idintegrante = $id; 
+		}
+		try{
+			$new->update(); 
+		}catch(Exception $e){
+			RestUtils::sendResponse(500); 
+		}
+		}else{
+			//TODO bad format 
+		}
+	}
 	
 	function getDeEntidade($req, $ent, $id){
 		$bdEnt = new $ent(); 

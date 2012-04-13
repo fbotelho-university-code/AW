@@ -14,7 +14,10 @@
  	private $http_accept;  //response format. 
  	private $method;  //get, put, head, post...
 	private $path_info;  //array of path parameters. 
+	private $etag; 
 	
+	public function setEtag($etag){ $this->etag = $etag; }
+	public function getEtag(){return $this->etag; }
  	public function construct(){
 		$this->request_vars = array();
 		$this->data = '';

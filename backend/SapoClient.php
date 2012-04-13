@@ -42,6 +42,7 @@ class SapoClient extends Fonte {
 				
 			//Insere na Base de Dados e caracteriza semanticamente cada noticia encontrada
 			foreach($items as $news) {
+				
 				$myNew = new Noticia(); 
 	 			$myNew->setIdfonte($this->idfonte);
 	 			$myNew->setData_pub(isset($news["dataPub"]) ?
@@ -69,3 +70,4 @@ class SapoClient extends Fonte {
 $sapo = new SapoClient();
 $parameters = Util::getSearchParameters();
 $sapo->search($parameters);
+

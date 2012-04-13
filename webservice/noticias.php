@@ -8,22 +8,32 @@
  require_once ('Util.php');    
   
  /*
+<<<<<<< HEAD
   * Documenta�‹o dos mŽtodos suportados neste url: 
 	/ | GET | Listar todas as noticias. Representa�‹o em XML, JSON e XHTML que devem conter apontadores para o recurso de cada noticia.  Por parametro Ž possivel especificar palavras chaves de forma a filtrar os resultados (i.e., permitir escolher noticias que referem o clube X.).
 
 	/ | POST |  Coloca�‹o de  uma noticia nova. O corpo do pedido deve  conter a descri�‹o da noticia em XML . Ser‡ retornado o identificador œnico da noticia decidido pelo servi�o.
 
 	/idNoticia | GET | Retorna o conteudo e informa�‹o relativa a uma noticia, incluindo rela�›es como referencias temporais, referencias espaciais, clubes , etc., A representa�‹o ser‡ em XML, JSON e XHTML. 
- **/
+=======
+  * Documenta��o dos m�todos suportados neste url: 
+	/ | GET | Listar todas as noticias. Representa��o em XML, JSON e XHTML que devem conter apontadores para o recurso de cada noticia.  Por parametro � possivel especificar palavras chaves de forma a filtrar os resultados (i.e., permitir escolher noticias que referem o clube X.).
 
+	/ | POST |  Coloca��o de  uma noticia nova. O corpo do pedido deve  conter a descri��o da noticia em XML . Ser� retornado o identificador �nico da noticia decidido pelo servi�o.
+
+	/idNoticia | GET | Retorna o conteudo e informa��o relativa a uma noticia, incluindo rela��es como referencias temporais, referencias espaciais, clubes , etc., A representa��o ser� em XML, JSON e XHTML. 
+>>>>>>> origin/master
+ **/
+ 
+	
     $options = array(
       "indent"          => "    ",
       "linebreak"       => "\n",
       "typeHints"       => false,
-      "addDecl"         => true,
+      "addDecl"         => true	,
       "encoding"        => "UTF-8",
-      XML_SERIALIZER_OPTION_RETURN_RESULT => true, 
-      "defaultTagName"  => "noticia",
+      XML_SERIALIZER_OPTION_RETURN_RESULT => true,
+      XML_SERIALIZER_OPTION_CLASSNAME_AS_TAGNAME => true,  
       "ignoreNull"      => true,
  	); 
  	
@@ -32,7 +42,7 @@
     
 	$req  = RestUtils::processRequest();  // The request made by the client.
 	checkRequest($req);   // check that the request is valid. Dies otherwise.  
-	  
+	
 	  //Dispatching according to the path info. 
 	  $path_parameters = $req->getPathInfo(); 
 	  $path_parameters_count = count($path_parameters);
@@ -56,46 +66,69 @@
 	 * HEAD
 	 */
 	function processRoot($req){
+		
 		switch($req->getMethod()){
 			case 'GET': 
 				getRoot($req);
-			break;
+				break;
 			case 'POST': 
 				postRoot($req);
 			break;
-			case 'HEAD': 
-				postHead($req);
+			case 'HEAD':
+			
+				headRoot();
 			break;
 			default:
 				RestUtils::sendResponse(405, array('allow' => "HEAD", "GET", "POST"));
 				exit; 
 		}			
 	}
+		
+	function headRoot(){
+		$news = getAllNews();
+		$hash = md5(var_export($news,true));
+		RestUtils::sendResponseHead($hash);
+	}
 	
-	
-	/**
-	 * Listar todas as noticias. 
-	 * Representa�‹o em XML, JSON que devem conter apontadores para o recurso de cada noticia.  
-	 * Por parametro (search=SEARCH_STRING) Ž possivel especificar palavras chaves de forma a filtrar os resultados (i.e., permitir escolher noticias que referem o clube X.).
-	 * TODO : filtrar pesquisa. 
-	 **/
-	function getRoot($req){
+		
+	function getAllNews(){
 		$noticia = new Noticia(); 
 		$news =$noticia->getAll(array("idnoticia","data_pub", "assunto", "descricao", "url"));
 		if (!$news){
 			RestUtils::sendResponse(500); 
 		}
+		return $news; 	
+	}
+	
+	function getHashObject($ob){
+		$hash = md5(var_export($ob, true)); 
+	}
+	/**
+	 * Listar todas as noticias. 
+<<<<<<< HEAD
+	 * Representa�‹o em XML, JSON que devem conter apontadores para o recurso de cada noticia.  
+	 * Por parametro (search=SEARCH_STRING) Ž possivel especificar palavras chaves de forma a filtrar os resultados (i.e., permitir escolher noticias que referem o clube X.).
+=======
+	 * Representação em XML, JSON que devem conter apontadores para o recurso de cada noticia.  
+	 * Por parametro (search=SEARCH_STRING) é possivel especificar palavras chaves de forma a filtrar os resultados (i.e., permitir escolher noticias que referem o clube X.).
+>>>>>>> origin/master
+	 * TODO : filtrar pesquisa. 
+	 **/
+	function getRoot($req){
+		$news = getAllNews($req); 
+		
+		if ($req->getEtag() != null && $req->getEtag() == getHashObject($news)){
+			RestUtils::sendResponse(304); 	
+		}
+		
 		foreach ($news as $n){
 			$n->follow = "myUrl/" . $n->idnoticia; 
 		}
 		
 		if ($req->getHttpAccept() == 'text/xml'){
-		
-		global $options; $options["rootName"] = "noticias"; 
-		
-		$xmlSerializer =  new XML_Serializer($options); 
-		
-		$result = $xmlSerializer->serialize($news);
+			global $options; $options["rootName"] = "noticias";
+			$xmlSerializer =  new XML_Serializer($options);
+			$result = $xmlSerializer->serialize($news);
 		
 		if ($result == true){
 			RestUtils::sendResponse(200, null, $xmlSerializer->getSerializedData(), 'text/xml'); 
@@ -175,7 +208,7 @@
 	}
 	
 	function putNews($req, $id){
-		$noticia = new Noticia(); 
+			$noticia = new Noticia(); 
 		
 		$noticia->getObjectById($id);
 		
@@ -185,8 +218,7 @@
 		}
 			
 		$nova_noticia = $noticia->fromXml($req->getData());
-		
-		
+		if ($nova_noticia){
 		if (!isset($nova_noticia->texto)) $nova_noticia->texto =  Noticia::fetchTexto($nova_noticia->url);
 		$nova_noticia->idfonte = Util::getIdWebServiceAsFonte();
 		$nova_noticia->idnoticia = $id; 
@@ -196,12 +228,14 @@
 		}catch (Exception $e){
 			RestUtils::sendResponse(500); 
 		}
-		
+		}else{
+			//TODO  bad format 
+		}
 	}
 	
 	function getNews($req, $id){
 		$noticia = new Noticia(); 
-		$n = $noticia->findFirst(array ("idnoticia" => $id));
+		$n = $noticia->getRelationArray($id); 
 		if (!$n){
 			RestUtils::sendResponse(404);
 			exit; 
@@ -210,9 +244,9 @@
 			RestUtils::sendResponse(200, null, json_encode($n)); 
 		}
 		else if ($req->getHttpAccept() == 'text/xml'){
-			global $options; $options["rootName"] = "noticia"; 
+			global $options; $options["rootName"] = "noticia";
 			$xmlSerializer =  new XML_Serializer($options); 
-			$n->visivel = null; // we do not want this to show on the result.  
+			
 			$result = $xmlSerializer->serialize($n);
 			if ($result == true){
 				RestUtils::sendResponse(200, null, $xmlSerializer->getSerializedData(), 'text/xml');
