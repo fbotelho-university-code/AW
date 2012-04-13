@@ -9,11 +9,11 @@
  require_once("Model.php");
   
 /**
-* Classe que representa as referências temporais das noticias
+* Classe que representa as referï¿½ncias temporais das noticias
 */
 class Noticia_data extends Model{
 	/**
-	* Identificador da notícia
+	* Identificador da notï¿½cia
 	* @var int
 	*/
 	var $idnoticia; 
@@ -25,10 +25,11 @@ class Noticia_data extends Model{
 	public function getKeyFields(){
 		return array ('idnoticia', '$data'); 
 	}
+	
 	 
 	/**
 	 * Referencia temporal da noticia.
-	 * @var String - Data presente no texto da notícia
+	 * @var String - Data presente no texto da notï¿½cia
 	 */
 	var $tempo; 
  
@@ -37,14 +38,14 @@ class Noticia_data extends Model{
 	 * @param int $idnoticia - Identificador da noticia {@link $idnoticia}
 	 * @param unknown_type $tempo - Referencia Temporal {@link $tempo}
 	 */
-	public function __construct($idnoticia, $tempo){
+	public function __construct($idnoticia='', $tempo=''){
 		parent::__construct();
 		$this->idnoticia = $idnoticia;
 		$this->tempo = $tempo;
 	}
 	
 	/**
-	* Retorna o identificador da notícia
+	* Retorna o identificador da notï¿½cia
 	* @return int {@link $idnoticia}
 	*/
 	public function getIdNoticia() {
@@ -52,7 +53,7 @@ class Noticia_data extends Model{
 	}
 	
 	/**
-	* Altera o valor do identificador da notícia {@link $idnoticia}
+	* Altera o valor do identificador da notï¿½cia {@link $idnoticia}
 	* @param int $id
 	*/
 	public function setIdNoticia($v) {
@@ -61,7 +62,7 @@ class Noticia_data extends Model{
 	
 	/**
 	 * Retorna a referencia temporal da noticia
-	 * @return String {@link $tempo} - Data presente no texto da notícia
+	 * @return String {@link $tempo} - Data presente no texto da notï¿½cia
 	 */
 	public function getTempo() {
 		return $this->tempo;
@@ -73,6 +74,19 @@ class Noticia_data extends Model{
 	*/
 	public function setTempo($v) {
 		$this->tempo = $v;
+	}
+	
+	public static function getAllDatas($idNoticia){
+		$class_Noticia_Locais = new Noticia_data(); 
+		$rel = $class_Noticia_Locais->find(array("idnoticia" =>  $idNoticia));
+		if (!$rel) return null;
+		
+		//Apanhar todos os locais atraves das referencias de locais_noticias: 
+		$datas = array();
+		foreach ($rel as $ln){
+			$data = $ln->getTempo();
+		}
+		return $datas; 
 	}
  }
 ?>

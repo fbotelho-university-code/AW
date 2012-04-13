@@ -21,14 +21,14 @@ class DAO extends ADOConnection {
 	private $myserver = "localhost";
 	
 	/**
-	 * Nome do usuario para acesso à Base de Dados
+	 * Nome do usuario para acesso ï¿½ Base de Dados
 	 * @var String
 	 */
 	private $myuser = "root";
 	
 	/**
 	 * 
-	 * Palavra-passe para acesso à Base de Dados
+	 * Palavra-passe para acesso ï¿½ Base de Dados
 	 * @var String
 	 */
 	private $mypassword = "pcdamf06";
@@ -40,7 +40,7 @@ class DAO extends ADOConnection {
 	private $mydbName = "aw";
 	
 	/**
-	 * Objeto para acesso à Base de Dados
+	 * Objeto para acesso ï¿½ Base de Dados
 	 * @var ADONewConnection
 	 */
 	public $db;
@@ -53,16 +53,19 @@ class DAO extends ADOConnection {
 	function __construct(){
 		
 		$this->db = &ADONewConnection($this->mysgbd);
-		/* Ativa Associação dos nomes das colunas das tabelas da BD com as chaves dos arrays de retorno de consulta */
+		/* Ativa Associaï¿½ï¿½o dos nomes das colunas das tabelas da BD com as chaves dos arrays de retorno de consulta */
 		$this->db->SetFetchMode(ADODB_FETCH_ASSOC);
+	//	$this->db->Execute("set names 'utf8'"); 
 	}
 	
 	/**
 	 * Conecta com a base de dados
-	 * Usa os atributos da classe para estabelecar uma ligação com o SGBD
+	 * Usa os atributos da classe para estabelecar uma ligaï¿½ï¿½o com o SGBD
 	 */
+	 
 	function connect() {
 		$this->db->Connect($this->myserver, $this->myuser, $this->mypassword, $this->mydbName) or die($this->db->ErrorMsg());
+	  	
 	}
 	
 	/**
@@ -71,11 +74,11 @@ class DAO extends ADOConnection {
 	function disconnect() {
 		$this->db->Close();
 	}
-	
-		 
+
+	 
 	function execute($sql) {
 		$this->connect();
-		$rs = $this->db->Execute($sql) or die($this->db->ErrorMsg() . "<br>SQL: ".$sql);
+		$rs = $this->db->Execute($sql) or die ($this->db->ErrorMsg() . "<br>SQL: ".$sql); 
 		$this->disconnect();
 		return $rs;
 	}

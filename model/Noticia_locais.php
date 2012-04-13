@@ -1,7 +1,8 @@
 <?php
 
 require_once "Model.php";
- 
+require_once "includes.php";  
+
  /**
   * Classe que representa a rela�‹o Noticias Locais
   */
@@ -64,7 +65,24 @@ require_once "Model.php";
   	 */
   	public function setIdnoticia($id) {
   		$this->idnoticia = $id;
-  	}	
+  	}
+  	
+  	public static function getAllLocais($locais_noticias){
+  		$class_locais = new Local(); 
+  		if (!$locais_noticias){
+			return null; 
+		}else{
+			
+			//Apanhar todos os locais atraves das referencias de locais_noticias: 
+			$locais = array(); 
+			foreach ($locais_noticias as $ln){
+				$local = $class_locais->getObjectById($ln->getIdLocal());
+				$locais[] = $local;  
+			}
+		}
+		return $locais; 
+  	}
+  		
   }
   
 ?>

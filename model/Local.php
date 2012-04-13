@@ -98,7 +98,7 @@ class Local extends Model{
 	 * Transforma um ficheiro xXML em um Objecto da classe
 	 * @param String $xml
 	 */
-	public static function fromXml($xml){
+/*	public static function fromXml($xml){
 		
 		//$xml = simplexml_load_string($xml);
 		//var_dump($xml);
@@ -153,6 +153,7 @@ class Local extends Model{
 			return null;
 		}
 	}
+	*/
 	
 }
 

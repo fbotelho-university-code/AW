@@ -80,8 +80,8 @@
 			RestUtils::sendResponse(201, null, $id, 'text'); 
 		}
 		else{
-			
-			RestUtils::sendResponse(200, null , $result->coordenadas, 'text'); 
+			//TODO send bad format
+			//RestUtils::sendResponse(200, null , $result->coordenadas, 'text'); 
 		} 		 
 	}
 	
@@ -129,11 +129,15 @@
  * DELETE
  */
 	function processLocal($req){
+				$path_info = $req->getPathInfo();
+		//var_dump($path_info); 
+		$id = $path_info[1]; 
 		switch($req->getMethod()){
 			case 'GET': 
-				getLocal($req);
+				getLocal($req, $id);
 			break; 
 			case 'PUT':
+				putLocal($req, $id); 
 			break;
 			case 'HEAD':
 			break; 
@@ -145,11 +149,25 @@
 		}
 	}
 	
-	function getLocal($req){
+	function putLocal($req, $id){
+		$local = new Local(); 
+		$local->getObjectById($id);
+		if (!$local){
+			RestUtils::sendResponse(404);
+		} 
+		$new_local = $local->fromXml($req->getData());
+		if ($new_local  && $new_local->checkValidity() ){
+				$new_local->idlocal = $id;
+				$new_local->update();   
+		}
+		else{
+			//TODO send bad format 
+		}
+	}
+	
+	function getLocal($req, $id){
 		//TODO : make it safe to access path_info[0]. Prevent sql injection please. 
-		$path_info = $req->getPathInfo();
-		//var_dump($path_info); 
-		$id = $path_info[1]; 
+
 		$local = new Local(); 
 		$n = $local->findFirst(array ("idlocal" => $id));
 		if (!$n){

@@ -30,7 +30,7 @@ require_once("Model.php");
  	var $idnoticia; 
 	
  	/**
- 	 * Qualificação da notícia. Representa se um notícia descreve aspectos positivos (1), neutros (0) e negativos (-1)
+ 	 * Qualificaï¿½ï¿½o da notï¿½cia. Representa se um notï¿½cia descreve aspectos positivos (1), neutros (0) e negativos (-1)
  	 * @var int
  	 */
  	var $qualificacao =0;
@@ -73,7 +73,7 @@ require_once("Model.php");
  	}
  	
  	/**
- 	* Retorna o identificador da notícia
+ 	* Retorna o identificador da notï¿½cia
  	* @return int {@link $idnoticia}
  	*/
  	public function getIdNoticia() {
@@ -81,7 +81,7 @@ require_once("Model.php");
  	}
  	
  	/**
- 	* Altera o valor do identificador da notícia {@link $idnoticia}
+ 	* Altera o valor do identificador da notï¿½cia {@link $idnoticia}
  	* @param int $id
  	*/
  	public function setIdNoticia($p) {
@@ -89,7 +89,7 @@ require_once("Model.php");
  	}
  	
  	/**
- 	* Retorna a qualificação da notícia
+ 	* Retorna a qualificaï¿½ï¿½o da notï¿½cia
  	* @return int {@link $qualificacao}
  	*/
  	public function getQualificacao() {
@@ -97,7 +97,7 @@ require_once("Model.php");
  	}
  	
  	/**
- 	* Altera o valor da qualificacao da notícia {@link $qualificacao}
+ 	* Altera o valor da qualificacao da notï¿½cia {@link $qualificacao}
  	* @param int $q
  	*/
  	public function setQualificacao($q) {
@@ -121,7 +121,7 @@ require_once("Model.php");
  	}
 			
 	/**
-	 * Consulta Base de Dados para inserir ou alterar uma relação entre uma noticia e um clube
+	 * Consulta Base de Dados para inserir ou alterar uma relaï¿½ï¿½o entre uma noticia e um clube
 	 */
 	public function update(){
 			$sql_where_key =" where idclube = " . $this->idclube . " AND idnoticia = " . $this->idnoticia;
@@ -134,11 +134,11 @@ require_once("Model.php");
 			if (!$rs){
 				die($dao->db->ErrorMsg());
 			}
-			// Relacionamento já existe na base de dados. Alterar registo
+			// Relacionamento jï¿½ existe na base de dados. Alterar registo
 			if ($rs->RecordCount() > 0 ){
 				$query = "update noticia_has_clube SET qualificacao = " . $this->qualificacao . $sql_where_key; 
 			}
-			// Relacionamento não existe na base de dados. Inserir registo
+			// Relacionamento nï¿½o existe na base de dados. Inserir registo
 			else {
 				$query = "insert into noticia_has_clube values (" . $this->idnoticia . "," . $this->idclube . ", " . $this->qualificacao . "," . $this->idlexico .")";
 			}
@@ -147,7 +147,7 @@ require_once("Model.php");
 		}
 		
 	/**
-	 * Calcula a qualificação da notícia de forma acumulativa
+	 * Calcula a qualificaï¿½ï¿½o da notï¿½cia de forma acumulativa
 	 * @param int $qual
 	 * @uses {@link $qualificacao}
 	 */
@@ -156,7 +156,7 @@ require_once("Model.php");
 	}
 	
 	/**
-	* Retorna o objeto em forma de String. Usado para depuração.
+	* Retorna o objeto em forma de String. Usado para depuraï¿½ï¿½o.
 	* @return String $res
 	*/
 	public function __toString(){
@@ -167,6 +167,24 @@ require_once("Model.php");
 		if ($this->idlexico) $rs .= 'ID LEXICO : ' . $this->idlexico;
 		return $res; 
 	}
+	
+	public static function getAllNews($idClube){
+		
+	}
+	public static function getAllClubes($idnoticia, $){
+		$class_this = new Noticia_Has_Clube(); 
+		$rel = $class_this->find(array("idnoticia" => $idnoticia)); 
+		if (!$rel) return null; 
+		
+		$clubes = array();
+		$clube_class = new Clube(); 
+		
+		foreach($rel as $rl){
+			$clubes[] = $clube_class->getObjectById($rl->getIdClube()); 
+		}
+		return $clubes; 
+	}
+	
 	
  }	
  ?>
