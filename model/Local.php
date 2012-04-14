@@ -11,10 +11,9 @@ class Local extends Model{
 	public function checkValidity(){
 		
 		if (
-		
-		preg_match('/\-?\d+\.?\d*;-?\d+\.?\d*/', $this->coordenadas ) == 1  
+			preg_match('/\-?\d+\.?\d*;-?\d+\.?\d*/', $this->coordenadas ) == 1  
 		)
-			return true; 
+	    return true; 
 	}
 	
 	public function getKeyFields(){

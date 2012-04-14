@@ -4,7 +4,7 @@
  require_once ('Util/RestRequest.php'); 
  require_once ('Util/XML/Serializer.php'); 
  require_once ('../model/Noticia.php');
-// require_once ('Util.php');    
+ require_once ('./Util.php');    
   
  /*
 <<<<<<< HEAD
@@ -88,8 +88,7 @@
 		$hash = md5(var_export($news,true));
 		RestUtils::sendResponseHead($hash);
 	}
-	
-		
+
 	function getAllNews(){
 		$noticia = new Noticia(); 
 		$news =$noticia->getAll(array("idnoticia","data_pub", "assunto", "descricao", "url"));
@@ -156,7 +155,7 @@
 		$n = $noticia->fromXml($req->getData());
 		if (!$n->texto) $n->texto =  Noticia::fetchTexto($n->url);
 		 
-		$n->idfonte = Util::getIdWebServiceAsFonte();
+		$n->idfonte = Utill::getIdWebServiceAsFonte();
 		 
 		if (!$n) { 
 			RestUtils::sendResponse(400);
@@ -206,8 +205,10 @@
 		}
 	}
 	
+	
+	
 	function putNews($req, $id){
-			$noticia = new Noticia(); 
+		$noticia = new Noticia(); 
 		
 		$noticia->getObjectById($id);
 		
@@ -216,36 +217,149 @@
 		}
 		
 		$nova_noticia = $noticia->fromXml($req->getData());
+		
+		if (isset($nova_noticia->locais )) {
+			$locais = $nova_noticia->locais ;
+			unset($nova_noticia->locais); 
+		}
+		if (isset($nova_noticia->clubes )) {
+			$clubes = $nova_noticia->clubes;
+			unset($nova_noticia->clubes); 
+		}
+		if (isset($nova_noticia->integrantes)) {
+			$integrantes = $nova_noticia->integrantes ;
+			unset($nova_noticia->integrantes); 
+		}   
+		if (isset($nova_noticia->datas)){
+		 	$datas = $nova_noticia->datas;
+		 	unset($nova_noticia->datas);  	
+		}
+		
 		if ($nova_noticia){
 		$nova_noticia->texto = Noticia::fetchTexto($nova_noticia->url);
-		$nova_noticia->idfonte = Util::getIdWebServiceAsFonte();
+		$nova_noticia->idfonte = Utill::getIdWebServiceAsFonte();
 		$nova_noticia->idnoticia = $id; 
+		
 		try{
 			$nova_noticia->update();
-			 
 		}catch (Exception $e){
 			RestUtils::sendResponse(500); 
 		}
+		
 		}else{
 			//TODO  bad format 
 		}
-		
+
+		if (isset($locais )) {
+			$nova_noticia->locais = $locais; 
+		}
+		if (isset($clubes )) {
+			$nova_noticia->clubes = $clubes; 
+		}
+		if (isset($integrantes)) {
+			$nova_noticia->integrantes = $integrantes ;
+		}   
+		if (isset($datas)){
+		 	$nova_noticia->datas = $datas;
+		}
+
 		updateRelations($nova_noticia);
 	}
 	
 	
-	function updateRelations($noticia){
-		$locais_classe = new Noticia_locais(); 
-		if ($noticia->locais){
+	function checkRelations($noticia){
+		if (isset($noticia->locais)){
 			foreach ($noticias->locais as $l){
-				
+				if (!isset($l->idlocal) ) {
+					return false; 
+				}
 			}
-		}		
+		}
+		if(isset($noticia->datas)){
+			foreach($noticias->datas as $l){
+				if (!isset($l->data))
+					return false; 
+			}
+		}
+		
+		if (isset($noticia->locais)){
+			foreach ($noticias->clubes as $l){
+				if (!isset($l->idclube)) 
+					return false; 
+			}		
+		}	
+		if (isset($noticia->integrantes)) {
+			foreach($noticias->integrantes as $l)
+				if (!isset($l->idintegrante))	
+					return false;
+		}
+	}
+	
+	function updateRelations($noticia){
+		$locais_classe = new Noticia_locais();
+		$integrantes_classe = new Noticia_Data(); 
+		$clubes_classe = new Noticia_Has_Clube();
+		$datas_classe = new Noticia_Data();
+		 
+		try{ 
+			$locais_classe->deleteById($noticia->getIdNoticia());
+		}catch (Exception $e){
+			RestUtils::sendResponse(500); 
+		}
+		
+		if (isset($noticia->locais)){
+			foreach ($noticia->locais as $l){
+				
+				$rel = new Noticia_Locais($noticia->idnoticia, $l->idlocal);
+				try{
+					$rel->add();
+				}catch(Exception $e){
+					RestUtils::sendResponse(500); 
+				}
+			}
+		}
+		
+		$clubes_classe->deleteById($noticia->getIdNoticia());
+		if (isset($noticia->clubes)){
+			foreach($noticia->clubes as $l){
+				try{
+					$rel = new Noticia_Has_Clube($noticia->idnoticia, $l->idclube , $l->qualificacao );
+					$rel->add();
+				}catch(Exception $e){
+					RestUtils::sendResponse(500); 
+				}
+			}	
+		}
+		
+		if (isset($noticia->integrantes)){
+			foreach($noticia->integrantes as $l){
+				try{
+					$rel = new Noticia_Has_Integrante($noticia->idnoticia, $l->idintegrante , $l->qualificacao );
+					$rel->add();
+				}catch(Exception $e){
+					RestUtils::sendResponse(500); 
+				}
+			}	
+		}
+		
+		if (isset($noticia->datas)){
+			foreach($noticia->datas as $l){
+				 try{
+				 	echo $l->__toString(); 
+					$rel = new Noticia_Data($noticia->idnoticia, '' ,$l->__toString());
+					$rel->add();
+				}catch(Exception $e){
+					RestUtils::sendResponse(500); 
+				}
+			}	
+		}
+		
 	}
 	
 	function getNews($req, $id){
 		$noticia = new Noticia(); 
 		$n = $noticia->getRelationArray($id); 
+	
 		if (!$n){
 			RestUtils::sendResponse(404);
 			exit; 
@@ -255,6 +369,7 @@
 		}
 		else if ($req->getHttpAccept() == 'text/xml'){
 			global $options; $options["rootName"] = "noticia";
+			$options['defaultTagName'] = 'data';
 			$xmlSerializer =  new XML_Serializer($options); 
 			
 			$result = $xmlSerializer->serialize($n);

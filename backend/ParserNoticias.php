@@ -57,10 +57,10 @@ class ParserNoticias {
 					//Assumindo que s— vai ser associado a um: 
 					$lexClubes = $Clubes_Lexico->findFirst(array("idlexico" => $lexico->getIdlexico()));
 					$lexIntegrantes = $Integrantes_Lexico->findFirst(array ("idlexico" => $lexico->getIdlexico())); 
+
 					if ($lexClubes){					
 						//rela��o entre noticiaEClubes
 						$rel = $Noticias_Clube->findFirst(array("idnoticia" => $noticia->getIdnoticia(), "idclube" => $lexClubes->getIdClube()));
-
 						if (!$rel){
 							$rel = new Noticia_Has_Clube($noticia->getIdnoticia(), $lexClubes->getIdClube(), 0 , $lexico->getIdLexico());
 							$rel->add();  

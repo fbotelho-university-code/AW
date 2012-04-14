@@ -241,8 +241,8 @@
 	
 	function putClubeOrIntegrante($req, $id, $ent){
 		$existent  = new $ent();
-		$existent->getObjectById($id); 
-		
+		$existent->getObjectById($id);
+		 
 		if (!$existent){
 			RestUtils::sendResponse(404); 
 		}
@@ -270,15 +270,18 @@
 		$key = (strtolower($ent) == 'clube') ? "idclube" : "idintegrante";
 		$entry = $bdEnt->findFirst( array($key => $id));
 		if (!$entry){ RestUtils::sendResponse(404);exit; }
+
 		if (strtolower($ent)== 'clube'){
 			$entry->noticias = Noticia_Has_Clube::getAllNoticias($id);  	
 		}
 		else {
 			$entry->noticias = Noticia_Has_Integrante::getAllNoticias($id);  	
 		}
+		
 		if ($req->getHttpAccept() == 'json'){
 			RestUtils::sendResponse(200, null, json_encode($entry)); 
 		}
+		
 		else if ($req->getHttpAccept() == 'text/xml'){
 			//TODO descricao está cheio. 
 			global $options; $options["rootName"] = $ent ; $options["defaultTagName"]  = "descricao"; 
@@ -302,13 +305,13 @@
     //Variables that should be defined for checkRequest. Ideally this would be defined in a abstact/general form. 
  	$methods_supported = array("GET", "POST", "HEAD", "DELETE", "PUT");
  	$request_vars = array();
- 
-    	if (array_search($req->getMethod(), $methods_supported ) === FALSE){
+ 	
+     	if (array_search($req->getMethod(), $methods_supported ) === FALSE){
     		//405 -> method not supported 
     		RestUtils::sendResponse(405, array('allow' => $methods_supported));
     		exit;  
     	}
-    		
+    	
     	//check the request variables that are not understood by this resource
     	$dif = array_diff($req->getRequestVars(), $request_vars);
     	//If they are differences then we do not understand the request.  

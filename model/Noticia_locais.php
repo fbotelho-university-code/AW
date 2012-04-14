@@ -31,8 +31,10 @@ require_once "includes.php";
   	/**
   	 * Construtor da Classe
   	 */
-  	public function __construct() {
+  	public function __construct($idnoticia='', $idlocal='') {
   		parent::__construct();
+  		$this->idnoticia = $idnoticia; 
+  		$this->idlocal = $idlocal; 
   	}
   	
   	/**
@@ -67,8 +69,6 @@ require_once "includes.php";
   		$this->idnoticia = $id;
   	}
 	
-	
-		  	
   	public static function getAllLocais($locais_noticias){
   		$class_locais = new Local(); 
   		if (!$locais_noticias){
@@ -98,7 +98,6 @@ require_once "includes.php";
 		return $clubes; 
 	}
   }
-  
-  
-  
+	
+	
 ?>

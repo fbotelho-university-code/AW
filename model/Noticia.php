@@ -122,7 +122,7 @@ class Noticia extends Model{
 	 * @var boolean
 	 */
 	var $visivel = true;
-		
+	
 	/**
 	 * Contrutor da classe. 
 	 */
