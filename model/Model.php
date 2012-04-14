@@ -75,7 +75,6 @@ abstract class Model{
 		$sql = 'delete from ' . $table   . $this->getPrimaryKeyWhere(); 
 		$this->dao->execute($sql);
 	}
-<<<<<<< HEAD
 	
 	public function delete($fields) {
 		$table = get_class($this);
@@ -83,9 +82,7 @@ abstract class Model{
 		$sql .= $this->createWhereClause($fields) . ';';
 		$this->dao->execute($sql);
 	}
-=======
 	public function execute($m){ $this->dao->execute($m); }
->>>>>>> origin/master
 
 /**
  * Return the Where statement selecting this object in the database.

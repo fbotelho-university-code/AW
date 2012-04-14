@@ -8,21 +8,12 @@
  require_once ('Util.php');    
   
  /*
-<<<<<<< HEAD
   * Documenta�‹o dos mŽtodos suportados neste url: 
 	/ | GET | Listar todas as noticias. Representa�‹o em XML, JSON e XHTML que devem conter apontadores para o recurso de cada noticia.  Por parametro Ž possivel especificar palavras chaves de forma a filtrar os resultados (i.e., permitir escolher noticias que referem o clube X.).
 
 	/ | POST |  Coloca�‹o de  uma noticia nova. O corpo do pedido deve  conter a descri�‹o da noticia em XML . Ser‡ retornado o identificador œnico da noticia decidido pelo servi�o.
 
-	/idNoticia | GET | Retorna o conteudo e informa�‹o relativa a uma noticia, incluindo rela�›es como referencias temporais, referencias espaciais, clubes , etc., A representa�‹o ser‡ em XML, JSON e XHTML. 
-=======
-  * Documenta��o dos m�todos suportados neste url: 
-	/ | GET | Listar todas as noticias. Representa��o em XML, JSON e XHTML que devem conter apontadores para o recurso de cada noticia.  Por parametro � possivel especificar palavras chaves de forma a filtrar os resultados (i.e., permitir escolher noticias que referem o clube X.).
-
-	/ | POST |  Coloca��o de  uma noticia nova. O corpo do pedido deve  conter a descri��o da noticia em XML . Ser� retornado o identificador �nico da noticia decidido pelo servi�o.
-
-	/idNoticia | GET | Retorna o conteudo e informa��o relativa a uma noticia, incluindo rela��es como referencias temporais, referencias espaciais, clubes , etc., A representa��o ser� em XML, JSON e XHTML. 
->>>>>>> origin/master
+	/idNoticia | GET | Retorna o conteudo e informa�‹o relativa a uma noticia, incluindo rela�›es como referencias temporais, referencias espaciais, clubes , etc., A representa�‹o ser‡ em XML, JSON e XHTML.  
  **/
  
 	

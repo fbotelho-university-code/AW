@@ -1,37 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema targetNamespace="http://localhost/AW-3/workspace/Schemas/noticia.xsd" elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://localhost/AW-3/workspace/Schemas/noticia.xsd">
+<xsd:schema targetNamespace="localhost" elementFormDefault="qualified"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="localhost">
 
-    <xsd:complexType name="noticiaT">
-    	<xsd:sequence>
-    		<xsd:element name="idnoticia" type="xsd:int" minOccurs="0" maxOccurs="1"></xsd:element>
-    		<xsd:element name="idfonte" type="xsd:int"></xsd:element>
-    		<xsd:element name="data_pub" type="xsd:dateTime" minOccurs="0"></xsd:element>
-    		<xsd:element name="assunto" minOccurs="0">
-    			<xsd:simpleType>
-    				<xsd:restriction base="xsd:string">
-    					<xsd:maxLength value="100"></xsd:maxLength>
-    				</xsd:restriction>
-    			</xsd:simpleType>
-    		</xsd:element>
-    		<xsd:element name="descricao" minOccurs="0">
-    			<xsd:simpleType>
-    				<xsd:restriction base="xsd:string">
-    					<xsd:maxLength value="250"></xsd:maxLength>
-    				</xsd:restriction>
-    			</xsd:simpleType>
-    		</xsd:element>
-    		<xsd:element name="texto" type="xsd:string" minOccurs="0"></xsd:element>
-    		<xsd:element name="url" type="xsd:string"></xsd:element>
-    		<xsd:element name="visivel">
-    			<xsd:simpleType>
-    				<xsd:restriction base="xsd:int">
-    					<xsd:enumeration value="0"></xsd:enumeration>
-    					<xsd:enumeration value="1"></xsd:enumeration>
-    				</xsd:restriction>
-    			</xsd:simpleType>
-    		</xsd:element>
-    	</xsd:sequence>
-    </xsd:complexType>
-
-    <xsd:element name="noticia" type="tns:noticiaT"></xsd:element>
+	<xsd:include schemaLocation="clube.xsd"></xsd:include>
+	<xsd:include schemaLocation="integrante.xsd"></xsd:include>
+	<xsd:include schemaLocation="local.xsd"></xsd:include>
+	<xsd:complexType name="noticiaT">
+		<xsd:sequence>
+			<xsd:element name="idnoticia" type="xsd:int" minOccurs="0"
+				maxOccurs="1">
+			</xsd:element>
+			<xsd:element name="idfonte" type="xsd:int"></xsd:element>
+			<xsd:element name="data_pub" type="xsd:dateTime"
+				minOccurs="0">
+			</xsd:element>
+			<xsd:element name="assunto" minOccurs="0">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:maxLength value="100"></xsd:maxLength>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="descricao" minOccurs="0">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:maxLength value="250"></xsd:maxLength>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="texto" type="xsd:string" minOccurs="0"></xsd:element>
+			<xsd:element name="url" type="xsd:string"></xsd:element>
+			<xsd:element name="locais">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="local" type="localT" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="datas">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="data" type="xsd:date" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="clubes">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="clube" type="clubeT" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="integrantes">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="integrante" type="integranteT" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="noticias">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="noticia" type="noticiaT"
+					minOccurs="1" maxOccurs="unbounded">
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
 </xsd:schema>

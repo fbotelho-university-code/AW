@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema targetNamespace="http://localhost/AW-3/workspace/Schemas/integrante.xsd" elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://localhost/AW-3/workspace/Schemas/integrante.xsd">
+<xsd:schema targetNamespace="localhost" elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="localhost">
 
     <xsd:complexType name="integranteT">
     	<xsd:sequence>
@@ -16,5 +16,5 @@
     	</xsd:sequence>
     </xsd:complexType>
 
-    <xsd:element name="integrante" type="tns:integranteT"></xsd:element>
+    <xsd:element name="integrante" type="integranteT"></xsd:element>
 </xsd:schema>

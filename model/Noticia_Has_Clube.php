@@ -171,7 +171,7 @@ require_once("Model.php");
 	public static function getAllNews($idClube){
 		
 	}
-	public static function getAllClubes($idnoticia, $){
+	public static function getAllClubes($idnoticia){
 		$class_this = new Noticia_Has_Clube(); 
 		$rel = $class_this->find(array("idnoticia" => $idnoticia)); 
 		if (!$rel) return null; 

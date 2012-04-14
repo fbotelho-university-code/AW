@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p:noticias xmlns:p="localhost" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="localhost noticia.xsd ">
+  <p:noticia>
+    <p:idnoticia>0</p:idnoticia>
+    <p:idfonte>0</p:idfonte>
+    <p:data_pub>2001-12-31T12:00:00</p:data_pub>
+    <p:assunto>p:assunto</p:assunto>
+    <p:descricao>p:descricao</p:descricao>
+    <p:texto>p:texto</p:texto>
+    <p:url>p:url</p:url>
+    <p:locais/>
+    <p:datas/>
+    <p:clubes/>
+    <p:integrantes/>
+  </p:noticia>
+</p:noticias>

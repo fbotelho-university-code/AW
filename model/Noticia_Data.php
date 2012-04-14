@@ -45,9 +45,7 @@ class Noticia_data extends Model{
 	 * @param unknown_type $tempo - Referencia Temporal {@link $tempo}
 	 */
 	
-	public function __construct($idnoticia = 0, $tempo = 0, $dt = 0){
-
-	public function __construct($idnoticia='', $tempo=''){
+	public function __construct($idnoticia='', $tempo='', $dt = 0){
 		parent::__construct();
 		$this->idnoticia = $idnoticia;
 		$this->tempo = $tempo;
@@ -101,7 +99,8 @@ class Noticia_data extends Model{
 	 */
 	public function setData_interpretada($v) {
 		$this->data_interpretada = $v;
-
+	}
+	
 	public static function getAllDatas($idNoticia){
 		$class_Noticia_Locais = new Noticia_data(); 
 		$rel = $class_Noticia_Locais->find(array("idnoticia" =>  $idNoticia));
