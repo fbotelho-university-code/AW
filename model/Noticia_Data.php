@@ -25,8 +25,6 @@ class Noticia_data extends Model{
 	public function getKeyFields(){
 		return array ('idnoticia', '$data'); 
 	}
-	
-	 
 	/**
 	 * Referencia temporal da noticia.
 	 * @var String - Data presente no texto da notï¿½cia
@@ -34,7 +32,7 @@ class Noticia_data extends Model{
 	var $tempo;
 	
 	/**
-	 * Interpretação da data encontrada na notícia em formato 0000-00-00
+	 * Interpretaï¿½ï¿½o da data encontrada na notï¿½cia em formato 0000-00-00
 	 * @var String
 	 */
 	var $data_interpretada;
@@ -44,10 +42,8 @@ class Noticia_data extends Model{
 	 * @param int $idnoticia - Identificador da noticia {@link $idnoticia}
 	 * @param unknown_type $tempo - Referencia Temporal {@link $tempo}
 	 */
-	
-	public function __construct($idnoticia = 0, $tempo = 0, $dt = 0){
-
-	public function __construct($idnoticia='', $tempo=''){
+	 
+	public function __construct($idnoticia='', $tempo='', $dt =''){
 		parent::__construct();
 		$this->idnoticia = $idnoticia;
 		$this->tempo = $tempo;
@@ -101,7 +97,8 @@ class Noticia_data extends Model{
 	 */
 	public function setData_interpretada($v) {
 		$this->data_interpretada = $v;
-
+	}
+	
 	public static function getAllDatas($idNoticia){
 		$class_Noticia_Locais = new Noticia_data(); 
 		$rel = $class_Noticia_Locais->find(array("idnoticia" =>  $idNoticia));
@@ -109,11 +106,40 @@ class Noticia_data extends Model{
 		
 		//Apanhar todos os locais atraves das referencias de locais_noticias: 
 		$datas = array();
-		foreach ($rel as $ln){
-			$data = $ln->getTempo();
-		}
-		return $datas; 
 
+		foreach ($rel as $ln){
+			$datas[] = $ln->getTempo();
+		}
+		
+		return $datas; 
+	}
+	
+	public static function getAllNoticias($data){
+		
+		$class_Noticia_Locais = new Noticia_Data();
+		$rel = $class_Noticia_Locais->find(array("data_interpretada" => $data), ' LIKE ');
+		if (!$rel) return null;
+		
+		//var_dump($rel); 
+		$noticias = array(); 
+		$class_noticia = new Noticia();
+		
+		foreach($rel as $ln){
+			$idnoticia = $ln->getIdNoticia();
+			$bol = true;
+			foreach($noticias as $k){
+				if ($k->getIdNoticia() == $idnoticia) {
+					$bol = false; 
+					break; 
+				}
+			}
+			if ($bol){
+				$n = $class_noticia->getObjectById($idnoticia); 
+				$n->visivel = null; 
+				$noticias[] = $n; 
+			}
+		}
+		return $noticias; 
 	}
  }
 ?>

@@ -16,7 +16,7 @@ class Local extends Model{
 		)
 			return true; 
 	}
-	 
+	
 	public function getKeyFields(){
 		return array ('idlocal'); 
 	}
@@ -98,11 +98,9 @@ class Local extends Model{
 	 * Transforma um ficheiro xXML em um Objecto da classe
 	 * @param String $xml
 	 */
-<<<<<<< HEAD
-	/*public static function fromXml($xml){
-=======
+
 /*	public static function fromXml($xml){
->>>>>>> origin/master
+
 		
 		//$xml = simplexml_load_string($xml);
 		//var_dump($xml);
@@ -156,13 +154,7 @@ class Local extends Model{
 		}catch (Exception $e){
 			return null;
 		}
-<<<<<<< HEAD
 	}*/
-=======
-	}
-	*/
->>>>>>> origin/master
-	
 }
 
 ?>

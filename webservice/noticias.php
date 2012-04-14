@@ -4,8 +4,7 @@
  require_once ('Util/RestRequest.php'); 
  require_once ('Util/XML/Serializer.php'); 
  require_once ('../model/Noticia.php');
- require_once ('../model/includes.php'); 
- require_once ('Util.php');    
+// require_once ('Util.php');    
   
  /*
 <<<<<<< HEAD
@@ -214,12 +213,11 @@
 		
 		if (!$noticia) {
 			RestUtils::sendResponse(404); 	
-		
 		}
-			
+		
 		$nova_noticia = $noticia->fromXml($req->getData());
 		if ($nova_noticia){
-		if (!isset($nova_noticia->texto)) $nova_noticia->texto =  Noticia::fetchTexto($nova_noticia->url);
+		$nova_noticia->texto = Noticia::fetchTexto($nova_noticia->url);
 		$nova_noticia->idfonte = Util::getIdWebServiceAsFonte();
 		$nova_noticia->idnoticia = $id; 
 		try{
@@ -231,6 +229,18 @@
 		}else{
 			//TODO  bad format 
 		}
+		
+		updateRelations($nova_noticia);
+	}
+	
+	
+	function updateRelations($noticia){
+		$locais_classe = new Noticia_locais(); 
+		if ($noticia->locais){
+			foreach ($noticias->locais as $l){
+				
+			}
+		}		
 	}
 	
 	function getNews($req, $id){

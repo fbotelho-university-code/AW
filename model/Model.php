@@ -75,7 +75,6 @@ abstract class Model{
 		$sql = 'delete from ' . $table   . $this->getPrimaryKeyWhere(); 
 		$this->dao->execute($sql);
 	}
-<<<<<<< HEAD
 	
 	public function delete($fields) {
 		$table = get_class($this);
@@ -83,9 +82,8 @@ abstract class Model{
 		$sql .= $this->createWhereClause($fields) . ';';
 		$this->dao->execute($sql);
 	}
-=======
+	
 	public function execute($m){ $this->dao->execute($m); }
->>>>>>> origin/master
 
 /**
  * Return the Where statement selecting this object in the database.
@@ -128,17 +126,17 @@ abstract class Model{
 	 */
 	public function validateXMLbyXSD($xmlString) {
 		
-		// Transformação da String em DOM
+		// Transformaï¿½ï¿½o da String em DOM
 		$xmlDOM = new DOMDocument();
 		$xmlDOM->loadXML($xmlString);
 		
-		//Manipulação do nome da classe chamadora
+		//Manipulaï¿½ï¿½o do nome da classe chamadora
 		$class = get_class($this);
 		if($class == "local") {
 			$class = "espaco";
 		}
 		
-		//Alteração do cabeçalho XML para inclusão das referências para o XSD
+		//Alteraï¿½ï¿½o do cabeï¿½alho XML para inclusï¿½o das referï¿½ncias para o XSD
 		$rootElement = $xmlDOM->getElementsByTagName("clube");
 		
 		$xmlnsAttribute = $xmlDOM->createAttribute("xmlns");
@@ -155,7 +153,7 @@ abstract class Model{
 		$rootElement->appendChild($schemaLocationAttribute);
 		$xmlDOM->appendChild($rootElement);
 		
-		//Validação do XML usando o ficheiro XSD
+		//Validaï¿½ï¿½o do XML usando o ficheiro XSD
 		$pathToXSD = "../webservice/Schemas/";
 		$pathToXSD .= $class.".xsd";
 		if($xmlDOM->schemaValidate($pathToXSD)) {
@@ -277,6 +275,7 @@ abstract class Model{
 	public function getObjectById($id) {
 		$table = get_class($this);
 		$sql = "SELECT * FROM ".$table. " WHERE id".$table." = ".$id;
+		
 		$rs = $this->dao->execute($sql);
 		if (!$rs->fields) return null;
 		$result = new $table; 
