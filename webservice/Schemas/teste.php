@@ -42,6 +42,7 @@ else {
 	1) Filtro para GelALL
 	2) Inserir clube na noticia apos pesquisa
 	3) XSD para Relação
+		/noticias
 	4) Cabeçalho XML
 	
 */
