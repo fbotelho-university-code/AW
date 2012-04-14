@@ -9,7 +9,7 @@
  require_once ('Util/RestRequest.php'); 
  require_once ('Util/XML/Serializer.php'); 
  require_once ('../model/Local.php');
-  
+ require_once ('../model/Noticia_locais.php');
  
  $options = array(
       "indent"          => "    ",
@@ -17,7 +17,8 @@
       "typeHints"       => false,
       "addDecl"         => true,
       "encoding"        => "UTF-8",
-      XML_SERIALIZER_OPTION_RETURN_RESULT => true, 
+      XML_SERIALIZER_OPTION_RETURN_RESULT => true,
+      XML_SERIALIZER_OPTION_CLASSNAME_AS_TAGNAME => true,  
       "ignoreNull"      => true,
  	);
  	 
@@ -86,8 +87,8 @@
 	}
 	
 	/**
-	 * Listar todas os espaos 
-	 * Representa‹o em XML, JSON que devem conter apontadores para o recurso de cada local.  
+	 * Listar todas os espaï¿½os 
+	 * Representaï¿½ï¿½o em XML, JSON que devem conter apontadores para o recurso de cada local.  
 	 * TODO : filtrar pesquisa. 
 	 **/
 	 
@@ -167,9 +168,9 @@
 	
 	function getLocal($req, $id){
 		//TODO : make it safe to access path_info[0]. Prevent sql injection please. 
-
 		$local = new Local(); 
 		$n = $local->findFirst(array ("idlocal" => $id));
+		$n->noticias = Noticia_Locais::getAllNoticias($id); 
 		if (!$n){
 			RestUtils::sendResponse(404);
 			exit; 

@@ -2,24 +2,24 @@
 
 /* 
  * 
- * / | GET | Listar todas as entidades existentes. Representa‹o em XML/JSON deve separar 
+ * / | GET | Listar todas as entidades existentes. Representaï¿½ï¿½o em XML/JSON deve separar 
  * convenientemente nos dois grupos principais (clubes, integrantes). 
- * Representa‹o contm apontadores para os recursos dentro do servio.
+ * Representaï¿½ï¿½o contï¿½m apontadores para os recursos dentro do serviï¿½o.
  *
  * /clubes |  GET | Listar todos os clubes existentes.
  *
  * /clubes | POST | Adicionar um clube novo. 
- * Conteudo do pedido em XML deve especificar informa‹o necess‡ria e obrigatoria 
- * (e.g., nome oficial do clube).  Retorna o identificador œnico do clube. 
+ * Conteudo do pedido em XML deve especificar informaï¿½ï¿½o necessï¿½ria e obrigatoria 
+ * (e.g., nome oficial do clube).  Retorna o identificador ï¿½nico do clube. 
  * 
- * /clubes/nomeClube , /clubes/idClube |  GET | Representa‹o da informa‹o do Clube em XML/JSON. 
+ * /clubes/nomeClube , /clubes/idClube |  GET | Representaï¿½ï¿½o da informaï¿½ï¿½o do Clube em XML/JSON. 
  *  
  * /integrantes | GET | Listar todos os integrantes existentes.
  * 
  * /integrantes/ |  POST | Adicionar uma entidade nova. Conteudo do pedido em XML. 
  * Retorna o identificador unico de um integrante.
  *  
- * /integrantes/nomeIntegrante  , /integrantes/idIntegrante | GET | Representa‹o de uma entidade em XML/
+ * /integrantes/nomeIntegrante  , /integrantes/idIntegrante | GET | Representaï¿½ï¿½o de uma entidade em XML/
  * 
  */
  
@@ -37,6 +37,7 @@
       "addDecl"         => true,
       "encoding"        => "UTF-8",
       XML_SERIALIZER_OPTION_RETURN_RESULT => true, 
+      XML_SERIALIZER_OPTION_CLASSNAME_AS_TAGNAME => true, 
       "ignoreNull"      => true,
  	); 
  	
@@ -81,8 +82,8 @@
 		
 	/**
 	 * Listar todas as entidades 
-	 * Representa‹o em XML, JSON que devem conter apontadores para o recurso de cada entidade.
-	 * Representa‹o tambem deve saber em grupos de entidade  
+	 * Representaï¿½ï¿½o em XML, JSON que devem conter apontadores para o recurso de cada entidade.
+	 * Representaï¿½ï¿½o tambem deve saber em grupos de entidade  
 	 **/
 	function getRoot($req){
 /*		$clube = new Clube();
@@ -100,7 +101,7 @@
 		$clube->setNome_oficial("O nome oficial do clube");
 		$clube->follow = "url/follow/clubes"; 
 		
-		//TODO : follow local, competiao, etc. 
+		//TODO : follow local, competiï¿½ao, etc. 
 		$integrante = new Integrante();
 		$integrante->setIdclube("um campo numerico identificando univocamente o clube associado actualmente ao integrante"); 
 		$integrante->setIdfuncao("Um campo numerico identificando a funcao do integrante"); 
@@ -171,7 +172,7 @@
 		RestUtils::sendResponse(201, null, $id, 'text'); 
 	}
 	 
-	//TODO - este mŽtodo Ž igual ao postClube. fus‹o. 
+	//TODO - este mï¿½todo ï¿½ igual ao postClube. fusï¿½o. 
 	function postIntegrante($req){
 		$integranteClass = new Integrante(); 
 		$result = $integranteClass->fromXml($req->getData()); 
@@ -192,7 +193,6 @@
 			$id = strtolower($entidade) ==  'clube' ?  $en->getIdClube() : $en->getIdIntegrante(); 
 			$en->follow = "url/" . $entidade . "/" . $id;  
 		}
-
 		
 		if ($req->getHttpAccept() == 'json'){
 			RestUtils::sendResponse(200, null, json_encode($entrys)); 
@@ -210,6 +210,7 @@
 		}else{
 			RestUtils::sendResponse(406); 
 		}
+		
 	}
 	
 	/**
@@ -266,15 +267,20 @@
 	
 	function getDeEntidade($req, $ent, $id){
 		$bdEnt = new $ent(); 
-		$key = (strtolower($ent) == 'clube') ? "idclube" : "idintegrante";   
+		$key = (strtolower($ent) == 'clube') ? "idclube" : "idintegrante";
 		$entry = $bdEnt->findFirst( array($key => $id));
 		if (!$entry){ RestUtils::sendResponse(404);exit; }
-		
+		if (strtolower($ent)== 'clube'){
+			$entry->noticias = Noticia_Has_Clube::getAllNoticias($id);  	
+		}
+		else {
+			$entry->noticias = Noticia_Has_Integrante::getAllNoticias($id);  	
+		}
 		if ($req->getHttpAccept() == 'json'){
 			RestUtils::sendResponse(200, null, json_encode($entry)); 
 		}
 		else if ($req->getHttpAccept() == 'text/xml'){
-			//TODO descricao est‡ cheio. 
+			//TODO descricao estÃ¡ cheio. 
 			global $options; $options["rootName"] = $ent ; $options["defaultTagName"]  = "descricao"; 
 			$xmlSerializer =  new XML_Serializer($options); 
 			$result = $xmlSerializer->serialize($entry);
@@ -310,7 +316,6 @@
     		RestUtils::sendResponse(400, array('unrecognized_req_vars' => $dif));
     		exit; 
     	}
-
     	//TODO - check that path parameters are correct through regulares expressions that validate input types and formats. 
     	//could respond BadRequest also. 
     }

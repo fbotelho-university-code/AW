@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema targetNamespace="localhost" elementFormDefault="qualified"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="localhost">
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="localhost" attributeFormDefault="qualified">
 
 	<xsd:include schemaLocation="clube.xsd"></xsd:include>
 	<xsd:include schemaLocation="integrante.xsd"></xsd:include>
@@ -30,28 +30,28 @@
 			</xsd:element>
 			<xsd:element name="texto" type="xsd:string" minOccurs="0"></xsd:element>
 			<xsd:element name="url" type="xsd:string"></xsd:element>
-			<xsd:element name="locais">
+			<xsd:element name="locais" maxOccurs="1" minOccurs="0">
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element name="local" type="localT" minOccurs="0" maxOccurs="unbounded"></xsd:element>
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			<xsd:element name="datas">
+			<xsd:element name="datas" maxOccurs="1" minOccurs="0">
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element name="data" type="xsd:date" minOccurs="0" maxOccurs="unbounded"></xsd:element>
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			<xsd:element name="clubes">
+			<xsd:element name="clubes" maxOccurs="1" minOccurs="0">
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element name="clube" type="clubeT" minOccurs="0" maxOccurs="unbounded"></xsd:element>
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			<xsd:element name="integrantes">
+			<xsd:element name="integrantes" maxOccurs="1" minOccurs="0">
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element name="integrante" type="integranteT" minOccurs="0" maxOccurs="unbounded"></xsd:element>
@@ -60,13 +60,5 @@
 			</xsd:element>
 		</xsd:sequence>
 	</xsd:complexType>
-	<xsd:element name="noticias">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="noticia" type="noticiaT"
-					minOccurs="1" maxOccurs="unbounded">
-				</xsd:element>
-			</xsd:sequence>
-		</xsd:complexType>
-	</xsd:element>
+	<xsd:element name="noticia" type="noticiaT"></xsd:element>
 </xsd:schema>

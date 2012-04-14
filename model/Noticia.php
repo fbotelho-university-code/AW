@@ -41,11 +41,6 @@ class Noticia extends Model{
 		 
 		//O array resultante. 
 		
-		
-		//Noticia em si:	
-		//$result['noticia'] = $noticiaOb; 
-		
-		
 		foreach (get_object_vars($noticiaOb) as $key=>$value){
 			$result[$key] = $value; 
 		}
@@ -263,7 +258,7 @@ class Noticia extends Model{
 	public function setVisivel($v) {
 		$this->visivel = $v;
 	}
-
+	
 
 }
 

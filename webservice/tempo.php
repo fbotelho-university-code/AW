@@ -7,24 +7,21 @@ require ('../model/includes.php');
 require_once ('Util/RestUtils.php'); 
 require_once ('Util/RestRequest.php'); 
 require_once ('Util/XML/Serializer.php');
-
  
- 
-   $options = array(
+    $options = array(
       "indent"          => "    ",
       "linebreak"       => "\n",
       "typeHints"       => false,
-      "addDecl"         => true,
+      "addDecl"         => true	,
       "encoding"        => "UTF-8",
-      XML_SERIALIZER_OPTION_RETURN_RESULT => true, 
-      "defaultTagName"  => "noticia",
+      XML_SERIALIZER_OPTION_RETURN_RESULT => true,
+      XML_SERIALIZER_OPTION_CLASSNAME_AS_TAGNAME => true,  
       "ignoreNull"      => true,
  	); 
  	
  	$xmlSerializer = new XML_Serializer($options); 
  
-	
- 	 
+
  	  //Dispatching according to the path info. 
 
 
@@ -38,7 +35,8 @@ require_once ('Util/XML/Serializer.php');
  */
  
  //Let us find this variables: 
- $ano ; $mes; $dia;  
+ 
+ $ano = $mes = $dia = '%'; //associativity to the right. 
  //did not give yet? ... ok : 
  
  	/**
@@ -53,7 +51,6 @@ require_once ('Util/XML/Serializer.php');
 		case 0:
 			$ano = $mes = $dia = '%'; //associativity to the right. 
 	  		break;
-	  		
 	  		//Do all at the same time:  
 		case 3 :
 			$dia = (strcmp($path_parameters[3], 'dia') == 0 ) ? '%' : $path_parameters[3];
@@ -65,7 +62,6 @@ require_once ('Util/XML/Serializer.php');
 	  	  
 	$data_needle = $ano . '-' . $mes . '-' . $dia;
 	
-	echo $data_needle; 
 	// We only have one resource :time .
 	
 	/**
@@ -80,9 +76,20 @@ require_once ('Util/XML/Serializer.php');
 	}
 	
 	$n = new Noticia_Data();
-	$results = $n->find(array('tempo' => $data_needle), ' LIKE ' ); 
-	foreach ($results as $r){
-		echo $r->getTempo() . ' </br>'; 
+	//$results = $n->find(array('tempo' => $data_needle), ' LIKE ' );
+	$results = Noticia_Data::getAllNoticias($data_needle);
+
+	global $options; $options["rootName"] ='noticias'; 
+	$xmlSerializer = new XML_Serializer($options);
+	$result = $xmlSerializer->serialize($results);  	
+	if ($req->getHttpAccept() == 'text/xml'){
+	if ($result == true){
+		RestUtils::sendResponse(200, null, $xmlSerializer->getSerializedData(), 'text/xml'); 
+	}else{
+		RestUtils::sendResponse(500); 
 	}
-				
+	}else if ($req->getHttpAccept() == 'json'){
+		RestUtils::sendResponse(200, null, json_encode($results)); 
+	}
+	
 ?>

@@ -66,13 +66,14 @@ require_once "includes.php";
   	public function setIdnoticia($id) {
   		$this->idnoticia = $id;
   	}
-  	
+	
+	
+		  	
   	public static function getAllLocais($locais_noticias){
   		$class_locais = new Local(); 
   		if (!$locais_noticias){
 			return null; 
 		}else{
-			
 			//Apanhar todos os locais atraves das referencias de locais_noticias: 
 			$locais = array(); 
 			foreach ($locais_noticias as $ln){
@@ -82,7 +83,22 @@ require_once "includes.php";
 		}
 		return $locais; 
   	}
-  		
+  	
+  	public static function getAllNoticias($idlocal){
+			$class_this = new Noticia_Locais(); 
+			$rel = $class_this->find(array("idlocal" => $idlocal)); 
+			if (!$rel) return null; 
+			$noticias = array();
+			$clube_class = new Noticia();
+			foreach($rel as $rl){
+				$n =$clube_class->getObjectById($rl->getIdNoticia()); 
+				$n->visivel = null; 
+				$clubes[] = $n; 
+			}
+		return $clubes; 
+	}
   }
+  
+  
   
 ?>

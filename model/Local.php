@@ -99,7 +99,7 @@ class Local extends Model{
 	 * @param String $xml
 	 */
 
-	/*public static function fromXml($xml){
+/*	public static function fromXml($xml){
 		
 		//$xml = simplexml_load_string($xml);
 		//var_dump($xml);
@@ -152,11 +152,7 @@ class Local extends Model{
 			else return null;
 		}catch (Exception $e){
 			return null;
-		}
-	}*/
-
-
-	
+		}*/
 }
 
 ?>

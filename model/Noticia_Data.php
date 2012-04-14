@@ -25,8 +25,6 @@ class Noticia_data extends Model{
 	public function getKeyFields(){
 		return array ('idnoticia', '$data'); 
 	}
-	
-	 
 	/**
 	 * Referencia temporal da noticia.
 	 * @var String - Data presente no texto da not�cia
@@ -44,9 +42,8 @@ class Noticia_data extends Model{
 	 * @param int $idnoticia - Identificador da noticia {@link $idnoticia}
 	 * @param unknown_type $tempo - Referencia Temporal {@link $tempo}
 	 */
-	
-	public function __construct($idnoticia='', $tempo='', $dt = 0){
-		parent::__construct();
+public function __construct($idnoticia='', $tempo='', $dt =''){
+	parent::__construct();
 		$this->idnoticia = $idnoticia;
 		$this->tempo = $tempo;
 		$this->data_interpretada = $dt;
@@ -108,11 +105,40 @@ class Noticia_data extends Model{
 		
 		//Apanhar todos os locais atraves das referencias de locais_noticias: 
 		$datas = array();
-		foreach ($rel as $ln){
-			$data = $ln->getTempo();
-		}
-		return $datas; 
 
+		foreach ($rel as $ln){
+			$datas[] = $ln->getTempo();
+		}
+		
+		return $datas; 
+	}
+	
+	public static function getAllNoticias($data){
+		
+		$class_Noticia_Locais = new Noticia_Data();
+		$rel = $class_Noticia_Locais->find(array("data_interpretada" => $data), ' LIKE ');
+		if (!$rel) return null;
+		
+		//var_dump($rel); 
+		$noticias = array(); 
+		$class_noticia = new Noticia();
+		
+		foreach($rel as $ln){
+			$idnoticia = $ln->getIdNoticia();
+			$bol = true;
+			foreach($noticias as $k){
+				if ($k->getIdNoticia() == $idnoticia) {
+					$bol = false; 
+					break; 
+				}
+			}
+			if ($bol){
+				$n = $class_noticia->getObjectById($idnoticia); 
+				$n->visivel = null; 
+				$noticias[] = $n; 
+			}
+		}
+		return $noticias; 
 	}
  }
 ?>

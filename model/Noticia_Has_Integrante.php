@@ -149,7 +149,22 @@ class Noticia_Has_Integrante extends Model{
 		
 		return $res; 
 	}
+
 	
+		public static function getAllNoticias($idIntegrante){
+			$class_this = new Noticia_Has_Integrante(); 
+			$rel = $class_this->find(array("idintegrante" => $idIntegrante)); 
+			if (!$rel) return null; 
+			$noticias = array();
+			$clube_class = new Noticia();
+			foreach($rel as $rl){
+				$n =$clube_class->getObjectById($rl->getIdNoticia()); 
+				$n->visivel = null; 
+				$clubes[] = $n; 
+			}
+			return $clubes; 
+		}
+		
 		public static function getAllIntegrantes($idnoticia){
 		$class_this = new Noticia_Has_Integrante(); 
 		$rel = $class_this->find(array("idnoticia" => $idnoticia)); 

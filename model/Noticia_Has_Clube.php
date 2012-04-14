@@ -104,6 +104,7 @@ require_once("Model.php");
  		$this->qualificao = $q;
  	}
  	
+ 	 	
  	/**
  	* Retorna o identificador do lexico
  	* @return int {@link $idlexico}
@@ -168,9 +169,21 @@ require_once("Model.php");
 		return $res; 
 	}
 	
-	public static function getAllNews($idClube){
-		
+	
+		public static function getAllNoticias($idIntegrante){
+			$class_this = new Noticia_Has_Clube(); 
+			$rel = $class_this->find(array("idclube" => $idIntegrante)); 
+			if (!$rel) return null; 
+			$noticias = array();
+			$clube_class = new Noticia();
+			foreach($rel as $rl){
+				$n =$clube_class->getObjectById($rl->getIdNoticia()); 
+				$n->visivel = null; 
+				$clubes[] = $n; 
+			}
+			return $clubes; 
 	}
+
 	public static function getAllClubes($idnoticia){
 		$class_this = new Noticia_Has_Clube(); 
 		$rel = $class_this->find(array("idnoticia" => $idnoticia)); 
@@ -184,7 +197,5 @@ require_once("Model.php");
 		}
 		return $clubes; 
 	}
-	
-	
  }	
  ?>

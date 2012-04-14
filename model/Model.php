@@ -184,7 +184,7 @@ abstract class Model{
 	 * Retorna todos os registos da base de dados de uma tabela
 	 * @return Object[] $objects Array de Objectos com atributos da base de dados
 	 */
-	public  function getAll($fields =null){
+	public  function getAll($fields =null, $start = null, $end = null){
 		$table = get_class($this);
 		$sql = "SELECT "; 
 				
@@ -202,7 +202,11 @@ abstract class Model{
 		else{
 			$sql .= ' * '; 
 		}
-		$sql .= ' FROM ' . $table . ';';
+		$sql .= ' FROM ' . $table;
+		
+		if(!(is_null($start) && is_null($end)) {
+			$sql .= " LIMIT ".$start." , ". ($end-$start);
+		}
 		
 		$rs = $this->dao->execute($sql) or die ($this->dao->db->ErrorMsg());
 		$objects = array();
