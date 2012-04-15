@@ -69,7 +69,7 @@ require_once "includes.php";
   		$this->idnoticia = $id;
   	}
 	
-  	public static function getAllLocais($locais_noticias){
+  	public static function getAllLocais($locais_noticias, $baseurl){
   		$class_locais = new Local(); 
   		if (!$locais_noticias){
 			return null; 
@@ -78,6 +78,7 @@ require_once "includes.php";
 			$locais = array(); 
 			foreach ($locais_noticias as $ln){
 				$local = $class_locais->getObjectById($ln->getIdLocal());
+				$local->follow = $baseurl . 'espaco.php/' . $local->idlocal ; 
 				$locais[] = $local;  
 			}
 		}

@@ -9,7 +9,6 @@
 
 
 abstract class Model{
-	
 	private $dao; 
 	
 	/**
@@ -17,6 +16,25 @@ abstract class Model{
 	 *  
 	 */
 	public abstract function checkValidity();
+	
+	public function setCount($start , $count){
+		$start = $count = null;
+		if(isset($_GET["start"])) {
+			$start = $_GET["start"];
+			settype($start, "integer");
+		}
+		if(isset($_GET["count"])) {
+		$count = $_GET["count"];
+		settype($count, "integer");
+	}
+	if(!is_null($start) && is_null($count)) {
+		$count = 10;
+	}
+	if(is_null($start) && !is_null($count)) {
+		$start = 0;
+	}
+	}
+	
 	
 	/**
 	 * Remote DAO from get_object vars
@@ -55,7 +73,9 @@ abstract class Model{
 	 * @return ResultSet $rs Resultado da SQL executada
 	 */
 
-	
+	private function throwException($string){
+		throw new Exception($string); 
+	}
 	/**
 	 * Insere um objeto na base de dados
 	 * @return int $id Identificador do registo inserido
@@ -64,7 +84,9 @@ abstract class Model{
 		$this->dao->connect();
 		$table = get_class($this);
 		$fields = $this->my_get_object_vars();
-		$rs = $this->dao->db->AutoExecute($table, $fields, "INSERT") or die($this->dao->db->ErrorMsg() . "<br>SQL: ".var_dump($fields). " - Table: ".$table);
+		
+		$rs = $this->dao->db->AutoExecute($table, $fields, "INSERT") or $this->throwException($this->dao->db->ErrorMsg() . "<br>CENAS SQL: ".var_export($fields,true). " - Table: ".$table);
+		
 		$id = $this->dao->db->Insert_ID();
 		$this->dao->disconnect();
 		return $id;
@@ -104,7 +126,6 @@ abstract class Model{
 		//Filter the primary key.
 		$sql .= $this->getPrimaryKeyWhere();
 		
-		//echo $sql; 
 		$this->dao->execute($sql);
 	}
 	
@@ -112,11 +133,16 @@ abstract class Model{
 	 * Cria-te um objecto a partir de uma string xml.
 	 */
 	public  function fromXml($xmlString){
+		if ($xmlString == ''){
+			return ; 
+		}
 		$ob =  simplexml_load_string($xmlString);
 		$class = get_class($this);
 	    $return_obj  = new $class; 
 	    $this->setObj(get_object_vars($ob), $return_obj);
-	    return $return_obj;  	
+	    
+	    return $return_obj;
+		
 	}
 	
 	/**
@@ -125,17 +151,17 @@ abstract class Model{
 	 */
 	public function validateXMLbyXSD($xmlString) {
 		
-		// Transformação da String em DOM
+		// Transformaï¿½ï¿½o da String em DOM
 		$xmlDOM = new DOMDocument();
 		$xmlDOM->loadXML($xmlString);
 		
-		//Manipulação do nome da classe chamadora
+		//Manipulaï¿½ï¿½o do nome da classe chamadora
 		$class = get_class($this);
 		if($class == "local") {
 			$class = "espaco";
 		}
 		
-		//Alteração do cabeçalho XML para inclusão das referências para o XSD
+		//Alteraï¿½ï¿½o do cabeï¿½alho XML para inclusï¿½o das referï¿½ncias para o XSD
 		$rootElement = $xmlDOM->getElementsByTagName("clube");
 		
 		$xmlnsAttribute = $xmlDOM->createAttribute("xmlns");
@@ -152,7 +178,7 @@ abstract class Model{
 		$rootElement->appendChild($schemaLocationAttribute);
 		$xmlDOM->appendChild($rootElement);
 		
-		//Validação do XML usando o ficheiro XSD
+		//Validaï¿½ï¿½o do XML usando o ficheiro XSD
 		$pathToXSD = "../webservice/Schemas/";
 		$pathToXSD .= $class.".xsd";
 		if($xmlDOM->schemaValidate($pathToXSD)) {
@@ -184,7 +210,8 @@ abstract class Model{
 	 * Retorna todos os registos da base de dados de uma tabela
 	 * @return Object[] $objects Array de Objectos com atributos da base de dados
 	 */
-	public  function getAll($fields =null, $start = null, $end = null){
+	public  function getAll($fields =null){
+		$this->setCount(&$start,&$end); 
 		$table = get_class($this);
 		$sql = "SELECT "; 
 				
@@ -327,11 +354,10 @@ abstract class Model{
 		if(is_null($start) && !is_null($count)) {
 			$start = 0;
 		}
+	}
 	public function deleteById($noticia){
 			$sql = 'DELETE FROM  ' . get_class($this) . ' WHERE idnoticia =  ' . $noticia;
-			echo $sql; 
 			$this->execute($sql);   
-			
 	}
 	
 	/**

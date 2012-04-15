@@ -40,7 +40,7 @@ class Noticia_data extends Model{
 	var $tempo;
 	
 	/**
-	 * Interpretação da data encontrada na notícia em formato 0000-00-00
+	 * Interpretaï¿½ï¿½o da data encontrada na notï¿½cia em formato 0000-00-00
 	 * @var String
 	 */
 	var $data_interpretada;
@@ -106,7 +106,7 @@ public function __construct($idnoticia='', $tempo='', $dt =''){
 		$this->data_interpretada = $v;
 	}
 			
-	public static function getAllDatas($idNoticia){
+	public static function getAllDatas($idNoticia, $baseurl){
 		$class_Noticia_Locais = new Noticia_data(); 
 		$rel = $class_Noticia_Locais->find(array("idnoticia" =>  $idNoticia));
 		if (!$rel) return null;
@@ -114,43 +114,60 @@ public function __construct($idnoticia='', $tempo='', $dt =''){
 		$datas = array();
 		foreach ($rel as $ln){
 			$n = $ln->getData_interpretada();   
+			if (isset($n) ) {
+				continue; 
+			} 
+			//$n->follow = $baseurl . 'tempo.php/' .  str_replace("-", "/", $n); 
 			$datas[] =  $n; 
 		}
 		return $datas; 
 	}
 	
-	public static function getAllNoticias($data) {
+	function getUrl(){
+ 	$v = parse_url("http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+ 	 
+
+ 	$r = $v['scheme'] . '://' . $v['host'] . $v['path'];
+ 	$pos = strpos($r, 'noticias.php') + strlen('noticias.php');
+ 	
+ 	$val = substr($r, 0, $pos);
+ 	
+ 	return $val;    		
+ 	}
+ 	
+	public static function getAllNoticias($data, $start=null, $end = null) {
 		$class_Noticia_Locais = new Noticia_Data();
-		
 		$rel = $class_Noticia_Locais->find(array("data_interpretada" => $data), ' LIKE ');
 		
 		if (!$rel) return null;
-		
 		$datas = array(); 
-		
 		foreach ($rel as $l){
-			if (array_search($l->data_interpretada, $datas) !== false){
+			if (array_search($l->data_interpretada, $datas) === false){
 				$datas[] = $l->data_interpretada; 
 			}
 		}
 		
 		$result['datas'] = array(); 
 		$class_noticia = new Noticia();
+		
 		foreach($datas as $data){
 			$dataResult = new Data(); 
 			$dataResult->tempo = $data;
-			$dataresult->noticias = array();  
-			$rel = $class_Noticia_Locais->find(array("data_interpretada" => $data)); 
-			if ($rel){
+			$dataResult->noticias = array();  
+			//echo $data; 
+			$rel = $class_Noticia_Locais->find(array("data_interpretada" => $data), ' LIKE ');
+
+			if (isset($rel)){
+
 				foreach ($rel as $l){
-					$n = $class_noticia->getObjectById($l->idnoticia); 
+					$n = $class_noticia->getObjectById($l->idnoticia);
 					$n->visivel = null; 
-					$dataresult->noticias[] = $n;
+					$dataResult->noticias[] = $n;
 				}
 			}
 			$result['datas'][]= $dataResult; 	
 		}
-		var_dump($result); 
+
 		return $result; 
 	}
  }
