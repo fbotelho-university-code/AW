@@ -18,14 +18,11 @@ require_once ('Util/XML/Serializer.php');
       XML_SERIALIZER_OPTION_RETURN_RESULT => true,
       XML_SERIALIZER_OPTION_CLASSNAME_AS_TAGNAME => true,  
       "ignoreNull"      => true,
- 	); 
+ 	);
  	
+ 	 
  	$xmlSerializer = new XML_Serializer($options); 
- 
-
  	  //Dispatching according to the path info. 
-
-
 /**
  * The ideia is to have a path url like this:  /ano/mes/dia
  * We can also have /, /ano, /mes, /dia.
