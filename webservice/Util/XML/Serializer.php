@@ -549,7 +549,7 @@ class XML_Serializer extends PEAR
         XML_SERIALIZER_OPTION_ENCODE_FUNC => null,
 
         // namespace to use
-        XML_SERIALIZER_OPTION_NAMESPACE => null,
+        XML_SERIALIZER_OPTION_NAMESPACE => "localhost",
 
         // type of entities to replace,
         XML_SERIALIZER_OPTION_ENTITIES => XML_SERIALIZER_ENTITIES_XML,
@@ -1166,8 +1166,9 @@ class XML_Serializer extends PEAR
                 $tag['qname'] = $this->options[XML_SERIALIZER_OPTION_NAMESPACE][0]
                     . ':' . $tag['qname'];
             } else {
-                $tag['qname'] = $this->options[XML_SERIALIZER_OPTION_NAMESPACE]
-                    . ':' . $tag['qname'];
+                //$tag['qname'] = $this->options[XML_SERIALIZER_OPTION_NAMESPACE]
+                //    . ':' . $tag['qname'];
+            	//$tag['qname'] = 
             }
         }
 

@@ -17,7 +17,7 @@ abstract class Model{
 	 */
 	public abstract function checkValidity();
 	
-	public function setCount($start , $count){
+	public function setCount(){
 		$start = $count = null;
 		if(isset($_GET["start"])) {
 			$start = $_GET["start"];
@@ -33,6 +33,9 @@ abstract class Model{
 	if(is_null($start) && !is_null($count)) {
 		$start = 0;
 	}
+	$result['start'] = $start; 
+	$result['count'] = $count; 
+	return $result; 
 	}
 	
 	
@@ -228,7 +231,11 @@ abstract class Model{
 	 * @return Object[] $objects Array de Objectos com atributos da base de dados
 	 */
 	public  function getAll($fields =null){
-		$this->setCount(&$start,&$end); 
+		
+		$var = $this->setCount(); 
+		$start = $var['start'];
+		$end = $var['count'];
+		
 		$table = get_class($this);
 		$sql = "SELECT "; 
 				
