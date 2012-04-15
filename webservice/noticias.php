@@ -82,8 +82,11 @@
 	
 		
 	function getAllNews(){
-		$noticia = new Noticia(); 
-		$news =$noticia->getAll(array("idnoticia","data_pub", "assunto", "descricao", "url"));
+		$noticia = new Noticia();
+		
+		include("filter.php");
+		
+		$news =$noticia->getAll(array("idnoticia","data_pub", "assunto", "descricao", "url"), $start, $count);
 		if (!$news){
 			RestUtils::sendResponse(500); 
 		}
@@ -95,13 +98,8 @@
 	}
 	/**
 	 * Listar todas as noticias. 
-<<<<<<< HEAD
-	 * Representa�‹o em XML, JSON que devem conter apontadores para o recurso de cada noticia.  
-	 * Por parametro (search=SEARCH_STRING) Ž possivel especificar palavras chaves de forma a filtrar os resultados (i.e., permitir escolher noticias que referem o clube X.).
-=======
 	 * Representação em XML, JSON que devem conter apontadores para o recurso de cada noticia.  
 	 * Por parametro (search=SEARCH_STRING) é possivel especificar palavras chaves de forma a filtrar os resultados (i.e., permitir escolher noticias que referem o clube X.).
->>>>>>> origin/master
 	 * TODO : filtrar pesquisa. 
 	 **/
 	function getRoot($req){
@@ -266,7 +264,7 @@
     function checkRequest($req){
     //Variables that should be defined for checkRequest. Ideally this would be defined in a abstact/general form. 
  	$methods_supported = array("GET", "POST", "HEAD", "DELETE", "PUT");
- 	$request_vars = array();
+ 	$request_vars = array("start", "count");
  	
     	if (array_search($req->getMethod(), $methods_supported ) === FALSE){
     		//405 -> method not supported 
@@ -275,10 +273,10 @@
     	}
     		
     	//check the request variables that are not understood by this resource
-    	$dif = array_diff($req->getRequestVars(), $request_vars);
+    	$dif = array_diff(array_keys($req->getRequestVars()), $request_vars);
     	//If they are differences then we do not understand the request.  
     	 if ( count($dif)  != 0 ){
-    		RestUtils::sendResponse(400, array('unrecognized_req_vars' => $dif));
+    	 	RestUtils::sendResponse(400, array('unrecognized_req_vars' => $dif));
     		exit; 
     	}
     	    	

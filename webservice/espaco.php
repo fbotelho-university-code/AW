@@ -93,8 +93,9 @@
 	 **/
 	 
 	function getRoot($req){
-		$local = new Local(); 
-		$locais =$local->getAll();
+		$local = new Local();
+		include "filter.php";
+		$locais =$local->getAll(null, $start, $count);
 		if (!$locais) {RestUtils::sendResponse(500); exit; }
 		foreach ($locais as $n){ $n->follow = "myUrl/" . $n->idlocal; }
 			
@@ -200,7 +201,7 @@
     function checkRequest($req){
     //Variables that should be defined for checkRequest. Ideally this would be defined in a abstact/general form. 
  	$methods_supported = array("GET", "POST", "HEAD", "DELETE", "PUT");
- 	$request_vars = array();
+ 	$request_vars = array("start", "count");
  
     	if (array_search($req->getMethod(), $methods_supported ) === FALSE){
     		//405 -> method not supported 
@@ -209,7 +210,7 @@
     	}
     		
     	//check the request variables that are not understood by this resource
-    	$dif = array_diff($req->getRequestVars(), $request_vars);
+    	$dif = array_diff(array_keys($req->getRequestVars()), $request_vars);
     	//If they are differences then we do not understand the request.  
     	 if ( count($dif)  != 0 ){
     		RestUtils::sendResponse(400, array('unrecognized_req_vars' => $dif));

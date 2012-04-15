@@ -204,9 +204,9 @@ abstract class Model{
 		}
 		$sql .= ' FROM ' . $table;
 		
-		if(!(is_null($start) && is_null($end)) {
-			$sql .= " LIMIT ".$start." , ". ($end-$start);
-		}
+		if(!(is_null($start) && is_null($end))) {
+				$sql .= " LIMIT ".$start." , ". $end;
+			}
 		
 		$rs = $this->dao->execute($sql) or die ($this->dao->db->ErrorMsg());
 		$objects = array();
@@ -312,6 +312,21 @@ abstract class Model{
 			}  
 		}
 		return $sql; 
+	}
+	
+	public function getSelectFilter($start,$count) {
+		if(!is_null($start)) {
+			settype($start, "integer");
+		}
+		if(!is_null($count)) {
+			settype($count, "integer");
+		}
+		if(!is_null($start) && is_null($count)) {
+			$count = 10;
+		}
+		if(is_null($start) && !is_null($count)) {
+			$start = 0;
+		}
 	}
 	
 	/**
