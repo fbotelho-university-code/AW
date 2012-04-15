@@ -37,7 +37,7 @@
       XML_SERIALIZER_OPTION_RETURN_RESULT => true,
       XML_SERIALIZER_OPTION_CLASSNAME_AS_TAGNAME => true,  
       "ignoreNull"      => true,
-      "rootAttributes"  => array("xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance", "xsi:schemaLocation" => "localhost Noticias.xsd "),
+      "rootAttributes"  => array("xmlns" => "localhost", "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance", "xsi:schemaLocation" => "localhost Noticias.xsd "),
       "namespace" 		=> "localhost"
  	); 
  	
@@ -139,15 +139,14 @@
 						
 			//RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
 			
-			
 			if($noticia->validateXMLbyXSD($xmlResponse, "Noticias.xsd")) {
 				RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
 			}
 			else {
 				RestUtils::sendResponse(500);
-			}  
 			}
-			else{
+		}
+		else{
 				RestUtils::sendResponse(500); 
 			}
 		}
@@ -159,6 +158,7 @@
 			RestUtils::sendResponse(406); 
 		}
 		RestUtils::sendResponse(400); 
+	}
 	}
 	
 	
@@ -459,5 +459,5 @@
     	//TODO - check that path parameters are correct through regulares expressions that validate input types and formats. 
     	//could respond BadRequest also. 
     }
-	}
+	
 ?>
