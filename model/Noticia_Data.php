@@ -8,9 +8,11 @@
  
  require_once("Model.php");
 
-class data {
-	
-}  
+	 
+class Data {
+		var $tempo; 
+		var $noticias;
+}
 
 
 
@@ -105,7 +107,7 @@ public function __construct($idnoticia='', $tempo='', $dt =''){
 	public function setData_interpretada($v) {
 		$this->data_interpretada = $v;
 	}
-	
+			
 	public static function getAllDatas($idNoticia){
 		$class_Noticia_Locais = new Noticia_data(); 
 		$rel = $class_Noticia_Locais->find(array("idnoticia" =>  $idNoticia));
@@ -113,39 +115,45 @@ public function __construct($idnoticia='', $tempo='', $dt =''){
 		//Apanhar todos os locais atraves das referencias de locais_noticias: 
 		$datas = array();
 		foreach ($rel as $ln){
-			//$data = new data(); 
-			//$data->data =
 			$n = $ln->getData_interpretada();   
 			$datas[] =  $n; 
 		}
 		return $datas; 
 	}
 	
-	public static function getAllNoticias($data){
+	public static function getAllNoticias($data) {
 		$class_Noticia_Locais = new Noticia_Data();
+		
 		$rel = $class_Noticia_Locais->find(array("data_interpretada" => $data), ' LIKE ');
+		
 		if (!$rel) return null;
 		
-		//var_dump($rel); 
-		$noticias = array(); 
-		$class_noticia = new Noticia();
+		$datas = array(); 
 		
-		foreach($rel as $ln){
-			$idnoticia = $ln->getIdNoticia();
-			$bol = true;
-			foreach($noticias as $k){
-				if ($k->getIdNoticia() == $idnoticia) {
-					$bol = false; 
-					break; 
-				}
-			}
-			if ($bol){
-				$n = $class_noticia->getObjectById($idnoticia); 
-				$n->visivel = null; 
-				$noticias[] = $n; 
+		foreach ($rel as $l){
+			if (array_search($l->data_interpretada, $datas) !== false){
+				$datas[] = $l->data_interpretada; 
 			}
 		}
-		return $noticias; 
+		
+		$result['datas'] = array(); 
+		$class_noticia = new Noticia();
+		foreach($datas as $data){
+			$dataResult = new Data(); 
+			$dataResult->tempo = $data;
+			$dataresult->noticias = array();  
+			$rel = $class_Noticia_Locais->find(array("data_interpretada" => $data)); 
+			if ($rel){
+				foreach ($rel as $l){
+					$n = $class_noticia->getObjectById($l->idnoticia); 
+					$n->visivel = null; 
+					$dataresult->noticias[] = $n;
+				}
+			}
+			$result['datas'][]= $dataResult; 	
+		}
+		var_dump($result); 
+		return $result; 
 	}
  }
 ?>

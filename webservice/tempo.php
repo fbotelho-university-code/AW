@@ -3,11 +3,12 @@
  * Created on Mar 29, 2012
  * No class, top-down flux ...
 */
-require ('../model/includes.php'); 
+require_once ('../model/includes.php'); 
 require_once ('Util/RestUtils.php'); 
 require_once ('Util/RestRequest.php'); 
 require_once ('Util/XML/Serializer.php');
  
+
     $options = array(
       "indent"          => "    ",
       "linebreak"       => "\n",
@@ -59,9 +60,9 @@ require_once ('Util/XML/Serializer.php');
 	  	case 1:
 	  		$ano = (strcmp($path_parameters[1], 'ano') == 0 ) ? '%' : $path_parameters[1];
 	  }
-	  	  
+	var_dump($path_parameters); 	
 	$data_needle = $ano . '-' . $mes . '-' . $dia;
-	
+	var_dump($data_needle); 
 	// We only have one resource :time .
 	
 	/**
@@ -91,5 +92,6 @@ require_once ('Util/XML/Serializer.php');
 	}else if ($req->getHttpAccept() == 'json'){
 		RestUtils::sendResponse(200, null, json_encode($results)); 
 	}
+	
 	
 ?>
