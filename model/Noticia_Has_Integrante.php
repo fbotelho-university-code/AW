@@ -157,11 +157,13 @@ class Noticia_Has_Integrante extends Model{
 			if (!$rel) return null; 
 			$noticias = array();
 			$clube_class = new Noticia();
+			
 			foreach($rel as $rl){
 				$n =$clube_class->getObjectById($rl->getIdNoticia()); 
 				$n->visivel = null; 
 				$clubes[] = $n; 
 			}
+			
 			return $clubes; 
 		}
 		
@@ -172,7 +174,9 @@ class Noticia_Has_Integrante extends Model{
 		$clubes = array();
 		$clube_class = new Integrante();
 		foreach($rel as $rl){
-			$clubes[] = $clube_class->getObjectById($rl->getIdIntegrante()); 
+			$r = $clube_class->getObjectById($rl->getIdIntegrante());
+			$r->qualificacao = $rl->qualificacao;    
+			$clubes[] =  $r; 
 		}
 		return $clubes; 
 	}

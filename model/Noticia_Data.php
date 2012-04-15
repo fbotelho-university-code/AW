@@ -7,7 +7,11 @@
  */
  
  require_once("Model.php");
-  
+
+class data {
+	
+}  
+
 /**
 * Classe que representa as refer�ncias temporais das noticias
 */
@@ -18,7 +22,9 @@ class Noticia_data extends Model{
 	*/
 	var $idnoticia; 
  
+ 	
  	public function checkValidity(){
+ 		
 		return true; 
 	}
 	
@@ -102,19 +108,18 @@ public function __construct($idnoticia='', $tempo='', $dt =''){
 		$class_Noticia_Locais = new Noticia_data(); 
 		$rel = $class_Noticia_Locais->find(array("idnoticia" =>  $idNoticia));
 		if (!$rel) return null;
-		
 		//Apanhar todos os locais atraves das referencias de locais_noticias: 
 		$datas = array();
-
 		foreach ($rel as $ln){
-			$datas[] = $ln->getTempo();
+			//$data = new data(); 
+			//$data->data =
+			$n = $ln->getData_interpretada();   
+			$datas[] =  $n; 
 		}
-		
 		return $datas; 
 	}
 	
 	public static function getAllNoticias($data){
-		
 		$class_Noticia_Locais = new Noticia_Data();
 		$rel = $class_Noticia_Locais->find(array("data_interpretada" => $data), ' LIKE ');
 		if (!$rel) return null;

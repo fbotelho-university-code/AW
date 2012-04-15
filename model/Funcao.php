@@ -15,15 +15,15 @@ class Funcao extends Model{
 	 public function getKeyFields(){
 		return array ('idfuncao'); 
 	}
-	
+		
 	/**
-	 * Identificador da Função
+	 * Identificador da Funï¿½ï¿½o
 	 * @var int
 	 */
 	var $idfuncao;
 	
 	/**
-	 * Nome da Função
+	 * Nome da Funï¿½ï¿½o
 	 * @var String
 	 */
 	var $funcao;
@@ -37,7 +37,7 @@ class Funcao extends Model{
 	}
 	
 	/**
-	* Retorna o identificador da função
+	* Retorna o identificador da funï¿½ï¿½o
 	* @return int {@link $idfuncao}
 	*/
 	function getIdfuncao() {
@@ -45,7 +45,7 @@ class Funcao extends Model{
 	}
 	
 	/**
-	* Altera o valor do identificador da função {@link $idfuncao}
+	* Altera o valor do identificador da funï¿½ï¿½o {@link $idfuncao}
 	* @param int $id
 	*/
 	function setIdFuncao($id) {
@@ -53,7 +53,7 @@ class Funcao extends Model{
 	}
 	
 	/**
-	* Retorna o nome da função
+	* Retorna o nome da funï¿½ï¿½o
 	* @return String {@link $funcao}
 	*/
 	function getFuncao() {

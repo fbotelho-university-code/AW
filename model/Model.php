@@ -104,7 +104,7 @@ abstract class Model{
 		//Filter the primary key.
 		$sql .= $this->getPrimaryKeyWhere();
 		
-		echo $sql; 
+		//echo $sql; 
 		$this->dao->execute($sql);
 	}
 	
@@ -327,6 +327,11 @@ abstract class Model{
 		if(is_null($start) && !is_null($count)) {
 			$start = 0;
 		}
+	public function deleteById($noticia){
+			$sql = 'DELETE FROM  ' . get_class($this) . ' WHERE idnoticia =  ' . $noticia;
+			echo $sql; 
+			$this->execute($sql);   
+			
 	}
 	
 	/**

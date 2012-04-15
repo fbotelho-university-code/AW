@@ -41,6 +41,7 @@ require_once("Model.php");
  	 */
  	var $idlexico; 
 	
+	
  	/**
  	 * Construtor da classe
  	 * @param int $idNoticia
@@ -193,7 +194,10 @@ require_once("Model.php");
 		$clube_class = new Clube(); 
 		
 		foreach($rel as $rl){
-			$clubes[] = $clube_class->getObjectById($rl->getIdClube()); 
+			$c = $clube_class->getObjectById($rl->getIdClube());
+			//$c->idlexico = $rl->idlexico; 
+			$c->qualificacao = $rl->qualificacao; 
+			$clubes[] = $c; 
 		}
 		return $clubes; 
 	}
