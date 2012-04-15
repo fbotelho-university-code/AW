@@ -47,6 +47,7 @@ class Noticia extends Model{
 		
 		//locais : 
 		$class_locais_rel = new Noticia_Locais();
+		
 		//TODO - what if idNoticia nao existe nas relações. 
 		$locais_noticias = $class_locais_rel->find(array("idnoticia" => $idNoticia));
 		
@@ -64,7 +65,7 @@ class Noticia extends Model{
 	 */
 		public static function fetchTexto($url){
 			    Encoding::fixUTF8(Encoding::toUTF8(addslashes($url))); 
-    }
+    	}
 	 
 	/**
 	 * Identificador da noticia
@@ -256,8 +257,6 @@ class Noticia extends Model{
 	public function setVisivel($v) {
 		$this->visivel = $v;
 	}
-	
-
 }
 
 ?>

@@ -31,8 +31,9 @@ class DAO extends ADOConnection {
 	 * Palavra-passe para acesso � Base de Dados
 	 * @var String
 	 */
+	 
 	private $mypassword = "pcdamf06";
-	
+		
 	/**
 	 * Nome da Base de Dados a ser utilizada
 	 * @var String

@@ -26,8 +26,8 @@ class Noticia_data extends Model{
 	*/
 	var $idnoticia; 
  
- 	
- 	public function checkValidity(){
+ 
+  	public function checkValidity(){
  		
 		return true; 
 	}
