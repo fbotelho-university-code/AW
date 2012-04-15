@@ -186,7 +186,8 @@
 	
 	function getEntidade($req, $entidade){
 		$bdEnt = new $entidade(); 
-		$entrys = $bdEnt->getAll(); 
+		include "filter.php";
+		$entrys = $bdEnt->getAll(null, $start, $count); 
 		if (!$entrys){ RestUtils::sendResponse(404);exit; }
 		
 		foreach ($entrys as $en){
@@ -304,16 +305,16 @@
     function checkRequest($req){
     //Variables that should be defined for checkRequest. Ideally this would be defined in a abstact/general form. 
  	$methods_supported = array("GET", "POST", "HEAD", "DELETE", "PUT");
- 	$request_vars = array();
- 	
+ 	$request_vars = array("start", "count");
+ 
      	if (array_search($req->getMethod(), $methods_supported ) === FALSE){
-    		//405 -> method not supported 
+   		//405 -> method not supported 
     		RestUtils::sendResponse(405, array('allow' => $methods_supported));
     		exit;  
     	}
     	
     	//check the request variables that are not understood by this resource
-    	$dif = array_diff($req->getRequestVars(), $request_vars);
+    	$dif = array_diff(array_keys($req->getRequestVars()), $request_vars);
     	//If they are differences then we do not understand the request.  
     	 if ( count($dif)  != 0 ){
     		RestUtils::sendResponse(400, array('unrecognized_req_vars' => $dif));

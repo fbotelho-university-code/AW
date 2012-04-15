@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<clube xmlns='http://localhost/AW-3/workspace/Schemas/clube.xsd' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://localhost/AW-3/workspace/Schemas/clube.xsd clube.xsd '>
-  <idclube>1</idclube>
-  <idlocal>1</idlocal>
-  <idcompeticao>1</idcompeticao>
-  <nome_clube>Bahia</nome_clube>
-  <nome_oficial>Esporte Clube Bahia</nome_oficial>
-</clube>

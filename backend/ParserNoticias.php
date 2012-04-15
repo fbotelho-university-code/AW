@@ -18,9 +18,9 @@ class ParserNoticias {
 			$noticia->setIdnoticia($idnoticia);
 			
 			// Caracterização Semântica da Notícia
-			//ParserNoticias::findRefEspacial($noticia);
+			ParserNoticias::findRefEspacial($noticia);
 		    ParserNoticias::findRefTemporal($noticia); 
-			//ParserNoticias::findRefClubesAndIntegrantes($noticia); 
+			ParserNoticias::findRefClubesAndIntegrantes($noticia); 
 		}
 		
 		private static function findRefEspacial($noticia){
@@ -111,6 +111,8 @@ class ParserNoticias {
 			);
 			
 			// insere data da publicação na tabela data_noticia
+			$rel  = new Noticia_Data($noticia->getIdnoticia(), $noticia->getData_pub(), $noticia->getData_pub());
+			$rel->add();
 				
 			$matches = array();
 			for($i=0;$i<count($regexes);$i++){

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datas xmlns="localhost" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="localhost datas.xsd ">
+  <data>
+    <tempo>2001-04-30</tempo>
+    <noticias>
+      <noticia>
+        <idnoticia>0</idnoticia>
+        <idfonte>0</idfonte>
+        <data_pub>2001-12-31T12:00:00</data_pub>
+        <assunto>assunto</assunto>
+        <descricao>descricao</descricao>
+        <texto>texto</texto>
+        <url>url</url>
+        <locais>
+          <local>
+            <idlocal>0</idlocal>
+            <nome_local>nome_local</nome_local>
+            <coordenadas>coordenadas</coordenadas>
+          </local>
+        </locais>
+        <datas>
+          <data>2001-01-01</data>
+        </datas>
+        <clubes>
+          <clube>
+            <idclube>0</idclube>
+            <idlocal>0</idlocal>
+            <idcompeticao>0</idcompeticao>
+            <nome_clube>nome_clube</nome_clube>
+            <nome_oficial>nome_oficial</nome_oficial>
+          </clube>
+        </clubes>
+        <integrantes>
+          <integrante>
+            <idintegrante>0</idintegrante>
+            <idclube>0</idclube>
+            <idfuncao>0</idfuncao>
+            <nome_integrante>nome_integrante</nome_integrante>
+          </integrante>
+        </integrantes>
+      </noticia>
+    </noticias>
+  </data>
+</datas>

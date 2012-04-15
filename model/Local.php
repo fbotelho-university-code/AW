@@ -15,7 +15,7 @@ class Local extends Model{
 		)
 	    return true; 
 	}
-	
+	 
 	public function getKeyFields(){
 		return array ('idlocal'); 
 	}
@@ -99,7 +99,6 @@ class Local extends Model{
 	 */
 
 /*	public static function fromXml($xml){
-
 		
 		//$xml = simplexml_load_string($xml);
 		//var_dump($xml);
@@ -152,8 +151,7 @@ class Local extends Model{
 			else return null;
 		}catch (Exception $e){
 			return null;
-		}
-	}*/
+		}*/
 }
 
 ?>

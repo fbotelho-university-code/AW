@@ -1,0 +1,167 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+		<title> Projecto de AW</title>
+		</head><body><h2> Pesquisa de notícias de futebol</h2>
+		
+			<script language="javascript">
+			
+			    var xmlHttp = createXmlHttpRequestObject(); //Criação do objecto utilizado para comunicar com o servidor
+				
+				function createXmlHttpRequestObject()
+				{
+					var xmlHttp;
+				
+					try {
+						//IE7 ou mais recente ou outros browsers actuais
+						xmlHttp = new XMLHttpRequest();
+					} catch(e) {
+						//IE6 ou mais antigo
+						try {
+							xmlHttp = new ActiveXObject("Microsoft.XMLHttp");
+						} catch(e) {}
+					}
+					//retorna o objecto criado ou apresenta a mensagem de erro
+					if (!xmlHttp)
+						alert ("Erro ao criar objecto XMLHttpRequest.");
+					else
+					return xmlHttp;
+				}
+			
+			//ler um ficheiro do servidor
+			function processa(op)
+			{
+				var data = "http://localhost/AW-3/webservice/";
+				//só continua se xmlHttp não é void
+				if (xmlHttp)
+				{
+					xmlHttp.onreadystatechange= function trataResposta() {
+						if (xmlHttp.readyState==4) {
+							handleRequestStateChange(op);
+						}
+					}
+					//tenta ligar ao servidor
+					try
+					
+					{
+						//inicia a leitura de um ficheiro do servidor
+														
+								switch(op) {
+									case "noticia":
+										data += "noticias.php/"+document.forms[0].Texto1.value
+										break
+									case "clube":
+										data += "entidades.php/clube/"+document.forms[0].Texto2.value
+										break
+									case "integrante":
+										data += "entidades.php/integrante/"+document.forms[0].Texto3.value
+										break
+									case "local":
+										data += "espaco.php/"+document.forms[0].Texto4.value
+										break
+								}
+					
+						xmlHttp.open("GET",data,true); //Abre um Request ao servidor
+						//define o nome do event handler que deve ser chamado quando o valor da propriedade readyState muda
+						
+						xmlHttp.send(null);
+						//Para o browser obter os dados do URL configurado
+					}
+					//apresenta o erro em caso de falha
+					catch (e)
+					{
+						alert("Não é possível comunicar com o servidor:\n");
+					}
+				}
+			}
+			
+			//Função chamada quando muda o estado do HTTP Request
+			function handleRequestStateChange(op)
+			{
+				
+				if (xmlHttp.status==200)
+					{
+						try
+						{
+						//Utilizar a resposta do servidor
+						handleServerResponse(op);
+						}
+						catch (e)
+						{
+						//Apresentar mensagem de erro
+						alert("Erro ao ler a resposta para " + op +": " + e.toString());
+						}
+					}
+					else
+					{
+						//Apresenta a mensagem de estado
+						alert("Houve um problema na obtenção dos dados:\n" + xmlHttp.statusText);
+					}
+			}
+		
+		
+		//Função que trata a resposta do servidor
+		function handleServerResponse(op)
+		{
+			//Ler a mensagem do servidor
+			var xmlResponse=xmlHttp.responseXML;
+			//Obter os elementos do XML
+			xmlRoot=xmlResponse.documentElement;
+			//Obter arrays com assunto e url das noticias
+			
+						if(op == "noticia")//noticias
+							{
+								param1Array=xmlRoot.getElementsByTagName("assunto");
+								//param2Array=xmlRoot.getElementsByTagName("url");
+							} 
+					
+						if(op == "clube")//clube
+							{
+								param1Array=xmlRoot.getElementsByTagName("nome_clube");
+								//param2Array=xmlRoot.getElementsByTagName("nome_oficial");
+							} 
+							
+							if(op == "integrante")//Integrante
+							{
+								param1Array=xmlRoot.getElementsByTagName("nome_integrante");
+								//param2Array=xmlRoot.getElementsByTagName("nome_integrante");
+							} 
+							
+							if(op == "local")//Local
+							{
+								param1Array=xmlRoot.getElementsByTagName("nome_local");
+								//param2Array=xmlRoot.getElementsByTagName("coordenadas");
+							} 
+	
+			
+			//Gerar o output HTML
+			var html="";
+			myDiv=document.getElementById('myDivElement');
+			// iterar pelos arrays e criar a estrutura HTML
+			for (var i=0;i<param1Array.length;i++)
+				html += param1Array.item(i).firstChild.data + "<br/>";
+				myDiv.innerHTML = html;
+		}
+			
+			</script>
+	
+	
+	
+			<form>
+				Pesquisar por ID: <br>
+				<input name="Texto1" id="Texto1" type="text">
+				<input value="Notícias" onclick="processa('noticia')" type="button"><br>
+				
+				<input name="Texto2" id="Texto2" type="text">
+				<input value="Clube" onclick="processa('clube')" type="button"><br>
+				
+				<input name="Texto3" id="Texto3" type="text">
+				<input value="Integrante" onclick="processa('integrante')" type="button"><br>
+				
+				<input value="4" name="Texto4" id="Texto4" type="text">
+				<input value="Local" onclick="processa('local')" type="button">
+			</form>
+		
+		<div id="myDivElement">Ilha das Flores<br></div>
+		
+	
+</body></html>

@@ -40,7 +40,7 @@ class Noticia_data extends Model{
 	var $tempo;
 	
 	/**
-	 * Interpretaï¿½ï¿½o da data encontrada na notï¿½cia em formato 0000-00-00
+	 * Interpretação da data encontrada na notícia em formato 0000-00-00
 	 * @var String
 	 */
 	var $data_interpretada;
@@ -50,9 +50,8 @@ class Noticia_data extends Model{
 	 * @param int $idnoticia - Identificador da noticia {@link $idnoticia}
 	 * @param unknown_type $tempo - Referencia Temporal {@link $tempo}
 	 */
-	 
-	public function __construct($idnoticia='', $tempo='', $dt =''){
-		parent::__construct();
+public function __construct($idnoticia='', $tempo='', $dt =''){
+	parent::__construct();
 		$this->idnoticia = $idnoticia;
 		$this->tempo = $tempo;
 		$this->data_interpretada = $dt;

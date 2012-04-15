@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema targetNamespace="http://localhost/AW-3/workspace/Schemas/clube.xsd" elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://localhost/AW-3/workspace/Schemas/clube.xsd">
+<xsd:schema targetNamespace="localhost" elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="localhost">
 
-    <xsd:element name="clube" type="clubeT"></xsd:element>
     <xsd:complexType name="clubeT">
     	<xsd:sequence>
     		<xsd:element name="idclube" type="xsd:int" minOccurs="0"></xsd:element>
@@ -21,8 +20,9 @@
     				</xsd:restriction>
     			</xsd:simpleType>
     		</xsd:element>
+    		<xsd:element name="qualificacao" type="xsd:int" maxOccurs="1" minOccurs="0"></xsd:element>
     	</xsd:sequence>
     </xsd:complexType>
 
-    
+    <xsd:element name="clube" type="clubeT"></xsd:element>
 </xsd:schema>

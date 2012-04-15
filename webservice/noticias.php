@@ -7,21 +7,12 @@
  require_once ('./Util.php');    
   
  /*
-<<<<<<< HEAD
   * Documenta�‹o dos mŽtodos suportados neste url: 
 	/ | GET | Listar todas as noticias. Representa�‹o em XML, JSON e XHTML que devem conter apontadores para o recurso de cada noticia.  Por parametro Ž possivel especificar palavras chaves de forma a filtrar os resultados (i.e., permitir escolher noticias que referem o clube X.).
 
 	/ | POST |  Coloca�‹o de  uma noticia nova. O corpo do pedido deve  conter a descri�‹o da noticia em XML . Ser‡ retornado o identificador œnico da noticia decidido pelo servi�o.
 
-	/idNoticia | GET | Retorna o conteudo e informa�‹o relativa a uma noticia, incluindo rela�›es como referencias temporais, referencias espaciais, clubes , etc., A representa�‹o ser‡ em XML, JSON e XHTML. 
-=======
-  * Documenta��o dos m�todos suportados neste url: 
-	/ | GET | Listar todas as noticias. Representa��o em XML, JSON e XHTML que devem conter apontadores para o recurso de cada noticia.  Por parametro � possivel especificar palavras chaves de forma a filtrar os resultados (i.e., permitir escolher noticias que referem o clube X.).
-
-	/ | POST |  Coloca��o de  uma noticia nova. O corpo do pedido deve  conter a descri��o da noticia em XML . Ser� retornado o identificador �nico da noticia decidido pelo servi�o.
-
-	/idNoticia | GET | Retorna o conteudo e informa��o relativa a uma noticia, incluindo rela��es como referencias temporais, referencias espaciais, clubes , etc., A representa��o ser� em XML, JSON e XHTML. 
->>>>>>> origin/master
+	/idNoticia | GET | Retorna o conteudo e informa�‹o relativa a uma noticia, incluindo rela�›es como referencias temporais, referencias espaciais, clubes , etc., A representa�‹o ser‡ em XML, JSON e XHTML.  
  **/
  
 	
@@ -90,8 +81,11 @@
 	}
 
 	function getAllNews(){
-		$noticia = new Noticia(); 
-		$news =$noticia->getAll(array("idnoticia","data_pub", "assunto", "descricao", "url"));
+		$noticia = new Noticia();
+		
+		include("filter.php");
+		
+		$news =$noticia->getAll(array("idnoticia","data_pub", "assunto", "descricao", "url"), $start, $count);
 		if (!$news){
 			RestUtils::sendResponse(500); 
 		}
@@ -103,13 +97,8 @@
 	}
 	/**
 	 * Listar todas as noticias. 
-<<<<<<< HEAD
-	 * Representa�‹o em XML, JSON que devem conter apontadores para o recurso de cada noticia.  
-	 * Por parametro (search=SEARCH_STRING) Ž possivel especificar palavras chaves de forma a filtrar os resultados (i.e., permitir escolher noticias que referem o clube X.).
-=======
 	 * Representação em XML, JSON que devem conter apontadores para o recurso de cada noticia.  
 	 * Por parametro (search=SEARCH_STRING) é possivel especificar palavras chaves de forma a filtrar os resultados (i.e., permitir escolher noticias que referem o clube X.).
->>>>>>> origin/master
 	 * TODO : filtrar pesquisa. 
 	 **/
 	function getRoot($req){
@@ -389,7 +378,7 @@
     function checkRequest($req){
     //Variables that should be defined for checkRequest. Ideally this would be defined in a abstact/general form. 
  	$methods_supported = array("GET", "POST", "HEAD", "DELETE", "PUT");
- 	$request_vars = array();
+ 	$request_vars = array("start", "count");
  	
     	if (array_search($req->getMethod(), $methods_supported ) === FALSE){
     		//405 -> method not supported 
@@ -398,10 +387,10 @@
     	}
     		
     	//check the request variables that are not understood by this resource
-    	$dif = array_diff($req->getRequestVars(), $request_vars);
+    	$dif = array_diff(array_keys($req->getRequestVars()), $request_vars);
     	//If they are differences then we do not understand the request.  
     	 if ( count($dif)  != 0 ){
-    		RestUtils::sendResponse(400, array('unrecognized_req_vars' => $dif));
+    	 	RestUtils::sendResponse(400, array('unrecognized_req_vars' => $dif));
     		exit; 
     	}
     	    	

@@ -1,14 +1,16 @@
 <?php
 
 $xml = new DOMDocument();
-$xml->load('./espaco.xml');
+@$xml->load('./datas.xml');
+@$validate = $xml->schemaValidate('./datas.xsd');
 
-if (!$xml->schemaValidate('./espaco.xsd')) {
-   echo "invalid<p/>";
+if ($validate) {
+   echo "valid<p/>";
 }
 else {
-   echo "validated<p/>";
+   echo "invalid<p/>";
 }
+
 
 /**
 	1) Schema para incluir dependencias no XML
@@ -42,6 +44,7 @@ else {
 	1) Filtro para GelALL
 	2) Inserir clube na noticia apos pesquisa
 	3) XSD para Relação
+		/noticias
 	4) Cabeçalho XML
 	
 */

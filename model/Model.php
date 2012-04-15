@@ -82,7 +82,6 @@ abstract class Model{
 		$sql .= $this->createWhereClause($fields) . ';';
 		$this->dao->execute($sql);
 	}
-	
 	public function execute($m){ $this->dao->execute($m); }
 
 /**
@@ -126,17 +125,17 @@ abstract class Model{
 	 */
 	public function validateXMLbyXSD($xmlString) {
 		
-		// Transformaï¿½ï¿½o da String em DOM
+		// Transformação da String em DOM
 		$xmlDOM = new DOMDocument();
 		$xmlDOM->loadXML($xmlString);
 		
-		//Manipulaï¿½ï¿½o do nome da classe chamadora
+		//Manipulação do nome da classe chamadora
 		$class = get_class($this);
 		if($class == "local") {
 			$class = "espaco";
 		}
 		
-		//Alteraï¿½ï¿½o do cabeï¿½alho XML para inclusï¿½o das referï¿½ncias para o XSD
+		//Alteração do cabeçalho XML para inclusão das referências para o XSD
 		$rootElement = $xmlDOM->getElementsByTagName("clube");
 		
 		$xmlnsAttribute = $xmlDOM->createAttribute("xmlns");
@@ -153,7 +152,7 @@ abstract class Model{
 		$rootElement->appendChild($schemaLocationAttribute);
 		$xmlDOM->appendChild($rootElement);
 		
-		//Validaï¿½ï¿½o do XML usando o ficheiro XSD
+		//Validação do XML usando o ficheiro XSD
 		$pathToXSD = "../webservice/Schemas/";
 		$pathToXSD .= $class.".xsd";
 		if($xmlDOM->schemaValidate($pathToXSD)) {
@@ -185,7 +184,7 @@ abstract class Model{
 	 * Retorna todos os registos da base de dados de uma tabela
 	 * @return Object[] $objects Array de Objectos com atributos da base de dados
 	 */
-	public  function getAll($fields =null){
+	public  function getAll($fields =null, $start = null, $end = null){
 		$table = get_class($this);
 		$sql = "SELECT "; 
 				
@@ -203,7 +202,11 @@ abstract class Model{
 		else{
 			$sql .= ' * '; 
 		}
-		$sql .= ' FROM ' . $table . ';';
+		$sql .= ' FROM ' . $table;
+		
+		if(!(is_null($start) && is_null($end))) {
+				$sql .= " LIMIT ".$start." , ". $end;
+			}
 		
 		$rs = $this->dao->execute($sql) or die ($this->dao->db->ErrorMsg());
 		$objects = array();
@@ -275,7 +278,6 @@ abstract class Model{
 	public function getObjectById($id) {
 		$table = get_class($this);
 		$sql = "SELECT * FROM ".$table. " WHERE id".$table." = ".$id;
-		
 		$rs = $this->dao->execute($sql);
 		if (!$rs->fields) return null;
 		$result = new $table; 
@@ -312,6 +314,19 @@ abstract class Model{
 		return $sql; 
 	}
 	
+	public function getSelectFilter($start,$count) {
+		if(!is_null($start)) {
+			settype($start, "integer");
+		}
+		if(!is_null($count)) {
+			settype($count, "integer");
+		}
+		if(!is_null($start) && is_null($count)) {
+			$count = 10;
+		}
+		if(is_null($start) && !is_null($count)) {
+			$start = 0;
+		}
 	public function deleteById($noticia){
 			$sql = 'DELETE FROM  ' . get_class($this) . ' WHERE idnoticia =  ' . $noticia;
 			echo $sql; 
