@@ -23,6 +23,7 @@
  * 
  */
  
+ 
  require_once ('Util/RestUtils.php'); 
  require_once ('Util/RestRequest.php'); 
  require_once ('Util/XML/Serializer.php'); 
@@ -30,6 +31,14 @@
  require_once ('../model/Integrante.php');
  require_once ('../model/Clube.php'); 
  
+ 	function getUrl(){
+ 		$v = parse_url("http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+ 		
+ 		$r = $v['scheme'] . '://' . $v['host'] . $v['path'];
+ 		$pos = strpos($r, 'entidades.php') ;
+ 		$val = substr($r, 0, $pos );
+ 		return $val; 
+ 	}
  	$options = array(
       "indent"          => "    ",
       "linebreak"       => "\n",
@@ -134,31 +143,30 @@
  	*/
 	function processEntidade($req){
 		$entidade = $req->getPathInfo(); $entidade = $entidade[1];
-		
 		if (strcmp($entidade,'clube') != 0 && strcmp($entidade, 'integrante') !=0 ){
 			RestUtils::sendResponse(404); 
 		}
 		
 		switch($req->getMethod()){
-			case 'GET': 
+			case 'GET':
+			 
 				getEntidade($req, $entidade);
-			break; 
+			break;
 			case 'POST':
 			$foo = 'post' . $entidade; $foo($req, $entidade);
 			break;
 			case 'HEAD':
-			
 			default: 
 			 RestUtils::sendResponse(405, array('allow' =>"POST GET"));
 			 exit;  
 		}
+		
  }
 
 	function postClube($req){
 		$clubeClass = new Clube(); 
-		$result = $clubeClass->fromXml($req->getData()); 
+		$result = $clubeClass->fromXml($req->getData());
 		$id = $result->add(); 
-		
 		if (!$id){
 			RestUtils::sendResponse(500);
 			exit;  
@@ -179,14 +187,19 @@
 	}
 	
 	function getEntidade($req, $entidade){
-		$bdEnt = new $entidade(); 
-		$entrys = $bdEnt->getAll(null); 
-		if (!$entrys){ RestUtils::sendResponse(404);exit; }
-		
+		$bdEnt = new $entidade();
+		 
+		try{
+			$entrys = $bdEnt->getAll(null);
+		}catch(Exception $e){
+			RestUtils::sendResponse(500); 		
+		}
+		 
 		foreach ($entrys as $en){
 			$id = strtolower($entidade) ==  'clube' ?  $en->getIdClube() : $en->getIdIntegrante(); 
-			$en->follow = "url/" . $entidade . "/" . $id;  
+			$en->follow = getUrl() .  $entidade . "/" . $id;  
 		}
+		
 		if ($req->getHttpAccept() == 'json'){
 			RestUtils::sendResponse(200, null, json_encode($entrys)); 
 		}
@@ -203,6 +216,7 @@
 		}else{
 			RestUtils::sendResponse(406); 
 		}
+		
 	}
 	
 	/**

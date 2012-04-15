@@ -60,7 +60,7 @@
 			RestUtils::sendResponse(404);
 			exit;  
 	  } 
-	  
+	 
 	// Process resource head (/noticias) requests. Accepts GET/POST  
 	function processRoot($req){
 		switch($req->getMethod()){
@@ -77,7 +77,7 @@
 				exit; 
 		}			
 	}
-		
+	
 	function headRoot(){
 		$news = getAllNews();
 		$hash = md5(var_export($news,true));
@@ -130,24 +130,21 @@
 				$xmlSerializer =  new XML_Serializer($options);
 			//$xmlSerializer->setOption("namespace",array("localhost", "localhost"));
 				$result = $xmlSerializer->serialize($news);
-			if ($result == true){
-			$result = $xmlSerializer->serialize($news);
-		
+
 		if ($result == true){
 			$xmlResponse = $xmlSerializer->getSerializedData();
 			$noticia = new Noticia();
 						
-			//RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
-			
-			
-			if($noticia->validateXMLbyXSD($xmlResponse, "Noticias.xsd")) {
+			RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+
+			/*if($noticia->validateXMLbyXSD($xmlResponse, "Noticias.xsd")) {
 				RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
 			}
 			else {
 				RestUtils::sendResponse(500);
-			}  
-			}
-			else{
+			} 
+			*/ 
+		}else{
 				RestUtils::sendResponse(500); 
 			}
 		}
@@ -158,9 +155,8 @@
 			//Not Acceptable. 
 			RestUtils::sendResponse(406); 
 		}
-		RestUtils::sendResponse(400); 
-	}
-	
+	RestUtils::sendResponse(400); 
+}
 	
 	
 	
@@ -459,4 +455,5 @@
     	//TODO - check that path parameters are correct through regulares expressions that validate input types and formats. 
     	//could respond BadRequest also. 
     }
+	
 ?>
