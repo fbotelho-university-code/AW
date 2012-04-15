@@ -18,14 +18,11 @@ require_once ('Util/XML/Serializer.php');
       XML_SERIALIZER_OPTION_RETURN_RESULT => true,
       XML_SERIALIZER_OPTION_CLASSNAME_AS_TAGNAME => true,  
       "ignoreNull"      => true,
- 	); 
+ 	);
  	
+ 	 
  	$xmlSerializer = new XML_Serializer($options); 
- 
-
  	  //Dispatching according to the path info. 
-
-
 /**
  * The ideia is to have a path url like this:  /ano/mes/dia
  * We can also have /, /ano, /mes, /dia.
@@ -60,9 +57,9 @@ require_once ('Util/XML/Serializer.php');
 	  	case 1:
 	  		$ano = (strcmp($path_parameters[1], 'ano') == 0 ) ? '%' : $path_parameters[1];
 	  }
-	var_dump($path_parameters); 	
+	//var_dump($path_parameters); 	
 	$data_needle = $ano . '-' . $mes . '-' . $dia;
-	var_dump($data_needle); 
+	//var_dump($data_needle); 
 	// We only have one resource :time .
 	
 	/**
@@ -80,7 +77,7 @@ require_once ('Util/XML/Serializer.php');
 	//$results = $n->find(array('tempo' => $data_needle), ' LIKE ' );
 	$results = Noticia_Data::getAllNoticias($data_needle);
 
-	global $options; $options["rootName"] ='noticias'; 
+	global $options; $options["rootName"] ='datas'; 
 	$xmlSerializer = new XML_Serializer($options);
 	$result = $xmlSerializer->serialize($results);  	
 	if ($req->getHttpAccept() == 'text/xml'){

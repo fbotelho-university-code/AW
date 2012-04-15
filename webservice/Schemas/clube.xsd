@@ -20,7 +20,10 @@
     				</xsd:restriction>
     			</xsd:simpleType>
     		</xsd:element>
-    		<xsd:element name="qualificacao" type="xsd:int" maxOccurs="1" minOccurs="0"></xsd:element>
+    		<xsd:element name="qualificacao" type="xsd:int"
+    			maxOccurs="1" minOccurs="0">
+    		</xsd:element>
+    		<xsd:element name="follow" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
     	</xsd:sequence>
     </xsd:complexType>
 

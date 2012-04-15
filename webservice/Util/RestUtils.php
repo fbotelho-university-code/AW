@@ -23,26 +23,23 @@ class RestUtils{
 		$etag = isset($_SERVER['HTTP_IF_MATCH'])  ? strtolower($_SERVER['HTTP_If_MATCH']) : null;
 		
 		$return_obj->setEtag($etag); 
-			
-		if ($accept){
-			$accept = explode(',', $accept); 
-			if (array_search('json', $accept) !==FALSE){
+		
+		
+		if (isset($accept)){
+			if (strpos( $accept, 'application/json') !==false){
 				$accept = 'json'; 
 			}
+			else if (strpos($accept,'application/xml') !== false){
+					$accept ='text/xml'; 
+				}
 			else{
-				$accept ='text/xml'; 
+				$accept = null; 
 			} 
-			
-	
-			//TODO - fix and test this . 
-			/*
-			else if (array_search('application/xml', $accept) !==FALSE){
-				$accept = 'text/xml';
-			}*/
-			
 		}
-		 
-		
+		else{
+			$accept = 'text/xml'; 
+		}
+
 		$return_obj->setHttpAccept($accept); 
 		
 		if (isset($path)){
@@ -117,6 +114,9 @@ class RestUtils{
 		}
 
 		switch($status){
+			case 204: 
+			echo $body; 
+			exit; 
 			case 400: 
 				$message = 'The request could not be understood';
 				//if (!isset($vars['unrecognized_req_vars'])){
@@ -132,13 +132,13 @@ class RestUtils{
 				break;
 			case 405 : //  
 				//Standards specifies that we must include an ALllow field in the response with the methods supported by this resource. 
-				$message = 'The request method ' . $_SERVER['REQUEST_METHOD'] . ' is not supported on this resource';
-				/*if (!isset($vars['allow'])){
+				 $message = 'The request method ' . $_SERVER['REQUEST_METHOD'] . ' is not supported on this resource';
+				 if (isset($vars) && !isset($vars['allow'])){
 					die ("Web service error, failed to comply to standards."); 
 				}
 				
-				header('Allow:'. implode( " ",$vars['allow'])); 
-				*/
+				header('Allow:'.  $vars['allow']); 
+				
 				break; 
 			case 500: 
 				$message = 'The server encountered an error processing your request.';

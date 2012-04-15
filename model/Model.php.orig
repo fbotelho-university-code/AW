@@ -17,7 +17,7 @@ abstract class Model{
 	 */
 	public abstract function checkValidity();
 	
-	public function setCount(){
+	public function setCount($start , $count){
 		$start = $count = null;
 		if(isset($_GET["start"])) {
 			$start = $_GET["start"];
@@ -33,9 +33,6 @@ abstract class Model{
 	if(is_null($start) && !is_null($count)) {
 		$start = 0;
 	}
-	$result['start'] = $start; 
-	$result['count'] = $count; 
-	return $result; 
 	}
 	
 	
@@ -139,11 +136,13 @@ abstract class Model{
 		if ($xmlString == ''){
 			return ; 
 		}
-		@$ob =  simplexml_load_string($xmlString);
+		$ob =  simplexml_load_string($xmlString);
 		$class = get_class($this);
 	    $return_obj  = new $class; 
 	    $this->setObj(get_object_vars($ob), $return_obj);
+	    
 	    return $return_obj;
+		
 	}
 	
 	/**
@@ -156,28 +155,39 @@ abstract class Model{
 		$xmlDOM = new DOMDocument();
 		@$xmlDOM->loadXML($xmlString);
 		
-		//Validaï¿½ï¿½o do XML usando o ficheiro XSD
+<<<<<<< HEAD
+		//Validação do XML usando o ficheiro XSD
 		$pathToXSD = "../webservice/Schemas/".$xsdName;
 		
 		@$validate = $xmlDOM->schemaValidate($pathToXSD); 
 		if($validate) {
 			return true;
 			//echo "validated<br>";
+=======
+		//Manipulaï¿½ï¿½o do nome da classe chamadora
+		$class = get_class($this);
+		if($class == "local") {
+			$class = "espaco";
+>>>>>>> 53538d95d72b05bf97502bafe4638351e2a29739
 		}
 		else {
 			return false;
 		}
 	}
 	
-		//Alteraï¿½ï¿½o do cabeï¿½alho XML para inclusï¿½o das referï¿½ncias para o XSD
 	public function createXMLNS($xmlString) {
 		$xmlDOM = new DOMDocument();
 		@$xmlDOM->loadXML($xmlString);
 		$xmlDOM->formatOutput = true;
 		
+<<<<<<< HEAD
 		//Recupera Elemento raiz do XML
 		$rootElement = $xmlDOM->documentElement;
 		//$rootElement->get
+=======
+		//Alteraï¿½ï¿½o do cabeï¿½alho XML para inclusï¿½o das referï¿½ncias para o XSD
+		$rootElement = $xmlDOM->getElementsByTagName("clube");
+>>>>>>> 53538d95d72b05bf97502bafe4638351e2a29739
 		
 		
 		$ns = $xmlDOM->createElementNS("localhost", "noticias");
@@ -191,6 +201,7 @@ abstract class Model{
 		//$atributo = $xmlDOM->createAttributeNS("localhost", "xmlns");
 		$rootElement->setAttributeNS("localhost", "xmlns", "localhost");
 		
+<<<<<<< HEAD
 		//xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
 		$atributo = $xmlDOM->createAttribute("xmlns:xsi");
 		$atributo->value = "http://www.w3.org/2001/XMLSchema-instance";
@@ -207,6 +218,17 @@ abstract class Model{
 		//echo $xmlDOM->saveXML();
 		
 		return $xmlDOM->saveXML();
+=======
+		//Validaï¿½ï¿½o do XML usando o ficheiro XSD
+		$pathToXSD = "../webservice/Schemas/";
+		$pathToXSD .= $class.".xsd";
+		if($xmlDOM->schemaValidate($pathToXSD)) {
+			echo "validated<br>";
+		}
+		else {
+			echo "Error!!<br>";
+		}
+>>>>>>> 53538d95d72b05bf97502bafe4638351e2a29739
 	}
 	
 	
@@ -231,11 +253,7 @@ abstract class Model{
 	 * @return Object[] $objects Array de Objectos com atributos da base de dados
 	 */
 	public  function getAll($fields =null){
-		
-		$var = $this->setCount(); 
-		$start = $var['start'];
-		$end = $var['count'];
-		
+		$this->setCount(&$start,&$end); 
 		$table = get_class($this);
 		$sql = "SELECT "; 
 				

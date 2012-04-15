@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema targetNamespace="localhost" elementFormDefault="qualified"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="localhost">
+<xsd:schema elementFormDefault="qualified"
+	attributeFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="localhost" xmlns:tns="localhost">
 	<xsd:include schemaLocation="noticia.xsd"></xsd:include>
 	<xsd:element name="noticias">
     	<xsd:complexType>
     		<xsd:sequence>
-    			<xsd:element name="noticia" minOccurs="1" maxOccurs="unbounded" type="noticiaT"></xsd:element>
+    			<xsd:element name="Noticia" minOccurs="1" maxOccurs="unbounded" type="tns:noticiaT"></xsd:element>
     		</xsd:sequence>
     	</xsd:complexType>
     </xsd:element>

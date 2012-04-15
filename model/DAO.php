@@ -45,13 +45,13 @@ class DAO extends ADOConnection {
 	 */
 	public $db;
 	
+ 	
 	/**
 	 * Construtor da Classe
 	 * Configura o SGBD a ser utilizado
 	 * @uses {@link $mysgbd}
 	 */
 	function __construct(){
-		
 		$this->db = &ADONewConnection($this->mysgbd);
 		/* Ativa Associa��o dos nomes das colunas das tabelas da BD com as chaves dos arrays de retorno de consulta */
 		$this->db->SetFetchMode(ADODB_FETCH_ASSOC);
@@ -74,11 +74,16 @@ class DAO extends ADOConnection {
 	function disconnect() {
 		$this->db->Close();
 	}
-
+	
+	private function throwException($string){
+		throw new Exception($string); 
+	}
 	 
 	function execute($sql) {
 		$this->connect();
-		$rs = $this->db->Execute($sql) or die ($this->db->ErrorMsg() . "<br>SQL: ".$sql); 
+
+		$rs = $this->db->Execute($sql) or $this->throwException($this->db->ErrorMsg() . "<br> CENAS SQL: ".$sql); 
+
 		$this->disconnect();
 		return $rs;
 	}

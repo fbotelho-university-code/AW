@@ -23,6 +23,7 @@
  * 
  */
  
+ 
  require_once ('Util/RestUtils.php'); 
  require_once ('Util/RestRequest.php'); 
  require_once ('Util/XML/Serializer.php'); 
@@ -30,6 +31,14 @@
  require_once ('../model/Integrante.php');
  require_once ('../model/Clube.php'); 
  
+ 	function getUrl(){
+ 		$v = parse_url("http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+ 		
+ 		$r = $v['scheme'] . '://' . $v['host'] . $v['path'];
+ 		$pos = strpos($r, 'entidades.php') ;
+ 		$val = substr($r, 0, $pos );
+ 		return $val; 
+ 	}
  	$options = array(
       "indent"          => "    ",
       "linebreak"       => "\n",
@@ -52,48 +61,40 @@
 	  switch($path_parameters_count){
 		case 0: 		  	
 	  		processRoot($req);
+	  		RestUtils::sendResponse(404); 
 	  		break; 
 	  	case 1: // /clubes, /integrantes, ... 
 	  		processEntidade($req);
 	  		break;
 	  	case 2: 
-	  		processEntidadeEspecifica($req); 
+	  		processEntidadeEspecifica($req);
+	  	default: 
+	  		RestUtils::sendResponse(404); 
 	  } 
 
-	// Process resource head (/entidades/) requests. Accepts GET/HEAD
+	// Process resource head (/entidades/) requests. Accepts GET
 	
-	/*
-	 * TODO: 
-	 * HEAD
-	 */
 	function processRoot($req){
 		switch($req->getMethod()){
 			case 'GET': 
 				getRoot($req);
 			break;
 			case 'HEAD': 
-				postHead($req);
-			break;
+	//			postHead($req);
+//			break;
 			default:
-				RestUtils::sendResponse(405, array('allow' => "HEAD", "GET"));
+				RestUtils::sendResponse(405, array('allow' => "GET"));
 				exit; 
 		}			
 	} 
-		
+
 	/**
 	 * Listar todas as entidades 
-	 * Representa��o em XML, JSON que devem conter apontadores para o recurso de cada entidade.
-	 * Representa��o tambem deve saber em grupos de entidade  
+	 * Representação em XML, JSON que devem conter apontadores para o recurso de cada entidade.
+	 * Representao tambem deve saber em grupos de entidade  
 	 **/
 	function getRoot($req){
-/*		$clube = new Clube();
-		$clubes =$clube->getAll();
-		if (!$clubes) { RestUtil::sendResponse(500); exit; }
-		$integrantes = $integrante->getAll();
-		if (!$integrantes) {RestUtil::SendResponse(500); exit; }
-*/
 		$clube = new Clube();
-
 		$clube->setIdclube("Um campo numerico identificando univocamente o clube"); 
 		$clube->setIdcompeticao("Um identificador numerico identificando a competicao em que o clube se encontra"); 
 		$clube->setIdlocal("Um identificador numerico identificando o local do clube");
@@ -133,66 +134,77 @@
 		//TODO - send malformed request response
 	}
 
-	
+/***********************************************************************************************************************/
 	//Process resource (/entidade/{clubes} , /entidade/{integrantes}) requests. 
 	//Accepts GET/PUT/HEAD/DELETE
-	
 	/*
 	 * TODO: 
 	 * POST 
-	 * HEAD
  	*/
 	function processEntidade($req){
-		//TODO - make it safe to get here
 		$entidade = $req->getPathInfo(); $entidade = $entidade[1];
+		if (strcmp($entidade,'clube') != 0 && strcmp($entidade, 'integrante') !=0 ){
+			RestUtils::sendResponse(404); 
+		}
+		
 		switch($req->getMethod()){
-			case 'GET': 
+			case 'GET':
 				getEntidade($req, $entidade);
-			break; 
+			break;
 			case 'POST':
 			$foo = 'post' . $entidade; $foo($req, $entidade);
 			break;
 			case 'HEAD':
-			break; 
 			default: 
-			 RestUtils::sendResponse(405, array('allow' => "HEAD", "POST", "GET"));
+			 RestUtils::sendResponse(405, array('allow' =>"POST GET"));
 			 exit;  
 		}
+		
  }
 
 	function postClube($req){
 		$clubeClass = new Clube(); 
-		$result = $clubeClass->fromXml($req->getData()); 
-		$id = $result->add(); 
+		$result = $clubeClass->fromXml($req->getData());
 		
-		if (!$id){
+		if (isset($result->idclube)){
+			RestUtils::sendResponse(400); 
+		}
+		
+		try{
+			$id = $result->add();
+		}catch(Exception $e){ 
 			RestUtils::sendResponse(500);
-			exit;  
 		}
 		RestUtils::sendResponse(201, null, $id, 'text'); 
 	}
-	 
-	//TODO - este m�todo � igual ao postClube. fus�o. 
+	
 	function postIntegrante($req){
 		$integranteClass = new Integrante(); 
-		$result = $integranteClass->fromXml($req->getData()); 
-		$id = $result->add(); 
-		if (!$id){
+		$result = $integranteClass->fromXml($req->getData());
+		if (isset($result->idintegrante)){
+			RestUtils::sendResponse(400); 
+		}
+		
+		try{ 
+			$id = $result->add();
+		}catch(Exception $e){ 
 			RestUtils::sendResponse(500);
-			exit;  
 		}
 		RestUtils::sendResponse(201, null, $id, 'text'); 
 	}
 	
 	function getEntidade($req, $entidade){
-		$bdEnt = new $entidade(); 
-		include "filter.php";
-		$entrys = $bdEnt->getAll(null, $start, $count); 
-		if (!$entrys){ RestUtils::sendResponse(404);exit; }
-		
+		$bdEnt = new $entidade();
+		 
+		try{
+			$entrys = $bdEnt->getAll(null);
+		}catch(Exception $e){
+			RestUtils::sendResponse(500); 		
+		}
+		 
 		foreach ($entrys as $en){
 			$id = strtolower($entidade) ==  'clube' ?  $en->getIdClube() : $en->getIdIntegrante(); 
-			$en->follow = "url/" . $entidade . "/" . $id;  
+			$en->follow = getUrl() .  $entidade . "/" . $id;  
 		}
 		
 		if ($req->getHttpAccept() == 'json'){
@@ -211,7 +223,6 @@
 		}else{
 			RestUtils::sendResponse(406); 
 		}
-		
 	}
 	
 	/**
@@ -223,7 +234,12 @@
 		//TODO - make it safe to access this info
 		$path = $req->getPathInfo(); 
 		$ent = $path[1]; 
-		$id = $path[2]; 
+		$id = $path[2];
+		
+		if (!is_numeric($id)){
+			RestUtil::sendResponse(400); 
+		}
+
 		switch($req->getMethod()){
 			case 'GET': 
 				getDeEntidade($req, $ent, $id); 
@@ -238,7 +254,7 @@
 					deleteIntegrante($id);
 			 	break; 
 			 default :
-			 	RestUtils::sendResponse(405, array('allow' => "HEAD", "GET", "PUT", "DELETE"));
+			 	RestUtils::sendResponse(405, array('allow' => "GET POST"));
 		}
 	}
 	
@@ -256,30 +272,32 @@
 	}
 	
 	function putClubeOrIntegrante($req, $id, $ent){
+
 		$existent  = new $ent();
-		$existent->getObjectById($id);
-		 
-		if (!$existent){
-			RestUtils::sendResponse(404); 
+		try{
+			$existent->getObjectById($id);
+		}catch(Exception $e){
+			RestUtils::sendResponse(500); 	
 		}
-		 
+
+		//TODO - check XSD 
 		$new = $existent->fromXml($req->getData());
-		if ($new){
+		//ASSUMINDO QUE $new exist: 
+		
 	    if (strtolower($ent) == 'clube'){ 
 			$new->idclube = $id; 
 		}
 		else {
 			$new->idintegrante = $id; 
 		}
+		
 		try{
 			$new->update(); 
 		}catch(Exception $e){
 			RestUtils::sendResponse(500); 
 		}
-		}else{
-			//TODO bad format 
-		}
-	}
+	}			
+	
 	
 	function getDeEntidade($req, $ent, $id){
 		$bdEnt = new $ent(); 
