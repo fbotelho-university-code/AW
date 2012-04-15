@@ -12,6 +12,8 @@ class data {
 	
 }  
 
+
+
 /**
 * Classe que representa as refer�ncias temporais das noticias
 */
