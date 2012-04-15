@@ -25,6 +25,8 @@
       XML_SERIALIZER_OPTION_RETURN_RESULT => true,
       XML_SERIALIZER_OPTION_CLASSNAME_AS_TAGNAME => true,  
       "ignoreNull"      => true,
+      "rootAttributes"  => array("xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance", "xsi:schemaLocation" => "localhost Noticias.xsd "),
+      "namespace" 		=> "localhost"
  	); 
  	
  	$xmlSerializer = new XML_Serializer($options); 
@@ -89,7 +91,8 @@
 		if (!$news){
 			RestUtils::sendResponse(500); 
 		}
-		return $news; 	
+		
+		return $news;
 	}
 	
 	function getHashObject($ob){
@@ -109,16 +112,29 @@
 		}
 		
 		foreach ($news as $n){
-			$n->follow = "myUrl/" . $n->idnoticia; 
+			//$n->follow = "myUrl/" . $n->idnoticia;
+			$n->visivel = null; 
 		}
 		
 		if ($req->getHttpAccept() == 'text/xml'){
 			global $options; $options["rootName"] = "noticias";
 			$xmlSerializer =  new XML_Serializer($options);
+			//$xmlSerializer->setOption("namespace",array("localhost", "localhost"));
 			$result = $xmlSerializer->serialize($news);
 		
 		if ($result == true){
-			RestUtils::sendResponse(200, null, $xmlSerializer->getSerializedData(), 'text/xml'); 
+			$xmlResponse = $xmlSerializer->getSerializedData();
+			$noticia = new Noticia();
+						
+			//RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+			
+			
+			if($noticia->validateXMLbyXSD($xmlResponse, "Noticias.xsd")) {
+				RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+			}
+			else {
+				RestUtils::sendResponse(500);
+			}  
 		}
 		else{
 			RestUtils::sendResponse(500); 

@@ -123,44 +123,62 @@ abstract class Model{
 	 * Valida um XML em formato String usando um ficheiro XML Schema (XSD)
 	 * @param String $xmlString
 	 */
-	public function validateXMLbyXSD($xmlString) {
+	public function validateXMLbyXSD($xmlString, $xsdName) {
 		
 		// Transformação da String em DOM
 		$xmlDOM = new DOMDocument();
-		$xmlDOM->loadXML($xmlString);
-		
-		//Manipulação do nome da classe chamadora
-		$class = get_class($this);
-		if($class == "local") {
-			$class = "espaco";
-		}
-		
-		//Alteração do cabeçalho XML para inclusão das referências para o XSD
-		$rootElement = $xmlDOM->getElementsByTagName("clube");
-		
-		$xmlnsAttribute = $xmlDOM->createAttribute("xmlns");
-		$xmlnsAttribute->value = "http://localhost/AW-3/workspace/Schemas/".$class.".xsd";
-		
-		$xmlnsXsiAttribute = $xmlDOM->createAttribute("xmlns:xsi");
-		$xmlnsXsiAttribute->value = "http://www.w3.org/2001/XMLSchema-instance";
-		
-		$schemaLocationAttribute = $xmlDOM->createAttribute("xsi:schemaLocation");
-		$schemaLocationAttribute->value = "http://localhost/AW-3/workspace/Schemas/".$class.".xsd ".$class."xsd ";
-		
-		$rootElement->appendChild($xmlnsAttribute);
-		$rootElement->appendChild($xmlnsXsiAttribute);
-		$rootElement->appendChild($schemaLocationAttribute);
-		$xmlDOM->appendChild($rootElement);
+		@$xmlDOM->loadXML($xmlString);
 		
 		//Validação do XML usando o ficheiro XSD
-		$pathToXSD = "../webservice/Schemas/";
-		$pathToXSD .= $class.".xsd";
-		if($xmlDOM->schemaValidate($pathToXSD)) {
-			echo "validated<br>";
+		$pathToXSD = "../webservice/Schemas/".$xsdName;
+		
+		@$validate = $xmlDOM->schemaValidate($pathToXSD); 
+		if($validate) {
+			return true;
+			//echo "validated<br>";
 		}
 		else {
-			echo "Error!!<br>";
+			return false;
 		}
+	}
+	
+	public function createXMLNS($xmlString) {
+		$xmlDOM = new DOMDocument();
+		@$xmlDOM->loadXML($xmlString);
+		$xmlDOM->formatOutput = true;
+		
+		//Recupera Elemento raiz do XML
+		$rootElement = $xmlDOM->documentElement;
+		//$rootElement->get
+		
+		
+		$ns = $xmlDOM->createElementNS("localhost", "noticias");
+		//$xmlDOM->appendChild($ns);
+		
+		//xmlns='localhost'
+		//$atributo = $xmlDOM->createAttribute("xmlns");
+		//$atributo->value = "localhost";
+		//$rootElement->appendChild($atributo);
+		
+		//$atributo = $xmlDOM->createAttributeNS("localhost", "xmlns");
+		$rootElement->setAttributeNS("localhost", "xmlns", "localhost");
+		
+		//xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+		$atributo = $xmlDOM->createAttribute("xmlns:xsi");
+		$atributo->value = "http://www.w3.org/2001/XMLSchema-instance";
+		//$rootElement->appendChild($atributo);
+		$rootElement->setAttributeNS("localhost", "xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+		
+		//xsi:schemaLocation='localhost Noticias.xsd '
+		$atributo = $xmlDOM->createAttribute("xmlns:schemaLocation");
+		$atributo->value = "localhost Noticias.xsd";
+		//$rootElement->appendChild($atributo);
+		$rootElement->setAttributeNS("localhost", "xsi:schemaLocation", "localhost Noticias.xsd ");
+		
+		//echo $rootElement->namespaceURI;
+		//echo $xmlDOM->saveXML();
+		
+		return $xmlDOM->saveXML();
 	}
 	
 	

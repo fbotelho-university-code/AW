@@ -1,15 +1,18 @@
 <?php
 
 $xml = new DOMDocument();
-@$xml->load('./datas.xml');
-@$validate = $xml->schemaValidate('./datas.xsd');
+$xml->load('./Noticias.xml');
+
+echo $xml->documentElement->namespaceURI;
+/*
+@$validate = $xml->schemaValidate('./Noticias.xsd');
 
 if ($validate) {
    echo "valid<p/>";
 }
 else {
    echo "invalid<p/>";
-}
+}*/
 
 
 /**
