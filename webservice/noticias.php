@@ -341,7 +341,6 @@
 				}
 			}	
 		}
-		
 		if (isset($noticia->datas)){
 			foreach($noticia->datas as $l){
 				 try{
