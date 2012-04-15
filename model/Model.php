@@ -140,9 +140,7 @@ abstract class Model{
 		$class = get_class($this);
 	    $return_obj  = new $class; 
 	    $this->setObj(get_object_vars($ob), $return_obj);
-	    
 	    return $return_obj;
-		
 	}
 	
 	/**

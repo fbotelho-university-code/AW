@@ -52,48 +52,40 @@
 	  switch($path_parameters_count){
 		case 0: 		  	
 	  		processRoot($req);
+	  		RestUtils::sendResponse(404); 
 	  		break; 
 	  	case 1: // /clubes, /integrantes, ... 
 	  		processEntidade($req);
 	  		break;
 	  	case 2: 
-	  		processEntidadeEspecifica($req); 
+	  		processEntidadeEspecifica($req);
+	  	default: 
+	  		RestUtils::sendResponse(404); 
 	  } 
 
-	// Process resource head (/entidades/) requests. Accepts GET/HEAD
+	// Process resource head (/entidades/) requests. Accepts GET
 	
-	/*
-	 * TODO: 
-	 * HEAD
-	 */
 	function processRoot($req){
 		switch($req->getMethod()){
 			case 'GET': 
 				getRoot($req);
 			break;
 			case 'HEAD': 
-				postHead($req);
-			break;
+	//			postHead($req);
+//			break;
 			default:
-				RestUtils::sendResponse(405, array('allow' => "HEAD", "GET"));
+				RestUtils::sendResponse(405, array('allow' => "GET"));
 				exit; 
 		}			
 	} 
-		
+
 	/**
 	 * Listar todas as entidades 
-	 * Representa��o em XML, JSON que devem conter apontadores para o recurso de cada entidade.
-	 * Representa��o tambem deve saber em grupos de entidade  
+	 * Representação em XML, JSON que devem conter apontadores para o recurso de cada entidade.
+	 * Representao tambem deve saber em grupos de entidade  
 	 **/
 	function getRoot($req){
-/*		$clube = new Clube();
-		$clubes =$clube->getAll();
-		if (!$clubes) { RestUtil::sendResponse(500); exit; }
-		$integrantes = $integrante->getAll();
-		if (!$integrantes) {RestUtil::SendResponse(500); exit; }
-*/
 		$clube = new Clube();
-
 		$clube->setIdclube("Um campo numerico identificando univocamente o clube"); 
 		$clube->setIdcompeticao("Um identificador numerico identificando a competicao em que o clube se encontra"); 
 		$clube->setIdlocal("Um identificador numerico identificando o local do clube");
@@ -133,18 +125,20 @@
 		//TODO - send malformed request response
 	}
 
-	
+/***********************************************************************************************************************/
 	//Process resource (/entidade/{clubes} , /entidade/{integrantes}) requests. 
 	//Accepts GET/PUT/HEAD/DELETE
-	
 	/*
 	 * TODO: 
 	 * POST 
-	 * HEAD
  	*/
 	function processEntidade($req){
-		//TODO - make it safe to get here
 		$entidade = $req->getPathInfo(); $entidade = $entidade[1];
+		
+		if (strcmp($entidade,'clube') != 0 && strcmp($entidade, 'integrante') !=0 ){
+			RestUtils::sendResponse(404); 
+		}
+		
 		switch($req->getMethod()){
 			case 'GET': 
 				getEntidade($req, $entidade);
@@ -153,9 +147,9 @@
 			$foo = 'post' . $entidade; $foo($req, $entidade);
 			break;
 			case 'HEAD':
-			break; 
+			
 			default: 
-			 RestUtils::sendResponse(405, array('allow' => "HEAD", "POST", "GET"));
+			 RestUtils::sendResponse(405, array('allow' =>"POST GET"));
 			 exit;  
 		}
  }
@@ -186,15 +180,13 @@
 	
 	function getEntidade($req, $entidade){
 		$bdEnt = new $entidade(); 
-		//include "filter.php";
-		$entrys = $bdEnt->getAll(null, $start, $count); 
+		$entrys = $bdEnt->getAll(null); 
 		if (!$entrys){ RestUtils::sendResponse(404);exit; }
 		
 		foreach ($entrys as $en){
 			$id = strtolower($entidade) ==  'clube' ?  $en->getIdClube() : $en->getIdIntegrante(); 
 			$en->follow = "url/" . $entidade . "/" . $id;  
 		}
-		
 		if ($req->getHttpAccept() == 'json'){
 			RestUtils::sendResponse(200, null, json_encode($entrys)); 
 		}
@@ -211,7 +203,6 @@
 		}else{
 			RestUtils::sendResponse(406); 
 		}
-		
 	}
 	
 	/**
