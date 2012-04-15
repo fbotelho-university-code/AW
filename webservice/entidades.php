@@ -236,7 +236,7 @@
 		$ent = $path[1]; 
 		$id = $path[2];
 		
-		if (!is_numerical($id)){
+		if (!is_numeric($id)){
 			RestUtil::sendResponse(400); 
 		}
 
@@ -257,7 +257,7 @@
 	}
 	
 	function putClubeOrIntegrante($req, $id, $ent){
-		
+
 		$existent  = new $ent();
 		try{
 			$existent->getObjectById($id);
@@ -267,8 +267,8 @@
 
 		//TODO - check XSD 
 		$new = $existent->fromXml($req->getData());
+		//ASSUMINDO QUE $new exist: 
 		
-		if ($new){
 	    if (strtolower($ent) == 'clube'){ 
 			$new->idclube = $id; 
 		}
@@ -281,8 +281,8 @@
 		}catch(Exception $e){
 			RestUtils::sendResponse(500); 
 		}
-		}		
-	}
+	}			
+	
 	
 	function getDeEntidade($req, $ent, $id){
 		$bdEnt = new $ent(); 
