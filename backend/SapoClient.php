@@ -45,8 +45,8 @@ class SapoClient extends Fonte {
 				
 				$myNew = new Noticia(); 
 	 			$myNew->setIdfonte($this->idfonte);
-	 			$myNew->setData_pub(isset($news["dataPub"]) ?
-	 									Util::formatDateToDB($news["dataPub"])
+	 			$myNew->setData_pub(isset($news["pubDate"]) ?
+	 									Util::formatDateToDB($news["pubDate"])
 	 									: "");
 	 			$myNew->setAssunto(isset($news["title"]) ?
 	 									addslashes($news["title"])

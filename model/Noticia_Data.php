@@ -14,6 +14,8 @@ class Data {
 		var $noticias;
 }
 
+
+
 /**
 * Classe que representa as refer�ncias temporais das noticias
 */

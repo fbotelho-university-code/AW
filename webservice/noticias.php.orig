@@ -109,10 +109,8 @@
 	 * Listar todas as noticias. 
 	 * Representação em XML, JSON que devem conter apontadores para o recurso de cada noticia.  
 	 * Por parametro (search=SEARCH_STRING) é possivel especificar palavras chaves de forma a filtrar os resultados (i.e., permitir escolher noticias que referem o clube X.).
-	 * TODO : filtrar pesquisa. 
 	 **/
 	function getRoot($req){
-		$news = getAllNews($req); 
 		
 		$news = getAllNews($req);
 		 //TODO - HEAD
