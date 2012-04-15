@@ -230,7 +230,7 @@ abstract class Model{
 	 * @return Object[] $objects Array de Objectos com atributos da base de dados
 	 */
 	public  function getAll($fields =null){
-		$this->setCount(&$start,&$end); 
+		@$this->setCount(&$start,&$end); 
 		$table = get_class($this);
 		$sql = "SELECT "; 
 				
