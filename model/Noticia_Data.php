@@ -31,8 +31,9 @@ class Noticia_data extends Model{
 	}
 	
 	public function getKeyFields(){
-		return array ('idnoticia', '$data'); 
-	}
+		return array ('id'); 
+	}	
+	
 	/**
 	 * Referencia temporal da noticia.
 	 * @var String - Data presente no texto da notï¿½cia
@@ -40,7 +41,7 @@ class Noticia_data extends Model{
 	var $tempo;
 	
 	/**
-	 * Interpretação da data encontrada na notícia em formato 0000-00-00
+	 * Interpretaï¿½ï¿½o da data encontrada na notï¿½cia em formato 0000-00-00
 	 * @var String
 	 */
 	var $data_interpretada;

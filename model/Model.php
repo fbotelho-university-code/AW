@@ -64,12 +64,13 @@ abstract class Model{
 		$this->dao->connect();
 		$table = get_class($this);
 		$fields = $this->my_get_object_vars();
-		$rs = $this->dao->db->AutoExecute($table, $fields, "INSERT") or die($this->dao->db->ErrorMsg() . "<br>SQL: ".var_dump($fields). " - Table: ".$table);
+		$rs = $this->dao->db->AutoExecute($table, $fields, "INSERT") or die($this->dao->db->ErrorMsg() . "<br>SQL: ".var_export($fields,true). " - Table: ".$table);
 		$id = $this->dao->db->Insert_ID();
 		$this->dao->disconnect();
 		return $id;
 	}
 		
+	// Isto devia retornar um boolean pra saber se correu bem, pra poder mandar um 200 ou erro.
 	public function del(){
 		$table = get_class($this); 
 		$sql = 'delete from ' . $table   . $this->getPrimaryKeyWhere(); 
@@ -125,17 +126,17 @@ abstract class Model{
 	 */
 	public function validateXMLbyXSD($xmlString) {
 		
-		// Transformação da String em DOM
+		// Transformaï¿½ï¿½o da String em DOM
 		$xmlDOM = new DOMDocument();
 		$xmlDOM->loadXML($xmlString);
 		
-		//Manipulação do nome da classe chamadora
+		//Manipulaï¿½ï¿½o do nome da classe chamadora
 		$class = get_class($this);
 		if($class == "local") {
 			$class = "espaco";
 		}
 		
-		//Alteração do cabeçalho XML para inclusão das referências para o XSD
+		//Alteraï¿½ï¿½o do cabeï¿½alho XML para inclusï¿½o das referï¿½ncias para o XSD
 		$rootElement = $xmlDOM->getElementsByTagName("clube");
 		
 		$xmlnsAttribute = $xmlDOM->createAttribute("xmlns");
@@ -152,7 +153,7 @@ abstract class Model{
 		$rootElement->appendChild($schemaLocationAttribute);
 		$xmlDOM->appendChild($rootElement);
 		
-		//Validação do XML usando o ficheiro XSD
+		//Validaï¿½ï¿½o do XML usando o ficheiro XSD
 		$pathToXSD = "../webservice/Schemas/";
 		$pathToXSD .= $class.".xsd";
 		if($xmlDOM->schemaValidate($pathToXSD)) {
@@ -327,6 +328,8 @@ abstract class Model{
 		if(is_null($start) && !is_null($count)) {
 			$start = 0;
 		}
+	}
+	
 	public function deleteById($noticia){
 			$sql = 'DELETE FROM  ' . get_class($this) . ' WHERE idnoticia =  ' . $noticia;
 			echo $sql; 

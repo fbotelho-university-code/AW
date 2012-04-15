@@ -233,11 +233,26 @@
 			 case 'PUT':
 			 	putClubeOrIntegrante($req, $id, $ent); 
 			 	break; 
-			 case 'DELETE': 
+			 case 'DELETE':
+				if (strtolower($ent) == 'integrante')
+					deleteIntegrante($id);
 			 	break; 
 			 default :
 			 	RestUtils::sendResponse(405, array('allow' => "HEAD", "GET", "PUT", "DELETE"));
 		}
+	}
+	
+	function deleteIntegrante($id){
+		$validID = settype($id, "integer");
+		$integrante = new Integrante();
+		$integrante->getObjectById($id);
+		if (!$integrante || !$validID){
+			RestUtils::sendResponse(404);
+			exit();
+		}
+		
+		$integrante->del();
+		RestUtils::sendResponse(200);
 	}
 	
 	function putClubeOrIntegrante($req, $id, $ent){
