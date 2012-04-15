@@ -139,7 +139,7 @@ abstract class Model{
 		if ($xmlString == ''){
 			return ; 
 		}
-		$ob =  simplexml_load_string($xmlString);
+		@$ob =  simplexml_load_string($xmlString);
 		$class = get_class($this);
 	    $return_obj  = new $class; 
 	    $this->setObj(get_object_vars($ob), $return_obj);
@@ -156,7 +156,7 @@ abstract class Model{
 		$xmlDOM = new DOMDocument();
 		@$xmlDOM->loadXML($xmlString);
 		
-		//Validação do XML usando o ficheiro XSD
+		//Validaï¿½ï¿½o do XML usando o ficheiro XSD
 		$pathToXSD = "../webservice/Schemas/".$xsdName;
 		
 		@$validate = $xmlDOM->schemaValidate($pathToXSD); 
@@ -169,7 +169,7 @@ abstract class Model{
 		}
 	}
 	
-		//Alteração do cabeçalho XML para inclusão das referências para o XSD
+		//Alteraï¿½ï¿½o do cabeï¿½alho XML para inclusï¿½o das referï¿½ncias para o XSD
 	public function createXMLNS($xmlString) {
 		$xmlDOM = new DOMDocument();
 		@$xmlDOM->loadXML($xmlString);

@@ -149,7 +149,6 @@
 		
 		switch($req->getMethod()){
 			case 'GET':
-			 
 				getEntidade($req, $entidade);
 			break;
 			case 'POST':
@@ -166,22 +165,30 @@
 	function postClube($req){
 		$clubeClass = new Clube(); 
 		$result = $clubeClass->fromXml($req->getData());
-		$id = $result->add(); 
-		if (!$id){
+		
+		if (isset($result->idclube)){
+			RestUtils::sendResponse(400); 
+		}
+		
+		try{
+			$id = $result->add();
+		}catch(Exception $e){ 
 			RestUtils::sendResponse(500);
-			exit;  
 		}
 		RestUtils::sendResponse(201, null, $id, 'text'); 
 	}
-	 
-	//TODO - este m�todo � igual ao postClube. fus�o. 
+	
 	function postIntegrante($req){
 		$integranteClass = new Integrante(); 
-		$result = $integranteClass->fromXml($req->getData()); 
-		$id = $result->add(); 
-		if (!$id){
+		$result = $integranteClass->fromXml($req->getData());
+		if (isset($result->idintegrante)){
+			RestUtils::sendResponse(400); 
+		}
+		
+		try{ 
+			$id = $result->add();
+		}catch(Exception $e){ 
 			RestUtils::sendResponse(500);
-			exit;  
 		}
 		RestUtils::sendResponse(201, null, $id, 'text'); 
 	}
@@ -216,7 +223,6 @@
 		}else{
 			RestUtils::sendResponse(406); 
 		}
-		
 	}
 	
 	/**
@@ -228,7 +234,12 @@
 		//TODO - make it safe to access this info
 		$path = $req->getPathInfo(); 
 		$ent = $path[1]; 
-		$id = $path[2]; 
+		$id = $path[2];
+		
+		if (!is_numerical($id)){
+			RestUtil::sendResponse(400); 
+		}
+
 		switch($req->getMethod()){
 			case 'GET': 
 				getDeEntidade($req, $ent, $id); 
@@ -241,19 +252,22 @@
 			 case 'DELETE': 
 			 	break; 
 			 default :
-			 	RestUtils::sendResponse(405, array('allow' => "HEAD", "GET", "PUT", "DELETE"));
+			 	RestUtils::sendResponse(405, array('allow' => "GET POST"));
 		}
 	}
 	
 	function putClubeOrIntegrante($req, $id, $ent){
+		
 		$existent  = new $ent();
-		$existent->getObjectById($id);
-		 
-		if (!$existent){
-			RestUtils::sendResponse(404); 
+		try{
+			$existent->getObjectById($id);
+		}catch(Exception $e){
+			RestUtils::sendResponse(500); 	
 		}
-		 
+
+		//TODO - check XSD 
 		$new = $existent->fromXml($req->getData());
+		
 		if ($new){
 	    if (strtolower($ent) == 'clube'){ 
 			$new->idclube = $id; 
@@ -261,14 +275,13 @@
 		else {
 			$new->idintegrante = $id; 
 		}
+		
 		try{
 			$new->update(); 
 		}catch(Exception $e){
 			RestUtils::sendResponse(500); 
 		}
-		}else{
-			//TODO bad format 
-		}
+		}		
 	}
 	
 	function getDeEntidade($req, $ent, $id){

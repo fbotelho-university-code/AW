@@ -114,6 +114,9 @@ class RestUtils{
 		}
 
 		switch($status){
+			case 204: 
+			echo $body; 
+			exit; 
 			case 400: 
 				$message = 'The request could not be understood';
 				//if (!isset($vars['unrecognized_req_vars'])){

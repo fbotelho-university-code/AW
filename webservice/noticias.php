@@ -134,7 +134,7 @@
 		if ($result == true){
 			$xmlResponse = $xmlSerializer->getSerializedData();
 			$noticia = new Noticia();
-						
+			
 			//RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
 			
 			if($noticia->validateXMLbyXSD($xmlResponse, "Noticias.xsd")) {
@@ -157,7 +157,7 @@
 		}
 		RestUtils::sendResponse(400); 
 	}
-	}
+	
 	
 	
 	
@@ -221,7 +221,6 @@
 		}catch(Exception $e){
 			RestUtils::sendResponse(500);
 		} 		
-		
 		if (isset($id)){
 			RestUtils::sendResponse(201, null, $id, 'text');
 	
@@ -229,7 +228,6 @@
 			RestUtils::sendResponse(500);
 		}
 	}
-	
 		
 	function putNews($req, $id){
 		$noticia = new Noticia();
@@ -254,7 +252,7 @@
 		
 		$nova_noticia->idnoticia =$id; 
 		addNoticia($nova_noticia, "update");
-		RestUtils::sendResponse(200);
+		RestUtils::sendResponse(204);
 		exit;   
 	}
 	
