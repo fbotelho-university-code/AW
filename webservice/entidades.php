@@ -66,14 +66,15 @@
 	  	case 1: // /clubes, /integrantes, ... 
 	  		processEntidade($req);
 	  		break;
-	  	case 2: 
+	  	case 2:
+	  	case 3: 
 	  		processEntidadeEspecifica($req);
+	  		break; 
 	  	default: 
 	  		RestUtils::sendResponse(404); 
 	  } 
 
 	// Process resource head (/entidades/) requests. Accepts GET
-	
 	function processRoot($req){
 		switch($req->getMethod()){
 			case 'GET': 
@@ -86,8 +87,8 @@
 				RestUtils::sendResponse(405, array('allow' => "GET"));
 				exit; 
 		}			
-	} 
-
+	}
+	
 	/**
 	 * Listar todas as entidades 
 	 * Representação em XML, JSON que devem conter apontadores para o recurso de cada entidade.
@@ -133,6 +134,7 @@
 		}
 		//TODO - send malformed request response
 	}
+	
 
 /***********************************************************************************************************************/
 	//Process resource (/entidade/{clubes} , /entidade/{integrantes}) requests. 
@@ -159,7 +161,6 @@
 			 RestUtils::sendResponse(405, array('allow' =>"POST GET"));
 			 exit;  
 		}
-		
  }
 
 	function postClube($req){
@@ -195,13 +196,12 @@
 	
 	function getEntidade($req, $entidade){
 		$bdEnt = new $entidade();
-		 
 		try{
 			$entrys = $bdEnt->getAll(null);
 		}catch(Exception $e){
 			RestUtils::sendResponse(500); 		
 		}
-		 
+		
 		foreach ($entrys as $en){
 			$id = strtolower($entidade) ==  'clube' ?  $en->getIdClube() : $en->getIdIntegrante(); 
 			$en->follow = getUrl() .  $entidade . "/" . $id;  
@@ -239,43 +239,48 @@
 		if (!is_numeric($id)){
 			RestUtil::sendResponse(400); 
 		}
-
-		switch($req->getMethod()){
-			case 'GET': 
-				getDeEntidade($req, $ent, $id); 
-				break;
-			case 'HEAD': 
-			 	break; 
-			 case 'PUT':
-			 	putClubeOrIntegrante($req, $id, $ent); 
-			 	break; 
-			 case 'DELETE': 
-			 	break; 
-			 default :
-			 	RestUtils::sendResponse(405, array('allow' => "GET POST"));
+		switch(count($req->getPathInfo())){
+			case 2: 
+			switch($req->getMethod()){
+				case 'GET': 
+					getDeEntidade($req, $ent, $id);
+					break;
+				 case 'PUT':
+				 	putClubeOrIntegrante($req, $id, $ent); 
+				 	break;
+			 	  case 'DELETE': 
+			 		break; 
+				RestUtils::sendResponse(405, array('allow' => "GET POST"));			 	  
+			}
+			case 3 :
+				 if ($req->getMethod() == 'GET'){
+				 	$var = $path[3]; 
+				 	if (strcmp($var, 'noticias') !==false){
+				 		getDeEntidadeNoticias($req,$ent,$id); 
+				 	}
+				 }
+			RestUtils::sendResponse(405, array('allow' => "GET "));			 	  
 		}
 	}
 	
 	function putClubeOrIntegrante($req, $id, $ent){
-
 		$existent  = new $ent();
 		try{
-			$existent->getObjectById($id);
+			$r = 	$existent->getObjectById($id);
 		}catch(Exception $e){
 			RestUtils::sendResponse(500); 	
 		}
 
 		//TODO - check XSD 
 		$new = $existent->fromXml($req->getData());
-		//ASSUMINDO QUE $new exist: 
-		
-	    if (strtolower($ent) == 'clube'){ 
-			$new->idclube = $id; 
+		$ide = 'id' . $ent; 
+		if (isset($new->$ide)  && $new->$ide != $id){
+			RestUtils::sendResponse(400); 
 		}
-		else {
-			$new->idintegrante = $id; 
-		}
-		
+
+		//ASSUMINDO QUE $new exist:
+		$new->$ide = $id;
+		 
 		try{
 			$new->update(); 
 		}catch(Exception $e){
@@ -283,24 +288,29 @@
 		}
 	}			
 	
-	
 	function getDeEntidade($req, $ent, $id){
 		$bdEnt = new $ent(); 
 		$key = (strtolower($ent) == 'clube') ? "idclube" : "idintegrante";
-		$entry = $bdEnt->findFirst( array($key => $id));
-		if (!$entry){ RestUtils::sendResponse(404);exit; }
-
-		if (strtolower($ent)== 'clube'){
-			$entry->noticias = Noticia_Has_Clube::getAllNoticias($id);  	
-		}
-		else {
-			$entry->noticias = Noticia_Has_Integrante::getAllNoticias($id);  	
+		try{
+			$entry = $bdEnt->getObjectById($id);
+		}catch(Exception $e){
+			RestUtils::sendResponse(404); 	
 		}
 		
+
+				
+		
+			
+		if (strtolower($ent)== 'clube'){
+			//$entry->noticias = Noticia_Has_Clube::getAllNoticias($id);  	
+		}
+		else {
+			//$entry->noticias = Noticia_Has_Integrante::getAllNoticias($id);  	
+		}
+		}
 		if ($req->getHttpAccept() == 'json'){
 			RestUtils::sendResponse(200, null, json_encode($entry)); 
 		}
-		
 		else if ($req->getHttpAccept() == 'text/xml'){
 			//TODO descricao está cheio. 
 			global $options; $options["rootName"] = $ent ; $options["defaultTagName"]  = "descricao"; 
@@ -315,6 +325,7 @@
 			RestUtils::sendResponse(406); 
 		}
 	}
+	
 	
     /*
      * Checks if the request is valid through whitelistening of the possible request types.
