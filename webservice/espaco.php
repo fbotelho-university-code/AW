@@ -94,7 +94,7 @@
 	 
 	function getRoot($req){
 		$local = new Local();
-		include "filter.php";
+		//include "filter.php";
 		$locais =$local->getAll(null, $start, $count);
 		if (!$locais) {RestUtils::sendResponse(500); exit; }
 		foreach ($locais as $n){ $n->follow = "myUrl/" . $n->idlocal; }

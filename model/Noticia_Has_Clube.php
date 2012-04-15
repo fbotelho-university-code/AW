@@ -125,7 +125,7 @@ require_once("Model.php");
 	/**
 	 * Consulta Base de Dados para inserir ou alterar uma rela��o entre uma noticia e um clube
 	 */
-	public function update(){
+	/*public function update(){
 			$sql_where_key =" where idclube = " . $this->idclube . " AND idnoticia = " . $this->idnoticia;
 			$query = "select * from noticia_has_clube" . $sql_where_key;   
 			
@@ -148,6 +148,9 @@ require_once("Model.php");
 			$rs = $ado->execute($query); 
 		}
 		
+		*/
+		
+	
 	/**
 	 * Calcula a qualifica��o da not�cia de forma acumulativa
 	 * @param int $qual
@@ -171,7 +174,7 @@ require_once("Model.php");
 	}
 	
 	
-		public static function getAllNoticias($idIntegrante){
+	public static function getAllNoticias($idIntegrante){
 			$class_this = new Noticia_Has_Clube(); 
 			$rel = $class_this->find(array("idclube" => $idIntegrante)); 
 			if (!$rel) return null; 
@@ -180,12 +183,13 @@ require_once("Model.php");
 			foreach($rel as $rl){
 				$n =$clube_class->getObjectById($rl->getIdNoticia()); 
 				$n->visivel = null; 
+				
 				$clubes[] = $n; 
 			}
 			return $clubes; 
 	}
 
-	public static function getAllClubes($idnoticia){
+	public static function getAllClubes($idnoticia, $baseurl){
 		$class_this = new Noticia_Has_Clube(); 
 		$rel = $class_this->find(array("idnoticia" => $idnoticia)); 
 		if (!$rel) return null; 
@@ -197,6 +201,7 @@ require_once("Model.php");
 			$c = $clube_class->getObjectById($rl->getIdClube());
 			//$c->idlexico = $rl->idlexico; 
 			$c->qualificacao = $rl->qualificacao; 
+			$c->follow = $baseurl . 'entidades.php/clube/' . $c->idclube; 
 			$clubes[] = $c; 
 		}
 		return $clubes; 

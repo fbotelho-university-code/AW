@@ -14,8 +14,20 @@
 
 	/idNoticia | GET | Retorna o conteudo e informa�‹o relativa a uma noticia, incluindo rela�›es como referencias temporais, referencias espaciais, clubes , etc., A representa�‹o ser‡ em XML, JSON e XHTML.  
  **/
- 
-	
+ 	
+ 	
+ 	
+ 	function getUrl(){
+ 	$v = parse_url("http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+ 	 
+
+ 	$r = $v['scheme'] . '://' . $v['host'] . $v['path'];
+ 	$pos = strpos($r, 'noticias.php') ;
+ 	$val = substr($r, 0, $pos );
+ 	
+ 	return $val;    		
+ 	}
+
     $options = array(
       "indent"          => "    ",
       "linebreak"       => "\n",
@@ -30,7 +42,6 @@
  	); 
  	
  	$xmlSerializer = new XML_Serializer($options); 
- 
     
 	$req  = RestUtils::processRequest();  // The request made by the client.
 	checkRequest($req);   // check that the request is valid. Dies otherwise.  
@@ -38,7 +49,6 @@
 	  //Dispatching according to the path info. 
 	  $path_parameters = $req->getPathInfo(); 
 	  $path_parameters_count = count($path_parameters);
-	  
 	  switch($path_parameters_count){
 		case 0: 		  	
 	  		processRoot($req);
@@ -47,18 +57,12 @@
 	  		processNews($req);
 	  		break;  
 	  	default:
-	  	//TODO - send bad content 
+			RestUtils::sendResponse(404);
+			exit;  
 	  } 
 	  
-	// Process resource head (/noticias) requests. Accepts GET/POST/HEAD  
-	  
-	/*
-	 * TODO: 
-	 * POST
-	 * HEAD
-	 */
+	// Process resource head (/noticias) requests. Accepts GET/POST  
 	function processRoot($req){
-		
 		switch($req->getMethod()){
 			case 'GET': 
 				getRoot($req);
@@ -67,11 +71,9 @@
 				postRoot($req);
 			break;
 			case 'HEAD':
-			
-				headRoot();
-			break;
+				//headRoot();
 			default:
-				RestUtils::sendResponse(405, array('allow' => "HEAD", "GET", "POST"));
+				RestUtils::sendResponse(405, array('allow' =>"GET POST"));
 				exit; 
 		}			
 	}
@@ -81,15 +83,19 @@
 		$hash = md5(var_export($news,true));
 		RestUtils::sendResponseHead($hash);
 	}
-
+	
 	function getAllNews(){
 		$noticia = new Noticia();
+		try{
+			$news =$noticia->getAll(array("idnoticia","data_pub", "assunto", "descricao", "url"));
+		}catch(Exception $e){
+			RestUtils::sendResponse(500);
+			exit;  
+		}
 		
-		include("filter.php");
-		
-		$news =$noticia->getAll(array("idnoticia","data_pub", "assunto", "descricao", "url"), $start, $count);
-		if (!$news){
-			RestUtils::sendResponse(500); 
+		foreach ($news as $n){
+			$n->follow = getUrl() .'noticias.php/'.   $n->idnoticia;
+			$n->visivel = null;  
 		}
 		
 		return $news;
@@ -98,6 +104,7 @@
 	function getHashObject($ob){
 		$hash = md5(var_export($ob, true)); 
 	}
+	
 	/**
 	 * Listar todas as noticias. 
 	 * Representação em XML, JSON que devem conter apontadores para o recurso de cada noticia.  
@@ -107,9 +114,11 @@
 	function getRoot($req){
 		$news = getAllNews($req); 
 		
-		if ($req->getEtag() != null && $req->getEtag() == getHashObject($news)){
-			RestUtils::sendResponse(304); 	
-		}
+		$news = getAllNews($req);
+		 //TODO - HEAD
+		//if ($req->getEtag() != null && $req->getEtag() == getHashObject($news)){
+			//RestUtils::sendResponse(304); 	
+		//}
 		
 		foreach ($news as $n){
 			//$n->follow = "myUrl/" . $n->idnoticia;
@@ -117,9 +126,11 @@
 		}
 		
 		if ($req->getHttpAccept() == 'text/xml'){
-			global $options; $options["rootName"] = "noticias";
-			$xmlSerializer =  new XML_Serializer($options);
+				global $options; $options["rootName"] = "noticias";
+				$xmlSerializer =  new XML_Serializer($options);
 			//$xmlSerializer->setOption("namespace",array("localhost", "localhost"));
+				$result = $xmlSerializer->serialize($news);
+			if ($result == true){
 			$result = $xmlSerializer->serialize($news);
 		
 		if ($result == true){
@@ -135,50 +146,22 @@
 			else {
 				RestUtils::sendResponse(500);
 			}  
-		}
-		else{
-			RestUtils::sendResponse(500); 
-		}
+			}
+			else{
+				RestUtils::sendResponse(500); 
+			}
 		}
 		else if ($req->getHttpAccept() == 'json'){
 			RestUtils::sendResponse(200, null,  json_encode($news)); 
 		}
 		else{
+			//Not Acceptable. 
 			RestUtils::sendResponse(406); 
 		}
-		//TODO - send malformed request response
+		RestUtils::sendResponse(400); 
 	}
 	
-	/**
-	 * Post to /noticias . 
-	 * Must create new news and return the identifier  of that news  
-	 * 
-	 */
-	function postRoot($req){
-		$noticia = new Noticia(); 
-
-		$n = $noticia->fromXml($req->getData());
-		if (!$n->texto) $n->texto =  Noticia::fetchTexto($n->url);
-		 
-		$n->idfonte = Utill::getIdWebServiceAsFonte();
-		 
-		if (!$n) { 
-			RestUtils::sendResponse(400);
-			exit;  
-		}
-		$id = $n->add();
-		if (!$id){
-			// database could not   
-			RestUtils::sendResponse(500);
-			exit; 
-		}
-		else {
-			//TODO - create response url 
-			RestUtils::sendResponse(201, null, $id, 'text'); 
-		}
-//		if ($id = )
-		//RestUtils::sendResponse(200, null, $req->getData()); 
-	}
+	
 	
 	
 	//Process resource (/noticias/{idnoticia}) requests. Accepts GET/PUT/HEAD/DELETE
@@ -191,8 +174,14 @@
  */
 	function processNews($req){
 	//TODO : make it safe to access path_info[0]. Prevent sql injection please.
-	$path_info = $req->getPathInfo();  
+	$path_info = $req->getPathInfo();
+	  
 	$id = $path_info[1];
+	
+	if (!is_numeric($id)){
+		RestUtils::sendResponse(400);
+	}
+	
 		switch($req->getMethod()){
 			case 'GET': 
 			getNews($req, $id);
@@ -205,24 +194,73 @@
 			case 'DELETE':
 			break; 
 			default: 
-			 RestUtils::sendResponse(405, array('allow' => "HEAD", "PUT",  "DELETE", "GET"));
+			 RestUtils::sendResponse(405, array('allow' => "PUT DELETE GET"));
 			 exit;  
 		}
 	}
 	
 	
-	
-	function putNews($req, $id){
+	/**
+	 * Post to /noticias . 
+	 * Must create new news and return the identifier  of that news  
+	 * Similiar to putNews
+	 */
+	function postRoot($req){
 		$noticia = new Noticia(); 
+
+		$n = $noticia->fromXml($req->getData());
 		
-		$noticia->getObjectById($id);
+		if (!isset($n) || checkRelations($n)  === false || isset($n->idnoticia)){
+			RestUtils::sendResponse(400);
+			exit; 
+		}
 		
-		if (!$noticia) {
+		$n->texto =  Noticia::fetchTexto($n->url);
+		$n->idfonte = Utill::getIdWebServiceAsFonte();
+
+		try{
+			$id = addNoticia($n, 'add');
+		}catch(Exception $e){
+			RestUtils::sendResponse(500);
+		} 		
+		
+		if (isset($id)){
+			RestUtils::sendResponse(201, null, $id, 'text');
+	
+		}else{
+			RestUtils::sendResponse(500);
+		}
+	}
+	
+		
+	function putNews($req, $id){
+		$noticia = new Noticia();
+		
+		try{ 
+			$n = $noticia->getObjectById($id);
+		}catch(Exception $e){
+			RestUtils::sendResponse(500); 
+		}
+		
+		if (!isset($n)) {
 			RestUtils::sendResponse(404); 	
 		}
 		
 		$nova_noticia = $noticia->fromXml($req->getData());
+		if ($nova_noticia === null || checkRelations($nova_noticia)===false ||
+			// se existir id de noticia no gajo nao pode ir.  
+			(isset($nova_noticia->idnoticia) && ($nova_noticia->idnoticia !=  $id))){ 
+			RestUtils::sendResponse(400);
+			exit;
+		}
 		
+		$nova_noticia->idnoticia =$id; 
+		addNoticia($nova_noticia, "update");
+		RestUtils::sendResponse(200);
+		exit;   
+	}
+	
+	function addNoticia($nova_noticia, $foo){
 		if (isset($nova_noticia->locais )) {
 			$locais = $nova_noticia->locais ;
 			unset($nova_noticia->locais); 
@@ -243,18 +281,16 @@
 		if ($nova_noticia){
 		$nova_noticia->texto = Noticia::fetchTexto($nova_noticia->url);
 		$nova_noticia->idfonte = Utill::getIdWebServiceAsFonte();
-		$nova_noticia->idnoticia = $id; 
 		
-		try{
-			$nova_noticia->update();
-		}catch (Exception $e){
-			RestUtils::sendResponse(500); 
-		}
-		
-		}else{
-			//TODO  bad format 
-		}
-
+			try{
+				$r = $nova_noticia->$foo();
+				if (isset($r)){
+					$nova_noticia->idnoticia = $r; 
+				} 
+			}catch(Exception $e){
+				RestUtils::sendResponse(500);
+				exit;  
+			}
 		if (isset($locais )) {
 			$nova_noticia->locais = $locais; 
 		}
@@ -267,34 +303,29 @@
 		if (isset($datas)){
 		 	$nova_noticia->datas = $datas;
 		}
-
+		
 		updateRelations($nova_noticia);
+		return $r; 
+		}
 	}
-	
 	
 	function checkRelations($noticia){
 		if (isset($noticia->locais)){
-			foreach ($noticias->locais as $l){
+			foreach ($noticia->locais as $l){
 				if (!isset($l->idlocal) ) {
 					return false; 
 				}
 			}
 		}
-		if(isset($noticia->datas)){
-			foreach($noticias->datas as $l){
-				if (!isset($l->data))
-					return false; 
-			}
-		}
 		
-		if (isset($noticia->locais)){
-			foreach ($noticias->clubes as $l){
+		if (isset($noticia->clubes)){
+			foreach ($noticia->clubes as $l){
 				if (!isset($l->idclube)) 
 					return false; 
 			}		
-		}	
+		}
 		if (isset($noticia->integrantes)) {
-			foreach($noticias->integrantes as $l)
+			foreach($noticia->integrantes as $l)
 				if (!isset($l->idintegrante))	
 					return false;
 		}
@@ -308,8 +339,12 @@
 		 
 		try{ 
 			$locais_classe->deleteById($noticia->getIdNoticia());
+			$clubes_classe->deleteById($noticia->getIdNoticia());
+			$integrantes_classe->deleteById($noticia->getIdNoticia());
+			$datas_classe->deleteById($noticia->getIdNoticia());
 		}catch (Exception $e){
-			RestUtils::sendResponse(500); 
+			RestUtils::sendResponse(500);
+			exit;  
 		}
 		
 		if (isset($noticia->locais)){
@@ -319,22 +354,24 @@
 				try{
 					$rel->add();
 				}catch(Exception $e){
-					RestUtils::sendResponse(500); 
+					RestUtils::sendResponse(500);
+					exit;  
 				}
 			}
 		}
 		
-		$clubes_classe->deleteById($noticia->getIdNoticia());
 		if (isset($noticia->clubes)){
 			foreach($noticia->clubes as $l){
 				try{
 					$rel = new Noticia_Has_Clube($noticia->idnoticia, $l->idclube , $l->qualificacao );
 					$rel->add();
 				}catch(Exception $e){
-					RestUtils::sendResponse(500); 
+					RestUtils::sendResponse(500);
+					exit;  
 				}
 			}	
 		}
+		
 		
 		if (isset($noticia->integrantes)){
 			foreach($noticia->integrantes as $l){
@@ -342,18 +379,23 @@
 					$rel = new Noticia_Has_Integrante($noticia->idnoticia, $l->idintegrante , $l->qualificacao );
 					$rel->add();
 				}catch(Exception $e){
-					RestUtils::sendResponse(500); 
+					RestUtils::sendResponse(500);
+					exit;  
 				}
 			}	
 		}
+		
+		
+		 
 		if (isset($noticia->datas)){
 			foreach($noticia->datas as $l){
 				 try{
-				 	echo $l->__toString(); 
+//				 	echo $l->__toString();
 					$rel = new Noticia_Data($noticia->idnoticia, '' ,$l->__toString());
 					$rel->add();
 				}catch(Exception $e){
-					RestUtils::sendResponse(500); 
+					RestUtils::sendResponse(500);
+					exit;  
 				}
 			}	
 		}
@@ -361,13 +403,18 @@
 	}
 	
 	function getNews($req, $id){
-		$noticia = new Noticia(); 
-		$n = $noticia->getRelationArray($id); 
-	
-		if (!$n){
-			RestUtils::sendResponse(404);
-			exit; 
+		$noticia = new Noticia();
+		
+		try{
+		$n = $noticia->getRelationArray($id, getUrl()); 
+		}catch(Exception $e){
+			RestUtils::sendResponse(500);
 		}
+		
+		if ($n == null){
+			RestUtils::sendResponse(404); 
+		}
+		
 		if ($req->getHttpAccept() == 'json'){
 			RestUtils::sendResponse(200, null, json_encode($n)); 
 		}
@@ -401,7 +448,7 @@
     		RestUtils::sendResponse(405, array('allow' => $methods_supported));
     		exit;  
     	}
-    		
+    	
     	//check the request variables that are not understood by this resource
     	$dif = array_diff(array_keys($req->getRequestVars()), $request_vars);
     	//If they are differences then we do not understand the request.  
@@ -409,7 +456,6 @@
     	 	RestUtils::sendResponse(400, array('unrecognized_req_vars' => $dif));
     		exit; 
     	}
-    	    	
     	//TODO - check that path parameters are correct through regulares expressions that validate input types and formats. 
     	//could respond BadRequest also. 
     }

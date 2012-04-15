@@ -112,7 +112,7 @@ class Noticia_Has_Integrante extends Model{
    	/**
 	 * Consulta Base de Dados para inserir ou alterar uma rela��o entre uma noticia e um integrante
 	 */
-	 public function update() {
+	/* public function update() {
         $sql_where_key = " where idnoticia = " . $this->idnoticia . " AND idintegrante = " . $this->idintegrante;
         $query = "select * from noticia_has_integrante" . $sql_where_key;
 
@@ -135,7 +135,7 @@ class Noticia_Has_Integrante extends Model{
         }
         $rs = $ado->execute($query);
     }
-    
+    */
     /**
     * Retorna o objeto em forma de String. Usado para depura��o.
     * @return String $res
@@ -167,7 +167,7 @@ class Noticia_Has_Integrante extends Model{
 			return $clubes; 
 		}
 		
-		public static function getAllIntegrantes($idnoticia){
+		public static function getAllIntegrantes($idnoticia, $baseurl){
 		$class_this = new Noticia_Has_Integrante(); 
 		$rel = $class_this->find(array("idnoticia" => $idnoticia)); 
 		if (!$rel) return null; 
@@ -176,6 +176,7 @@ class Noticia_Has_Integrante extends Model{
 		foreach($rel as $rl){
 			$r = $clube_class->getObjectById($rl->getIdIntegrante());
 			$r->qualificacao = $rl->qualificacao;    
+			$r->follow = $baseurl . 'entidades.php/integrante/' . $r->idintegrante; 
 			$clubes[] =  $r; 
 		}
 		return $clubes; 

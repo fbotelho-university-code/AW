@@ -3,7 +3,7 @@
 require_once "Model.php";
 require_once 'includes.php'; 
 require_once 'lib/Util.php'; 
-
+require_once 'Encoding.php'; 
 /**
  * Classe que representa uma notícia recuperada de fontes de informações da Web
  *  (Google News, Sapo News, Twitter, etc.)
@@ -31,7 +31,7 @@ class Noticia extends Model{
 	 * "locais" => locais , 
 	 *  "tempo" => blah ) 
 	 */		
-	public static function getRelationArray($idNoticia){
+	public static function getRelationArray($idNoticia, $baseurl){
 		//TODO what if idNoticia nao existe? 
 		$class_noticia = new Noticia();
 		$noticiaOb = $class_noticia->getObjectById($idNoticia);
@@ -50,10 +50,10 @@ class Noticia extends Model{
 		//TODO - what if idNoticia nao existe nas relações. 
 		$locais_noticias = $class_locais_rel->find(array("idnoticia" => $idNoticia));
 		
-		$result['locais'] =  Noticia_Locais::getAllLocais($locais_noticias);
-		$result['datas'] = Noticia_Data::getAllDatas($idNoticia); 
-		$result['clubes'] = Noticia_Has_Clube::getAllClubes($idNoticia); 
-		$result['integrantes'] = Noticia_Has_Integrante::getAllIntegrantes($idNoticia); 
+		$result['locais'] =  Noticia_Locais::getAllLocais($locais_noticias, $baseurl);
+		$result['datas'] = Noticia_Data::getAllDatas($idNoticia, $baseurl); 
+		$result['clubes'] = Noticia_Has_Clube::getAllClubes($idNoticia,$baseurl); 
+		$result['integrantes'] = Noticia_Has_Integrante::getAllIntegrantes($idNoticia,$baseurl); 
 		
 		return $result; 
 	}
@@ -63,10 +63,8 @@ class Noticia extends Model{
 	 * @param url O url da noticia.  
 	 */
 		public static function fetchTexto($url){
-		// TODO - usar curl, meter null em caso de o url t� dead. 
-		// TODO - usar parser html do prof e fazer cenas... (ir buscar s� o body)
-		return addslashes(file_get_contents($url)); 
-	}
+			    Encoding::fixUTF8(Encoding::toUTF8(addslashes($url))); 
+    }
 	 
 	/**
 	 * Identificador da noticia

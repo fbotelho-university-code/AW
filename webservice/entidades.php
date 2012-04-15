@@ -186,7 +186,7 @@
 	
 	function getEntidade($req, $entidade){
 		$bdEnt = new $entidade(); 
-		include "filter.php";
+		//include "filter.php";
 		$entrys = $bdEnt->getAll(null, $start, $count); 
 		if (!$entrys){ RestUtils::sendResponse(404);exit; }
 		
