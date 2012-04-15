@@ -241,26 +241,39 @@
 		}
 		switch(count($req->getPathInfo())){
 			case 2: 
-			switch($req->getMethod()){
-				case 'GET': 
-					getDeEntidade($req, $ent, $id);
-					break;
-				 case 'PUT':
-				 	putClubeOrIntegrante($req, $id, $ent); 
-				 	break;
-			 	  case 'DELETE': 
-			 		break; 
-				RestUtils::sendResponse(405, array('allow' => "GET POST"));			 	  
-			}
-			case 3 :
+		switch($req->getMethod()){
+			case 'GET': 
+				getDeEntidade($req, $ent, $id); 
+				break;
+			 case 'PUT':
+			 	putClubeOrIntegrante($req, $id, $ent); 
+			 	break; 
+			 case 'DELETE':
+	if (strtolower($ent) == 'integrante')
+					deleteIntegrante($id); 
+			 	break; 
+			 default :
+			 	RestUtils::sendResponse(405, array('allow' => "GET POST"));
+		}
+case 3 :
 				 if ($req->getMethod() == 'GET'){
 				 	$var = $path[3]; 
 				 	if (strcmp($var, 'noticias') !==false){
 				 		getDeEntidadeNoticias($req,$ent,$id); 
 				 	}
-				 }
-			RestUtils::sendResponse(405, array('allow' => "GET "));			 	  
+	}
+	
+	function deleteIntegrante($id){
+		$validID = settype($id, "integer");
+		$integrante = new Integrante();
+		$integrante->getObjectById($id);
+		if (!$integrante || !$validID){
+			RestUtils::sendResponse(404);
+			exit();
 		}
+		
+		$integrante->del();
+		RestUtils::sendResponse(200);
 	}
 	
 	function putClubeOrIntegrante($req, $id, $ent){

@@ -1,0 +1,247 @@
+<html>
+	<head>
+		<title>API Web Service</title>
+	</head>
+	<body>
+		<h1>Tabela de métodos disponíveis</h1>
+		<table border="1">
+			<tr>
+				<th>Recurso</th>
+				<th><code>GET</code></th>
+				<th><code>POST</code></th>
+				<th><code>PUT</code></th>
+				<th><code>DELETE</code></th>
+			</tr>
+			<tr>
+				<td>/noticias.php</td>
+				<td bgcolor="green"></td>
+				<td bgcolor="green"></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>/noticias.php/{id}</td>
+				<td bgcolor="green"></td>
+				<td></td>
+				<td bgcolor="green"></td>
+				<td bgcolor="green"></td>
+			</tr>
+			<td>/entidades.php/clube</td>
+			<td bgcolor="green"></td>
+			<td bgcolor="green"></td>
+			<td></td>
+			<td></td>
+			</tr>
+			<tr>
+				<td>/entidades.php/clube/{id}</td>
+				<td bgcolor="green"></td>
+				<td></td>
+				<td bgcolor="green"></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>/entidades.php/integrante</td>
+				<td bgcolor="green"></td>
+				<td bgcolor="green"></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>/entidades.php/integrante/{id}</td>
+				<td bgcolor="green"></td>
+				<td></td>
+				<td bgcolor="green"></td>
+				<td bgcolor="green"></td>
+			</tr>
+			<tr>
+				<td>/espaco.php</td>
+				<td bgcolor="green"></td>
+				<td bgcolor="green"></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>/espaco.php/{id}</td>
+				<td bgcolor="green"></td>
+				<td></td>
+				<td bgcolor="green"></td>
+				<td bgcolor="green"></td>
+			</tr>
+			<tr>
+				<td>/tempo.php[/{ano}[/{mes}[/{dia}]]]</td>
+				<td bgcolor="green"></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+		</table>
+		
+		<h1><code>URI</code> base</h1>
+		<p><code>http://localhost/aw12/webservice</code></p>
+		
+		<h1><code>API</code></h1>
+		<p>A <code>API</code> é apresentada em função de cada recurso.</p>
+		<p>
+		Em todos os recursos o método <code>GET</code> está definido, podendo receber como paramêtro "text/xml" ou "json" 
+		no campo <code>Accept</code> do pedido <code>HTTP</code>, para que a resposta seja em <code>XML</code> ou 
+		<code>JSON</code>, respectivamente. Também são aceites como <em>query variables</em> as variáveis 
+		<code>start</code> e <code>count</code>. <code>start</code> indica onde os elementos retornados começam, e 
+		<code>count</code> indica quantos elementos devem ser devolvidos na resposta. Se não houverem elementos suficientes 
+		disponíveis para perfazer <code>count</code>, todos os elementos disponíveis são retornados. Obviamente tanto 
+		<code>count</code> como <code>start</code> devem ser sempre valores inteiros e positivos. Se estas variáveis não estiverem definidas, 
+		o valor por defeito utilizado é 0 para <code>start</code> e 10 para <code>count</code>.
+		</p> 
+		<h2><code>/noticias.php</code></h2>
+		<p>
+		Este é o recurso relativo as <em>notícias</em>.
+		</p>
+		<p>
+		Para este recurso estão definidos os métodos <code>GET</code> e <code>POST</code>.
+			<dl>
+				<dt><code>GET</code></dt>
+					<dd>Devolve uma lista de notícias.</dd>
+				<dt><code>POST</code></dt>
+					<dd>Permite inserir uma nova notícia, que deve ser passada no corpo do pedido <code>HTTP</code>, em 
+					<code>XML</code>, respeitando o <code>XML Schema</code> <a href="Schemas/noticia.xsd">noticia.xsd</a>. Como pode ser visto no 
+					<code>XML Schema</code>, a notícia a ser inserida já deve conter todas as relações existentes.
+				</dd>
+			</dl>
+		</p>
+			<h3><code>/noticias.php/{id}</code></h3>
+			<p>Este recurso é relativo apenas a uma <em>notícia</em>.</p>
+			<p>
+			A variável <code>id</code> representa o identificador único da notícia. Para este recurso estão definidos os métodos <code>GET</code>, 
+			<code>PUT</code> e <code>DELETE</code>.
+				<dl>
+					<dt><code>GET</code></dt>
+						<dd>Devolve a notícia com o identificador igual à <code>id</code>.</dd>
+					<dt><code>PUT</code></dt>
+						<dd>Actualiza a notícia com o identificador igual à <code>id</code>, para ficar igual a notícia passada por parâmetro no corpo do 
+					pedido <code>HTTP</code>. A notícia fornecida deve seguir o <code>XML Schema</code> <a href="Schemas/noticia.xsd">noticia.xsd</a>.
+						</dd>
+					<dt><code>DELETE</code></dt>
+						<dd>Remove a notícia com o identificador igual à <code>id</code>. A notícia não é pagada da base de dados, mas sim movida para uma 
+					tabela secundária, onde não estará disponível para o público.</dd>
+				</dl>
+			</p>
+		<h2><code>/entidades.php</code></h2>
+		<p>Não se trata de um recurso, mas sim de mais um nível de indirecção adicionado ao <code>URI</code> base. Aponta tanto para os <em>clubes</em> quanto para os seus <em>integrantes</em>.</p>
+			<h3><code>/entidades.php/clube</code></h3>
+			<p>
+				Este recurso representa os <em>clubes</em>.
+			</p>
+			<p>
+			Para este recurso estão disponíveis os métodos <code>GET</code> e <code>POST</code>.
+				<dl>
+					<dt><code>GET</code></dt>
+						<dd>Retorna uma lista de clubes.</dd>
+					<dt><code>POST</code></dt>
+						<dd>Insere um novo clube, enviado em <code>XML</code> no corpo do pedido <code>HTTP</code>. O <code>XML</code> deve respeitar o <code>XML Schema</code>		<a href="Schemas/clube.xsd">clube.xsd</a>.</dd>
+				</dl>
+			</p>
+			<h3><code>/entidades.php/clube/{id}</code></h3>
+			<p>
+				Este recurso representa um <em>clube</em>.
+			</p>
+			<p>
+				Este recurso aceita os métodos <code>GET</code> e <code>PUT</code>.
+				<dl>
+					<dt><code>GET</code></dt>
+						<dd>Retorna o clube que tem o identificador igual à <code>id</code>.</dd>
+					<dt><code>PUT</code></dt>
+						<dd>Permite actualizar a informação do clube com o identificador igual à <code>id</code>. A informação deve ser passada em <code>XML</code> no corpo do request <code>HTTP</code>, respeitando o <code>XML Schema</code> <a href="Schemas/clube.xsd">clube.xsd</a>.</dd>
+				</dl>
+			</p>
+			<h3><code>/entidades.php/integrante</code></h3>
+			<p>
+				Este recurso representa os <em>integrantes</em>.
+			</p>
+				Para este recurso estão definidos os métodos <code>GET</code> e <code>POST</code>.
+			<p>
+			<dl>
+				<dt><code>GET</code></dt>
+					<dd>Retorna uma lista de integrantes.</dd>
+				<dt><code>POST</code></dt>
+					<dd>Permite inserir um novo integrante. A informação deve ser passada em <code>XML</code> no corpo do pedido <code>HTTP</code>, respeitando o <code>XML		Schema</code> <a href="Schemas/integrante.xsd">integrante.xsd</a>.</dd>
+			</dl>
+			</p>
+			<h3><code>/entidades.php/integrante/{id}</code></h3>
+			<p>
+				Este recurso representa um <em>integrante</em>.
+			</p>
+			<p>
+				Este recurso aceita os métodos <code>GET</code>, <code>PUT</code> e <code>DELETE</code>.
+				<dl>
+					<dt><code>GET</code></dt>
+						<dd>Retorna o integrante com identificador igual à <code>id</code>.</dd>
+					<dt><code>PUT</code></dt>
+						<dd>Permite actualizar o integrante com identificador igual à <code>id</code>. A informação deve ser passada em <code>XML</code> no corpo do pedido		<code>HTTP</code>, respeitando o <code>XML Schema</code> <a href="Schemas/integrante.xsd">integrante.xsd</a>.</dd>
+					<dt><code>DELETE</code></dt>
+						<dd>Remove o integrante com identificador igual à <code>id</code>.</dd>
+				</dl>
+			</p>
+		<h2>/espaco.php</h2>
+		<p>
+			Este recurso representa os <em>locais</em>.
+		</p>
+		<p>
+			Para este recurso estao definidos os métodos <code>GET</code> e <code>POST</code>.
+			<dl>
+				<dt><code>GET</code></dt>
+					<dd>Retorna uma lista de locais.</dd>
+				<dt><code>POST</code></dt>
+					<dd>Permite adicionar um novo local. A informação deve ser passada em <code>XML</code> no corpo do pedido <code>HTTP</code>, respeitando o <code>XML Schema</code> <a href="Schemas/local.xsd">local.xsd</a>.</dd>
+			</dl>
+		</p>
+			<h3>/espaco.php/{id}</h3>
+			<p>
+				Este recurso representa um <em>local</em>.
+			</p>
+				Este recurso aceita os métodos <code>GET</code>, <code>PUT</code> e <code>DELETE</code>.
+			<p>
+				<dl>
+					<dt><code>GET</code></dt>
+						<dd>Retorna o local com identificador igual à <code>id</code>.</dd>
+					<dt><code>PUT</code></dt>
+						<dd>Permite actualizar a informação do recurso com indentificador igual à <code>id</code>. A informação deve ser passada em <code>XML</code> no corpo do pedido <code>HTTP</code>, respeitando o <code>XML Schema</code> <a href="Schemas/local.xsd">local.xsd</a>.</dd>
+					<dt><code>DELETE</code></dt>
+						<dd>Remove o local com identificador igual à <code>id</code>.</dd>
+				</dl>
+			</p>
+		<h2>/tempo.php</h2>
+		<p>
+			Este recurso representa as <em>datas</em> que estão associadas à notícias.
+		</p>
+		<p>
+			Para este recurso e os seus derivados, apenas está definido o método <code>GET</code>. Note que para os seus derivados, os <code>URI</code>s devem seguir o formato especificado abaixo, mas podem ser utilizados os <em>wildcards "ano"</em>, <em>"mes"</em> e <em>"dia"</em>.
+			<dl>
+				<dt><code>GET</code></dt>
+					<dd>Retorna a lista de datas associadas à notícias.</dd>
+			</dl>
+		</p>
+			<h3>/tempo.php/{ano}</h3>
+				<p>
+					Este recurso representa as datas associadas às notícias do ano <code>ano</code>.
+					<dl>
+						<dt>GET</dt>
+							<dd>Retorna as datas associadas às notícias do ano <code>ano</code>.</dd>
+					</dl>
+				</p>
+			<h3>/tempo.php/{ano}/{mes}</h3>
+				<p>
+					Este recurso representa as datas associadas às notícias do ano <code>ano</code> e mês <code>mes</code>.
+					<dl>
+						<dt>GET</dt>
+							<dd>Retorna as datas associadas às notícias do ano <code>ano</code> e mês <code>mes</code>.</dd>
+					</dl>
+				</p>
+			<h3>/tempo.php/{ano}/{mes}/{dia}</h3>
+				<p>
+					Este recurso representa a data associada às notícias do ano <code>ano</code>, mês <code>mes</code> e dia <code>dia</code>.
+					<dl>
+						<dt>GET</dt>
+							<dd>Retorna a data associada às notícias do ano <code>ano</code>, mês <code>mes</code> e dia <code>dia</code>.</dd>
+					</dl>
+				</p>
+	</body>
+</html>

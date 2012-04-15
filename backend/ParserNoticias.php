@@ -153,9 +153,12 @@ class ParserNoticias {
 									}
 									break;
 							}
-							//echo $dataInterpretada."<br>";
-							$rel  = new Noticia_Data($noticia->getIdnoticia(), $dates[$j], $dataInterpretada);
-							$rel->add();
+							$testearray = find(array('idnoticia'=>$noticia->getIdnoticia(),'tempo'=>$dataInterpretada));
+							if(!count($testearray)){							
+								//echo $dataInterpretada."<br>";
+								$rel  = new Noticia_Data($noticia->getIdnoticia(), $dates[$j], $dataInterpretada);
+								$rel->add();
+							}
 						}
 					}	
 				}

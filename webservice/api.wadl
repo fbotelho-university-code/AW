@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<application 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	xsi:schemaLocation="http://research.sun.com/wadl/2006/10 wadl.xsd" 
+	xmlns="http://research.sun.com/wadl/2006/10"
+	xmlns:aw="http://localhost/aw12/webservice"
+	> 
+	
+	<grammars> 
+		<include href="Schemas/clube.xsd"/> 
+		<include href="Schemas/local.xsd"/> 
+		<include href="Schemas/integrante.xsd"/> 
+		<include href="Schemas/noticia.xsd"/> 
+		<include href="Schemas/datas.xsd"/> 
+		<include href="Schemas/clubes.xsd"/> 
+		<include href="Schemas/integrantes.xsd"/> 
+		<include href="Schemas/locais.xsd"/>
+		<include href="Schemas/noticias.xsd"/>
+	</grammars> 
+	
+	<resources base="http://localhost/aw12/webservice"> 
+		<resource path="noticias.php"> 
+			<method name="GET"> 
+				<request>
+					<param name="start" style="query" type="xsd:int"/>
+					<doc xml:lang="en" title="Start value.">
+						Indicates the 'id' where the response should start.
+						0 is used if not defined.
+						Must be greater than 0.
+					</doc>
+					<param name="count" style="query" type="xsd:int"/>
+					<doc xml:lang="en" title="How many elements to be returned.">
+						Indicates how many elements should be returned.
+						Must be greater than 0.
+						10 is used if not defined.
+						If not so many elements are available, all are returned.
+					</doc>
+					<param name="Accept" style="header" type="xsd:string"/>
+					<doc xml:lang="en" title="Response format.">
+						Can be 'text/xml' (default) or 'json'.
+					</doc>
+				</request>
+				<response status="200"> 
+					<representation id="Noticias" mediaType="text/xml" element="noticias:noticias"/> 
+				</response>
+			</method>
+			<method name="POST"> 
+				<request>
+					<representation id="Noticia" mediaType="text/xml" element="noticia:noticia"/> 
+				</request>
+				</response status="201">
+				</response>
+			</method> 
+			<resource path={idNoticia}>
+				<param name="idNoticia" style="query" type="xsd:int"/>
+				<method name="GET"> 
+					<request>
+						<param name="Accept" type="xsd:string" style="header"/>
+						<doc xml:lang="en" title="Response format.">
+							Can be 'text/xml' (default) or 'json'.
+						</doc>
+					</request>
+					</response status="200"> 
+						<representation id="Noticia" mediaType="text/xml" element="noticia:noticia"/> 
+					</response>
+				</method>
+				<method name="PUT">
+					<request>
+						<representation id="Noticia" mediaType="text/xml" element="noticia:noticia"/> 
+					</request>
+					</response status="200">
+					</response>
+				</method>
+				<method name="DELETE">
+					<request>
+					</request>
+					</response status="200">
+						
+					</response>
+				</method>
+			</resource>
+		</resource>
+		<resource path="entidades.php">
+			<resource path="clube">
+				<method name="GET"> 
+					<request>
+						<param name="start" style="query" type="xsd:int"/>
+						<doc xml:lang="en" title="Start value.">
+							Indicates the 'id' where the response should start.
+							0 is used if not defined.
+							Must be greater than 0.
+						</doc>
+						<param name="count" style="query" type="xsd:int"/>
+						<doc xml:lang="en" title="How many elements to be returned.">
+							Indicates how many elements should be returned.
+							Must be greater than 0.
+							10 is used if not defined.
+							If not so many elements are available, all are returned.
+						</doc>
+						<param name="Accept" type="xsd:string" style="header"/>
+						<doc xml:lang="en" title="Response format.">
+							Can be 'text/xml' (default) or 'json'.
+						</doc>	
+					</request>
+					</response status="200"> 
+						<representation id="Clubes" mediaType="text/xml" element="clubes:clubes"/> 
+					</response>
+				</method>
+				<method name="POST"> 
+					<request>
+						<representation id="Clube" mediaType="text/xml" element="clube:clube"/> 
+					</request>
+					<response status="201">
+					</response>
+				</method>
+				<resource path={idClube}>
+					<param name="idClube" style="query" type="xsd:int"/>
+					<method name="GET"> 
+						<request>
+							<param name="Accept" type="xsd:string" style="header"/>
+							<doc xml:lang="en" title="Response format.">
+								Can be 'text/xml' (default) or 'json'.
+							</doc>	
+						</request>
+						</response status="200"> 
+							<representation id="Clube" mediaType="text/xml" element="clube:clube"/> 
+						</response>
+					</method>
+					<method name="PUT">
+						<request>
+							<representation id="Clube" mediaType="text/xml" element="clube:clube"/> 
+						</request>
+						</response status="200">
+						</response>
+					</method>
+				</resource>
+			</resource>
+			<resource path="integrante">
+				<method name="GET"> 
+					<request>
+						<param name="start" style="query" type="xsd:int"/>
+						<doc xml:lang="en" title="Start value.">
+							Indicates the 'id' where the response should start.
+							0 is used if not defined.
+							Must be greater than 0.
+						</doc>
+						<param name="count" style="query" type="xsd:int"/>
+						<doc xml:lang="en" title="How many elements to be returned.">
+							Indicates how many elements should be returned.
+							Must be greater than 0.
+							10 is used if not defined.
+							If not so many elements are available, all are returned.
+						</doc>
+						<param name="Accept" type="xsd:string" style="header"/>
+						<doc xml:lang="en" title="Response format.">
+							Can be 'text/xml' (default) or 'json'.
+						</doc>	
+					</request>
+					</response status="200"> 
+						<representation id="Integrantes" mediaType="text/xml" element="integrantes:integrantes"/> 
+					</response>
+				</method>
+				<method name="POST"> 
+					<request>
+						<representation id="Integrante" mediaType="text/xml" element="integrante:integrante"/> 
+					</request>
+					<response status="201">
+					</response>
+				</method>
+				<resource path={idIntegrante}>
+					<param name="idIntegrante" style="query" type="xsd:int"/>
+					<method name="GET"> 
+						<request>
+							<param name="Accept" type="xsd:string" style="header"/>
+							<doc xml:lang="en" title="Response format.">
+								Can be 'text/xml' (default) or 'json'.
+							</doc>	
+						</request>
+						</response status="200"> 
+							<representation id="Integrante" mediaType="text/xml" element="integrante:integrante"/> 
+						</response>
+					</method>
+					<method name="PUT">
+						<request>
+							<representation id="Integrante" mediaType="text/xml" element="integrante:integrante"/> 
+						</request>
+						</response status="200">
+						</response>
+					</method>
+					<method name="DELETE">
+						<request>
+						</request>
+						</response status="200">						
+						</response>
+					</method>
+				</resource>
+			</resource>
+		</resource>
+		<resource path="espaco">
+			<method name="GET"> 
+				<request>
+					<param name="start" style="query" type="xsd:int"/>
+					<doc xml:lang="en" title="Start value.">
+						Indicates the 'id' where the response should start.
+						0 is used if not defined.
+						Must be greater than 0.
+					</doc>
+					<param name="count" style="query" type="xsd:int"/>
+					<doc xml:lang="en" title="How many elements to be returned.">
+						Indicates how many elements should be returned.
+						Must be greater than 0.
+						10 is used if not defined.
+						If not so many elements are available, all are returned.
+					</doc>
+					<param name="Accept" type="xsd:string" style="header"/>
+					<doc xml:lang="en" title="Response format.">
+						Can be 'text/xml' (default) or 'json'.
+					</doc>	
+				</request>
+				</response status="200"> 
+					<representation id="Locais" mediaType="text/xml" element="locais:locais"/> 
+				</response>
+			</method>
+			<method name="POST"> 
+				<request>
+					<representation id="Local" mediaType="text/xml" element="local:local"/> 
+				</request>
+				<response status="201">
+				</response>
+			</method>
+			<resource path={idEspaco}>
+				<param name="idEspaco" style="query" type="xsd:int"/>
+				<method name="GET"> 
+					<request>
+						<param name="Accept" type="xsd:string" style="header"/>
+						<doc xml:lang="en" title="Response format.">
+							Can be 'text/xml' (default) or 'json'.
+						</doc>	
+					</request>
+					</response status="200"> 
+						<representation id="Local" mediaType="text/xml" element="local:local"/> 
+					</response>
+				</method>
+			</resource>
+			<method name="PUT">
+				<request>
+					<representation id="Local" mediaType="text/xml" element="local:local"/> 
+				</request>
+				</response status="200">
+				</response>
+			</method>
+			<method name="DELETE">
+				<request>
+				</request>
+				</response status="200">
+				</response>
+			</method>
+		</resource>
+		<resource path="tempo">
+			<method name="GET"> 
+				<request>
+					<param name="start" style="query" type="xsd:int"/>
+					<doc xml:lang="en" title="Start value.">
+						Indicates the 'id' where the response should start.
+						0 is used if not defined.
+						Must be greater than 0.
+					</doc>
+					<param name="count" style="query" type="xsd:int"/>
+					<doc xml:lang="en" title="How many elements to be returned.">
+						Indicates how many elements should be returned.
+						Must be greater than 0.
+						10 is used if not defined.
+						If not so many elements are available, all are returned.
+					</doc>
+					<param name="Accept" type="xsd:string" style="header"/>
+					<doc xml:lang="en" title="Response format.">
+						Can be 'text/xml' (default) or 'json'.
+					</doc>	
+				</request>
+				</response status="200"> 
+					<representation id="Datas" mediaType="text/xml" element="datas:datas"/> 
+				</response>
+			</method>
+			<resource path={ano}>
+				<param name="ano" style="query" type="xsd:int"/>
+				<method name="GET"> 
+					<request>
+						<param name="start" style="query" type="xsd:int"/>
+						<doc xml:lang="en" title="Start value.">
+							Indicates the 'id' where the response should start.
+							0 is used if not defined.
+							Must be greater than 0.
+						</doc>
+						<param name="count" style="query" type="xsd:int"/>
+						<doc xml:lang="en" title="How many elements to be returned.">
+							Indicates how many elements should be returned.
+							Must be greater than 0.
+							10 is used if not defined.
+							If not so many elements are available, all are returned.
+						</doc>
+						<param name="Accept" type="xsd:string" style="header"/>
+						<doc xml:lang="en" title="Response format.">
+							Can be 'text/xml' (default) or 'json'.
+						</doc>	
+					</request>
+					</response status="200"> 
+						<representation id="Datas" mediaType="text/xml" element="datas:datas"/> 
+					</response>
+				</method>
+				<resource path={mes}>
+					<param name="mes" style="query" type="xsd:int"/>
+					<method name="GET"> 
+						<request>
+							<param name="start" style="query" type="xsd:int"/>
+							<doc xml:lang="en" title="Start value.">
+								Indicates the 'id' where the response should start.
+								0 is used if not defined.
+								Must be greater than 0.
+							</doc>
+							<param name="count" style="query" type="xsd:int"/>
+							<doc xml:lang="en" title="How many elements to be returned.">
+								Indicates how many elements should be returned.
+								Must be greater than 0.
+								10 is used if not defined.
+								If not so many elements are available, all are returned.
+							</doc>
+							<param name="Accept" type="xsd:string" style="header"/>
+							<doc xml:lang="en" title="Response format.">
+								Can be 'text/xml' (default) or 'json'.
+							</doc>	
+						</request>
+						</response status="200"> 
+							<representation id="Datas" mediaType="text/xml" element="datas:datas"/> 
+						</response>
+					</method>
+					<resource path={dia}>
+						<param name="dia" style="query" type="xsd:int"/>
+						<method name="GET"> 
+							<request>
+								<param name="start" style="query" type="xsd:int"/>
+								<doc xml:lang="en" title="Start value.">
+									Indicates the 'id' where the response should start.
+									0 is used if not defined.
+									Must be greater than 0.
+								</doc>
+								<param name="count" style="query" type="xsd:int"/>
+								<doc xml:lang="en" title="How many elements to be returned.">
+									Indicates how many elements should be returned.
+									Must be greater than 0.
+									10 is used if not defined.
+									If not so many elements are available, all are returned.
+								</doc>
+								<param name="Accept" type="xsd:string" style="header"/>
+								<doc xml:lang="en" title="Response format.">
+									Can be 'text/xml' (default) or 'json'.
+								</doc>	
+							</request>
+							</response status="200"> 
+								<representation id="Datas" mediaType="text/xml" element="datas:datas"/> 
+							</response>
+						</method>
+					</resource>
+				</resource>
+			</resource>
+		</resource>
+	</resources> 
+</application> 

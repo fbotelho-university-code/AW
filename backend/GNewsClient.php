@@ -2,6 +2,7 @@
 
 require_once "includes.php";
 require_once "ParserNoticias.php";
+require_once "lib/simple_html_dom.php";
 
 /**
 * Classe responsável pelo leitura e consulta dos RSS do Google News
@@ -51,6 +52,8 @@ class GNewsClient extends Fonte {
 				$myNew->setUrl(isset($news->unescapedUrl) ?
 									addslashes($news->unescapedUrl)
 									: ""); 
+									echo 'wtf1';
+				//$myNew->setTexto($myNew->fetchTexto($myNew->getUrl()));
 				ParserNoticias::parseNoticia($myNew);
 			}
 		}

@@ -4,6 +4,7 @@
  require_once ('Util/RestRequest.php'); 
  require_once ('Util/XML/Serializer.php'); 
  require_once ('../model/Noticia.php');
+ require_once ('../model/Noticia_Bin.php');
  require_once ('./Util.php');    
   
  /*
@@ -190,6 +191,7 @@
 			case 'HEAD':
 			break; 
 			case 'DELETE':
+				deleteNewsFingir($id);
 			break; 
 			default: 
 			 RestUtils::sendResponse(405, array('allow' => "PUT DELETE GET"));
@@ -197,6 +199,24 @@
 		}
 	}
 	
+	function deleteNewsFingir($id){
+		$validID = settype($id, "integer");
+		$Noticia = new Noticia();
+		$Noticia->getObjectById($id);
+		if (!$Noticia || !$validID){
+			RestUtils::sendResponse(404);
+			exit();
+		}
+		
+		// Criar noticia_bin
+		$noticia_bin = new Noticia_Bin($Noticia);
+		$noticia_bin->add();
+		
+		// Apagar noticia
+		$Noticia->del();
+		RestUtils::sendResponse(200);
+	
+	}
 	
 	/**
 	 * Post to /noticias . 
