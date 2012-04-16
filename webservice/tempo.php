@@ -57,6 +57,14 @@ require_once ('Util/XML/Serializer.php');
 	  	case 1:
 	  		$ano = (strcmp($path_parameters[1], 'ano') == 0 ) ? '%' : $path_parameters[1];
 	  }
+	  
+	  if ($dia < 10){
+	  	$dia = '0'. $dia; 
+	  }
+	  if ($mes < 10){
+	  	$mes = '0' . $mes; 
+	  }
+	  
 	//var_dump($path_parameters); 	
 	$data_needle = $ano . '-' . $mes . '-' . $dia;
 	//var_dump($data_needle); 
