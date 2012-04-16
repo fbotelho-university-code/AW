@@ -288,5 +288,24 @@
 							<dd>Retorna a data associada às notícias do ano <code>ano</code>, mês <code>mes</code> e dia <code>dia</code>.</dd>
 					</dl>
 				</p>
+		<h1>Códigos de resposta		<code>HTTP</code></h1>
+		<dl>
+			<dt>200<dt>
+				<dd>Código de sucesso, devolvido em operações <code>GET</code> e <code>DELETE</code> bem sucedidas.</dd>
+			<dt>201<dt>
+				<dd>Código de sucesso de criação, devolvido em operações <code>POST</code> bem sucedidas.</dd>
+			<dt>204<dt>
+				<dd>Código de sucesso, devolvido em operações <code>PUT</code>.</dd>
+			<dt>400<dt>
+				<dd>Código de erro semântico, devolvido em operações <code>PUT</code> e <code>POST</code>, quando a informação passada está bem estruturada mas o conteúdo não tem sentido.</dd>
+			<dt>404<dt>
+				<dd>Código de erro por inexistência, devolvido em qualquer operação em que o recurso a que se pretende aceder não foi encontrado.</dd>
+			<dt>405<dt>
+				<dd>Código de erro por método não pertido, devolvido em qualquer operação que não está definida para um determinado recurso.</dd>
+			<dt>406<dt>
+				<dd>Código de erro por parâmetro não aceitável, devolvido em operações <code>GET</code> quando o parâmetro <code>Accept</code> fornecido é inválido.</dd>		
+			<dt>500<dt>
+				<dd>Codigo de erro interno do servidor, retornado em qualquer operação caso ocorra um erro no servidor.</dd>
+		</dl>
 	</body>
 </html>

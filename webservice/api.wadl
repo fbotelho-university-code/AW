@@ -46,12 +46,18 @@
 				</response>
 				<response status="406">
 				</response>
+				<response status="500">
+				</response>
 			</method>
 			<method name="POST"> 
 				<request>
 					<representation id="Noticia" mediaType="text/xml" element="Noticia:Noticia"/> 
 				</request>
 				<response status="201">
+				</response>
+				<response status="400">
+				</response>
+				<response status="500">
 				</response>
 			</method> 
 			<resource path={idNoticia}>
@@ -70,14 +76,20 @@
 					</response>
 					<response status="406">
 					</response>
+					<response status="500">
+					</response>
 				</method>
 				<method name="PUT">
 					<request>
 						<representation id="Noticia" mediaType="text/xml" element="Noticia:Noticia"/> 
 					</request>
-					<response status="200">
+					<response status="204">
 					</response>
 					<response status="404">
+					</response>
+					<response status="400">
+					</response>
+					<response status="500">
 					</response>
 				</method>
 				<method name="DELETE">
@@ -86,6 +98,8 @@
 					<response status="200">
 					</response>
 					<response status="404">
+					</response>
+					<response status="500">
 					</response>
 				</method>
 			</resource>
@@ -117,12 +131,18 @@
 					</response>
 					<response status="406">
 					</response>
+					<response status="500">
+					</response>
 				</method>
 				<method name="POST"> 
 					<request>
 						<representation id="Clube" mediaType="text/xml" element="Clube:Clube"/> 
 					</request>
 					<response status="201">
+					</response>
+					<response status="400">
+					</response>
+					<response status="500">
 					</response>
 				</method>
 				<resource path={idClube}>
@@ -141,14 +161,20 @@
 						</response>
 						<response status="406">
 						</response>
+						<response status="500">
+						</response>
 					</method>
 					<method name="PUT">
 						<request>
 							<representation id="Clube" mediaType="text/xml" element="Clube:Clube"/> 
 						</request>
-						<response status="200">
+						<response status="204">
 						</response>
 						<response status="404">
+						</response>
+						<response status="400">
+						</response>
+						<response status="500">
 						</response>
 					</method>
 					<resource path="noticias">
@@ -178,6 +204,8 @@
 							<response status="404">
 							</response>
 							<response status="406">
+							</response>
+							<response status="500">
 							</response>
 						</method>
 					</resource>
@@ -209,12 +237,18 @@
 					</response>
 					<response status="406">
 					</response>
+					<response status="500">
+					</response>
 				</method>
 				<method name="POST"> 
 					<request>
 						<representation id="Integrante" mediaType="text/xml" element="Integrante:Integrante"/> 
 					</request>
 					<response status="201">
+					</response>
+					<response status="400">
+					</response>
+					<response status="500">
 					</response>
 				</method>
 				<resource path={idIntegrante}>
@@ -233,14 +267,20 @@
 						</response>
 						<response status="406">
 						</response>
+						<response status="500">
+						</response>
 					</method>
 					<method name="PUT">
 						<request>
 							<representation id="Integrante" mediaType="text/xml" element="Integrante:Integrante"/> 
 						</request>
-						<response status="200">
+						<response status="204">
 						</response>
 						<response status="404">
+						</response>
+						<response status="400">
+						</response>
+						<response status="500">
 						</response>
 					</method>
 					<method name="DELETE">
@@ -249,6 +289,8 @@
 						<response status="200">						
 						</response>
 						<response status="404">
+						</response>
+						<response status="500">
 						</response>
 					</method>
 					<resource path="noticias">
@@ -278,6 +320,8 @@
 							<response status="404">
 							</response>
 							<response status="406">
+							</response>
+							<response status="500">
 							</response>
 						</method>
 					</resource>
@@ -310,12 +354,18 @@
 				</response>
 				<response status="406">
 				</response>
+				<response status="500">
+				</response>
 			</method>
 			<method name="POST"> 
 				<request>
 					<representation id="Local" mediaType="text/xml" element="Local:Local"/> 
 				</request>
 				<response status="201">
+				</response>
+				<response status="400">
+				</response>
+				<response status="500">
 				</response>
 			</method>
 			<resource path={idEspaco}>
@@ -334,15 +384,21 @@
 					</response>
 					<response status="406">
 					</response>
+					<response status="500">
+					</response>
 				</method>
 			</resource>
 			<method name="PUT">
 				<request>
 					<representation id="Local" mediaType="text/xml" element="Local:Local"/> 
 				</request>
-				<response status="200">
+				<response status="204">
 				</response>
 				<response status="404">
+				</response>
+				<response status="400">
+				</response>
+				<response status="500">
 				</response>
 			</method>
 			<method name="DELETE">
@@ -351,6 +407,8 @@
 				<response status="200">
 				</response>
 				<response status="404">
+				</response>
+				<response status="500">
 				</response>
 			</method>
 			<resource path="noticias">
@@ -381,6 +439,8 @@
 					</response>
 					<response status="406">
 					</response>
+					<response status="500">
+					</response>
 				</method>
 			</resource>
 		</resource>
@@ -409,6 +469,8 @@
 					<representation id="Datas" mediaType="text/xml" element="Datas:datas"/> 
 				</response>
 				<response status="406">
+				</response>
+				<response status="500">
 				</response>
 			</method>
 			<resource path={ano}>
@@ -440,6 +502,8 @@
 					</response>
 					<response status="406">
 					</response>
+					<response status="500">
+					</response>
 				</method>
 				<resource path={mes}>
 					<param name="mes" style="query" type="xsd:int"/>
@@ -470,6 +534,8 @@
 						</response>
 						<response status="406">
 						</response>
+						<response status="500">
+						</response>
 					</method>
 					<resource path={dia}>
 						<param name="dia" style="query" type="xsd:int"/>
@@ -499,6 +565,8 @@
 							<response status="404">
 							</response>
 							<response status="406">
+							</response>
+							<response status="500">
 							</response>
 						</method>
 					</resource>
