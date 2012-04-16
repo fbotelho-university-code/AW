@@ -144,6 +144,9 @@
  * HEAD
  * DELETE
  */
+ 
+ 	
+ 
 	function processLocal($req){
 				$path_info = $req->getPathInfo();
 		//var_dump($path_info); 
@@ -158,6 +161,7 @@
 			case 'HEAD':
 			break; 
 			case 'DELETE':
+				deleteLocal($id);
 			break; 
 			default: 
 			 RestUtils::sendResponse(405, array('allow' => "HEAD", "PUT", "DELETE", "GET"));
@@ -165,12 +169,26 @@
 		}
 	}
 	
+	function deleteLocal($id){
+		$validID = settype($id, "integer");
+		$local = new Local(); 
+		$local->getObjectById($id);
+		if (!$local || !$validID){
+			RestUtils::sendResponse(404);
+			exit();
+		}
+		
+		$local->del();
+		RestUtils::sendResponse(200);
+	}
+	
 	function putLocal($req, $id){
 		$local = new Local(); 
 		$local->getObjectById($id);
 		if (!$local){
 			RestUtils::sendResponse(404);
-		} 
+			exit();
+		}
 		
 		$xmlHttpContent = $req->getData();
 		/*if(!$local->validateXMLbyXSD($xmlHttpContent, "Local.xsd")) {

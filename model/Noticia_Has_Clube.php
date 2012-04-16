@@ -183,7 +183,6 @@ require_once("Model.php");
 			foreach($rel as $rl){
 				$n =$clube_class->getObjectById($rl->getIdNoticia()); 
 				$n->visivel = null; 
-				
 				$clubes[] = $n; 
 			}
 			return $clubes; 

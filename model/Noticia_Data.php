@@ -26,15 +26,16 @@ class Noticia_data extends Model{
 	*/
 	var $idnoticia; 
  
- 	
- 	public function checkValidity(){
+ 
+  	public function checkValidity(){
  		
 		return true; 
 	}
 	
 	public function getKeyFields(){
-		return array ('idnoticia', '$data'); 
-	}
+		return array ('id'); 
+	}	
+	
 	/**
 	 * Referencia temporal da noticia.
 	 * @var String - Data presente no texto da not�cia

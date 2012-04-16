@@ -23,6 +23,7 @@
  * 
  */
  
+ 
  require_once ('Util/RestUtils.php'); 
  require_once ('Util/RestRequest.php'); 
  require_once ('Util/XML/Serializer.php'); 
@@ -30,6 +31,14 @@
  require_once ('../model/Integrante.php');
  require_once ('../model/Clube.php'); 
  
+ 	function getUrl(){
+ 		$v = parse_url("http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+ 		
+ 		$r = $v['scheme'] . '://' . $v['host'] . $v['path'];
+ 		$pos = strpos($r, 'entidades.php') ;
+ 		$val = substr($r, 0, $pos );
+ 		return $val; 
+ 	}
  	$options = array(
       "indent"          => "    ",
       "linebreak"       => "\n",
@@ -57,14 +66,15 @@
 	  	case 1: // /clubes, /integrantes, ... 
 	  		processEntidade($req);
 	  		break;
-	  	case 2: 
+	  	case 2:
+	  	case 3: 
 	  		processEntidadeEspecifica($req);
+	  		break; 
 	  	default: 
 	  		RestUtils::sendResponse(404); 
 	  } 
 
 	// Process resource head (/entidades/) requests. Accepts GET
-	
 	function processRoot($req){
 		switch($req->getMethod()){
 			case 'GET': 
@@ -77,8 +87,8 @@
 				RestUtils::sendResponse(405, array('allow' => "GET"));
 				exit; 
 		}			
-	} 
-
+	}
+	
 	/**
 	 * Listar todas as entidades 
 	 * Representação em XML, JSON que devem conter apontadores para o recurso de cada entidade.
@@ -124,6 +134,7 @@
 		}
 		//TODO - send malformed request response
 	}
+	
 
 /***********************************************************************************************************************/
 	//Process resource (/entidade/{clubes} , /entidade/{integrantes}) requests. 
@@ -134,20 +145,18 @@
  	*/
 	function processEntidade($req){
 		$entidade = $req->getPathInfo(); $entidade = $entidade[1];
-		
 		if (strcmp($entidade,'clube') != 0 && strcmp($entidade, 'integrante') !=0 ){
 			RestUtils::sendResponse(404); 
 		}
 		
 		switch($req->getMethod()){
-			case 'GET': 
+			case 'GET':
 				getEntidade($req, $entidade);
-			break; 
+			break;
 			case 'POST':
 			$foo = 'post' . $entidade; $foo($req, $entidade);
 			break;
 			case 'HEAD':
-			
 			default: 
 			 RestUtils::sendResponse(405, array('allow' =>"POST GET"));
 			 exit;  
@@ -156,46 +165,48 @@
 
 	function postClube($req){
 		$clubeClass = new Clube(); 
-		$xmlHttpContent = $req->getData();
-		/*if(!$clubeClass->validateXMLbyXSD($xmlHttpContent, "Clube.xsd")) {
-		 RestUtils::sendResponse(400, null, "XML mal formado!", "text/plain");
-		}*/
+		$result = $clubeClass->fromXml($req->getData());
 		
-		$result = $clubeClass->fromXml($xmlHttpContent); 
-		$id = $result->add(); 
+		if (isset($result->idclube)){
+			RestUtils::sendResponse(400); 
+		}
 		
-		if (!$id){
+		try{
+			$id = $result->add();
+		}catch(Exception $e){ 
 			RestUtils::sendResponse(500);
-			exit;  
 		}
 		RestUtils::sendResponse(201, null, $id, 'text'); 
 	}
-	 
-	//TODO - este m�todo � igual ao postClube. fus�o. 
+	
 	function postIntegrante($req){
 		$integranteClass = new Integrante(); 
-		$xmlHttpContent = $req->getData();
-		/*if(!$integranteClass->validateXMLbyXSD($xmlHttpContent, "Integrante.xsd")) {
-		 RestUtils::sendResponse(400, null, "XML mal formado!", "text/plain");
-		}*/
-		$result = $integranteClass->fromXml($xmlHttpContent); 
-		$id = $result->add(); 
-		if (!$id){
+		$result = $integranteClass->fromXml($req->getData());
+		if (isset($result->idintegrante)){
+			RestUtils::sendResponse(400); 
+		}
+		
+		try{ 
+			$id = $result->add();
+		}catch(Exception $e){ 
 			RestUtils::sendResponse(500);
-			exit;  
 		}
 		RestUtils::sendResponse(201, null, $id, 'text'); 
 	}
 	
 	function getEntidade($req, $entidade){
-		$bdEnt = new $entidade(); 
-		$entrys = $bdEnt->getAll(null); 
-		if (!$entrys){ RestUtils::sendResponse(404);exit; }
+		$bdEnt = new $entidade();
+		try{
+			$entrys = $bdEnt->getAll(null);
+		}catch(Exception $e){
+			RestUtils::sendResponse(500); 		
+		}
 		
 		foreach ($entrys as $en){
 			$id = strtolower($entidade) ==  'clube' ?  $en->getIdClube() : $en->getIdIntegrante(); 
-			$en->follow = "url/" . $entidade . "/" . $id;  
+			$en->follow = getUrl() .  $entidade . "/" . $id;  
 		}
+		
 		if ($req->getHttpAccept() == 'json'){
 			RestUtils::sendResponse(200, null, json_encode($entrys)); 
 		}
@@ -205,16 +216,7 @@
 			$n->visivel = null; // we do not want this to show on the result.  
 			$result = $xmlSerializer->serialize($entrys);
 			if ($result == true){
-				$xmlResponse = $xmlSerializer->getSerializedData();
-				
-				//RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
-					
-				if($bdEnt->validateXMLbyXSD($xmlResponse, $options["rootName"]."xsd")) {
-					RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
-				}
-				else {
-					RestUtils::sendResponse(400);
-				}
+				RestUtils::sendResponse(200, null, $xmlSerializer->getSerializedData(), 'text/xml');
 			} else {
 				RestUtils::sendResponse(500); 
 			}
@@ -232,84 +234,103 @@
 		//TODO - make it safe to access this info
 		$path = $req->getPathInfo(); 
 		$ent = $path[1]; 
-		$id = $path[2]; 
+		$id = $path[2];
+		
+		if (!is_numeric($id)){
+			RestUtil::sendResponse(400); 
+		}
+		switch(count($req->getPathInfo())){
+			case 2: 
 		switch($req->getMethod()){
 			case 'GET': 
 				getDeEntidade($req, $ent, $id); 
 				break;
-			case 'HEAD': 
-			 	break; 
 			 case 'PUT':
 			 	putClubeOrIntegrante($req, $id, $ent); 
 			 	break; 
-			 case 'DELETE': 
+			 case 'DELETE':
+	if (strtolower($ent) == 'integrante')
+					deleteIntegrante($id); 
 			 	break; 
 			 default :
-			 	RestUtils::sendResponse(405, array('allow' => "HEAD", "GET", "PUT", "DELETE"));
+			 	RestUtils::sendResponse(405, array('allow' => "GET POST"));
 		}
+case 3 :
+				 if ($req->getMethod() == 'GET'){
+				 	$var = $path[3]; 
+				 	if (strcmp($var, 'noticias') !==false){
+				 		getDeEntidadeNoticias($req,$ent,$id); 
+				 	}
+	}
+	
+	function deleteIntegrante($id){
+		$validID = settype($id, "integer");
+		$integrante = new Integrante();
+		$integrante->getObjectById($id);
+		if (!$integrante || !$validID){
+			RestUtils::sendResponse(404);
+			exit();
+		}
+		
+		$integrante->del();
+		RestUtils::sendResponse(200);
 	}
 	
 	function putClubeOrIntegrante($req, $id, $ent){
 		$existent  = new $ent();
-		$existent->getObjectById($id);
-		 
-		if (!$existent){
-			RestUtils::sendResponse(404); 
+		try{
+			$r = 	$existent->getObjectById($id);
+		}catch(Exception $e){
+			RestUtils::sendResponse(500); 	
 		}
-		
-		$xmlHttpContent = $req->getData();
-		/*if(!$existent->validateXMLbyXSD($xmlHttpContent, $existent.".xsd")) {
-		 RestUtils::sendResponse(400, null, "XML mal formado!", "text/plain");
-		}*/
-		 
+
+		//TODO - check XSD 
 		$new = $existent->fromXml($req->getData());
-		if ($new){
-	    if (strtolower($ent) == 'clube'){ 
-			$new->idclube = $id; 
+		$ide = 'id' . $ent; 
+		if (isset($new->$ide)  && $new->$ide != $id){
+			RestUtils::sendResponse(400); 
 		}
-		else {
-			$new->idintegrante = $id; 
-		}
+
+		//ASSUMINDO QUE $new exist:
+		$new->$ide = $id;
+		 
 		try{
 			$new->update(); 
 		}catch(Exception $e){
 			RestUtils::sendResponse(500); 
 		}
-		}else{
-			//TODO bad format 
-		}
-	}
+	}			
 	
 	function getDeEntidade($req, $ent, $id){
 		$bdEnt = new $ent(); 
 		$key = (strtolower($ent) == 'clube') ? "idclube" : "idintegrante";
-		$entry = $bdEnt->findFirst( array($key => $id));
-		if (!$entry){ RestUtils::sendResponse(404);exit; }
-
-		if (strtolower($ent)== 'clube'){
-			$entry->noticias = Noticia_Has_Clube::getAllNoticias($id);  	
-		}
-		else {
-			$entry->noticias = Noticia_Has_Integrante::getAllNoticias($id);  	
+		try{
+			$entry = $bdEnt->getObjectById($id);
+		}catch(Exception $e){
+			RestUtils::sendResponse(404); 	
 		}
 		
+
+				
+		
+			
+		if (strtolower($ent)== 'clube'){
+			//$entry->noticias = Noticia_Has_Clube::getAllNoticias($id);  	
+		}
+		else {
+			//$entry->noticias = Noticia_Has_Integrante::getAllNoticias($id);  	
+		}
+		}
 		if ($req->getHttpAccept() == 'json'){
 			RestUtils::sendResponse(200, null, json_encode($entry)); 
 		}
-		
 		else if ($req->getHttpAccept() == 'text/xml'){
 			//TODO descricao está cheio. 
 			global $options; $options["rootName"] = $ent ; $options["defaultTagName"]  = "descricao"; 
 			$xmlSerializer =  new XML_Serializer($options); 
 			$result = $xmlSerializer->serialize($entry);
 			if ($result == true){
-				$xmlResponse = $xmlSerializer->getSerializedData();
-				
-				//RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
-					
-				if($bdEnt->validateXMLbyXSD($xmlResponse, $options["rootName"]."xsd")) {
-					RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
-				}
+				RestUtils::sendResponse(200, null, $xmlSerializer->getSerializedData(), 'text/xml');
 			} else {
 				RestUtils::sendResponse(500); 
 			}
@@ -317,6 +338,7 @@
 			RestUtils::sendResponse(406); 
 		}
 	}
+	
 	
     /*
      * Checks if the request is valid through whitelistening of the possible request types.

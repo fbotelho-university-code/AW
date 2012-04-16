@@ -4,6 +4,7 @@
  require_once ('Util/RestRequest.php'); 
  require_once ('Util/XML/Serializer.php'); 
  require_once ('../model/Noticia.php');
+ require_once ('../model/Noticia_Bin.php');
  require_once ('./Util.php');    
   
  /*
@@ -59,7 +60,7 @@
 			RestUtils::sendResponse(404);
 			exit;  
 	  } 
-	  
+	 
 	// Process resource head (/noticias) requests. Accepts GET/POST  
 	function processRoot($req){
 		switch($req->getMethod()){
@@ -76,7 +77,7 @@
 				exit; 
 		}			
 	}
-		
+	
 	function headRoot(){
 		$news = getAllNews();
 		$hash = md5(var_export($news,true));
@@ -129,13 +130,11 @@
 				$xmlSerializer =  new XML_Serializer($options);
 			//$xmlSerializer->setOption("namespace",array("localhost", "localhost"));
 				$result = $xmlSerializer->serialize($news);
-			if ($result == true){
-			$result = $xmlSerializer->serialize($news);
-		
+
 		if ($result == true){
 			$xmlResponse = $xmlSerializer->getSerializedData();
 			$noticia = new Noticia();
-						
+			
 			//RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
 			
 			if($noticia->validateXMLbyXSD($xmlResponse, "Noticias.xsd")) {
@@ -158,7 +157,7 @@
 		}
 		RestUtils::sendResponse(400); 
 	}
-	}
+	
 	
 	
 	
@@ -191,6 +190,7 @@
 			case 'HEAD':
 			break; 
 			case 'DELETE':
+				deleteNewsFingir($id);
 			break; 
 			default: 
 			 RestUtils::sendResponse(405, array('allow' => "PUT DELETE GET"));
@@ -198,6 +198,24 @@
 		}
 	}
 	
+	function deleteNewsFingir($id){
+		$validID = settype($id, "integer");
+		$Noticia = new Noticia();
+		$Noticia->getObjectById($id);
+		if (!$Noticia || !$validID){
+			RestUtils::sendResponse(404);
+			exit();
+		}
+		
+		// Criar noticia_bin
+		$noticia_bin = new Noticia_Bin($Noticia);
+		$noticia_bin->add();
+		
+		// Apagar noticia
+		$Noticia->del();
+		RestUtils::sendResponse(200);
+	
+	}
 	
 	/**
 	 * Post to /noticias . 
@@ -227,7 +245,6 @@
 		}catch(Exception $e){
 			RestUtils::sendResponse(500);
 		} 		
-		
 		if (isset($id)){
 			RestUtils::sendResponse(201, null, $id, 'text');
 	
@@ -235,7 +252,6 @@
 			RestUtils::sendResponse(500);
 		}
 	}
-	
 		
 	function putNews($req, $id){
 		$noticia = new Noticia();
@@ -265,7 +281,7 @@
 		
 		$nova_noticia->idnoticia =$id; 
 		addNoticia($nova_noticia, "update");
-		RestUtils::sendResponse(200);
+		RestUtils::sendResponse(204);
 		exit;   
 	}
 	
