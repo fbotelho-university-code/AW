@@ -13,6 +13,9 @@ class ParserNoticias {
     	 * Efectua mudan�as directamente na base de dados relativa ˆ noticia  
     	 */
 		public static function parseNoticia($noticia){
+			$noticia->descricao = strip_tags($noticia->descricao); 
+			$noticia->assunto = strip_tags($noticia->assunto); 
+			
 	     	//Armazenamento da noticia na Base de Dados
 			$idnoticia = $noticia->add();
 			$noticia->setIdnoticia($idnoticia);
@@ -153,7 +156,7 @@ class ParserNoticias {
 									}
 									break;
 							}
-							$testearray = find(array('idnoticia'=>$noticia->getIdnoticia(),'tempo'=>$dataInterpretada));
+							$testearray = $rel->find(array('idnoticia'=>$noticia->getIdnoticia(),'tempo'=> $dataInterpretada));
 							if(!count($testearray)){							
 								//echo $dataInterpretada."<br>";
 								$rel  = new Noticia_Data($noticia->getIdnoticia(), $dates[$j], $dataInterpretada);

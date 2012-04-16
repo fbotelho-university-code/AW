@@ -48,6 +48,8 @@
       XML_SERIALIZER_OPTION_RETURN_RESULT => true, 
       XML_SERIALIZER_OPTION_CLASSNAME_AS_TAGNAME => true, 
       "ignoreNull"      => true,
+       "rootAttributes"  => array("xmlns" => "localhost", "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance"),
+       "namespace" 		=> "localhost"
  	); 
  	
 
@@ -115,7 +117,7 @@
 		$result = array($clube, $integrante); 
 		if ($req->getHttpAccept() == 'text/xml'){
 			global $options; $options["rootName"] = "entidades"; $options["defaultTagName"]  = "entidade";  
-			
+
 			$xmlSerializer =  new XML_Serializer($options); 
 			//var_dump($news); 
 			$result = $xmlSerializer->serialize($result);
@@ -165,6 +167,12 @@
  
 	function postClube($req){
 		$clubeClass = new Clube(); 
+		$xmlHttpContent = $req->getData(); 
+
+		if(!$clubeClass->validateXMLbyXSD($xmlHttpContent, "Clube.xsd")) {
+			RestUtils::sendResponse(400, null, "XML mal formado!", "text/plain");
+		}
+		
 		$result = $clubeClass->fromXml($req->getData());
 		
 		if (isset($result->idclube)){
@@ -182,6 +190,12 @@
 	function postIntegrante($req){
 		$integranteClass = new Integrante(); 
 		$result = $integranteClass->fromXml($req->getData());
+		
+		$xmlHttpContent = $req->getData(); 
+		if(!$integranteClass->validateXMLbyXSD($xmlHttpContent, "Integrante.xsd")) {
+			RestUtils::sendResponse(400, null, "XML mal formado!", "text/plain");
+		}
+		
 		if (isset($result->idintegrante)){
 			RestUtils::sendResponse(400); 
 		}
@@ -207,19 +221,28 @@
 			$id = strtolower($entidade) ==  'clube' ?  $en->getIdClube() : $en->getIdIntegrante(); 
 			$en->follow = getUrl() .  $entidade . "/" . $id;  
 		}
-		
 		if ($req->getHttpAccept() == 'json'){
 			RestUtils::sendResponse(200, null, json_encode($entrys)); 
 		}
 		else if ($req->getHttpAccept() == 'text/xml'){
-			global $options; $options["rootName"] = get_class($bdEnt) .  "s"; $options["defaultTagName"]  = get_class($bdEnt); 
+			
+			global $options; $options["rootName"] = get_class($bdEnt) .  "s"; 
+			$options["defaultTagName"]  = get_class($bdEnt);
+			 $options["rootAttributes"]["xsi:schemaLocation"] = "localhost " . $options["rootName"] . ".xsd ";
+			 $options["rootName"] = strtolower($options["rootName"]); 
 			$xmlSerializer =  new XML_Serializer($options); 
 			$n->visivel = null; // we do not want this to show on the result.  
 			$result = $xmlSerializer->serialize($entrys);
-			if ($result == true){
-				RestUtils::sendResponse(200, null, $xmlSerializer->getSerializedData(), 'text/xml');
-			} else {
-				RestUtils::sendResponse(500); 
+			
+			$xmlResponse = $xmlSerializer->getSerializedData(); 
+			
+			//RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+			
+			if($bdEnt->validateXMLbyXSD($xmlResponse,  $options["rootName"] . ".xsd")) {
+				RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+			}
+			else {
+				RestUtils::sendResponse(500);
 			}
 		}else{
 			RestUtils::sendResponse(406); 
@@ -236,11 +259,8 @@
 		$path = $req->getPathInfo(); 
 		$ent = $path[1]; 
 		$id = $path[2];
-		
-		
-		
 		if (!is_numeric($id)){
-			RestUtil::sendResponse(400); 
+			RestUtils::sendResponse(400); 
 		}
 		switch(count($req->getPathInfo())){
 			case 2: 
@@ -296,7 +316,13 @@
 		}catch(Exception $e){
 			RestUtils::sendResponse(500); 	
 		}
-
+		if (!isset($r)){
+			RestUtils::sendResponse(404); 
+		}
+		
+		if(!$existent->validateXMLbyXSD($req->getData(), get_class($existent) . ".xsd")) {
+			RestUtils::sendResponse(400);
+		}
 		//TODO - check XSD 
 		$new = $existent->fromXml($req->getData());
 		$ide = 'id' . $ent; 
@@ -328,6 +354,9 @@
 		}catch(Exception $e){
 			RestUtils::sendResponse(404); 	
 		}
+		if (!isset($entry)){
+			RestUtils::sendResponse(404); 	
+		}
 		return $entry; 
 	}
 	
@@ -351,13 +380,18 @@
 		}
 		else if ($req->getHttpAccept() == 'text/xml'){
 			//TODO descricao está cheio. 
-			global $options; $options["rootName"] = $ent ; $options["defaultTagName"]  = "descricao"; 
+			global $options; $options["rootName"] = get_class($entry) ; $options["defaultTagName"]  = "descricao";
+			$options["rootAttributes"]["xsi:schemaLocation"] = "localhost " . $options["rootName"] . ".xsd ";
 			$xmlSerializer =  new XML_Serializer($options); 
 			$result = $xmlSerializer->serialize($entry);
-			if ($result == true){
-				RestUtils::sendResponse(200, null, $xmlSerializer->getSerializedData(), 'text/xml');
-			} else {
-				RestUtils::sendResponse(500); 
+			
+			$xmlResponse = $xmlSerializer->serialize($entry); 
+			//RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+			if($entry->validateXMLbyXSD($xmlResponse,  $options["rootName"] . ".xsd")) {
+				RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+			}
+			else {
+				RestUtils::sendResponse(500);
 			}
 		}else{
 			RestUtils::sendResponse(406); 

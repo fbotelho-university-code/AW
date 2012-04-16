@@ -141,7 +141,7 @@
 				RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
 			}
 			else {
-				RestUtils::sendResponse(400);
+				RestUtils::sendResponse(500);
 			}
 		}
 		else{
@@ -200,21 +200,30 @@
 	
 	function deleteNewsFingir($id){
 		$validID = settype($id, "integer");
+		if (!$validID){
+			RestUtils::sendResponse(400);
+		}
 		$Noticia = new Noticia();
-		$Noticia->getObjectById($id);
-		if (!$Noticia || !$validID){
+		try{
+			$n = $Noticia->getObjectById($id);
+		}catch(Exception $e){
 			RestUtils::sendResponse(404);
-			exit();
 		}
 		
+		if (!isset($n)){
+			RestUtils::sendResponse(404);
+		}
+
 		// Criar noticia_bin
 		$noticia_bin = new Noticia_Bin($Noticia);
+		try{
 		$noticia_bin->add();
-		
 		// Apagar noticia
 		$Noticia->del();
-		RestUtils::sendResponse(200);
-	
+		}catch(Exception $e){
+			RestUtils::sendResponse(500);
+		}
+		RestUtils::sendResponse(204);
 	}
 	
 	/**
@@ -225,10 +234,10 @@
 	function postRoot($req){
 		$noticia = new Noticia();
 		$xmlHttpContent = $req->getData();
-		/*if(!$noticia->validateXMLbyXSD($xmlHttpContent, "Noticia.xsd")) {
+
+		if(!$noticia->validateXMLbyXSD($xmlHttpContent, "Noticia.xsd")) {
 			RestUtils::sendResponse(400, null, "XML mal formado!", "text/plain");
-		}*/
-		
+		}
 		
 		$n = $noticia->fromXml($xmlHttpContent);
 		
@@ -244,7 +253,8 @@
 			$id = addNoticia($n, 'add');
 		}catch(Exception $e){
 			RestUtils::sendResponse(500);
-		} 		
+		}
+		
 		if (isset($id)){
 			RestUtils::sendResponse(201, null, $id, 'text');
 	
@@ -267,9 +277,9 @@
 		}
 		
 		$xmlHttpContent = $req->getData();
-		/*if(!$noticia->validateXMLbyXSD($xmlHttpContent, "Noticia.xsd")) {
+		if(!$noticia->validateXMLbyXSD($xmlHttpContent, "Noticia.xsd")) {
 		 RestUtils::sendResponse(400, null, "XML mal formado!", "text/plain");
-		}*/
+		}
 		
 		$nova_noticia = $noticia->fromXml($xmlHttpContent);
 		if ($nova_noticia === null || checkRelations($nova_noticia)===false ||
@@ -308,10 +318,12 @@
 		$nova_noticia->idfonte = Utill::getIdWebServiceAsFonte();
 		
 			try{
+
 				$r = $nova_noticia->$foo();
 				if (isset($r)){
 					$nova_noticia->idnoticia = $r; 
 				} 
+				
 			}catch(Exception $e){
 				RestUtils::sendResponse(500);
 				exit;  
@@ -328,7 +340,6 @@
 		if (isset($datas)){
 		 	$nova_noticia->datas = $datas;
 		}
-		
 		updateRelations($nova_noticia);
 		return $r; 
 		}
@@ -362,11 +373,12 @@
 		$clubes_classe = new Noticia_Has_Clube();
 		$datas_classe = new Noticia_Data();
 		 
-		try{ 
+		try{
 			$locais_classe->deleteById($noticia->getIdNoticia());
 			$clubes_classe->deleteById($noticia->getIdNoticia());
 			$integrantes_classe->deleteById($noticia->getIdNoticia());
 			$datas_classe->deleteById($noticia->getIdNoticia());
+			
 		}catch (Exception $e){
 			RestUtils::sendResponse(500);
 			exit;  
@@ -410,14 +422,15 @@
 			}	
 		}
 		
-		
-		 
 		if (isset($noticia->datas)){
 			foreach($noticia->datas as $l){
 				 try{
 //				 	echo $l->__toString();
+	
 					$rel = new Noticia_Data($noticia->idnoticia, '' ,$l->__toString());
+					
 					$rel->add();
+					
 				}catch(Exception $e){
 					RestUtils::sendResponse(500);
 					exit;  
@@ -444,15 +457,15 @@
 			RestUtils::sendResponse(200, null, json_encode($n)); 
 		}
 		else if ($req->getHttpAccept() == 'text/xml'){
-			global $options; $options["rootName"] = "noticia";
+			global $options; $options["rootName"] = "noticia"; 
+			$options['rootAttributes']  = array("xmlns" => "localhost", "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance", "xsi:schemaLocation" => "localhost Noticia.xsd "); 
 			$options['defaultTagName'] = 'data';
 			$xmlSerializer =  new XML_Serializer($options); 
-			
 			$result = $xmlSerializer->serialize($n);
+			
 			if ($result == true){
 				$xmlResponse = $xmlSerializer->getSerializedData();
 				//RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
-					
 				if($noticia->validateXMLbyXSD($xmlResponse, "Noticia.xsd")) {
 					RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
 				}

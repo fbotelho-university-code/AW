@@ -33,7 +33,7 @@ class Noticia_data extends Model{
 	}
 	
 	public function getKeyFields(){
-		return array ('id'); 
+		return array ('idnoticia', 'tempo', 'data_interpretada'); 
 	}	
 	
 	/**
@@ -116,13 +116,14 @@ public function __construct($idnoticia='', $tempo='', $dt =''){
 		//Apanhar todos os locais atraves das referencias de locais_noticias: 
 		$datas = array();
 		foreach ($rel as $ln){
-			$n = $ln->getData_interpretada();   
-			if (isset($n) ) {
+			
+			$n = $ln->getData_interpretada();
+			if (!isset($n) ) {
 				continue; 
 			} 
-			//$n->follow = $baseurl . 'tempo.php/' .  str_replace("-", "/", $n); 
 			$datas[] =  $n; 
 		}
+		
 		return $datas; 
 	}
 	

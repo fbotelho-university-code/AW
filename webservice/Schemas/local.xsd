@@ -3,23 +3,24 @@
 
     <xsd:complexType name="localT">
     	<xsd:sequence>
-    		<xsd:element name="idlocal" type="xsd:int"></xsd:element>
-    		<xsd:element name="nome_local">
+    		<xsd:element name="idlocal" type="xsd:int" maxOccurs="1" minOccurs="0"></xsd:element>
+    		<xsd:element name="nome_local" maxOccurs="1" minOccurs="0">
     			<xsd:simpleType>
     				<xsd:restriction base="xsd:string">
     					<xsd:maxLength value="100"></xsd:maxLength>
     				</xsd:restriction>
     			</xsd:simpleType>
     		</xsd:element>
-    		<xsd:element name="coordenadas">
+    		<xsd:element name="coordenadas" maxOccurs="1" minOccurs="0">
     			<xsd:simpleType>
     				<xsd:restriction base="xsd:string">
     					<xsd:maxLength value="45"></xsd:maxLength>
     				</xsd:restriction>
     			</xsd:simpleType>
     		</xsd:element>
+    		<xsd:element name="follow" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
     	</xsd:sequence>
     </xsd:complexType>
 
-    <xsd:element name="local" type="localT"></xsd:element>
+    <xsd:element name="Local" type="localT"></xsd:element>
 </xsd:schema>

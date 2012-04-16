@@ -38,7 +38,7 @@
             <xsd:element name="locais" maxOccurs="1" minOccurs="0">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="local" type="localT"
+						<xsd:element name="Local" type="localT"
 							minOccurs="0" maxOccurs="unbounded">
 						</xsd:element>
 					</xsd:sequence>
@@ -56,7 +56,7 @@
 			<xsd:element name="clubes" maxOccurs="1" minOccurs="0">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="clube" type="clubeT"
+						<xsd:element name="Clube" type="clubeT"
 							minOccurs="0" maxOccurs="unbounded">
 						</xsd:element>
 					</xsd:sequence>
@@ -66,7 +66,7 @@
 				minOccurs="0">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="integrante"
+						<xsd:element name="Integrante"
 							type="integranteT" minOccurs="0" maxOccurs="unbounded">
 						</xsd:element>
 					</xsd:sequence>
@@ -74,5 +74,5 @@
 			</xsd:element>
 		</xsd:sequence>
 	</xsd:complexType>
-	<xsd:element name="Noticia" type="noticiaT"></xsd:element>
+	<xsd:element name="noticia" type="noticiaT"></xsd:element>
 </xsd:schema>

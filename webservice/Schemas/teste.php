@@ -1,54 +1,54 @@
 <?php
 
 $xml = new DOMDocument();
-$xml->load('./Noticias.xml');
+$xml->load('./Noticia.xml');
 
-echo $xml->documentElement->namespaceURI;
-/*
-@$validate = $xml->schemaValidate('./Noticias.xsd');
+//echo $xml->documentElement->namespaceURI;
+
+@$validate = $xml->schemaValidate('./Noticia.xsd');
 
 if ($validate) {
    echo "valid<p/>";
 }
 else {
    echo "invalid<p/>";
-}*/
+}
 
 
 /**
 	1) Schema para incluir dependencias no XML
-	2) Função p/ incluir cabeçalho XML para validação do Schema
-	3) Função para tratamento de erro de Schemas (chamada pela função de validação)
+	2) Funï¿½ï¿½o p/ incluir cabeï¿½alho XML para validaï¿½ï¿½o do Schema
+	3) Funï¿½ï¿½o para tratamento de erro de Schemas (chamada pela funï¿½ï¿½o de validaï¿½ï¿½o)
 	
 	
 	
-	WADL no Anexo do Relatório
-	Citar no Relatório os módulos e exemplos.
+	WADL no Anexo do Relatï¿½rio
+	Citar no Relatï¿½rio os mï¿½dulos e exemplos.
 	Acrescentar noticia: "Chamo Web service com esses parametros e ele devolve isso"
 	
 	Evitar os filtros do lado do front end.
 	Inserir filtros no webservice. Ex: Buscra as primeiras 10 norticias.
 	Filtros sobre datas e locais
-	Zoom em um mapa em Lisboa = buscra notícias só de Lisboa.
-	Obrigatório: PUT e DELETE
+	Zoom em um mapa em Lisboa = buscra notï¿½cias sï¿½ de Lisboa.
+	Obrigatï¿½rio: PUT e DELETE
 	
 	Interface HTML para teste do Web Service.
 	
-	Apresentar uma página HTML com a API do Web Service, com exemplos.
+	Apresentar uma pï¿½gina HTML com a API do Web Service, com exemplos.
 	
-	Uso de Parametros para realizar filtros do número de resultados.(Não necessariamente REST full)
+	Uso de Parametros para realizar filtros do nï¿½mero de resultados.(Nï¿½o necessariamente REST full)
 	Ou noticias.php/1-10
 	
 	Converter parametros da URL para transformar em String (settype()). Mais para tratar SQL Injection.
 	
-	O Prof falou que não vai avaliar código!!!!
-	No DELETE, Não apagar a notícia. Colocar ela como não visivel.
+	O Prof falou que nï¿½o vai avaliar cï¿½digo!!!!
+	No DELETE, Nï¿½o apagar a notï¿½cia. Colocar ela como nï¿½o visivel.
 	
 	1) Filtro para GelALL
 	2) Inserir clube na noticia apos pesquisa
-	3) XSD para Relação
+	3) XSD para Relaï¿½ï¿½o
 		/noticias
-	4) Cabeçalho XML
+	4) Cabeï¿½alho XML
 	
 */
 
