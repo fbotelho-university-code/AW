@@ -117,7 +117,16 @@
 			$result = $xmlSerializer->serialize($locais);
 		
 			if ($result == true){
-				RestUtils::sendResponse(200, null, $xmlSerializer->getSerializedData(), 'text/xml'); 
+				$xmlResponse = $xmlSerializer->getSerializedData();
+				
+				RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+					
+				/*if($local->validateXMLbyXSD($xmlResponse, "Locais.xsd")) {
+					RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+				}
+				else {
+					RestUtils::sendResponse(400);
+				} */
 			}
 			else{
 				RestUtils::sendResponse(500); 
@@ -183,7 +192,13 @@
 			RestUtils::sendResponse(404);
 			exit();
 		}
-		$new_local = $local->fromXml($req->getData());
+		
+		$xmlHttpContent = $req->getData();
+		/*if(!$local->validateXMLbyXSD($xmlHttpContent, "Local.xsd")) {
+		 RestUtils::sendResponse(400, null, "XML mal formado!", "text/plain");
+		}*/
+		
+		$new_local = $local->fromXml($xmlHttpContent);
 		if ($new_local  && $new_local->checkValidity() ){
 				$new_local->idlocal = $id;
 				$new_local->update();   
@@ -211,6 +226,15 @@
 			$n->visivel = null; // we do not want this to show on the result.  
 			$result = $xmlSerializer->serialize($n);
 			if ($result == true){
+				$xmlResponse = $xmlSerializer->getSerializedData();
+				//RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+					
+				if($noticia->validateXMLbyXSD($xmlResponse, "Noticia.xsd")) {
+					RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+				}
+				else {
+					RestUtils::sendResponse(400);
+				}
 				RestUtils::sendResponse(200, null, $xmlSerializer->getSerializedData(), 'text/xml');
 			} else {
 				RestUtils::sendResponse(500); 

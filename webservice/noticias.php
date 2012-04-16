@@ -46,7 +46,6 @@
     
 	$req  = RestUtils::processRequest();  // The request made by the client.
 	checkRequest($req);   // check that the request is valid. Dies otherwise.  
-	
 	  //Dispatching according to the path info. 
 	  $path_parameters = $req->getPathInfo(); 
 	  $path_parameters_count = count($path_parameters);
@@ -142,7 +141,7 @@
 				RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
 			}
 			else {
-				RestUtils::sendResponse(500);
+				RestUtils::sendResponse(400);
 			}
 		}
 		else{
@@ -224,9 +223,14 @@
 	 * Similiar to putNews
 	 */
 	function postRoot($req){
-		$noticia = new Noticia(); 
-
-		$n = $noticia->fromXml($req->getData());
+		$noticia = new Noticia();
+		$xmlHttpContent = $req->getData();
+		/*if(!$noticia->validateXMLbyXSD($xmlHttpContent, "Noticia.xsd")) {
+			RestUtils::sendResponse(400, null, "XML mal formado!", "text/plain");
+		}*/
+		
+		
+		$n = $noticia->fromXml($xmlHttpContent);
 		
 		if (!isset($n) || checkRelations($n)  === false || isset($n->idnoticia)){
 			RestUtils::sendResponse(400);
@@ -262,7 +266,12 @@
 			RestUtils::sendResponse(404); 	
 		}
 		
-		$nova_noticia = $noticia->fromXml($req->getData());
+		$xmlHttpContent = $req->getData();
+		/*if(!$noticia->validateXMLbyXSD($xmlHttpContent, "Noticia.xsd")) {
+		 RestUtils::sendResponse(400, null, "XML mal formado!", "text/plain");
+		}*/
+		
+		$nova_noticia = $noticia->fromXml($xmlHttpContent);
 		if ($nova_noticia === null || checkRelations($nova_noticia)===false ||
 			// se existir id de noticia no gajo nao pode ir.  
 			(isset($nova_noticia->idnoticia) && ($nova_noticia->idnoticia !=  $id))){ 
@@ -441,7 +450,15 @@
 			
 			$result = $xmlSerializer->serialize($n);
 			if ($result == true){
-				RestUtils::sendResponse(200, null, $xmlSerializer->getSerializedData(), 'text/xml');
+				$xmlResponse = $xmlSerializer->getSerializedData();
+				//RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+					
+				if($noticia->validateXMLbyXSD($xmlResponse, "Noticia.xsd")) {
+					RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+				}
+				else {
+					RestUtils::sendResponse(400);
+				}
 			} else {
 				RestUtils::sendResponse(500); 
 			}
@@ -458,19 +475,21 @@
     //Variables that should be defined for checkRequest. Ideally this would be defined in a abstact/general form. 
  	$methods_supported = array("GET", "POST", "HEAD", "DELETE", "PUT");
  	$request_vars = array("start", "count");
- 	
+ 	 
     	if (array_search($req->getMethod(), $methods_supported ) === FALSE){
     		//405 -> method not supported 
     		RestUtils::sendResponse(405, array('allow' => $methods_supported));
     		exit;  
     	}
     	
+    	if($req->getMethod() == "GET") {
     	//check the request variables that are not understood by this resource
     	$dif = array_diff(array_keys($req->getRequestVars()), $request_vars);
     	//If they are differences then we do not understand the request.  
     	 if ( count($dif)  != 0 ){
     	 	RestUtils::sendResponse(400, array('unrecognized_req_vars' => $dif));
     		exit; 
+    	}
     	}
     	//TODO - check that path parameters are correct through regulares expressions that validate input types and formats. 
     	//could respond BadRequest also. 
