@@ -11,6 +11,17 @@
  require_once ('../model/Local.php');
  require_once ('../model/Noticia_locais.php');
  
+ 
+ 
+ 	function getUrl(){
+ 		$v = parse_url("http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+ 		
+ 		$r = $v['scheme'] . '://' . $v['host'] . $v['path'];
+ 		$pos = strpos($r, 'espaco.php') ;
+ 		$val = substr($r, 0, $pos );
+ 		return $val; 
+ 	}
+ 	
  $options = array(
       "indent"          => "    ",
       "linebreak"       => "\n",
@@ -57,32 +68,28 @@
 				postRoot($req);
 			break;
 			case 'HEAD': 
-				postHead($req);
-			break;
+				//postHead($req);
 			default:
-				RestUtils::sendResponse(405, array('allow' => "HEAD", "GET", "POST"));
+				RestUtils::sendResponse(405, array('allow' => "GET POST"));
 				exit; 
 		}			
 	}
 	 
-	 /**
-	  * 
-	  */
-	
+	 
 	function postRoot($req){
 		$espaco = new Local();
 		$result = $espaco->fromXml($req->getData());
-		if ($result->checkValidity() == true){
-			$id = $result->add(); 
-			if (!$id){
-				RestUtils::sendResponse(500);
-				exit; 
-			}
+		if ($result->checkValidity() == true ){
+			
+			try{
+				$id = $result->add();
+			}catch(Exception $e){
+				RestUtils::sendResponse(500); 
+			} 
 			RestUtils::sendResponse(201, null, $id, 'text'); 
 		}
 		else{
-			//TODO send bad format
-			//RestUtils::sendResponse(200, null , $result->coordenadas, 'text'); 
+			RestUtils::sendResponse(406); 
 		} 		 
 	}
 	
@@ -91,14 +98,16 @@
 	 * Representa��o em XML, JSON que devem conter apontadores para o recurso de cada local.  
 	 * TODO : filtrar pesquisa. 
 	 **/
-	 
 	function getRoot($req){
 		$local = new Local();
-		//include "filter.php";
-		$locais =$local->getAll(null, $start, $count);
-		if (!$locais) {RestUtils::sendResponse(500); exit; }
-		foreach ($locais as $n){ $n->follow = "myUrl/" . $n->idlocal; }
-			
+		try{
+		$locais =$local->getAll(null);
+		}catch(Exception $e){
+			RestUtils::sendResponse(500); 
+		}
+		
+		foreach ($locais as $n){ $n->follow = getUrl() . 'espaco.php/' . $n->idlocal; }
+		
 		if ($req->getHttpAccept() == 'text/xml'){
 		
 			global $options; $options["rootName"] = "locais";  $options["defaultTagName"] = "local";   
@@ -108,7 +117,16 @@
 			$result = $xmlSerializer->serialize($locais);
 		
 			if ($result == true){
-				RestUtils::sendResponse(200, null, $xmlSerializer->getSerializedData(), 'text/xml'); 
+				$xmlResponse = $xmlSerializer->getSerializedData();
+				
+				RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+					
+				/*if($local->validateXMLbyXSD($xmlResponse, "Locais.xsd")) {
+					RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+				}
+				else {
+					RestUtils::sendResponse(400);
+				} */
 			}
 			else{
 				RestUtils::sendResponse(500); 
@@ -120,7 +138,6 @@
 		else{
 			RestUtils::sendResponse(406); 
 		}
-		//TODO - send malformed request response
 	}
 	
 	//Process resource (/local/{idlocal}) requests. Accepts GET/PUT/HEAD/DELETE
@@ -175,7 +192,13 @@
 			RestUtils::sendResponse(404);
 			exit();
 		}
-		$new_local = $local->fromXml($req->getData());
+		
+		$xmlHttpContent = $req->getData();
+		/*if(!$local->validateXMLbyXSD($xmlHttpContent, "Local.xsd")) {
+		 RestUtils::sendResponse(400, null, "XML mal formado!", "text/plain");
+		}*/
+		
+		$new_local = $local->fromXml($xmlHttpContent);
 		if ($new_local  && $new_local->checkValidity() ){
 				$new_local->idlocal = $id;
 				$new_local->update();   
@@ -203,6 +226,15 @@
 			$n->visivel = null; // we do not want this to show on the result.  
 			$result = $xmlSerializer->serialize($n);
 			if ($result == true){
+				$xmlResponse = $xmlSerializer->getSerializedData();
+				//RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+					
+				if($noticia->validateXMLbyXSD($xmlResponse, "Noticia.xsd")) {
+					RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+				}
+				else {
+					RestUtils::sendResponse(400);
+				}
 				RestUtils::sendResponse(200, null, $xmlSerializer->getSerializedData(), 'text/xml');
 			} else {
 				RestUtils::sendResponse(500); 

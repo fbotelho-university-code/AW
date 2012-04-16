@@ -38,16 +38,13 @@ class Noticia extends Model{
 		if (!$noticiaOb ) return null;
 		//We do not want this to show: 
 		$noticiaOb->visivel = null;
-		 
-		//O array resultante. 
 		
+		//O array resultante. 
 		foreach (get_object_vars($noticiaOb) as $key=>$value){
 			$result[$key] = $value; 
 		}
-		
 		//locais : 
 		$class_locais_rel = new Noticia_Locais();
-		
 		//TODO - what if idNoticia nao existe nas relações. 
 		$locais_noticias = $class_locais_rel->find(array("idnoticia" => $idNoticia));
 		

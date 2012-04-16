@@ -175,8 +175,8 @@ require_once("Model.php");
 	
 	
 	public static function getAllNoticias($idIntegrante){
-			$class_this = new Noticia_Has_Clube(); 
-			$rel = $class_this->find(array("idclube" => $idIntegrante)); 
+			$class_this = new Noticia_Has_Clube();
+			$rel = $class_this->find(array("idclube" => $idIntegrante));
 			if (!$rel) return null; 
 			$noticias = array();
 			$clube_class = new Noticia();
@@ -187,7 +187,7 @@ require_once("Model.php");
 			}
 			return $clubes; 
 	}
-
+	
 	public static function getAllClubes($idnoticia, $baseurl){
 		$class_this = new Noticia_Has_Clube(); 
 		$rel = $class_this->find(array("idnoticia" => $idnoticia)); 

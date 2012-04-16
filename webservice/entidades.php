@@ -162,7 +162,7 @@
 			 exit;  
 		}
  }
-
+ 
 	function postClube($req){
 		$clubeClass = new Clube(); 
 		$result = $clubeClass->fromXml($req->getData());
@@ -193,6 +193,7 @@
 		}
 		RestUtils::sendResponse(201, null, $id, 'text'); 
 	}
+	
 	
 	function getEntidade($req, $entidade){
 		$bdEnt = new $entidade();
@@ -236,33 +237,45 @@
 		$ent = $path[1]; 
 		$id = $path[2];
 		
+		
+		
 		if (!is_numeric($id)){
 			RestUtil::sendResponse(400); 
 		}
 		switch(count($req->getPathInfo())){
 			case 2: 
 		switch($req->getMethod()){
-			case 'GET': 
+			case 'GET':
+			 
 				getDeEntidade($req, $ent, $id); 
 				break;
 			 case 'PUT':
+			 
 			 	putClubeOrIntegrante($req, $id, $ent); 
 			 	break; 
 			 case 'DELETE':
-	if (strtolower($ent) == 'integrante')
+				if (strtolower($ent) == 'integrante')
 					deleteIntegrante($id); 
 			 	break; 
 			 default :
 			 	RestUtils::sendResponse(405, array('allow' => "GET POST"));
 		}
-case 3 :
-				 if ($req->getMethod() == 'GET'){
-				 	$var = $path[3]; 
-				 	if (strcmp($var, 'noticias') !==false){
+		     case 3 :
+				if ($req->getMethod() == 'GET'){
+					$var = $path[3]; 
+			     	if (strcmp($var, 'noticias') !==false){
 				 		getDeEntidadeNoticias($req,$ent,$id); 
 				 	}
+				 	else {
+				 		RestUtils::sendResponse(404);
+				 	}
+				}
+				else{
+					RestUtils::sendResponse(405, array('allow' => "GET "));
+				}
+		}
 	}
-	
+		
 	function deleteIntegrante($id){
 		$validID = settype($id, "integer");
 		$integrante = new Integrante();
@@ -299,9 +312,15 @@ case 3 :
 		}catch(Exception $e){
 			RestUtils::sendResponse(500); 
 		}
+		RestUtils::sendResponse(204); 
 	}			
 	
-	function getDeEntidade($req, $ent, $id){
+	function getDeEntidadeNoticias($req,$ent,$id){
+		$entry = getNoticia($ent, $id); 
+		getMore($ent, $id, $entry);
+		treatGetRequest($req, $entry, $ent); 		 	
+	}
+	function getNoticia($ent, $id){
 		$bdEnt = new $ent(); 
 		$key = (strtolower($ent) == 'clube') ? "idclube" : "idintegrante";
 		try{
@@ -309,18 +328,24 @@ case 3 :
 		}catch(Exception $e){
 			RestUtils::sendResponse(404); 	
 		}
-		
-
-				
-		
-			
+		return $entry; 
+	}
+	
+	function getMore($ent, $id, $entry){
 		if (strtolower($ent)== 'clube'){
-			//$entry->noticias = Noticia_Has_Clube::getAllNoticias($id);  	
+			$entry->noticias = Noticia_Has_Clube::getAllNoticias($id);  	
 		}
 		else {
-			//$entry->noticias = Noticia_Has_Integrante::getAllNoticias($id);  	
+			$entry->noticias = Noticia_Has_Integrante::getAllNoticias($id);  	
 		}
-		}
+	}
+	
+	function getDeEntidade($req, $ent, $id){
+		$entry = getNoticia($ent, $id);
+		treatGetRequest($req, $entry, $ent); 
+	}
+	
+	function treatGetRequest($req, $entry, $ent){
 		if ($req->getHttpAccept() == 'json'){
 			RestUtils::sendResponse(200, null, json_encode($entry)); 
 		}

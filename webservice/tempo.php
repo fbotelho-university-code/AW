@@ -82,7 +82,16 @@ require_once ('Util/XML/Serializer.php');
 	$result = $xmlSerializer->serialize($results);  	
 	if ($req->getHttpAccept() == 'text/xml'){
 	if ($result == true){
-		RestUtils::sendResponse(200, null, $xmlSerializer->getSerializedData(), 'text/xml'); 
+		
+		$xmlResponse = $xmlSerializer->getSerializedData();
+		RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+			
+		/*if($n->validateXMLbyXSD($xmlResponse, "Datas.xsd")) {
+			RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+		}
+		else {
+			RestUtils::sendResponse(400);
+		}*/
 	}else{
 		RestUtils::sendResponse(500); 
 	}
