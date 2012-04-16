@@ -51,7 +51,7 @@
 			</method>
 			<method name="POST"> 
 				<request>
-					<representation id="Noticia" mediaType="text/xml" element="Noticia:Noticia"/> 
+					<representation id="idNoticia" mediaType="xsd:int"/> 
 				</request>
 				<response status="201">
 				</response>
@@ -136,8 +136,8 @@
 				</method>
 				<method name="POST"> 
 					<request>
-						<representation id="Clube" mediaType="text/xml" element="Clube:Clube"/> 
-					</request>
+						<representation id="idClube" mediaType="xsd:int"/>
+ 					</request>
 					<response status="201">
 					</response>
 					<response status="400">
@@ -242,7 +242,7 @@
 				</method>
 				<method name="POST"> 
 					<request>
-						<representation id="Integrante" mediaType="text/xml" element="Integrante:Integrante"/> 
+						<representation id="idIntegrante" mediaType="xsd:int"/>  
 					</request>
 					<response status="201">
 					</response>
@@ -359,7 +359,7 @@
 			</method>
 			<method name="POST"> 
 				<request>
-					<representation id="Local" mediaType="text/xml" element="Local:Local"/> 
+					<representation id="idLocal" mediaType="xsd:int"/>  
 				</request>
 				<response status="201">
 				</response>
