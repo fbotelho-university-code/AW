@@ -152,6 +152,14 @@
 						<dd>Permite actualizar a informação do clube com o identificador igual à <code>id</code>. A informação deve ser passada em <code>XML</code> no corpo do request <code>HTTP</code>, respeitando o <code>XML Schema</code> <a href="Schemas/clube.xsd">clube.xsd</a>.</dd>
 				</dl>
 			</p>
+				<h4>/entidades.php/clube/{id}/noticias</h4>
+					<p>
+						Este recurso representa as notícias relacionadas com clube com identificador igual à <code>id</code>. Está disponível o método <code>GET</code>.
+						<dl>
+							<dt><code>GET</code></dt>
+								<dd>Retorna as notícias relacionadas com clube com identificador igual à <code>id</code>.</dd>
+						</dl>
+					</p>
 			<h3><code>/entidades.php/integrante</code></h3>
 			<p>
 				Este recurso representa os <em>integrantes</em>.
@@ -180,6 +188,14 @@
 						<dd>Remove o integrante com identificador igual à <code>id</code>.</dd>
 				</dl>
 			</p>
+				<h4>/entidades.php/integrante/{id}/noticias</h4>
+					<p>
+						Este recurso representa as notícias relacionadas com o integrante com identificador igual à <code>id</code>. Está disponível o método <code>GET</code>.
+						<dl>
+							<dt><code>GET</code></dt>
+								<dd>Retorna as notícias relacionadas com o integrante com identificador igual à <code>id</code>.</dd>
+						</dl>
+					</p>
 		<h2>/espaco.php</h2>
 		<p>
 			Este recurso representa os <em>locais</em>.
@@ -208,6 +224,14 @@
 						<dd>Remove o local com identificador igual à <code>id</code>.</dd>
 				</dl>
 			</p>
+				<h4>/espaco.php/{id}/noticias</h4>
+					<p>
+						Este recurso representa as notícias relacionadas com o local com identificador igual à <code>id</code>. Está disponível o método <code>GET</code>.
+						<dl>
+							<dt><code>GET</code></dt>
+								<dd>Retorna as notícias relacionadas com o local com identificador igual à <code>id</code>.</dd>
+						</dl>
+					</p>
 		<h2>/tempo.php</h2>
 		<p>
 			Este recurso representa as <em>datas</em> que estão associadas à notícias.
@@ -223,7 +247,7 @@
 				<p>
 					Este recurso representa as datas associadas às notícias do ano <code>ano</code>.
 					<dl>
-						<dt>GET</dt>
+						<dt><code>GET</code></dt>
 							<dd>Retorna as datas associadas às notícias do ano <code>ano</code>.</dd>
 					</dl>
 				</p>
@@ -231,7 +255,7 @@
 				<p>
 					Este recurso representa as datas associadas às notícias do ano <code>ano</code> e mês <code>mes</code>.
 					<dl>
-						<dt>GET</dt>
+						<dt><code>GET</code></dt>
 							<dd>Retorna as datas associadas às notícias do ano <code>ano</code> e mês <code>mes</code>.</dd>
 					</dl>
 				</p>
@@ -239,7 +263,7 @@
 				<p>
 					Este recurso representa a data associada às notícias do ano <code>ano</code>, mês <code>mes</code> e dia <code>dia</code>.
 					<dl>
-						<dt>GET</dt>
+						<dt><code>GET</code></dt>
 							<dd>Retorna a data associada às notícias do ano <code>ano</code>, mês <code>mes</code> e dia <code>dia</code>.</dd>
 					</dl>
 				</p>
