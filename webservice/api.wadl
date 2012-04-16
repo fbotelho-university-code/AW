@@ -95,7 +95,7 @@
 				<method name="DELETE">
 					<request>
 					</request>
-					<response status="200">
+					<response status="204">
 					</response>
 					<response status="404">
 					</response>
@@ -286,7 +286,7 @@
 					<method name="DELETE">
 						<request>
 						</request>
-						<response status="200">						
+						<response status="204">						
 						</response>
 						<response status="404">
 						</response>
@@ -404,7 +404,7 @@
 			<method name="DELETE">
 				<request>
 				</request>
-				<response status="200">
+				<response status="204">
 				</response>
 				<response status="404">
 				</response>
