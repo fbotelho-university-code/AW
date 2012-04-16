@@ -11,6 +11,17 @@
  require_once ('../model/Local.php');
  require_once ('../model/Noticia_locais.php');
  
+ 
+ 
+ 	function getUrl(){
+ 		$v = parse_url("http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+ 		
+ 		$r = $v['scheme'] . '://' . $v['host'] . $v['path'];
+ 		$pos = strpos($r, 'espaco.php') ;
+ 		$val = substr($r, 0, $pos );
+ 		return $val; 
+ 	}
+ 	
  $options = array(
       "indent"          => "    ",
       "linebreak"       => "\n",
@@ -57,18 +68,14 @@
 				postRoot($req);
 			break;
 			case 'HEAD': 
-				postHead($req);
-			break;
+				//postHead($req);
 			default:
-				RestUtils::sendResponse(405, array('allow' => "HEAD", "GET", "POST"));
+				RestUtils::sendResponse(405, array('allow' => "GET POST"));
 				exit; 
 		}			
 	}
 	 
-	 /**
-	  * 
-	  */
-	
+	 
 	function postRoot($req){
 		$espaco = new Local();
 		$xmlHttpContent = $req->getData();
@@ -86,8 +93,7 @@
 			RestUtils::sendResponse(201, null, $id, 'text'); 
 		}
 		else{
-			//TODO send bad format
-			//RestUtils::sendResponse(200, null , $result->coordenadas, 'text'); 
+			RestUtils::sendResponse(406); 
 		} 		 
 	}
 	
@@ -99,11 +105,14 @@
 	 
 	function getRoot($req){
 		$local = new Local();
-		//include "filter.php";
-		$locais =$local->getAll(null, $start, $count);
-		if (!$locais) {RestUtils::sendResponse(500); exit; }
-		foreach ($locais as $n){ $n->follow = "myUrl/" . $n->idlocal; }
-			
+		try{
+		$locais =$local->getAll(null);
+		}catch(Exception $e){
+			RestUtils::sendResponse(500); 
+		}
+		
+		foreach ($locais as $n){ $n->follow = getUrl() . 'espaco.php/' . $n->idlocal; }
+		
 		if ($req->getHttpAccept() == 'text/xml'){
 		
 			global $options; $options["rootName"] = "locais";  $options["defaultTagName"] = "local";   
@@ -134,7 +143,6 @@
 		else{
 			RestUtils::sendResponse(406); 
 		}
-		//TODO - send malformed request response
 	}
 	
 	//Process resource (/local/{idlocal}) requests. Accepts GET/PUT/HEAD/DELETE
