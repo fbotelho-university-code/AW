@@ -79,13 +79,13 @@
 	function postRoot($req){
 		$espaco = new Local();
 		$result = $espaco->fromXml($req->getData());
-		
-		if ($result->checkValidity() == true){
-			$id = $result->add(); 
-			if (!$id){
-				RestUtils::sendResponse(500);
-				exit; 
-			}
+		if ($result->checkValidity() == true ){
+			
+			try{
+				$id = $result->add();
+			}catch(Exception $e){
+				RestUtils::sendResponse(500); 
+			} 
 			RestUtils::sendResponse(201, null, $id, 'text'); 
 		}
 		else{
@@ -98,7 +98,6 @@
 	 * Representa��o em XML, JSON que devem conter apontadores para o recurso de cada local.  
 	 * TODO : filtrar pesquisa. 
 	 **/
-	 
 	function getRoot($req){
 		$local = new Local();
 		try{
