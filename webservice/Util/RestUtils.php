@@ -76,7 +76,8 @@ class RestUtils{
 				$data = file_get_contents('php://input'); 
 				break; 
 			case 'PUT':
-				$data = file_get_contents('php://input'); 
+				$data = parse_str(file_get_contents('php://input'),$put_varss);
+				$data =  $put_varss;
 				break;  
 		}
 

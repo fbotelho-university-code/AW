@@ -156,7 +156,12 @@
 
 	function postClube($req){
 		$clubeClass = new Clube(); 
-		$result = $clubeClass->fromXml($req->getData()); 
+		$xmlHttpContent = $req->getData();
+		/*if(!$clubeClass->validateXMLbyXSD($xmlHttpContent, "Clube.xsd")) {
+		 RestUtils::sendResponse(400, null, "XML mal formado!", "text/plain");
+		}*/
+		
+		$result = $clubeClass->fromXml($xmlHttpContent); 
 		$id = $result->add(); 
 		
 		if (!$id){
@@ -169,7 +174,11 @@
 	//TODO - este m�todo � igual ao postClube. fus�o. 
 	function postIntegrante($req){
 		$integranteClass = new Integrante(); 
-		$result = $integranteClass->fromXml($req->getData()); 
+		$xmlHttpContent = $req->getData();
+		/*if(!$integranteClass->validateXMLbyXSD($xmlHttpContent, "Integrante.xsd")) {
+		 RestUtils::sendResponse(400, null, "XML mal formado!", "text/plain");
+		}*/
+		$result = $integranteClass->fromXml($xmlHttpContent); 
 		$id = $result->add(); 
 		if (!$id){
 			RestUtils::sendResponse(500);
@@ -196,7 +205,16 @@
 			$n->visivel = null; // we do not want this to show on the result.  
 			$result = $xmlSerializer->serialize($entrys);
 			if ($result == true){
-				RestUtils::sendResponse(200, null, $xmlSerializer->getSerializedData(), 'text/xml');
+				$xmlResponse = $xmlSerializer->getSerializedData();
+				
+				//RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+					
+				if($bdEnt->validateXMLbyXSD($xmlResponse, $options["rootName"]."xsd")) {
+					RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+				}
+				else {
+					RestUtils::sendResponse(400);
+				}
 			} else {
 				RestUtils::sendResponse(500); 
 			}
@@ -238,6 +256,11 @@
 		if (!$existent){
 			RestUtils::sendResponse(404); 
 		}
+		
+		$xmlHttpContent = $req->getData();
+		/*if(!$existent->validateXMLbyXSD($xmlHttpContent, $existent.".xsd")) {
+		 RestUtils::sendResponse(400, null, "XML mal formado!", "text/plain");
+		}*/
 		 
 		$new = $existent->fromXml($req->getData());
 		if ($new){
@@ -280,7 +303,13 @@
 			$xmlSerializer =  new XML_Serializer($options); 
 			$result = $xmlSerializer->serialize($entry);
 			if ($result == true){
-				RestUtils::sendResponse(200, null, $xmlSerializer->getSerializedData(), 'text/xml');
+				$xmlResponse = $xmlSerializer->getSerializedData();
+				
+				//RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+					
+				if($bdEnt->validateXMLbyXSD($xmlResponse, $options["rootName"]."xsd")) {
+					RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+				}
 			} else {
 				RestUtils::sendResponse(500); 
 			}
