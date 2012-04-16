@@ -8,15 +8,15 @@
 	> 
 	
 	<grammars> 
-		<include href="Schemas/clube.xsd"/> 
-		<include href="Schemas/local.xsd"/> 
-		<include href="Schemas/integrante.xsd"/> 
-		<include href="Schemas/noticia.xsd"/> 
-		<include href="Schemas/datas.xsd"/> 
-		<include href="Schemas/clubes.xsd"/> 
-		<include href="Schemas/integrantes.xsd"/> 
-		<include href="Schemas/locais.xsd"/>
-		<include href="Schemas/noticias.xsd"/>
+		<include href="Schemas/Clube.xsd"/> 
+		<include href="Schemas/Local.xsd"/> 
+		<include href="Schemas/Integrante.xsd"/> 
+		<include href="Schemas/Noticia.xsd"/> 
+		<include href="Schemas/Datas.xsd"/> 
+		<include href="Schemas/Clubes.xsd"/> 
+		<include href="Schemas/Integrantes.xsd"/> 
+		<include href="Schemas/Locais.xsd"/>
+		<include href="Schemas/Noticias.xsd"/>
 	</grammars> 
 	
 	<resources base="http://localhost/aw12/webservice"> 
@@ -42,14 +42,16 @@
 					</doc>
 				</request>
 				<response status="200"> 
-					<representation id="Noticias" mediaType="text/xml" element="noticias:noticias"/> 
+					<representation id="Noticias" mediaType="text/xml" element="Noticias:noticias"/> 
+				</response>
+				<response status="406">
 				</response>
 			</method>
 			<method name="POST"> 
 				<request>
-					<representation id="Noticia" mediaType="text/xml" element="noticia:noticia"/> 
+					<representation id="Noticia" mediaType="text/xml" element="Noticia:Noticia"/> 
 				</request>
-				</response status="201">
+				<response status="201">
 				</response>
 			</method> 
 			<resource path={idNoticia}>
@@ -61,22 +63,29 @@
 							Can be 'text/xml' (default) or 'json'.
 						</doc>
 					</request>
-					</response status="200"> 
-						<representation id="Noticia" mediaType="text/xml" element="noticia:noticia"/> 
+					<response status="200"> 
+						<representation id="Noticia" mediaType="text/xml" element="Noticia:Noticia"/> 
+					</response>
+					<response status="404">
+					</response>
+					<response status="406">
 					</response>
 				</method>
 				<method name="PUT">
 					<request>
-						<representation id="Noticia" mediaType="text/xml" element="noticia:noticia"/> 
+						<representation id="Noticia" mediaType="text/xml" element="Noticia:Noticia"/> 
 					</request>
-					</response status="200">
+					<response status="200">
+					</response>
+					<response status="404">
 					</response>
 				</method>
 				<method name="DELETE">
 					<request>
 					</request>
-					</response status="200">
-						
+					<response status="200">
+					</response>
+					<response status="404">
 					</response>
 				</method>
 			</resource>
@@ -103,13 +112,15 @@
 							Can be 'text/xml' (default) or 'json'.
 						</doc>	
 					</request>
-					</response status="200"> 
-						<representation id="Clubes" mediaType="text/xml" element="clubes:clubes"/> 
+					<response status="200"> 
+						<representation id="Clubes" mediaType="text/xml" element="Clubes:clubes"/> 
+					</response>
+					<response status="406">
 					</response>
 				</method>
 				<method name="POST"> 
 					<request>
-						<representation id="Clube" mediaType="text/xml" element="clube:clube"/> 
+						<representation id="Clube" mediaType="text/xml" element="Clube:Clube"/> 
 					</request>
 					<response status="201">
 					</response>
@@ -123,17 +134,53 @@
 								Can be 'text/xml' (default) or 'json'.
 							</doc>	
 						</request>
-						</response status="200"> 
-							<representation id="Clube" mediaType="text/xml" element="clube:clube"/> 
+						<response status="200"> 
+							<representation id="Clube" mediaType="text/xml" element="Clube:Clube"/> 
+						</response>
+						<response status="404">
+						</response>
+						<response status="406">
 						</response>
 					</method>
 					<method name="PUT">
 						<request>
-							<representation id="Clube" mediaType="text/xml" element="clube:clube"/> 
+							<representation id="Clube" mediaType="text/xml" element="Clube:Clube"/> 
 						</request>
-						</response status="200">
+						<response status="200">
+						</response>
+						<response status="404">
 						</response>
 					</method>
+					<resource path="noticias">
+						<method name="GET"> 
+							<request>
+								<param name="start" style="query" type="xsd:int"/>
+								<doc xml:lang="en" title="Start value.">
+									Indicates the 'id' where the response should start.
+									0 is used if not defined.
+									Must be greater than 0.
+								</doc>
+								<param name="count" style="query" type="xsd:int"/>
+								<doc xml:lang="en" title="How many elements to be returned.">
+									Indicates how many elements should be returned.
+									Must be greater than 0.
+									10 is used if not defined.
+									If not so many elements are available, all are returned.
+								</doc>
+								<param name="Accept" type="xsd:string" style="header"/>
+								<doc xml:lang="en" title="Response format.">
+									Can be 'text/xml' (default) or 'json'.
+								</doc>	
+							</request>
+							<response status="200"> 
+								<representation id="Noticias" mediaType="text/xml" element="Noticias:noticias"/> 
+							</response>
+							<response status="404">
+							</response>
+							<response status="406">
+							</response>
+						</method>
+					</resource>
 				</resource>
 			</resource>
 			<resource path="integrante">
@@ -157,13 +204,15 @@
 							Can be 'text/xml' (default) or 'json'.
 						</doc>	
 					</request>
-					</response status="200"> 
-						<representation id="Integrantes" mediaType="text/xml" element="integrantes:integrantes"/> 
+					<response status="200"> 
+						<representation id="Integrantes" mediaType="text/xml" element="Integrantes:integrantes"/> 
+					</response>
+					<response status="406">
 					</response>
 				</method>
 				<method name="POST"> 
 					<request>
-						<representation id="Integrante" mediaType="text/xml" element="integrante:integrante"/> 
+						<representation id="Integrante" mediaType="text/xml" element="Integrante:Integrante"/> 
 					</request>
 					<response status="201">
 					</response>
@@ -177,23 +226,61 @@
 								Can be 'text/xml' (default) or 'json'.
 							</doc>	
 						</request>
-						</response status="200"> 
-							<representation id="Integrante" mediaType="text/xml" element="integrante:integrante"/> 
+						<response status="200"> 
+							<representation id="Integrante" mediaType="text/xml" element="Integrante:Integrante"/> 
+						</response>
+						<response status="404">
+						</response>
+						<response status="406">
 						</response>
 					</method>
 					<method name="PUT">
 						<request>
-							<representation id="Integrante" mediaType="text/xml" element="integrante:integrante"/> 
+							<representation id="Integrante" mediaType="text/xml" element="Integrante:Integrante"/> 
 						</request>
-						</response status="200">
+						<response status="200">
+						</response>
+						<response status="404">
 						</response>
 					</method>
 					<method name="DELETE">
 						<request>
 						</request>
-						</response status="200">						
+						<response status="200">						
+						</response>
+						<response status="404">
 						</response>
 					</method>
+					<resource path="noticias">
+						<method name="GET"> 
+							<request>
+								<param name="start" style="query" type="xsd:int"/>
+								<doc xml:lang="en" title="Start value.">
+									Indicates the 'id' where the response should start.
+									0 is used if not defined.
+									Must be greater than 0.
+								</doc>
+								<param name="count" style="query" type="xsd:int"/>
+								<doc xml:lang="en" title="How many elements to be returned.">
+									Indicates how many elements should be returned.
+									Must be greater than 0.
+									10 is used if not defined.
+									If not so many elements are available, all are returned.
+								</doc>
+								<param name="Accept" type="xsd:string" style="header"/>
+								<doc xml:lang="en" title="Response format.">
+									Can be 'text/xml' (default) or 'json'.
+								</doc>	
+							</request>
+							<response status="200"> 
+								<representation id="Noticias" mediaType="text/xml" element="Noticias:noticias"/> 
+							</response>
+							<response status="404">
+							</response>
+							<response status="406">
+							</response>
+						</method>
+					</resource>
 				</resource>
 			</resource>
 		</resource>
@@ -218,13 +305,15 @@
 						Can be 'text/xml' (default) or 'json'.
 					</doc>	
 				</request>
-				</response status="200"> 
-					<representation id="Locais" mediaType="text/xml" element="locais:locais"/> 
+				<response status="200"> 
+					<representation id="Locais" mediaType="text/xml" element="Locais:locais"/> 
+				</response>
+				<response status="406">
 				</response>
 			</method>
 			<method name="POST"> 
 				<request>
-					<representation id="Local" mediaType="text/xml" element="local:local"/> 
+					<representation id="Local" mediaType="text/xml" element="Local:Local"/> 
 				</request>
 				<response status="201">
 				</response>
@@ -238,24 +327,62 @@
 							Can be 'text/xml' (default) or 'json'.
 						</doc>	
 					</request>
-					</response status="200"> 
-						<representation id="Local" mediaType="text/xml" element="local:local"/> 
+					<response status="200"> 
+						<representation id="Local" mediaType="text/xml" element="Local:Local"/> 
+					</response>
+					<response status="404">
+					</response>
+					<response status="406">
 					</response>
 				</method>
 			</resource>
 			<method name="PUT">
 				<request>
-					<representation id="Local" mediaType="text/xml" element="local:local"/> 
+					<representation id="Local" mediaType="text/xml" element="Local:Local"/> 
 				</request>
-				</response status="200">
+				<response status="200">
+				</response>
+				<response status="404">
 				</response>
 			</method>
 			<method name="DELETE">
 				<request>
 				</request>
-				</response status="200">
+				<response status="200">
+				</response>
+				<response status="404">
 				</response>
 			</method>
+			<resource path="noticias">
+				<method name="GET"> 
+					<request>
+						<param name="start" style="query" type="xsd:int"/>
+						<doc xml:lang="en" title="Start value.">
+							Indicates the 'id' where the response should start.
+							0 is used if not defined.
+							Must be greater than 0.
+						</doc>
+						<param name="count" style="query" type="xsd:int"/>
+						<doc xml:lang="en" title="How many elements to be returned.">
+							Indicates how many elements should be returned.
+							Must be greater than 0.
+							10 is used if not defined.
+							If not so many elements are available, all are returned.
+						</doc>
+						<param name="Accept" type="xsd:string" style="header"/>
+						<doc xml:lang="en" title="Response format.">
+							Can be 'text/xml' (default) or 'json'.
+						</doc>	
+					</request>
+					<response status="200"> 
+						<representation id="Noticias" mediaType="text/xml" element="Noticias:noticias"/> 
+					</response>
+					<response status="404">
+					</response>
+					<response status="406">
+					</response>
+				</method>
+			</resource>
 		</resource>
 		<resource path="tempo">
 			<method name="GET"> 
@@ -278,8 +405,10 @@
 						Can be 'text/xml' (default) or 'json'.
 					</doc>	
 				</request>
-				</response status="200"> 
-					<representation id="Datas" mediaType="text/xml" element="datas:datas"/> 
+				<response status="200"> 
+					<representation id="Datas" mediaType="text/xml" element="Datas:datas"/> 
+				</response>
+				<response status="406">
 				</response>
 			</method>
 			<resource path={ano}>
@@ -304,8 +433,12 @@
 							Can be 'text/xml' (default) or 'json'.
 						</doc>	
 					</request>
-					</response status="200"> 
-						<representation id="Datas" mediaType="text/xml" element="datas:datas"/> 
+					<response status="200"> 
+						<representation id="Datas" mediaType="text/xml" element="Datas:datas"/> 
+					</response>
+					<response status="404">
+					</response>
+					<response status="406">
 					</response>
 				</method>
 				<resource path={mes}>
@@ -330,8 +463,12 @@
 								Can be 'text/xml' (default) or 'json'.
 							</doc>	
 						</request>
-						</response status="200"> 
-							<representation id="Datas" mediaType="text/xml" element="datas:datas"/> 
+						<response status="200"> 
+							<representation id="Datas" mediaType="text/xml" element="Datas:datas"/> 
+						</response>
+						<response status="404">
+						</response>
+						<response status="406">
 						</response>
 					</method>
 					<resource path={dia}>
@@ -356,8 +493,12 @@
 									Can be 'text/xml' (default) or 'json'.
 								</doc>	
 							</request>
-							</response status="200"> 
-								<representation id="Datas" mediaType="text/xml" element="datas:datas"/> 
+							<response status="200"> 
+								<representation id="Datas" mediaType="text/xml" element="Datas:datas"/> 
+							</response>
+							<response status="404">
+							</response>
+							<response status="406">
 							</response>
 						</method>
 					</resource>
