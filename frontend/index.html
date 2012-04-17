@@ -1,0 +1,254 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+	<title>Projecto AW</title>
+	<link rel="stylesheet" href="css/style.css" type="text/css" media="all" />
+	<!--[if lte IE 6]><link rel="stylesheet" href="css/ie6.css" type="text/css" media="all" /><![endif]-->
+	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true"></script>
+	<script type="text/javascript">
+  		function initialize() {
+    		var latlng = new google.maps.LatLng(38.71284,-9.135475);
+    		var myOptions = {
+      							zoom: 9,
+      							center: latlng,
+      							mapTypeId: google.maps.MapTypeId.ROADMAP
+    						};
+    		var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+  		}
+	</script>
+</head>
+<body onload="initialize()">
+	<!-- Header -->
+	<div id="header">
+		<div class="shell">
+			<!-- Logo -->
+			<h1 id="logo" class="notext"><a href="#">Sport Zone Sport Portal</a></h1>
+			<!-- End Logo -->
+		</div>
+	</div>
+	<!-- End Header -->
+	
+	 
+	<div id="navigation">
+		<center>
+		<div class="shell">
+			<div class="cl">&nbsp;</div>
+			<ul>
+			    <li><a href="#">Pesquisa por: </a></li>
+			    <li><br><select name="filtro">
+			    			<option>Clubes</option>
+			    			<option>Integrantes</option>
+			    			<option>Local</option>
+			    			<option>Data</option>
+			    		</select></li>
+			    <li><br><input type="text" name="filtro" size="50" /></li>
+			    <li><a href="#"><img src="css/images/search.png" border="0"></a></li>
+			    <li><a href="#">&nbsp;</a></li>
+			    <li><a href="#">Administração</a></li>
+			</ul>
+			<div class="cl">&nbsp;</div>
+		</div>
+		</center>
+	</div>
+	
+	<!-- Heading -->
+	<div id="heading">
+		<div class="shell">
+			<div id="heading-cnt">
+				
+				<!-- Sub nav 
+				<div id="side-nav">
+					<ul>
+					    <li class="active"><div class="link"><a href="#">home</a></div></li>
+					    <li><div class="link"><a href="#">ranking</a></div></li>
+					    <li><div class="link"><a href="#">results</a></div></li>
+					    <li><div class="link"><a href="#">schedules</a></div></li>
+					    <li><div class="link"><a href="#">photo gallery</a></div></li>
+					</ul>
+				</div>
+				 End Sub nav -->
+				
+				<!-- Widget -->
+				<div id="heading-box">
+					<div id="heading-box-cnt">
+						<div class="cl">&nbsp;</div>
+						
+						<!--  <div id="map_canvas" style="width:438px; height:310px"></div> -->
+						<!-- Main Slide Item -->
+						<div class="featured-main">
+							<!-- <a href="#"><img id="map_canvas" src="css/images/featured-main.jpg" alt="" /></a> -->
+							<div id="map_canvas" style="width:705px; height:310px"></div>
+							
+						</div>
+						<!-- End Main Slide Item -->
+						
+						<div class="featured-side">
+							
+							<!-- Slide Item 1 
+							<div class="featured-side-item">
+								<div class="cl">&nbsp;</div>
+								<a href="#" class="left"><img src="css/images/benfica.png" alt="" /></a>
+								<br><h4><a href="#">Sport Lisboa e Benfica</a></h4>
+								<p>&nbsp;</p>
+								<div class="cl">&nbsp;</div>
+							</div>
+							<!-- End Slide Item 1 
+							
+							<!-- Slide Item 2 
+							<div class="featured-side-item">
+								<div class="cl">&nbsp;</div>
+								<a href="#" class="left"><img src="css/images/porto.jpg" alt="" /></a>
+								<br><h4><a href="#">Sport Clube do Porto</a></h4>
+								<p>&nbsp;</p>
+								<div class="cl">&nbsp;</div>
+							</div>
+							<!-- End Slide Item 2 
+							
+							<!-- Slide Item 3 
+							<div class="featured-side-item">
+								<div class="cl">&nbsp;</div>
+								<a href="#" class="left"><img src="css/images/Sporting.png" alt="" /></a>
+								<br><h4><a href="#">Sporting Clube de Portugal</a></h4>
+								<p>&nbsp;</p>
+								<div class="cl">&nbsp;</div>
+							</div>
+							<!-- End Slide Item 3 
+							
+							<!-- Slide Item 4 
+							<div class="featured-side-item">
+								<div class="cl">&nbsp;</div>
+								<a href="#" class="left"><img src="css/images/braga.gif" alt="" /></a>
+								<br><h4><a href="#">Sporting Clube de Braga</a></h4>
+								<p>&nbsp;</p>
+								<div class="cl">&nbsp;</div>
+							</div>
+							<!-- End Slide Item 4 
+							
+							<!-- Slide Item 5 
+							<div class="featured-side-item">
+								<div class="cl">&nbsp;</div>
+								<a href="#" class="left"><img src="css/images/cdn.gif" alt="" /></a>
+								<br><h4><a href="#">Centro Desportivo Nacional</a></h4>
+								<p>&nbsp;</p>
+								<div class="cl">&nbsp;</div>
+							</div>
+							<!-- End Slide Item 5 -->
+						</div>
+						<div class="cl">&nbsp;</div>						
+					</div>
+				</div>
+				<!-- End Widget -->
+				
+			</div>			
+		</div>
+	</div>
+	<!-- End Heading -->
+	
+	<!-- Main -->
+	<div id="main">
+		<div class="shell">		
+			<div class="cl">&nbsp;</div>	
+			<div id="sidebar">
+				<h2>news spot</h2>
+				<ul>
+				    <li>
+				    	<small class="date">12.05.09</small>
+				    	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+				    </li>
+				    <li>
+				    	<small class="date">12.05.09</small>
+				    	<p>Donec venenatis varius urna vitae congue.</p>
+				    </li>
+				    <li>
+				    	<small class="date">12.05.09</small>
+				    	<p>Ullam vel neque ut lectus cursus dapibus.</p>
+				    </li>
+				    <li>
+				    	<small class="date">12.05.09</small>
+				    	<p>Praesent pellentesque arcu convallis ante dignissim quis ultrices felis iaculis.</p>
+				    </li>
+				    <li>
+				    	<small class="date">12.05.09</small>
+				    	<p>Ut eget lorem elit. Donec lorem eros, congue vel mollis non, tincidunt a nisl.</p>
+				    </li>
+				    <li>
+				    	<small class="date">12.05.09</small>
+				    	<p>Curabitur consectetur tellus a diam tincidunt pellentesque. </p>
+				    </li>
+				</ul>
+				<a href="#" class="archives">News Archives</a>
+			</div>
+			<div id="content">
+				<div class="cl">&nbsp;</div>
+				<div class="grey-box">
+					<h3><a href="#">Lorem ipsum dolor sit amet.</a></h3>
+					<a href="#"><img src="css/images/main-1.jpg" alt="" /></a>
+					<p>
+						<span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur elementum, odio tincidunt egestas</span>
+						<a href="#" class="button">Read more</a>
+					 </p>
+				</div>
+				<div class="grey-box">
+					<h3><a href="#">Curabitur elementum, odio tincidunt </a></h3>
+					<a href="#"><img src="css/images/main-2.jpg" alt="" /></a>
+					<p>
+						<span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur elementum, odio tincidunt egestas</span>
+						<a href="#" class="button">Read more</a>
+					 </p>
+				</div>
+				<div class="grey-box last">
+					<h3><a href="#">Etiam iaculis tortor vel arcu porta consectetur.</a></h3>
+					<a href="#"><img src="css/images/main-3.jpg" alt="" /></a>
+					<p>
+						<span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur elementum, odio tincidunt egestas</span>
+						<a href="#" class="button">Read more</a>
+					 </p>
+				</div>
+				<div class="cl">&nbsp;</div>
+				<div class="video-box">
+					<div class="cl">&nbsp;</div>
+					<h2 class="left">video spot</h2>
+					<a href="#" class="button">All videos</a>
+					<div class="cl">&nbsp;</div>
+					<div class="video-item-box">
+						<a href="#" class="left"><img src="css/images/video-1.jpg" alt="" /></a>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+						<a href="#" class="watch-now">Watch now</a>
+					</div>
+					<div class="video-item-box second">
+						<a href="#" class="left"><img src="css/images/video-2.jpg" alt="" /></a>
+						<p>Curabitur consectetur tellus a diam tincidunt pellentesque</p>
+						<a href="#" class="watch-now">Watch now</a>
+					</div>
+					<div class="video-item-box">
+						<a href="#" class="left"><img src="css/images/video-3.jpg" alt="" /></a>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+						<a href="#" class="watch-now">Watch now</a>
+					</div>
+					<div class="video-item-box second">
+						<a href="#" class="left"><img src="css/images/video-4.jpg" alt="" /></a>
+						<p>Aliquam erat volutpat. Nam tortor justo, pretium eget iaculis et</p>
+						<a href="#" class="watch-now">Watch now</a>
+					</div>
+					<div class="cl">&nbsp;</div>
+				</div>
+			</div>
+			<div class="cl">&nbsp;</div>
+		</div>
+	</div>
+	<!-- End Main -->
+	
+	<!-- Footer -->
+	<div id="footer">
+		<div class="shell">
+			<div class="cl">&nbsp;</div>
+			<a href="#" class="left">TERMS OF USE</a>
+			<a href="#" class="left">PRIVACY POLICY</a>
+			<p class="right">&copy; Sitename.com. Design by <a href="http://chocotemplates.com">ChocoTemplates.com</a> | downloaded from <a href="http://www.mytemplatez.com">Free Templates</a></p>
+			<div class="cl">&nbsp;</div>
+		</div>
+	</div>
+	<!-- End Footer -->
+</body>
+</html>
