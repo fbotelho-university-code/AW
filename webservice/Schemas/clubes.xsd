@@ -5,7 +5,7 @@
 	<xsd:element name="clubes">
     	<xsd:complexType>
     		<xsd:sequence>
-    			<xsd:element name="clube" minOccurs="1" maxOccurs="unbounded" type="clubeT"></xsd:element>
+    			<xsd:element name="Clube" minOccurs="0" maxOccurs="unbounded" type="clubeT"></xsd:element>
     		</xsd:sequence>
     	</xsd:complexType>
     </xsd:element>

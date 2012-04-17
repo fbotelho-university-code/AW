@@ -22,5 +22,5 @@
     	</xsd:sequence>
     </xsd:complexType>
 
-    <xsd:element name="integrante" type="integranteT"></xsd:element>
+    <xsd:element name="Integrante" type="integranteT"></xsd:element>
 </xsd:schema>

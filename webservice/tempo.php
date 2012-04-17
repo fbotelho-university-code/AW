@@ -16,7 +16,9 @@ require_once ('Util/XML/Serializer.php');
       "addDecl"         => true	,
       "encoding"        => "UTF-8",
       XML_SERIALIZER_OPTION_RETURN_RESULT => true,
-      XML_SERIALIZER_OPTION_CLASSNAME_AS_TAGNAME => true,  
+      XML_SERIALIZER_OPTION_CLASSNAME_AS_TAGNAME => true,
+      "rootAttributes"  => array("xmlns" => "localhost", "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance", "xsi:schemaLocation" => "localhost Datas.xsd "),
+      "namespace" 		=> "localhost", 
       "ignoreNull"      => true,
  	);
  	
@@ -57,6 +59,14 @@ require_once ('Util/XML/Serializer.php');
 	  	case 1:
 	  		$ano = (strcmp($path_parameters[1], 'ano') == 0 ) ? '%' : $path_parameters[1];
 	  }
+	  
+	  if ($dia < 10){
+	  	$dia = '0'. $dia; 
+	  }
+	  if ($mes < 10){
+	  	$mes = '0' . $mes; 
+	  }
+	  
 	//var_dump($path_parameters); 	
 	$data_needle = $ano . '-' . $mes . '-' . $dia;
 	//var_dump($data_needle); 
@@ -78,20 +88,21 @@ require_once ('Util/XML/Serializer.php');
 	$results = Noticia_Data::getAllNoticias($data_needle);
 
 	global $options; $options["rootName"] ='datas'; 
+	
 	$xmlSerializer = new XML_Serializer($options);
-	$result = $xmlSerializer->serialize($results);  	
+	$result = $xmlSerializer->serialize($results['datas']);
+	
 	if ($req->getHttpAccept() == 'text/xml'){
 	if ($result == true){
 		
 		$xmlResponse = $xmlSerializer->getSerializedData();
-		RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
-			
-		/*if($n->validateXMLbyXSD($xmlResponse, "Datas.xsd")) {
+		//RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+		if($n->validateXMLbyXSD($xmlResponse, "Datas.xsd")) {
 			RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
 		}
 		else {
 			RestUtils::sendResponse(400);
-		}*/
+		}
 	}else{
 		RestUtils::sendResponse(500); 
 	}

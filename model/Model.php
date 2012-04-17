@@ -128,7 +128,6 @@ abstract class Model{
 		
 		//Filter the primary key.
 		$sql .= $this->getPrimaryKeyWhere();
-		
 		$this->dao->execute($sql);
 	}
 	
@@ -139,7 +138,9 @@ abstract class Model{
 		if ($xmlString == ''){
 			return ; 
 		}
+		
 		@$ob =  simplexml_load_string($xmlString);
+		
 		$class = get_class($this);
 	    $return_obj  = new $class; 
 	    $this->setObj(get_object_vars($ob), $return_obj);
@@ -249,7 +250,7 @@ abstract class Model{
 					$sql .= ', ';  
 				} 
 			}
-		}
+		} 
 		else{
 			$sql .= ' * '; 
 		}
@@ -294,6 +295,10 @@ abstract class Model{
 	 */
 	 
 	public  function find ($fields, $connector = ' = '){
+		$var = $this->setCount(); 
+		$start = $var['start'];
+		$end = $var['count'];
+		
 		//Subclasses de Fonte devem usar tabela da classe pai (fonte)	
 		if(is_subclass_of($this, "fonte")) {
 			$table = "fonte";
@@ -305,7 +310,11 @@ abstract class Model{
 		$sql = 'select * from ' . $table;
 		
 		//This $connector is used for LIKE statements
-		$sql .= $this->createWhereClause($fields, 'where', ' AND ', $connector) . ';';
+		$sql .= $this->createWhereClause($fields, 'where', ' AND ', $connector) ;
+		
+		if(!(is_null($start) && is_null($end))) {
+				$sql .= " LIMIT ".$start." , ". $end;
+		}
 
 		$rs = $this->dao->execute($sql);
 		$values = array();

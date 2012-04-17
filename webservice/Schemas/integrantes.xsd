@@ -5,7 +5,7 @@
 	<xsd:element name="integrantes">
     	<xsd:complexType>
     		<xsd:sequence>
-    			<xsd:element name="integrante" minOccurs="1" maxOccurs="unbounded" type="integranteT"></xsd:element>
+    			<xsd:element name="Integrante" minOccurs="0" maxOccurs="unbounded" type="integranteT"></xsd:element>
     		</xsd:sequence>
     	</xsd:complexType>
     </xsd:element>

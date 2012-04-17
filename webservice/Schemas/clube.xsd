@@ -27,5 +27,5 @@
     	</xsd:sequence>
     </xsd:complexType>
 
-    <xsd:element name="clube" type="clubeT"></xsd:element>
+    <xsd:element name="Clube" type="clubeT"></xsd:element>
 </xsd:schema>

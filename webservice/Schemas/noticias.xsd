@@ -5,7 +5,7 @@
 	<xsd:element name="noticias">
     	<xsd:complexType>
     		<xsd:sequence>
-    			<xsd:element name="Noticia" minOccurs="1" maxOccurs="unbounded" type="tns:noticiaT"></xsd:element>
+    			<xsd:element name="Noticia" minOccurs="0" maxOccurs="unbounded" type="tns:noticiaT"></xsd:element>
     		</xsd:sequence>
     	</xsd:complexType>
     </xsd:element>

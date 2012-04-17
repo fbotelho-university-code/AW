@@ -5,7 +5,7 @@
 	<xsd:element name="locais">
     	<xsd:complexType>
     		<xsd:sequence>
-    			<xsd:element name="local" minOccurs="1" maxOccurs="unbounded" type="localT"></xsd:element>
+    			<xsd:element name="Local" minOccurs="0" maxOccurs="unbounded" type="localT"></xsd:element>
     		</xsd:sequence>
     	</xsd:complexType>
     </xsd:element>
