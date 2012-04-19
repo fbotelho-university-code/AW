@@ -244,6 +244,7 @@
 
 
 	function getL($req,$id){
+		
 		$local = new Local(); 
 		try{
 			$n = $local->getObjectById($id);
@@ -253,14 +254,19 @@
 		if (!isset($n)){
 			RestUtils::sendResponse(404); 
 		}
+		
+		
 		return $n; 
 	}	
 
 	function getLocalNoticia($req,$id){
 		$n = getL($req, $id);
+		
 		try{
 			$n->noticias = Noticia_Locais::getAllNoticias($id);
+
 		}catch(Exception $e){
+			
 			RestUtils::sendResponse(500);
 		}
 		
@@ -285,13 +291,13 @@
 			$result = $xmlSerializer->serialize($n);
 			if ($result == true){
 				$xmlResponse = $xmlSerializer->getSerializedData();
-				//RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
-				if($n->validateXMLbyXSD($xmlResponse, "Local.xsd")) {
+				RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+				/*if($n->validateXMLbyXSD($xmlResponse, "Local.xsd")) {
 					RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
 				}
 				else {
 					RestUtils::sendResponse(500);
-				}
+				}*/
 			} else {
 				RestUtils::sendResponse(500); 
 			}

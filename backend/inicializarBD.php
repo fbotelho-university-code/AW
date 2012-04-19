@@ -2,7 +2,7 @@
 
 require_once "includes.php";
 
-echo "<center><h1>Inicialização da Base de Dados</h1></center>";
+echo "<center><h1>Inicializaï¿½ï¿½o da Base de Dados</h1></center>";
 //-------------------------- LIMPANDO BASE DE DADOS -------------------------------------------//
 echo "Limpando a Base de Dados... ";
 $dao = new DAO();
@@ -18,7 +18,7 @@ while(!$rs->EOF) {
 echo "Ok!<hr>";
 
 //----------------------------- FONTE ----------------------------------------------------------//
-echo "Inicialização da Tabela <b>fonte</b>...";
+echo "Inicializaï¿½ï¿½o da Tabela <b>fonte</b>...";
 $f = new Fonte();
 $f->setIdfonte(null);
 $f->setLigado(1);
@@ -27,7 +27,7 @@ $f->setNome("Arquivo da Web Portuguesa");
 $f->setMain_url("http://arquivo.pt/opensearch?query=");
 $f->add();
 
-$f->setNome("RSS Sapo Notícias");
+$f->setNome("RSS Sapo Noticias");
 $f->setMain_url("http://pesquisa.sapo.pt/?barra=noticias&cluster=0&format=rss&location=pt&st=local&limit=10&q=");
 $f->add();
 
@@ -53,7 +53,7 @@ $f->add();
 echo "Ok!<hr>";
 
 //---------------------------- COMPETICAO ---------------------------------------------------//
-echo "Inicialização da Tabela <b>competicao</b>... ";
+echo "Inicializaï¿½ï¿½o da Tabela <b>competicao</b>... ";
 $comp = new Competicao();
 $comp->setIdcompeticao(null);
 
@@ -64,13 +64,13 @@ $idLigaOran = $comp->add();
 echo "Ok!<hr>";
 
 //----------------------------- LOCAL ---------------------------------------------------------//
-echo "Inicialização da Tabela <b>local</b>... ";
+echo "Inicializaï¿½ï¿½o da Tabela <b>local</b>... ";
 $l = new Local();
 include "GeoNetPtClient.php";
 echo "Ok!<hr>";
 
 //----------------------------- CLUBE ----------------------------------------------------------//
-echo "Inicialização da Tabela <b>clube</b>... ";
+echo "Inicializaï¿½ï¿½o da Tabela <b>clube</b>... ";
 $c = new Clube();
 $c->setIdclube(null);
 
@@ -113,7 +113,7 @@ $c->setNome_oficial("clube desportivo nacional");
 $idNacional = $c->add();
 echo "Ok!<hr>";
 //----------------------------- FUNCAO ----------------------------------------------------------//
-echo "Inicialização da Tabela <b>funcao</b>... ";
+echo "Inicializaï¿½ï¿½o da Tabela <b>funcao</b>... ";
 $f = new Funcao();
 $f->setIdFuncao(null);
 
@@ -128,12 +128,21 @@ $idJogador = $f->add();
 
 echo "Ok!<hr>";
 //----------------------------- INTEGRANTE ---------------------------------------------------------//
-echo "Inicialização da Tabela <b>integrante</b>... ";
+echo "Inicializaï¿½ï¿½o da Tabela <b>integrante</b>... ";
 $i = new Integrante();
-include ("searchPlantel.php");
+//include ("searchPlantel.php");
+$i = new Integrante(); 
+$i->nome_integrante = "Pinto da Costa"; 
+$i->idclube = "2"; 
+$i->idfuncao = "1"; 
+$i->add(); 
+$i->nome_integrante = "Jorge Jesus";
+$i->idfuncao = "2";
+$i->idclube = "1"; 
+$i->add();  
 echo "Ok!<hr>";
 //----------------------------- LEXICO -------------------------------------------------------------//
-echo "Inicialização da Tabela <b>lexico</b>... ";
+echo "Inicializaï¿½ï¿½o da Tabela <b>lexico</b>... ";
 require_once ("ReadLexico.php");
 echo "Ok!<hr>";
 echo 'The end'; 
