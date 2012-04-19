@@ -5,17 +5,76 @@
 	<title>Projecto AW</title>
 	<link rel="stylesheet" href="css/style.css" type="text/css" media="all" />
 	<!--[if lte IE 6]><link rel="stylesheet" href="css/ie6.css" type="text/css" media="all" /><![endif]-->
+	<script type="text/javascript" src="ajax/util.js"></script>
 	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true"></script>
 	<script type="text/javascript">
+  		var xhr;
+  		var map;
   		function initialize() {
     		var latlng = new google.maps.LatLng(38.71284,-9.135475);
     		var myOptions = {
-      							zoom: 9,
+      							zoom: 6,
       							center: latlng,
       							mapTypeId: google.maps.MapTypeId.ROADMAP
     						};
-    		var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+    		map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+    		
+    		
+    		
+    		xhr = createXMLHttpRequest();
+			  		
+	  		xhr.onreadystatechange = function() {
+				//Request is finished
+	  			if(xhr.readyState == 4) {
+	  				if(xhr.status == 200) {
+	  					var xmlResponse = xhr.responseXML;
+	  					var xmlRoot = xmlResponse.documentElement;
+	  					latlongArray = xmlRoot.getElementsByTagName("coordenadas");
+	  					nomeLocalArray = xmlRoot.getElementsByTagName("nome_local")
+	  					for(i=0; i<latlongArray.length; i++) {
+	  						var coord = latlongArray.item(i).firstChild.data.split(";");
+	  						var local = new google.maps.LatLng(parseFloat(coord[0]), parseFloat(coord[1]));
+	  						var nome_local = nomeLocalArray.item(i).firstChild.data;
+	  						var marker = new google.maps.Marker({
+				    			position: local,
+				    			title: nome_local
+				    		});
+				    		marker.setMap(map);
+	  					}
+	  				}
+	  				else {
+	  					alert("Message returned with Error");
+	  				}
+	  			}
+	  		}
+	  		
+	  		xhr.open("GET","http://localhost/AW3/webservice/espaco.php?count=20",true);
+	  		
+	  		//no headers, only body
+	  		xhr.send(null);
+	  		
   		}
+  		
+  		function addMarker(location) {
+  			marker = new google.maps.Marker({
+  				position: location,
+  				map: map
+  			});
+  		}
+  		function changeInputSearch(optionIndex) {
+  			if(optionIndex == 3) {
+  				document.getElementById("filtro").type = "hidden";
+  				document.getElementById("filtroDataAno").type = "text";
+  				document.getElementById("filtroDataMes").type = "text";
+  				document.getElementById("filtroDataDia").type = "text";
+  			}
+  			else {
+  				document.getElementById("filtro").type = "text";
+  				document.getElementById("filtroDataAno").type = "hidden";
+  				document.getElementById("filtroDataMes").type = "hidden";
+  				document.getElementById("filtroDataDia").type = "hidden";
+  			}
+  		}	
 	</script>
 </head>
 <body onload="initialize()">
@@ -29,20 +88,24 @@
 	</div>
 	<!-- End Header -->
 	
-	 
+	<form name="pesquisa"> 
 	<div id="navigation">
 		<center>
 		<div class="shell">
 			<div class="cl">&nbsp;</div>
 			<ul>
 			    <li><a href="#">Pesquisa por: </a></li>
-			    <li><br><select name="filtro">
+			    <li><br><select name="filtro" onchange="changeInputSearch(this.selectedIndex)">
 			    			<option>Clubes</option>
-			    			<option>Integrantes</option>
+			    			<option>Pessoas</option>
 			    			<option>Local</option>
-			    			<option>Data</option>
+			    			<option value="data" onselect="">Data</option>
 			    		</select></li>
-			    <li><br><input type="text" name="filtro" size="50" /></li>
+			    <li><br><input type="text" id="filtro" size="50" />
+			    		<input type="hidden" id="filtroDataAno" size="13" value="Ano" />&nbsp;&nbsp;&nbsp;
+			    		<input type="hidden" id="filtroDataMes" size="13" value="Mes" />&nbsp;&nbsp;&nbsp;
+			    		<input type="hidden" id="filtroDataDia" size="13" value="Dia" />
+			    </li>
 			    <li><a href="#"><img src="css/images/search.png" border="0"></a></li>
 			    <li><a href="#">&nbsp;</a></li>
 			    <li><a href="#">Administração</a></li>
@@ -51,7 +114,8 @@
 		</div>
 		</center>
 	</div>
-	
+	</form>
+	<div id="teste"></div>
 	<!-- Heading -->
 	<div id="heading">
 		<div class="shell">

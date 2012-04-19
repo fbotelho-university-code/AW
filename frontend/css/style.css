@@ -31,7 +31,7 @@ h1#logo a {display: block; background: url(images/logo.gif) no-repeat 0 0; width
 
 #navigation {background: url(images/nav.gif) repeat-x 0 0; height: 50px;}
 #navigation ul {float: right; list-style-type: none;}
-#navigation ul li {background: <!-- url(images/nav-divider.gif) --> no-repeat right 0; float: left; display: inline; padding-left: 23px; padding-right: 19px;}
+#navigation ul li {float: left; display: inline; padding-left: 23px; padding-right: 19px;}
 #navigation ul li a {color: #676767; font-family: tahoma, sans-serif; font-size: 13px; text-transform: uppercase; padding-top: 16px; display: block; height: 34px; float: left;}
 
 #heading {height: 340px; background: url(images/heading.jpg) repeat-x 0 0;}
