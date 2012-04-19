@@ -5,7 +5,7 @@ require_once "ParserNoticias.php";
 require_once "lib/rss_php.php"; 
 
 /**
- * Classe responsável pelo leitura e consulta dos RSS do Serviço Sapo News
+ * Classe responsï¿½vel pelo leitura e consulta dos RSS do Serviï¿½o Sapo News
  */
 class SapoClient extends Fonte {
 	
@@ -19,12 +19,12 @@ class SapoClient extends Fonte {
 	 * Contrutor da Classe
 	 */	
 	public function __construct() {
-		parent::__construct("RSS Sapo Notícias");
+		parent::__construct("RSS Sapo Noticias");
 		$this->rss = new rss_php();
 	}
 	
 	/**
-	 * Busca das notícias publicadas no RSS com palavras presentes no parametro de pesquisa
+	 * Busca das notï¿½cias publicadas no RSS com palavras presentes no parametro de pesquisa
 	 * @param String[] $parameters
 	 * 			Array com palavras a serem pesquisadas nos itens RSS
 	 */ 
@@ -63,7 +63,7 @@ class SapoClient extends Fonte {
 				ParserNoticias::parseNoticia($myNew);
 			}
 		}
-		echo "Foram inseridas notícias da Fonte ".$this->getNome()." com sucesso.";
+		echo "Foram inseridas notï¿½cias da Fonte ".$this->getNome()." com sucesso.";
 	}
 }
 

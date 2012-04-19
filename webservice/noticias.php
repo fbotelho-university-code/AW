@@ -15,9 +15,7 @@
 
 	/idNoticia | GET | Retorna o conteudo e informa�‹o relativa a uma noticia, incluindo rela�›es como referencias temporais, referencias espaciais, clubes , etc., A representa�‹o ser‡ em XML, JSON e XHTML.  
  **/
- 	
- 	
- 	
+ 
  	function getUrl(){
  	$v = parse_url("http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
  	 
@@ -177,9 +175,9 @@
 	$id = $path_info[1];
 	
 	if (!is_numeric($id)){
-		RestUtils::sendResponse(400);
+		RestUtils::sendResponse(404);
 	}
-	
+		
 		switch($req->getMethod()){
 			case 'GET': 
 			getNews($req, $id);
@@ -248,7 +246,7 @@
 		
 		$n->texto =  Noticia::fetchTexto($n->url);
 		$n->idfonte = Utill::getIdWebServiceAsFonte();
-
+		
 		try{
 			$id = addNoticia($n, 'add');
 		}catch(Exception $e){
@@ -257,7 +255,6 @@
 		
 		if (isset($id)){
 			RestUtils::sendResponse(201, null, $id, 'text');
-	
 		}else{
 			RestUtils::sendResponse(500);
 		}
@@ -318,7 +315,6 @@
 		$nova_noticia->idfonte = Utill::getIdWebServiceAsFonte();
 		
 			try{
-
 				$r = $nova_noticia->$foo();
 				if (isset($r)){
 					$nova_noticia->idnoticia = $r; 
@@ -340,6 +336,7 @@
 		if (isset($datas)){
 		 	$nova_noticia->datas = $datas;
 		}
+		
 		updateRelations($nova_noticia);
 		return $r; 
 		}
@@ -369,7 +366,7 @@
 	
 	function updateRelations($noticia){
 		$locais_classe = new Noticia_locais();
-		$integrantes_classe = new Noticia_Data(); 
+		$integrantes_classe = new Noticia_Has_Integrante(); 
 		$clubes_classe = new Noticia_Has_Clube();
 		$datas_classe = new Noticia_Data();
 		 
@@ -383,10 +380,8 @@
 			RestUtils::sendResponse(500);
 			exit;  
 		}
-		
 		if (isset($noticia->locais)){
 			foreach ($noticia->locais as $l){
-				
 				$rel = new Noticia_Locais($noticia->idnoticia, $l->idlocal);
 				try{
 					$rel->add();
@@ -403,35 +398,37 @@
 					$rel = new Noticia_Has_Clube($noticia->idnoticia, $l->idclube , $l->qualificacao );
 					$rel->add();
 				}catch(Exception $e){
+					
 					RestUtils::sendResponse(500);
 					exit;  
 				}
 			}	
 		}
-		
-		
+
 		if (isset($noticia->integrantes)){
 			foreach($noticia->integrantes as $l){
 				try{
 					$rel = new Noticia_Has_Integrante($noticia->idnoticia, $l->idintegrante , $l->qualificacao );
 					$rel->add();
 				}catch(Exception $e){
+					
 					RestUtils::sendResponse(500);
 					exit;  
 				}
 			}	
 		}
-		
+
 		if (isset($noticia->datas)){
 			foreach($noticia->datas as $l){
 				 try{
 //				 	echo $l->__toString();
-	
 					$rel = new Noticia_Data($noticia->idnoticia, '' ,$l->__toString());
 					
 					$rel->add();
 					
 				}catch(Exception $e){
+					echo $e; 	
+										
 					RestUtils::sendResponse(500);
 					exit;  
 				}
@@ -494,7 +491,6 @@
     		RestUtils::sendResponse(405, array('allow' => $methods_supported));
     		exit;  
     	}
-    	
     	if($req->getMethod() == "GET") {
     	//check the request variables that are not understood by this resource
     	$dif = array_diff(array_keys($req->getRequestVars()), $request_vars);

@@ -386,13 +386,13 @@
 			$result = $xmlSerializer->serialize($entry);
 			
 			$xmlResponse = $xmlSerializer->serialize($entry); 
-			//RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
-			if($entry->validateXMLbyXSD($xmlResponse,  $options["rootName"] . ".xsd")) {
+			RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+			/*if($entry->validateXMLbyXSD($xmlResponse,  $options["rootName"] . ".xsd")) {
 				RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
 			}
 			else {
 				RestUtils::sendResponse(500);
-			}
+			}*/
 		}else{
 			RestUtils::sendResponse(406); 
 		}
