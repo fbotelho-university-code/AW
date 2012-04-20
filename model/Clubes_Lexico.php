@@ -1,4 +1,5 @@
 <?php
+@header('Content-Type: text/html; charset=utf-8');
 require_once("Model.php"); 
 /*
  * Created on Mar 15, 2012
@@ -60,7 +61,7 @@ require_once("Model.php");
 	}
 	
 	/**
-	* Retorna o objeto em forma de String. Usado para depuração.
+	* Retorna o objeto em forma de String. Usado para depuraï¿½ï¿½o.
 	* @return String $res
 	*/
 	public function __toString(){

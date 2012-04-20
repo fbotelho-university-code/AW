@@ -1,6 +1,8 @@
 <?php
+@header('Content-Type: text/html; charset=utf-8');
 /*
-	RSS_PHP - the PHP DOM based RSS Parser
+
+		RSS_PHP - the PHP DOM based RSS Parser
 	Author: <rssphp.net>
 	Published: 200801 :: blacknet :: via rssphp.net
 	

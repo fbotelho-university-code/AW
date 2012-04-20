@@ -1,5 +1,5 @@
 <?php
-
+@header('Content-Type: text/html; charset=utf-8');
 require_once "Model.php";
 
 /**
@@ -30,7 +30,7 @@ class Integrante extends Model{
 	var $idclube;
 	
 	/**
-	* Identificador da função do integrante
+	* Identificador da funï¿½ï¿½o do integrante
 	* @var int
 	*/
 	var $idfuncao;
@@ -81,7 +81,7 @@ class Integrante extends Model{
 	}
 	
 	/**
-	* Retorna o identificador da função do integrante
+	* Retorna o identificador da funï¿½ï¿½o do integrante
 	* @return int {@link $idfuncao}
 	*/
 	public function getIdfuncao() {
@@ -89,7 +89,7 @@ class Integrante extends Model{
 	}
 	
 	/**
-	* Altera o valor do identificador da função do integrante {@link $idfuncao}
+	* Altera o valor do identificador da funï¿½ï¿½o do integrante {@link $idfuncao}
 	* @param int $id
 	*/
 	public function setIdfuncao($id) {

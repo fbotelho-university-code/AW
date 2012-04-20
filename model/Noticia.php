@@ -1,4 +1,5 @@
 <?php
+@header('Content-Type: text/html; charset=utf-8');
 
 require_once "Model.php";
 require_once 'includes.php'; 
@@ -61,7 +62,8 @@ class Noticia extends Model{
 	 * @param url O url da noticia.  
 	 */
 		public static function fetchTexto($url){
-			    Encoding::fixUTF8(Encoding::toUTF8(addslashes($url))); 
+			    //Encoding::fixUTF8(Encoding::toUTF8(addslashes($url)));
+			    addslashes($url);
     	}
 	 
 	/**
@@ -188,7 +190,7 @@ class Noticia extends Model{
 	 * @param String $as
 	 */
 	public function setAssunto($as) {
-		$this->assunto = utf8_encode($as);
+		$this->assunto = $as;
 	}
 	
 	/**
@@ -204,7 +206,7 @@ class Noticia extends Model{
 	 * @param String $desc
 	 */
 	public function setDescricao($desc) {
-		$this->descricao = utf8_encode($desc);
+		$this->descricao = $desc;
 	}
 	
 	/**
@@ -220,7 +222,7 @@ class Noticia extends Model{
 	 * @param String $t
 	 */
 	public function setTexto($t) {
-		$this->texto = utf8_encode($t);
+		$this->texto = $t;
 	}
 	
 	/**
@@ -236,7 +238,7 @@ class Noticia extends Model{
 	 * @param String $u
 	 */
 	public function setUrl($u) {
-		$this->url = utf8_encode($u);
+		$this->url = $u;
 	}
 	
 	/**

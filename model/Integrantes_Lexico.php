@@ -1,5 +1,7 @@
 <?php
+@header('Content-Type: text/html; charset=utf-8');
 /*
+
  * Created on Mar 19, 2012
  *
  * To change the template for this generated file go to
@@ -60,7 +62,7 @@ class Integrantes_Lexico extends Model{
 	}
 	
 	/**
-	* Retorna o objeto em forma de String. Usado para depuração.
+	* Retorna o objeto em forma de String. Usado para depuraï¿½ï¿½o.
 	* @return String $res
 	*/
 	public function __toString(){

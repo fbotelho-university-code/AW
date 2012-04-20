@@ -1,5 +1,5 @@
 <?php
-
+@header('Content-Type: text/html; charset=utf-8');
 require_once "includes.php";
 
 echo "<center><h1>Inicializa��o da Base de Dados</h1></center>";

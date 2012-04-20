@@ -1,4 +1,5 @@
-<?php 
+<?php
+@header('Content-Type: text/html; charset=utf-8'); 
 /**
  * @author   "Sebastián Grignoli" <grignoli@framework2.com.ar>
  * @package  Encoding

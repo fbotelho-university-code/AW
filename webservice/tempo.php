@@ -1,4 +1,5 @@
 <?php
+@header('Content-Type: text/html; charset=utf-8');
 /*
  * Created on Mar 29, 2012
  * No class, top-down flux ...

@@ -1,10 +1,10 @@
 <?php
-
+@header('Content-Type: text/html; charset=utf-8');
 require_once "includes.php";
 require_once "ParserNoticias.php";
 
 /**
-* Classe responsável pela consulta do Serviço do Twitter
+* Classe responsï¿½vel pela consulta do Serviï¿½o do Twitter
 */
 class TwitterSearchClient extends Fonte{
 	
@@ -16,7 +16,7 @@ class TwitterSearchClient extends Fonte{
 	}
 	
 	/**
-	* Busca dos coment‡rios publicadas no Twitter com palavras presentes no parametro de pesquisa
+	* Busca dos comentï¿½rios publicadas no Twitter com palavras presentes no parametro de pesquisa
 	* @param String[] $parameters
 	* 			Array com palavras a serem pesquisadas
 	*/
@@ -55,7 +55,7 @@ class TwitterSearchClient extends Fonte{
 				die ("error reading rss "); 
 			}
 		}
-		echo "Foram inseridas notícias da Fonte ".$this->getNome()." com sucesso.";
+		echo "Foram inseridas notï¿½cias da Fonte ".$this->getNome()." com sucesso.";
   }
 
 	
@@ -63,7 +63,7 @@ class TwitterSearchClient extends Fonte{
 	 * Associa os valores retornados pela consulta ao WebService da Fonte com os atributos do objecto
 	 * @param String $key - nome do atributo
 	 * @param String $value - valor do atributo
-	 * @param Noticia $noticia - Objecto Notícia
+	 * @param Noticia $noticia - Objecto Notï¿½cia
 	 */
 	private function readNewAsRssItem($key, $value, $noticia){
 	if ($value != ""){
