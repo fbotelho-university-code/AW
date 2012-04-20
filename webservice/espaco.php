@@ -100,36 +100,37 @@
 			RestUtils::sendResponse(406); 
 		} 		 
 	}
-	
+
 	/**
 	 * Listar todas os espa�os 
 	 * Representa��o em XML, JSON que devem conter apontadores para o recurso de cada local.  
 	 * TODO : filtrar pesquisa. 
 	 **/
-	function getRoot($req){
+	function getRoot($req, $ll=null){
 		$local = new Local();
-		try{
-		$locais =$local->getAll(null);
-		}catch(Exception $e){
-			RestUtils::sendResponse(500); 
+		if (!isset($ll)){
+			try{
+				$locais =$local->getAll(null);
+			}catch(Exception $e){
+				RestUtils::sendResponse(500); 
+			}
+			if (count($locais) == 0){
+				RestUtils::sendResponse(404); 
+			}
 		}
-		
+		else{
+			$locais = $ll;  
+		}
 		foreach ($locais as $n){ $n->follow = getUrl() . 'espaco.php/' . $n->idlocal; }
-		
 		if ($req->getHttpAccept() == 'text/xml'){
 		
 			global $options; $options["rootName"] = "locais";  $options["defaultTagName"] = "local";   
 			$xmlSerializer =  new XML_Serializer($options); 
-			
-			
-			//var_dump($news); 
 			$result = $xmlSerializer->serialize($locais);
-		
+			
 			if ($result == true){
 				$xmlResponse = $xmlSerializer->getSerializedData();
 				//RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
-					
-				
 				if($local->validateXMLbyXSD($xmlResponse, "Locais.xsd")) {
 					RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
 				}
@@ -161,32 +162,53 @@
 		$path_info = $req->getPathInfo();
 		$id = $path_info[1];
 		
-		if (!is_numeric($id)){
-			RestUtils::sendResponse(406); 
-		} 
+		$Local = new Local();
+		if (is_numeric($id)){
+			try{ 
+				$l = $Local->getObjectById($id);
+			}catch(Exception $e){
+				RestUtils::sendResponse(500); 
+			}
+			if (!isset($l)){
+				RestUtils::sendResponse(404); 
+			}
+		}else{
+			if ($req->getMethod() != 'GET'){
+				RestUtils::sendResponse(405, array('allow' =>  "GET"));
+			}
+			$id = '%' . mysql_real_escape_string($id) . '%';
+			try{			
+				$locais = $Local->find(array("nome_local" => $id), ' LIKE ');
+			}catch(Exception $e){
+				RestUtils::sendResponse(500); 
+			}
+			if (count($locais) == 0){
+				RestUtils::sendResponse(404); 
+			}
+			getRoot($req, $locais); 
+		}
 		
 		switch(count($path_info)){
-			case 1 :  
+			case 1 :
 		switch($req->getMethod()){
 			case 'GET': 
-				getLocal($req, $id);
+				getLocal($req, $id, $l);
 			break;
 			case 'PUT':
-				putLocal($req, $id); 
+				putLocal($req, $id, $l); 
 			break;
 			case 'DELETE':
-				deleteLocal($id);
+				deleteLocal($id, $l);
 			break;
 			case 'HEAD': 
 			default: 
 			 RestUtils::sendResponse(405, array('allow' =>  "PUT DELETE GET"));
-			 exit;  
 		}
-		break; 
+		break;
 		case 2: 
 			if ($req->getMethod()){
 				if (strcmp($path_info[2], 'noticias' )!==false){
-					getLocalNoticia($req,$id);
+					getLocalNoticia($req,$id, $l);
 				}else{
 					RestUtils::sendResponse(404); 
 				}
@@ -196,35 +218,25 @@
 		}
 	}
 	
-	function deleteLocal($id){
-		$validID = settype($id, "integer");
-		$local = new Local(); 
-		$local->getObjectById($id);
-		
-		if (!$local || !$validID){
-			RestUtils::sendResponse(404);
+	function deleteLocal($id,$l){
+		try{
+			$l-del(); 
+		}catch(Exception $e){
+			RestUtils::sendResponse(500); 
 		}
-		$local->del();
-		RestUtils::sendResponse(200);
+		RestUtils::sendResponse(204, null, '', 'text');
 	}
 	
-	function putLocal($req, $id){
+	function putLocal($req, $id, $l){
 		$local = new Local();
-		try{ 
-			$local->getObjectById($id);
-		}catch(Exception $e){
-			RestUtils::sendResponse(404);			
-		}
-		
 		$xmlHttpContent = $req->getData();
-		
 		if(!$local->validateXMLbyXSD($xmlHttpContent, "Local.xsd")) {
 		 	RestUtils::sendResponse(400, null, "XML mal formado!", "text/plain");
 		}
 		
 		$new_local = $local->fromXml($xmlHttpContent);
-		
-		if (isset($new_local->idlocal)){
+
+		if (isset($new_local->idlocal) && $new_local->idlocal != $l->idlocal){
 			RestUtils::respond(400); 
 		}
 		
@@ -242,42 +254,21 @@
 		}
 	}
 
-
-	function getL($req,$id){
-		
-		$local = new Local(); 
-		try{
-			$n = $local->getObjectById($id);
-		}catch(Exception $e){
-			RestUtils::sendResponse(500); 
-		}
-		if (!isset($n)){
-			RestUtils::sendResponse(404); 
-		}
-		
-		
-		return $n; 
-	}	
-
-	function getLocalNoticia($req,$id){
-		$n = getL($req, $id);
+	function getLocalNoticia($req,$id, $l){
+		$n = $l; 
 		
 		try{
 			$n->noticias = Noticia_Locais::getAllNoticias($id);
-
 		}catch(Exception $e){
-			
 			RestUtils::sendResponse(500);
 		}
-		
 		respond($n, $req); 
 	}
 		
-	function getLocal($req, $id){
-		$n = getL($req, $id);
+	function getLocal($req, $id, $n){
 		respond($n, $req); 
 	}
-	
+
 	function respond($n, $req){
 		if ($req->getHttpAccept() == 'json'){
 			RestUtils::sendResponse(200, null, json_encode($n)); 
@@ -313,7 +304,7 @@
     function checkRequest($req){
     //Variables that should be defined for checkRequest. Ideally this would be defined in a abstact/general form. 
  	$methods_supported = array("GET", "POST", "HEAD", "DELETE", "PUT");
- 	$request_vars = array("start", "count");
+ 	$request_vars = array("start", "count", "texto");
  	
     	if (array_search($req->getMethod(), $methods_supported ) === FALSE){
     		//405 -> method not supported 

@@ -44,6 +44,7 @@
     
 	$req  = RestUtils::processRequest();  // The request made by the client.
 	checkRequest($req);   // check that the request is valid. Dies otherwise.  
+
 	  //Dispatching according to the path info. 
 	  $path_parameters = $req->getPathInfo(); 
 	  $path_parameters_count = count($path_parameters);
@@ -52,6 +53,7 @@
 	  		processRoot($req);
 	  		break; 
 	  	case 1:
+	  	case 2: 
 	  		processNews($req);
 	  		break;  
 	  	default:
@@ -76,12 +78,12 @@
 		}			
 	}
 	
-	function headRoot(){
+/*	function headRoot(){
 		$news = getAllNews();
 		$hash = md5(var_export($news,true));
 		RestUtils::sendResponseHead($hash);
 	}
-	
+	*/
 	function getAllNews(){
 		$noticia = new Noticia();
 		try{
@@ -90,18 +92,17 @@
 			RestUtils::sendResponse(500);
 			exit;  
 		}
-		
+		if (count($news) == 0){
+			RestUtils::sendResponse(404); 
+		}
+	
 		foreach ($news as $n){
 			$n->follow = getUrl() .'noticias.php/'.   $n->idnoticia;
-			$n->visivel = null;  
 		}
 		
 		return $news;
 	}
-	
-	function getHashObject($ob){
-		$hash = md5(var_export($ob, true)); 
-	}
+
 	
 	/**
 	 * Listar todas as noticias. 
@@ -111,17 +112,7 @@
 	 **/
 	function getRoot($req){
 		$news = getAllNews($req); 
-		
-		$news = getAllNews($req);
-		 //TODO - HEAD
-		//if ($req->getEtag() != null && $req->getEtag() == getHashObject($news)){
-			//RestUtils::sendResponse(304); 	
-		//}
-		
-		foreach ($news as $n){
-			//$n->follow = "myUrl/" . $n->idnoticia;
-			$n->visivel = null; 
-		}
+		Utill::checkEtag($req, $news);
 		
 		if ($req->getHttpAccept() == 'text/xml'){
 				global $options; $options["rootName"] = "noticias";
@@ -129,20 +120,20 @@
 			//$xmlSerializer->setOption("namespace",array("localhost", "localhost"));
 				$result = $xmlSerializer->serialize($news);
 
-		if ($result == true){
-			$xmlResponse = $xmlSerializer->getSerializedData();
-			$noticia = new Noticia();
+			if ($result == true){
+				$xmlResponse = $xmlSerializer->getSerializedData();
+				$noticia = new Noticia();
 			
-			//RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+				//RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
 			
-			if($noticia->validateXMLbyXSD($xmlResponse, "Noticias.xsd")) {
-				RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+				if($noticia->validateXMLbyXSD($xmlResponse, "Noticias.xsd")) {
+					RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+				}
+				else {
+					RestUtils::sendResponse(500);
+				}
 			}
-			else {
-				RestUtils::sendResponse(500);
-			}
-		}
-		else{
+			else{
 				RestUtils::sendResponse(500); 
 			}
 		}
@@ -171,53 +162,134 @@
 	function processNews($req){
 	//TODO : make it safe to access path_info[0]. Prevent sql injection please.
 	$path_info = $req->getPathInfo();
-	  
 	$id = $path_info[1];
-	
-	if (!is_numeric($id)){
-		RestUtils::sendResponse(404);
+
+	//Valid id : numeric. Check if it exists in the database. 
+
+	if (is_numeric($id)){
+		$n = new Noticia(); 
+		try{
+			$n = $n->getObjectById($id);
+		}catch (Exception $e){
+			RestUtils::sendResponse(500); 
+		}
+		if (!isset($n)){
+			RestUtils::sendResponse(404); 
+		}
+	}else{
+		RestUtils::sendResponse(404); 
 	}
+
+	// >= no futuro
+	if (count($path_info) == 2){
+		$keyword = $path_info[2]; 
+		if (strcmp($keyword, 'comentarios') != 0){
+			RestUtils::sendResponse(404); 
+		}
 		
 		switch($req->getMethod()){
-			case 'GET': 
-			getNews($req, $id);
+			case 'GET':
+				getComments($req, $n);  
+			break; 
+			default: 			
+			RestUtils::sendResponse(405, array('allow' => "GET"));
+		}
+	}
+		switch($req->getMethod()){
+			case 'GET':
+			getNews($req, $id, $n);
 			break; 
 			case 'PUT':
-			putNews($req, $id); 
+			putNews($req, $id,$n); 
 			break;
+			case 'POST': 
+			postComment($req,$n);
+			break; 
 			case 'HEAD':
 			break; 
 			case 'DELETE':
-				deleteNewsFingir($id);
+				deleteNewsFingir($id,$n);
 			break; 
 			default: 
-			 RestUtils::sendResponse(405, array('allow' => "PUT DELETE GET"));
-			 exit;  
+			 RestUtils::sendResponse(405, array('allow' => "PUT DELETE GET POST"));
+			 
 		}
 	}
 	
-	function deleteNewsFingir($id){
-		$validID = settype($id, "integer");
-		if (!$validID){
-			RestUtils::sendResponse(400);
+	function postComment($req, $n){
+		$Comment = new Comentario();
+
+		$xmlHttpContent = $req->getData();
+		
+		
+		 /*if(!$Comment->validateXMLbyXSD($xmlHttpContent, "Comentario.xsd")) {
+			RestUtils::sendResponse(400, null, "XML mal formado!", "text/plain");
+		 }
+		 */
+		 
+		$comment = $Comment->fromXml($xmlHttpContent);
+		if ($comment->idnoticia != $n->idnoticia){
+			RestUtil::sendResponse(400); 
 		}
-		$Noticia = new Noticia();
 		try{
-			$n = $Noticia->getObjectById($id);
+			$r = $comment->add();
+			
 		}catch(Exception $e){
-			RestUtils::sendResponse(404);
+			echo $e; 
+			RestUtils::sendResponse(500); 
 		}
 		
-		if (!isset($n)){
-			RestUtils::sendResponse(404);
-		}
-
-		// Criar noticia_bin
-		$noticia_bin = new Noticia_Bin($Noticia);
+		//Created. 
+		RestUtils::sendResponse(201, null, $r, 'text'); 
+	}
+	
+	function getComments($req, $n){
+		$Comment = new Comentario();
 		try{
-		$noticia_bin->add();
-		// Apagar noticia
-		$Noticia->del();
+			$res = $Comment->find(array("idnoticia" => $n->idnoticia), ' = ', array("comentario", "user","time"));
+		}catch(Exception $e){
+			RestUtils::sendResponse(404); 
+		}
+		
+		if (count($res) == 0){
+			RestUtils::sendResponse(404); 
+		}
+		
+		if ($req->getHttpAccept() == 'json'){
+			RestUtils::sendResponse(200, null, json_encode($res)); 
+		}
+		else if ($req->getHttpAccept() == 'text/xml'){
+			global $options; $options["rootName"] = "Comentarios"; 
+			$options['rootAttributes']  = array("xmlns" => "localhost", "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance", "xsi:schemaLocation" => "localhost Comentario.xsd "); 
+			$options['defaultTagName'] = 'comentario';
+			$xmlSerializer =  new XML_Serializer($options); 
+			$result = $xmlSerializer->serialize($res);
+			
+			if ($result == true){
+				$xmlResponse = $xmlSerializer->getSerializedData();
+				RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+				/*TODO : XSD
+				 * if($n->validateXMLbyXSD($xmlResponse, "Noticia.xsd")) {
+					RestUtils::sendResponse(200, null, $xmlResponse , 'text/xml');
+				}
+				else {
+					RestUtils::sendResponse(500);
+				}*/
+			} else {
+				RestUtils::sendResponse(500); 
+			}
+		}else{
+			RestUtils::sendResponse(406); 
+		}
+	}
+
+	function deleteNewsFingir($id, $n){
+		// Criar noticia_bin
+		$noticia_bin = new Noticia_Bin($n);
+		try{
+			$noticia_bin->add();
+			//Apagar noticia
+			$n->del();
 		}catch(Exception $e){
 			RestUtils::sendResponse(500);
 		}
@@ -260,18 +332,8 @@
 		}
 	}
 		
-	function putNews($req, $id){
+	function putNews($req, $id, $n){
 		$noticia = new Noticia();
-		
-		try{ 
-			$n = $noticia->getObjectById($id);
-		}catch(Exception $e){
-			RestUtils::sendResponse(500); 
-		}
-		
-		if (!isset($n)) {
-			RestUtils::sendResponse(404); 	
-		}
 		
 		$xmlHttpContent = $req->getData();
 		if(!$noticia->validateXMLbyXSD($xmlHttpContent, "Noticia.xsd")) {
@@ -283,13 +345,12 @@
 			// se existir id de noticia no gajo nao pode ir.  
 			(isset($nova_noticia->idnoticia) && ($nova_noticia->idnoticia !=  $id))){ 
 			RestUtils::sendResponse(400);
-			exit;
+
 		}
 		
 		$nova_noticia->idnoticia =$id; 
 		addNoticia($nova_noticia, "update");
 		RestUtils::sendResponse(204);
-		exit;   
 	}
 	
 	function addNoticia($nova_noticia, $foo){
@@ -434,25 +495,15 @@
 				}
 			}	
 		}
-		
 	}
 	
-	function getNews($req, $id){
-		$noticia = new Noticia();
-		
-		try{
-		$n = $noticia->getRelationArray($id, getUrl()); 
-		}catch(Exception $e){
-			RestUtils::sendResponse(500);
-		}
-		
-		if ($n == null){
-			RestUtils::sendResponse(404); 
-		}
+	function getNews($req, $id, $n){
+		Utill::checkEtag($req, $n); 
 		
 		if ($req->getHttpAccept() == 'json'){
 			RestUtils::sendResponse(200, null, json_encode($n)); 
 		}
+		
 		else if ($req->getHttpAccept() == 'text/xml'){
 			global $options; $options["rootName"] = "noticia"; 
 			$options['rootAttributes']  = array("xmlns" => "localhost", "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance", "xsi:schemaLocation" => "localhost Noticia.xsd "); 
@@ -463,11 +514,11 @@
 			if ($result == true){
 				$xmlResponse = $xmlSerializer->getSerializedData();
 				//RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
-				if($noticia->validateXMLbyXSD($xmlResponse, "Noticia.xsd")) {
+				if($n->validateXMLbyXSD($xmlResponse, "Noticia.xsd")) {
 					RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
 				}
 				else {
-					RestUtils::sendResponse(400);
+					RestUtils::sendResponse(500);
 				}
 			} else {
 				RestUtils::sendResponse(500); 
@@ -477,6 +528,7 @@
 		}
 	}
 	
+	
     /*
      * Checks if the request is valid through whitelistening of the possible request types.
      * Deals with query variables, path info, method types, etc. 
@@ -484,13 +536,11 @@
     function checkRequest($req){
     //Variables that should be defined for checkRequest. Ideally this would be defined in a abstact/general form. 
  	$methods_supported = array("GET", "POST", "HEAD", "DELETE", "PUT");
- 	$request_vars = array("start", "count");
- 	 
-    	if (array_search($req->getMethod(), $methods_supported ) === FALSE){
-    		//405 -> method not supported 
-    		RestUtils::sendResponse(405, array('allow' => $methods_supported));
-    		exit;  
-    	}
+ 	$request_vars = array("start", "count", "texto");
+ 	
+    if (array_search($req->getMethod(), $methods_supported ) === FALSE){
+    	RestUtils::sendResponse(405, array('allow' => $methods_supported));
+    }
     	if($req->getMethod() == "GET") {
     	//check the request variables that are not understood by this resource
     	$dif = array_diff(array_keys($req->getRequestVars()), $request_vars);
@@ -503,5 +553,6 @@
     	//TODO - check that path parameters are correct through regulares expressions that validate input types and formats. 
     	//could respond BadRequest also. 
     }
+    
 	
 ?>
