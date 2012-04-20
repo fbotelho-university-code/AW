@@ -1,5 +1,5 @@
 <?php
-
+@header('Content-Type: text/html; charset=utf-8');
 require_once ('../model/Fonte.php'); 
 
 class Utill {

@@ -1,5 +1,5 @@
 <?php
-
+@header('Content-Type: text/html; charset=utf-8');
 $xml = new DOMDocument();
 $xml->load('./Noticia.xml');
 

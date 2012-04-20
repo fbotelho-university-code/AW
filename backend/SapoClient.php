@@ -1,8 +1,9 @@
 <?php
-
+@header('Content-Type: text/html; charset=utf-8');
 require_once "includes.php";
 require_once "ParserNoticias.php";
-require_once "lib/rss_php.php"; 
+require_once "lib/rss_php.php";
+require_once "../model/Encoding.php";
 
 /**
  * Classe respons�vel pelo leitura e consulta dos RSS do Servi�o Sapo News
@@ -33,16 +34,16 @@ class SapoClient extends Fonte {
 			//prepara query
 			$encode = urldecode($query);
 			$url_search = $this->main_url.$encode;
-				
+			
 			//carrega RSS
 			@$this->rss->load($url_search);
 				
 			//Cria array com itens presentes no RSS consultado
 			$items = $this->rss->getItems();
-				
+
 			//Insere na Base de Dados e caracteriza semanticamente cada noticia encontrada
 			foreach($items as $news) {
-				
+	
 				$myNew = new Noticia(); 
 	 			$myNew->setIdfonte($this->idfonte);
 	 			$myNew->setData_pub(isset($news["pubDate"]) ?

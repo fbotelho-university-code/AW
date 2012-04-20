@@ -1,5 +1,5 @@
 <?php
-
+@header('Content-Type: text/html; charset=utf-8');
 require_once "Model.php";
 
 /**
@@ -29,13 +29,13 @@ class Clube extends Model {
 	var $idlocal;
 	
 	/**
-	 * Identificador da competição que o clube participa
+	 * Identificador da competiï¿½ï¿½o que o clube participa
 	 * @var int
 	 */
 	var $idcompeticao;
 	
 	/**
-	 * Nome do clube. Usado para pesquisa nas fontes de informação
+	 * Nome do clube. Usado para pesquisa nas fontes de informaï¿½ï¿½o
 	 * @var String
 	 */
 	var $nome_clube;

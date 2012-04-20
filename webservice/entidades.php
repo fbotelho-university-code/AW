@@ -1,5 +1,5 @@
 <?php
-
+@header('Content-Type: text/html; charset=utf-8');
 /* 
  * 
  * / | GET | Listar todas as entidades existentes. Representa��o em XML/JSON deve separar 

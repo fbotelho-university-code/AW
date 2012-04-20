@@ -1,9 +1,9 @@
 <?php
-
+@header('Content-Type: text/html; charset=utf-8');
 require_once "Model.php";
 
 /**
- * Classe que representa uma Competição do Futebol Português
+ * Classe que representa uma Competiï¿½ï¿½o do Futebol Portuguï¿½s
  */
 class Competicao extends Model {
 	

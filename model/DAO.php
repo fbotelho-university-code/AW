@@ -1,5 +1,5 @@
 <?php
-
+@header('Content-Type: text/html; charset=utf-8');
 include ("adodb/adodb.inc.php");
 
 /**
@@ -56,7 +56,6 @@ class DAO extends ADOConnection {
 		$this->db = &ADONewConnection($this->mysgbd);
 		/* Ativa Associa��o dos nomes das colunas das tabelas da BD com as chaves dos arrays de retorno de consulta */
 		$this->db->SetFetchMode(ADODB_FETCH_ASSOC);
-	//	$this->db->Execute("set names 'utf8'"); 
 	}
 	
 	/**
@@ -88,5 +87,4 @@ class DAO extends ADOConnection {
 		$this->disconnect();
 		return $rs;
 	}
-	
 }
