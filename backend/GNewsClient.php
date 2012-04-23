@@ -1,11 +1,11 @@
 <?php
-
+@header('Content-Type: text/html; charset=utf-8');
 require_once "includes.php";
 require_once "ParserNoticias.php";
 require_once "lib/simple_html_dom.php";
 
 /**
-* Classe responsável pelo leitura e consulta dos RSS do Google News
+* Classe responsï¿½vel pelo leitura e consulta dos RSS do Google News
 */
 class GNewsClient extends Fonte {
 	
@@ -17,7 +17,7 @@ class GNewsClient extends Fonte {
 	}
 	
 	/**
-	* Busca das notícias publicadas no RSS com palavras presentes no prametro de pesquisa
+	* Busca das notï¿½cias publicadas no RSS com palavras presentes no prametro de pesquisa
 	* @param String[] $parameters
 	* 			Array com palavras a serem pesquisadas nos itens RSS
 	*/
@@ -57,7 +57,7 @@ class GNewsClient extends Fonte {
 				ParserNoticias::parseNoticia($myNew);
 			}
 		}
-		echo "Foram inseridas notícias da Fonte ".$this->getNome()." com sucesso.";
+		echo "Foram inseridas notï¿½cias da Fonte ".$this->getNome()." com sucesso.";
 	}
 	
 	private function execSearch($url) {

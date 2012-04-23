@@ -1,0 +1,24 @@
+<noticia xmlns="localhost" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="localhost Noticia.xsd ">
+<idfonte>4</idfonte>
+<data_pub>2012-04-15 09:26:36</data_pub>
+<assunto>Benfica claim fourth Portuguese League Cup</assunto>
+<descricao>Javier Saviola came off the bench to score the winner as SL Benfica lifted a fourth consecutive Portuguese League Cup following a 2-1 success against Gil Vicente FC in Coimbra. Javier Saviola came off the bench to score the winner as SL Beb</descricao>
+<url>
+http://www.uefa.com/memberassociations/association=por/news/newsid=1784305.html
+</url>
+<locais>
+<Local>
+<idlocal>62</idlocal>
+<nome_local>Braga</nome_local>
+<coordenadas>41.5445;-8.4209</coordenadas>
+<follow>http://localhost/aw12/webservice/espaco.php/62</follow>
+</Local>
+<Local>
+<idlocal>322</idlocal>
+<nome_local>Braga</nome_local>
+<coordenadas>41.553;-8.309799999999999</coordenadas>
+<follow>http://localhost/aw12/webservice/espaco.php/322</follow>
+</Local>
+</locais>
+<datas/>
+</noticia>

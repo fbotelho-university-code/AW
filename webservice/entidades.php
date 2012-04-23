@@ -1,5 +1,5 @@
 <?php
-
+@header('Content-Type: text/html; charset=utf-8');
 /* 
  * 
  * / | GET | Listar todas as entidades existentes. Representa��o em XML/JSON deve separar 
@@ -23,7 +23,6 @@
  * 
  */
  
- 
  require_once ('Util/RestUtils.php'); 
  require_once ('Util/RestRequest.php'); 
  require_once ('Util/XML/Serializer.php'); 
@@ -39,6 +38,7 @@
  		$val = substr($r, 0, $pos );
  		return $val; 
  	}
+ 	
  	$options = array(
       "indent"          => "    ",
       "linebreak"       => "\n",
@@ -147,6 +147,7 @@
  	*/
 	function processEntidade($req){
 		$entidade = $req->getPathInfo(); $entidade = $entidade[1];
+		
 		if (strcmp($entidade,'clube') != 0 && strcmp($entidade, 'integrante') !=0 ){
 			RestUtils::sendResponse(404); 
 		}
@@ -209,12 +210,20 @@
 	}
 	
 	
-	function getEntidade($req, $entidade){
+	function getEntidade($req, $entidade, $entradas=null){
 		$bdEnt = new $entidade();
-		try{
-			$entrys = $bdEnt->getAll(null);
-		}catch(Exception $e){
-			RestUtils::sendResponse(500); 		
+		if (!isset($entradas)){
+			try{
+				$entrys = $bdEnt->getAll();
+			}catch(Exception $e){
+				RestUtils::sendResponse(500); 		
+			}
+			if (count($entrys) ==0){
+				RestUtils::sendResponse(404); 
+			}
+		}
+		else{
+			$entrys = $entradas;
 		}
 		
 		foreach ($entrys as $en){
@@ -259,23 +268,52 @@
 		$path = $req->getPathInfo(); 
 		$ent = $path[1]; 
 		$id = $path[2];
-		if (!is_numeric($id)){
-			RestUtils::sendResponse(400); 
+		
+		if (is_numeric($id)){
+			$Entidade = new $ent;
+			try{ 
+				$result = $Entidade->getObjectById($id);
+			}catch(Exception $e){
+				RestUtils::sendResponse(500); 
+			}
+			if (!isset($result)){
+				RestUtils::sendResponse(404); 
+			}
 		}
+		else{
+			
+			if ($req->getMethod() != 'GET'){
+				RestUtils::sendResponse(405, array('allow' => "GET"));
+			}
+			
+			$Entidade = new $ent;
+			
+			$id = '%' . mysql_real_escape_string($id) . '%';
+			$needle = $Entidade instanceof Clube ? 'nome_oficial' : 'nome_integrante';  
+			try{
+				$results = $Entidade->find (array($needle => $id), ' LIKE');
+			}catch(Exception $e){
+				RestUtils::sendResponse(500); 
+			}
+			
+			if (count($results) == 0){
+				RestUtils::sendResponse(404); 
+			}
+			getEntidade($req, $ent, $results); 
+		}
+		
 		switch(count($req->getPathInfo())){
 			case 2: 
 		switch($req->getMethod()){
 			case 'GET':
-			 
-				getDeEntidade($req, $ent, $id); 
+				getDeEntidade($req, $ent, $id, $result); 
 				break;
 			 case 'PUT':
-			 
-			 	putClubeOrIntegrante($req, $id, $ent); 
+			 	putClubeOrIntegrante($req, $id, $ent, $result); 
 			 	break; 
 			 case 'DELETE':
 				if (strtolower($ent) == 'integrante')
-					deleteIntegrante($id); 
+					deleteIntegrante($id, $result); 
 			 	break; 
 			 default :
 			 	RestUtils::sendResponse(405, array('allow' => "GET POST"));
@@ -283,8 +321,8 @@
 		     case 3 :
 				if ($req->getMethod() == 'GET'){
 					$var = $path[3]; 
-			     	if (strcmp($var, 'noticias') !==false){
-				 		getDeEntidadeNoticias($req,$ent,$id); 
+			     	if (strcmp($var, 'noticias') == 0 ){
+				 		getDeEntidadeNoticias($req,$ent,$id, $result); 
 				 	}
 				 	else {
 				 		RestUtils::sendResponse(404);
@@ -296,33 +334,22 @@
 		}
 	}
 		
-	function deleteIntegrante($id){
-		$validID = settype($id, "integer");
-		$integrante = new Integrante();
-		$integrante->getObjectById($id);
-		if (!$integrante || !$validID){
-			RestUtils::sendResponse(404);
-			exit();
+	function deleteIntegrante($id, $entry){
+		try{		
+			$integrante->del();
+		}catch(Exception $e){
+			RestUtils::sendResponse(500); 
 		}
-		
-		$integrante->del();
-		RestUtils::sendResponse(200);
+		RestUtils::sendResponse(204);
 	}
 	
-	function putClubeOrIntegrante($req, $id, $ent){
+	function putClubeOrIntegrante($req, $id, $ent, $r){
 		$existent  = new $ent();
-		try{
-			$r = 	$existent->getObjectById($id);
-		}catch(Exception $e){
-			RestUtils::sendResponse(500); 	
-		}
-		if (!isset($r)){
-			RestUtils::sendResponse(404); 
-		}
 		
 		if(!$existent->validateXMLbyXSD($req->getData(), get_class($existent) . ".xsd")) {
 			RestUtils::sendResponse(400);
 		}
+
 		//TODO - check XSD 
 		$new = $existent->fromXml($req->getData());
 		$ide = 'id' . $ent; 
@@ -341,23 +368,9 @@
 		RestUtils::sendResponse(204); 
 	}			
 	
-	function getDeEntidadeNoticias($req,$ent,$id){
-		$entry = getNoticia($ent, $id); 
+	function getDeEntidadeNoticias($req,$ent,$id, $entry){
 		getMore($ent, $id, $entry);
 		treatGetRequest($req, $entry, $ent); 		 	
-	}
-	function getNoticia($ent, $id){
-		$bdEnt = new $ent(); 
-		$key = (strtolower($ent) == 'clube') ? "idclube" : "idintegrante";
-		try{
-			$entry = $bdEnt->getObjectById($id);
-		}catch(Exception $e){
-			RestUtils::sendResponse(404); 	
-		}
-		if (!isset($entry)){
-			RestUtils::sendResponse(404); 	
-		}
-		return $entry; 
 	}
 	
 	function getMore($ent, $id, $entry){
@@ -369,8 +382,7 @@
 		}
 	}
 	
-	function getDeEntidade($req, $ent, $id){
-		$entry = getNoticia($ent, $id);
+	function getDeEntidade($req, $ent, $id, $entry){
 		treatGetRequest($req, $entry, $ent); 
 	}
 	
@@ -406,14 +418,13 @@
     function checkRequest($req){
     //Variables that should be defined for checkRequest. Ideally this would be defined in a abstact/general form. 
  	$methods_supported = array("GET", "POST", "HEAD", "DELETE", "PUT");
- 	$request_vars = array("start", "count");
- 
+ 	$request_vars = array("start", "count", "texto");
+ 	
      	if (array_search($req->getMethod(), $methods_supported ) === FALSE){
    		//405 -> method not supported 
     		RestUtils::sendResponse(405, array('allow' => $methods_supported));
     		exit;  
     	}
-    	
     	//check the request variables that are not understood by this resource
     	$dif = array_diff(array_keys($req->getRequestVars()), $request_vars);
     	//If they are differences then we do not understand the request.  

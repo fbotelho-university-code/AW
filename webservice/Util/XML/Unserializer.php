@@ -1,4 +1,5 @@
 <?PHP
+@header('Content-Type: text/html; charset=utf-8');
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**

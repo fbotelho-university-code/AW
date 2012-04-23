@@ -1,4 +1,5 @@
 <?php
+@header('Content-Type: text/html; charset=utf-8');
 /*
  * Created on Mar 29, 2012
  *
@@ -6,7 +7,7 @@
  * Window - Preferences - PHPeclipse - PHP - Code Templates
  */
  require_once ('DAO.php'); 
-
+	require_once ('../webservice/Util/RestUtils.php'); 
 
 abstract class Model{
 	private $dao; 
@@ -38,7 +39,24 @@ abstract class Model{
 	return $result; 
 	}
 	
-	
+	public function setText(){
+		
+		$text = null; 
+		if (isset($_GET['texto'])){
+			$text = $_GET['texto']; 
+			if (strcmp($text, 'true') == 0){
+				$text = true; 
+			}
+			else if (strcmp($text, 'false') == 0){
+				$text = false; 
+			}
+			else{
+				RestUtils::sendResponse(400); 
+			}
+		}
+		return $text; 
+	}
+		
 	/**
 	 * Remote DAO from get_object vars
 	 * Also allows the filtering of the vars in the returning associative array. 
@@ -69,16 +87,18 @@ abstract class Model{
 	public function __construct(){
 		$this->dao = new DAO(); 
 	}
-	 
+	
 	/**
 	 * Executa uma SQL
 	 * @param String $sql
 	 * @return ResultSet $rs Resultado da SQL executada
 	 */
-
+	 
 	private function throwException($string){
 		throw new Exception($string); 
 	}
+
+	
 	/**
 	 * Insere um objeto na base de dados
 	 * @return int $id Identificador do registo inserido
@@ -227,19 +247,9 @@ abstract class Model{
 		}
 	}
 	
-	/**
-	 * Retorna todos os registos da base de dados de uma tabela
-	 * @return Object[] $objects Array de Objectos com atributos da base de dados
-	 */
-	public  function getAll($fields =null){
-		
-		$var = $this->setCount(); 
-		$start = $var['start'];
-		$end = $var['count'];
-		
-		$table = get_class($this);
-		$sql = "SELECT "; 
-				
+	
+	public function select($fields){
+		$sql = ""; 
 		if (isset($fields)){
 			$count = count($fields); 
 			$i = 0; 
@@ -254,11 +264,28 @@ abstract class Model{
 		else{
 			$sql .= ' * '; 
 		}
+		return $sql;
+	}
+	/**
+	 * Retorna todos os registos da base de dados de uma tabela
+	 * @return Object[] $objects Array de Objectos com atributos da base de dados
+	 */
+	public  function getAll($fields =null){
+		
+		$var = $this->setCount(); 
+		$start = $var['start'];
+		$end = $var['count'];
+		
+		$table = get_class($this);
+		$sql = "SELECT "; 
+				
+		$sql .= $this->select($fields); 
 		$sql .= ' FROM ' . $table;
 		
 		if(!(is_null($start) && is_null($end))) {
 				$sql .= " LIMIT ".$start." , ". $end;
 			}
+		
 		
 		$rs = $this->dao->execute($sql) or die ($this->dao->db->ErrorMsg());
 		$objects = array();
@@ -280,9 +307,9 @@ abstract class Model{
 	 *                           Os campos apenas podem ser strings ou numericos.
 	 * @return Object $res[0] - Objecto da classe chamadora refletindo resultado da pesquisa � Base de Dados 
 	 */
-	public function findFirst($fields, $connector =' = '){
+	public function findFirst($fields, $connector =' = ', $selectedFields=null){
 		$table = get_class($this);
-		$res = $this->find ($fields, $connector);
+		$res = $this->find ($fields, $connector, $selectedFields);
 		if (count($res) > 0) return $res[0]; 
 		return null;  
 	}
@@ -293,8 +320,7 @@ abstract class Model{
 	 *                           Os campos apenas podem ser strings ou numericos.
 	 * @return Object[] $values - Array com objectos da classe chamadora refletindo resultado da pesquisa � Base de Dados
 	 */
-	 
-	public  function find ($fields, $connector = ' = '){
+	public  function find ($fields, $connector = ' = ', $selectedFields = null){
 		$var = $this->setCount(); 
 		$start = $var['start'];
 		$end = $var['count'];
@@ -307,7 +333,9 @@ abstract class Model{
 			$table = get_class($this);
 		}
 		
-		$sql = 'select * from ' . $table;
+		$sql = 'select '; 
+		$sql .= $this->select($selectedFields);
+		$sql .= ' from ' . $table;
 		
 		//This $connector is used for LIKE statements
 		$sql .= $this->createWhereClause($fields, 'where', ' AND ', $connector) ;
@@ -335,9 +363,13 @@ abstract class Model{
 	 * Recupera um objecto da base de dados pelo seu id
 	 * @param int $id Identificador do objecto na base de dados
 	 */
-	public function getObjectById($id) {
+	public function getObjectById($id, $fields=null) {
 		$table = get_class($this);
-		$sql = "SELECT * FROM ".$table. " WHERE id".$table." = ".$id;
+		$sql = 'select '; 
+		$sql .= $this->select($fields);
+		 
+		$sql .= " FROM ".$table. " WHERE id".$table." = ".$id;
+
 		$rs = $this->dao->execute($sql);
 		if (!$rs->fields) return null;
 		$result = new $table; 

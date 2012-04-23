@@ -1,5 +1,5 @@
 <?php
-
+@header('Content-Type: text/html; charset=utf-8');
 require_once "../model/Clube.php";
 require_once "../model/Competicao.php";
 require_once "../model/DAO.php";

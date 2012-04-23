@@ -1,4 +1,5 @@
 <?php
+@header('Content-Type: text/html; charset=utf-8');
 require_once("Model.php"); 
 /*
  * Created on Mar 15, 2012

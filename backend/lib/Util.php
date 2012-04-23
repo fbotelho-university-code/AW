@@ -1,9 +1,10 @@
 <?php
+@header('Content-Type: text/html; charset=utf-8');
 
 class Util {
 
 	/**
-	 * Array com a correlação dos meses do ano em formato [A-Z]2[a-z] para 2[00-12]
+	 * Array com a correlaï¿½ï¿½o dos meses do ano em formato [A-Z]2[a-z] para 2[00-12]
 	 * @var String[] 
 	 */ 
 	static $meses = array( "Jan" => "01",
@@ -22,7 +23,7 @@ class Util {
 	static $mesesFull = array(
 						"Janeiro" 	=> "01",
 						"Fevereiro" => "02", 
-						"Março" 	=> "03",
+						"Marï¿½o" 	=> "03",
 						"Abril" 	=> "04",
 						"Maio" 		=> "05",
 						"Junho" 	=> "06",
@@ -67,11 +68,11 @@ class Util {
 	}
 
 	/**
-	 * Procura texto da notícia em página HTML
-	 * @param String $url URL da página HTML na qual se dará a busca
-	 * @param String $selector Tag HTML na qual a pesquisa deverá ser feita
+	 * Procura texto da notï¿½cia em pï¿½gina HTML
+	 * @param String $url URL da pï¿½gina HTML na qual se darï¿½ a busca
+	 * @param String $selector Tag HTML na qual a pesquisa deverï¿½ ser feita
 	 * @param String $texto Texto a procurar
-	 * @return String $text Texto da notícia
+	 * @return String $text Texto da notï¿½cia
 	 */
 	public static function find_contains($url, $selector, $keyword) {
     	$html = file_get_html($url);
@@ -90,8 +91,8 @@ class Util {
 	}
 	
 	/**
-	 * Busca todos os parâmetros para realizar pesquisas em fontes de informação.
-	 * Os parâmetros são todos os nomes de clube e de integrantes cadastrados no banco de dados
+	 * Busca todos os parï¿½metros para realizar pesquisas em fontes de informaï¿½ï¿½o.
+	 * Os parï¿½metros sï¿½o todos os nomes de clube e de integrantes cadastrados no banco de dados
 	 * @return String[] $param
 	 */
 	public static function getSearchParameters() {
