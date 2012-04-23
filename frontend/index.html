@@ -31,8 +31,8 @@
     		map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
     		
     		setInitialMarks(30);
-    		teste = new Array("A", "B", "C");
-    		AutoComplete_Create("filtro", teste);
+    		//teste = new Array("A", "B", "C");
+    		//AutoComplete_Create("filtro", teste);
   		}
  
   		function changeInputSearch(optionIndex) {
@@ -62,6 +62,24 @@
   			
   			//Criação do Array com nome dos locais para AutoComplete
   			createNomeLocalArray(locais);
+  		}
+  		
+  		function showAllClubes() {
+  			$("showResult").src="./results/clubes.html";
+  				$("showResult").style.display = "inline";
+  		}
+  		
+  		function showAllLocais() {
+  			$("showResult").src="./results/locais.html";
+  				$("showResult").style.display = "inline";
+  			
+  			// Requisição de todos os locais para o WebService
+  			var local = new Local();
+  			local.getAllLocais(function (result){
+  				locais = result;
+  				$("showResult").src="./results/locais.html";
+  				$("showResult").style.display = "inline";
+  			});
   		}
   		
   		function setInitialMarks(limit) {
@@ -109,7 +127,7 @@
 		<div class="shell">
 			<div class="cl">&nbsp;</div>
 			<ul>
-			    <li><a href="#">Pesquisa por: </a></li>
+			    <li><a href="#">Pesquisa Notícias por: </a></li>
 			    <li><br /><select id="pesquisaPor" onchange="changeInputSearch(this.selectedIndex)">
 			    			<option value="clubes">Clubes</option>
 			    			<option value="pessoas">Pessoas</option>
@@ -122,7 +140,6 @@
 			    		<input type="hidden" id="filtroDataDia" size="13" value="Dia" />
 			    </li>
 			    <li><a href="#" onclick=searchParameter(1)><img src="css/images/search.png" border="0" alt="Search" /></a></li>
-			    <li><a href="#">&nbsp;</a></li>
 			    <li><a href="#">Administração</a></li>
 			</ul>
 			<div class="cl">&nbsp;</div>
@@ -130,23 +147,22 @@
 		</center>
 	</div>
 	</form>
-	<div id="teste"></div>
 	<!-- Heading -->
 	<div id="heading">
 		<div class="shell">
 			<div id="heading-cnt">
 				
-				<!-- Sub nav 
+				<!-- Sub nav -->
 				<div id="side-nav">
 					<ul>
 					    <li class="active"><div class="link"><a href="#">home</a></div></li>
-					    <li><div class="link"><a href="#">ranking</a></div></li>
-					    <li><div class="link"><a href="#">results</a></div></li>
-					    <li><div class="link"><a href="#">schedules</a></div></li>
-					    <li><div class="link"><a href="#">photo gallery</a></div></li>
+					    <li><div class="link"><a href="javascript:showAllClubes()">clubes</a></div></li>
+					    <li><div class="link"><a href="#">pessoas</a></div></li>
+					    <li><div class="link"><a href=javascript:showAllLocais()>locais</a></div></li>
+					    <li><div class="link"><a href="#">datas</a></div></li>
 					</ul>
 				</div>
-				 End Sub nav -->
+				 <!--  End Sub nav -->
 				
 				<!-- Widget -->
 				<div id="heading-box">
@@ -259,7 +275,7 @@
 				<a href="#" class="archives">News Archives</a>
 			</div>
 			<div id="content">
-				<div class="cl">&nbsp;</div>
+				<!--  <div class="cl">&nbsp;</div>
 				<div class="grey-box">
 					<h3><a href="#">Lorem ipsum dolor sit amet.</a></h3>
 					<a href="#"><img src="css/images/main-1.jpg" alt="" /></a>
@@ -267,8 +283,10 @@
 						<span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur elementum, odio tincidunt egestas</span>
 						<a href="#" class="button">Read more</a>
 					 </p>
-				</div>
-				<div class="grey-box">
+				</div>-->
+				<div id="showResult" style="display:none"><iframe height="350" width="700" frameborder="1" src="./results/clubes.html" id="iframeResult"></iframe></div>
+				<p>&nbsp;</p>
+				<!-- <div class="grey-box">
 					<h3><a href="#">Curabitur elementum, odio tincidunt </a></h3>
 					<a href="#"><img src="css/images/main-2.jpg" alt="" /></a>
 					<p>
@@ -283,7 +301,7 @@
 						<span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur elementum, odio tincidunt egestas</span>
 						<a href="#" class="button">Read more</a>
 					 </p>
-				</div>
+				</div> -->
 				<div class="cl">&nbsp;</div>
 				<div class="video-box">
 					<div class="cl">&nbsp;</div>

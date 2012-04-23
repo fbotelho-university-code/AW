@@ -1,11 +1,22 @@
+/**
+ * Classe que representa uma referencia espacial de uma notícia.
+ */
+
 function Local() {
 	this.idlocal;
 	this.nome_local;
 	this.coordenadas;
 	
+	/* URL base para comunicacao com o web service */
+	this.baseurl = "http://localhost/AW3/webservice/espaco.php/";
+	
+	/**
+	 * Método para recuperar todos os locais.
+	 * Necessita de função callback como parametro para devolver resultado
+	 */
 	this.getAllLocais = function (cb) 
 	{
-		new Ajax.Request('http://localhost/AW3/webservice/espaco.php/',
+		new Ajax.Request(this.baseurl,
 		{
 		    method:'get',
 		    asynchronous: false,
@@ -22,6 +33,7 @@ function Local() {
 			  /* Armazena dados retornados em Array */ 
 			  var locais = new Array();
 			  
+			  /* Construçção dos objectos e armazenamento no Array de retorno */
 			  for(var i=0; i<idlocalDOMArray.length; i++) {
 			  	var l = new Local();
 				l.idlocal = idlocalDOMArray.item(i).firstChild.data;
@@ -31,10 +43,50 @@ function Local() {
 			  }
 			  //DEBUG
 		      //alert("Success! \n\n" + clubes.length);
+			  
+			  /* Retorno do array de objectos usando função callback passada como parâmetro */
 			  cb(locais);
 		    },
 		    /* Tratamento de Falhas */
 		    onFailure: function(){ alert("Erro ao recuperar 'Locais' do webservice!"); }
+		});
+	};
+	
+	/**
+	 * Recupera um local especifico de acordo com o id passado como parâmetro.
+	 * Necessita de função callback como parametro para devolver resultado
+	 */
+	this.getLocalById = function (id, cb)
+	{
+		var url = this.baseurl + id;
+		new Ajax.Request(url,
+		{
+			method: 'get',
+			asynchronous: false,
+			onSuccess: function(transport){
+				/* Recebimento da resposta */
+			      var response = transport.responseXML;
+			      var xmlRoot = response.documentElement;
+			      
+			      /* Recupera arrays com tags do XML retornado */
+			      var idlocalDOMArray = xmlRoot.getElementsByTagName("idlocal");
+				  var nome_localDOMArray = xmlRoot.getElementsByTagName("nome_local");
+				  var coordenadasDOMArray = xmlRoot.getElementsByTagName("coordenadas");
+				  
+				  /* Criação do objecto usando XML retornado */
+				  var l = new Local();
+				  l.idlocal = idlocalDOMArray.item(0).firstChild.data;
+				  l.nome_local = nome_localDOMArray.item(0).firstChild.data;
+				  l.coordenadas = coordenadasDOMArray.item(0).firstChild.data;
+				  
+				  //DEBUG
+			      //alert("Success! \n\n" + l);
+				  
+				  /* Retorno do objecto usando função callback passada como parametro */
+				  cb(l);
+			},
+			/* Tratamento de Falhas */
+		    onFailure: function(){ alert("Erro ao recuperar 'Local' do webservice!"); }
 		});
 	};
 }
