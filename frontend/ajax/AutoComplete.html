@@ -1,0 +1,52 @@
+<html>
+<head>
+    <link rel="stylesheet" href="AutoComplete.css" media="screen" type="text/css">
+    <script language="javascript" type="text/javascript" src="AutoComplete.js"></script>
+    <title>AutoComplete Example</title>
+    
+
+</head>
+<body bgcolor="#dddddd">
+
+<table border="0" align="center">
+    <tr>
+        <td>Email:</td>
+        <td>Color:</td>
+    </tr>
+
+    <tr>
+        <td><input type="text" name="ac_example" id="email"></td>
+        <td><input type="text" name="ac_example" id="color"></td>
+    </tr>
+    
+    <tr>
+        <td colspan="2">
+            <select><option>Fooddddddddddddd</option></select>
+            <input type="submit" value="Go &raquo;">
+        </td>
+    </tr>
+</table>
+
+
+
+
+
+
+<script language="javascript" type="text/javascript">
+<!--
+    data = ['george@example.com',
+            'beatrix@example.com',
+            'karen@example.com',
+            'fred@example.com',
+            'richard@example.com',
+            'john@example.com',
+            'joe@example.com'].sort();
+
+    AutoComplete_Create('email', data);
+    AutoComplete_Create('color', ['red', 'orange', 'green', 'black', 'pink', 'grey', 'mauve', 'turquoise', 'blue', 'purple'].sort(), 6);
+// -->
+</script>
+
+
+</body>
+</html>
