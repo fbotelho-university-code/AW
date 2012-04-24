@@ -5,32 +5,11 @@
 <link rel="stylesheet" href="../css/style.css" type="text/css" media="all" />
 <script type="text/javascript" src="ajax/prototype.js"></script>
 <script type="text/javascript" src="classes/Clube.js"></script>
-<script>
-function getAll() {
-// Requisição de todos os locais para o WebService
-  			alert(123);
-  			var tabela = $("dadosClubesTabela");
-  			// Requisição de todos os clubes para o WebService
-  			var clube = new Clube();
-  			clube.getAllClubes(function (result){
-  				locais = result;
-  				
-  				
-  				var numRows = tabela.rows.length;
-  				var numCols = tabela.rows[numRows-1].cells.length;
-  				var newRow = tabela.insertRow(numRow);
-  				
-  				for(var i=0; i<numRows; i++) {
-  					newCell = newRow.insertCell(i);
-  					newwCell.innerHTML = "Linha " +numRows + " - Coluna " +j;
-  				}
-  			});
- }
-</script>
+
 
 <title>Clubes</title>
 </head>
-<body onload="getAll()">
+<body>
 <table width="100%" border="0" summary="Clubes" id="dadosClubesTabela">
 	<tr height="50">
 		<td align="center" colspan="4"><h2 class="center">Clubes de Futebol</h2></td>

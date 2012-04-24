@@ -11,13 +11,17 @@
 	<script type="text/javascript" src="ajax/prototype.js"></script>
 	<script type="text/javascript" src="classes/Clube.js"></script>
 	<script type="text/javascript" src="classes/Local.js"></script>
+	<script type="text/javascript" src="classes/Tempo.js"></script>
+	<script type="text/javascript" src="classes/Noticia.js"></script>
 	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true"></script>
 	<script type="text/javascript">
 	
 	var map;
 	var nome_localArray = new Array();
-	var locais = new Array()
-	;
+	var locais = new Array();
+	var ultimasNoticias = new Array();
+	var noticias = new Array();
+	
   	function initialize() {
     		// LatLong de Liboa
     		var latlng = new google.maps.LatLng(38.71284,-9.135475);
@@ -30,7 +34,14 @@
     		// Criação do Mapa
     		map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
     		
-    		setInitialMarks(30);
+    		getAllLocais();
+    		//getAllClubes();
+    		//getAllIntegrantes();
+    		var tempo = new Tempo();
+    		tempo.getUltimasNoticias(function (result){
+  				ultimasNoticias = result;
+  			});
+    		setInitialMarks();
     		//teste = new Array("A", "B", "C");
     		//AutoComplete_Create("filtro", teste);
   		}
@@ -66,12 +77,12 @@
   		
   		function showAllClubes() {
   			$("showResult").src="./results/clubes.html";
-  				$("showResult").style.display = "inline";
+  			$("showResult").style.display = "inline";
   		}
   		
   		function showAllLocais() {
   			$("showResult").src="./results/locais.html";
-  				$("showResult").style.display = "inline";
+  			$("showResult").style.display = "inline";
   			
   			// Requisição de todos os locais para o WebService
   			var local = new Local();
@@ -82,24 +93,31 @@
   			});
   		}
   		
-  		function setInitialMarks(limit) {
-  			getAllLocais();
-  			
+  		function setInitialMarks() {
   			//Criação das marcas no mapa
   			var marker;
 	  		var latlong;
-	  		var coord;
-	  		for(i=0; i<limit; i++) {
-	  			coord = locais[i].coordenadas.split(";");
-	  			local = new google.maps.LatLng(parseFloat(coord[0]), parseFloat(coord[1]));
+	  		var coordUltimasNoticias = new Array();
+	  		
+	  		/* Recuperação das coordenadas dos locais das últimas notícias */
+	  		for(i=0; i<ultimasNoticias.length; i++) {
+				var result = ultimasNoticias[i].dataInterpretada;
+				for(var m=0; m<ultimasNoticias[i].noticias.length; m++) {
+				   	var idNoticia = ultimasNoticias[i].noticias[m].idnoticia;
+				   	alert(idNoticia);
+				}
+				//alert(result);
+			}
+	  			
+	  			//coord = locais[i].coordenadas.split(";");
+	  			/*local = new google.maps.LatLng(parseFloat(coord[0]), parseFloat(coord[1]));
 	  			nome_local = locais[i].nome_local;
 	  			marker = new google.maps.Marker({
 			  			position: local,
 			  			title: nome_local
 			  		});
 			  		marker.setMap(map);
-			  		
-	  		}
+			  		*/
   		}
   		
   		function createNomeLocalArray(locaisObjArray) {
@@ -127,17 +145,17 @@
 		<div class="shell">
 			<div class="cl">&nbsp;</div>
 			<ul>
-			    <li><a href="#">Pesquisa Notícias por: </a></li>
-			    <li><br /><select id="pesquisaPor" onchange="changeInputSearch(this.selectedIndex)">
+			    <li><a href="#">Pesquisa </a></li>
+			    <!-- <li><br /><select id="pesquisaPor" onchange="changeInputSearch(this.selectedIndex)">
 			    			<option value="clubes">Clubes</option>
 			    			<option value="pessoas">Pessoas</option>
 			    			<option value="local">Local</option>
 			    			<option value="data">Data</option>
-			    		</select></li>
+			    		</select></li> -->
 			    <li><br /><input type="text" id="filtro" size="50" />
-			    		<input type="hidden" id="filtroDataAno" size="13" value="Ano" />&nbsp;&nbsp;&nbsp;
+			    		<!-- <input type="hidden" id="filtroDataAno" size="13" value="Ano" />&nbsp;&nbsp;&nbsp;
 			    		<input type="hidden" id="filtroDataMes" size="13" value="Mes" />&nbsp;&nbsp;&nbsp;
-			    		<input type="hidden" id="filtroDataDia" size="13" value="Dia" />
+			    		<input type="hidden" id="filtroDataDia" size="13" value="Dia" /> -->
 			    </li>
 			    <li><a href="#" onclick=searchParameter(1)><img src="css/images/search.png" border="0" alt="Search" /></a></li>
 			    <li><a href="#">Administração</a></li>
@@ -153,7 +171,7 @@
 			<div id="heading-cnt">
 				
 				<!-- Sub nav -->
-				<div id="side-nav">
+				<!--  <div id="side-nav">
 					<ul>
 					    <li class="active"><div class="link"><a href="#">home</a></div></li>
 					    <li><div class="link"><a href="javascript:showAllClubes()">clubes</a></div></li>
@@ -161,7 +179,7 @@
 					    <li><div class="link"><a href=javascript:showAllLocais()>locais</a></div></li>
 					    <li><div class="link"><a href="#">datas</a></div></li>
 					</ul>
-				</div>
+				</div> -->
 				 <!--  End Sub nav -->
 				
 				<!-- Widget -->
