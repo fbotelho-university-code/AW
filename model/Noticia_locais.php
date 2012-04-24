@@ -82,6 +82,7 @@ require_once "includes.php";
 				$locais[] = $local;  
 			}
 		}
+		
 		return $locais; 
   	}
   	
