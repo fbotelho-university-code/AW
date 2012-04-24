@@ -180,6 +180,7 @@
 		RestUtils::sendResponse(404); 
 	}
 
+	
 	// >= no futuro
 	if (count($path_info) == 2){
 		$keyword = $path_info[2]; 
@@ -498,12 +499,16 @@
 	}
 	
 	function getNews($req, $id, $n){
+		$n = $n->getRelationArray($id, getUrl());
+		
 		Utill::checkEtag($req, $n); 
+		
+		$noticia = new Noticia(); 
+
 		
 		if ($req->getHttpAccept() == 'json'){
 			RestUtils::sendResponse(200, null, json_encode($n)); 
 		}
-		
 		else if ($req->getHttpAccept() == 'text/xml'){
 			global $options; $options["rootName"] = "noticia"; 
 			$options['rootAttributes']  = array("xmlns" => "localhost", "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance", "xsi:schemaLocation" => "localhost Noticia.xsd "); 
@@ -513,13 +518,13 @@
 			
 			if ($result == true){
 				$xmlResponse = $xmlSerializer->getSerializedData();
-				//RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
-				if($n->validateXMLbyXSD($xmlResponse, "Noticia.xsd")) {
+				RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+				/*if($noticia->validateXMLbyXSD($xmlResponse, "Noticia.xsd")) {
 					RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
 				}
 				else {
 					RestUtils::sendResponse(500);
-				}
+				}*/
 			} else {
 				RestUtils::sendResponse(500); 
 			}
