@@ -5,9 +5,18 @@ function Clube() {
 	this.nome_clube;
 	this.nome_oficial;
 	
-	this.getAllClubes = function (cb) 
+	/* URL base para comunicacao com o web service */
+	this.baseurl = "http://localhost/AW3/webservice/entidades.php/clube/";
+	
+	this.getAllClubes = function (start, count, cb) 
 	{
-		new Ajax.Request('http://localhost/AW3/webservice/entidades.php/clube/',
+		var params = "";
+		if(start != 0 && count != 0) {
+			params = "?start=" + start + "&count=" + count;
+		}
+		var url = this.baseurl + params;
+		
+		new Ajax.Request(url,
 		{
 		    method:'get',
 		    asynchronous: false,

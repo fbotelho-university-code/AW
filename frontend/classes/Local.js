@@ -14,9 +14,15 @@ function Local() {
 	 * Método para recuperar todos os locais.
 	 * Necessita de função callback como parametro para devolver resultado
 	 */
-	this.getAllLocais = function (cb) 
+	this.getAllLocais = function (start, count, cb) 
 	{
-		new Ajax.Request(this.baseurl,
+		var params = "";
+		if(start != 0 && count != 0) {
+			params = "?start=" + start + "&count=" + count;
+		}
+		var url = this.baseurl + params;
+		
+		new Ajax.Request(url,
 		{
 		    method:'get',
 		    asynchronous: false,
