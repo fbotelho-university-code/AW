@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<xsd:schema targetNamespace="localhost" elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="localhost">
+	<xsd:complexType name="comentarioT">
+	<xsd:sequence>
+		<xsd:element name="idnoticia" type="xsd:int" maxOccurs="1" minOccurs="1"></xsd:element>
+		<xsd:element name="comentario" type="xsd:string" maxOccurs="1" minOccurs="1"></xsd:element>
+		<xsd:element name="user" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+	</xsd:sequence>
+	</xsd:complexType>
+    <xsd:element name= "Comentario" type="comentarioT"></xsd:element>
+</xsd:schema>

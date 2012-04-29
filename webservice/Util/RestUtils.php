@@ -105,10 +105,16 @@ class RestUtils{
 		//set the content type
 		header('Content-type: ' . $content_type . ' ; charset = utf-8'); 
 		
+		if ($status == 200){
+			$hash = md5(var_export($body, true));
+			header('Etag: ' . $hash);
+		}
+		
 		if ($body!=''){
 			echo $body;
 			exit; 
 		}
+		
 		else{
 			//create some body message
 			$message = '';

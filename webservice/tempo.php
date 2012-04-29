@@ -38,12 +38,13 @@ require_once ('Util/XML/Serializer.php');
  //Let us find this variables: 
  
  $ano = $mes = $dia = '%'; //associativity to the right. 
- //did not give yet? ... ok : 
  
+  
  	/**
  	 * Dispatch the code according to parameters : 
  	 */
  		$req = RestUtils::processRequest();
+ 		checkRequest($req); 
  		//TODO - processRequest can fail? 
 	    $path_parameters = $req->getPathInfo();
 
@@ -70,7 +71,7 @@ require_once ('Util/XML/Serializer.php');
 	  
 	//var_dump($path_parameters); 	
 	$data_needle = $ano . '-' . $mes . '-' . $dia;
-	//var_dump($data_needle); 
+
 	// We only have one resource :time .
 	
 	/**
@@ -81,13 +82,21 @@ require_once ('Util/XML/Serializer.php');
 		case 'GET': 
 		break;
 		default: 
-		//TODO unsopurted method.  
+		RestUtils::sendResponse(405, array('allow' => "GET"));
 	}
 	
 	$n = new Noticia_Data();
 	//$results = $n->find(array('tempo' => $data_needle), ' LIKE ' );
-	$results = Noticia_Data::getAllNoticias($data_needle);
-
+	try{
+		$results = Noticia_Data::getAllNoticias($data_needle);
+	}catch(Exception $e){
+		RestUtils::sendResponse(500); 
+	}
+	
+	if (count($results) == 0){
+		RestUtils::sendResponse(404); 
+	}
+	
 	global $options; $options["rootName"] ='datas'; 
 	
 	$xmlSerializer = new XML_Serializer($options);
@@ -111,5 +120,21 @@ require_once ('Util/XML/Serializer.php');
 		RestUtils::sendResponse(200, null, json_encode($results)); 
 	}
 	
+	 function checkRequest($req){
+    //Variables that should be defined for checkRequest. Ideally this would be defined in a abstact/general form. 
+ 	
+ 	$request_vars = array("start", "count", "texto");
+ 	
+
+    	//check the request variables that are not understood by this resource
+    	$dif = array_diff(array_keys($req->getRequestVars()), $request_vars);
+    	//If they are differences then we do not understand the request.  
+    	 if ( count($dif)  != 0 ){
+    	 	RestUtils::sendResponse(400, array('unrecognized_req_vars' => $dif));
+    		exit; 
+    	}
+    	//TODO - check that path parameters are correct through regulares expressions that validate input types and formats. 
+    	//could respond BadRequest also. 
+    }
 	
 ?>

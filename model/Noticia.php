@@ -38,7 +38,7 @@ class Noticia extends Model{
 		$noticiaOb = $class_noticia->getObjectById($idNoticia);
 		if (!$noticiaOb ) return null;
 		//We do not want this to show: 
-		$noticiaOb->visivel = null;
+
 		
 		//O array resultante. 
 		foreach (get_object_vars($noticiaOb) as $key=>$value){
@@ -119,7 +119,7 @@ class Noticia extends Model{
 	 * Define se uma not�cia deve estar vis�vel para o utilizador
 	 * @var boolean
 	 */
-	var $visivel = true;
+	
 	
 	/**
 	 * Contrutor da classe. 
@@ -241,20 +241,54 @@ class Noticia extends Model{
 		$this->url = $u;
 	}
 	
-	/**
-	* Retorna a visibilidade da notícia
-	* @return boolean {@link $visivel}
-	*/
-	public function getVisivel() {
-		return $this->visivel;
+	private function arrangeFields($selectedFields =null){
+		if ($this->setText() ){
+			if (!isset($selectedFields)){
+				$selectedFields = array("idnoticia", "data_pub", "assunto", "descricao", "texto", "url"); 
+			}
+			else{
+				if (array_search("texto", $selectedFields)  === false ){
+					$selectedFields[] = "texto"; 
+				}
+			}
+		}
+		else{
+			if (!isset($selectedFields)){
+				$selectedFields = array("idnoticia", "data_pub", "assunto", "descricao", "url"); 
+			}
+			else{
+				$a = array(); 
+				foreach ($selectedFields as $f){
+					if (strcmp($f, "texto") == 0){
+						continue; 
+					}
+					$a[] = $f; 
+				}
+				$selectedFields = $a;  	
+			}
+		}
+		return $selectedFields; 
+	}
+
+	public function getObjectById($id){
+		
+		if ($this->setText()){
+			$selectedFields = array("idnoticia", "data_pub", "assunto", "descricao", "texto", "url"); 	
+		}else{
+			
+			$selectedFields = array("idnoticia", "data_pub", "assunto", "descricao", "url"); 	
+		}
+
+		return parent::getObjectById($id, $selectedFields); 
 	}
 	
-	/**
-	 * Altera o valor da URL da notícia {@link $url}
-	 * @param String $url
-	 */
-	public function setVisivel($v) {
-		$this->visivel = $v;
+	public function find($fields, $connector = ' = ', $selectedFields =null){
+		$selectedFields = $this->arrangeFields($selectedFields);
+		return parent::find($fields, $connector, $selectedFields); 
+	}
+	public function getAll($fields=null){
+		$fields = $this->arrangeFields($fields);
+		return parent::getAll($fields);  
 	}
 }
 

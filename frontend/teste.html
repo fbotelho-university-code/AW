@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+
+<script type="text/javascript" src="ajax/prototype.js"></script>
+<script>
+
+var x = new Array();
+
+function f1() {
+	for(var i=0; i<5;i++) {
+		x[i] = i;
+	}
+	alert(x.length);
+}
+
+function f2() {
+	alert(x.length);
+}
+f1();
+f2();
+</script>
+</head>
+<body>
+<div id="teste"></div>
+</body>
+</html>
