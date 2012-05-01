@@ -1,5 +1,5 @@
 /**
- * Classe que representa uma referencia espacial de uma notícia.
+ * Classe que representa uma referencia espacial de uma notï¿½cia.
  */
 
 function Local() {
@@ -8,11 +8,11 @@ function Local() {
 	this.coordenadas;
 	
 	/* URL base para comunicacao com o web service */
-	this.baseurl = "http://localhost/AW3/webservice/espaco.php/";
+	this.baseurl = "http://localhost/proj/webservice/espaco.php/";
 	
 	/**
-	 * Método para recuperar todos os locais.
-	 * Necessita de função callback como parametro para devolver resultado
+	 * Mï¿½todo para recuperar todos os locais.
+	 * Necessita de funï¿½ï¿½o callback como parametro para devolver resultado
 	 */
 	this.getAllLocais = function (start, count, cb) 
 	{
@@ -39,7 +39,7 @@ function Local() {
 			  /* Armazena dados retornados em Array */ 
 			  var locais = new Array();
 			  
-			  /* Construçção dos objectos e armazenamento no Array de retorno */
+			  /* Construï¿½ï¿½ï¿½o dos objectos e armazenamento no Array de retorno */
 			  for(var i=0; i<idlocalDOMArray.length; i++) {
 			  	var l = new Local();
 				l.idlocal = idlocalDOMArray.item(i).firstChild.data;
@@ -50,7 +50,7 @@ function Local() {
 			  //DEBUG
 		      //alert("Success! \n\n" + clubes.length);
 			  
-			  /* Retorno do array de objectos usando função callback passada como parâmetro */
+			  /* Retorno do array de objectos usando funï¿½ï¿½o callback passada como parï¿½metro */
 			  cb(locais);
 		    },
 		    /* Tratamento de Falhas */
@@ -59,8 +59,8 @@ function Local() {
 	};
 	
 	/**
-	 * Recupera um local especifico de acordo com o id passado como parâmetro.
-	 * Necessita de função callback como parametro para devolver resultado
+	 * Recupera um local especifico de acordo com o id passado como parï¿½metro.
+	 * Necessita de funï¿½ï¿½o callback como parametro para devolver resultado
 	 */
 	this.getLocalById = function (id, cb)
 	{
@@ -79,7 +79,7 @@ function Local() {
 				  var nome_localDOMArray = xmlRoot.getElementsByTagName("nome_local");
 				  var coordenadasDOMArray = xmlRoot.getElementsByTagName("coordenadas");
 				  
-				  /* Criação do objecto usando XML retornado */
+				  /* Criaï¿½ï¿½o do objecto usando XML retornado */
 				  var l = new Local();
 				  l.idlocal = idlocalDOMArray.item(0).firstChild.data;
 				  l.nome_local = nome_localDOMArray.item(0).firstChild.data;
@@ -88,11 +88,33 @@ function Local() {
 				  //DEBUG
 			      //alert("Success! \n\n" + l);
 				  
-				  /* Retorno do objecto usando função callback passada como parametro */
+				  /* Retorno do objecto usando funï¿½ï¿½o callback passada como parametro */
 				  cb(l);
 			},
 			/* Tratamento de Falhas */
 		    onFailure: function(){ alert("Erro ao recuperar 'Local' do webservice!"); }
 		});
 	};
+	
+	this.getLocalCountNoticias = function(id, cb)
+	{
+		var url = this.baseurl + id + '/noticias';
+		
+		new Ajax.Request(url,
+		{
+		    method:'get',
+		    asynchronous: false,
+		    onSuccess: function(transport){
+		      /* Recebimento da resposta */
+		      var response = transport.responseXML;
+		      var xmlRoot = response.documentElement;
+		      
+			  //DEBUG
+		      //alert("Success! \n\n" + clubes.length);
+			  cb(xmlRoot.getElementsByTagName("idnoticia").length);
+		    },
+		    /* Tratamento de Falhas */
+		    onFailure: function(){ alert("Erro ao recuperar noticias do clube!"); }
+		});		
+	}
 }

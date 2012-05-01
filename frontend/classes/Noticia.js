@@ -1,22 +1,22 @@
 /**
- * Classe que representa uma Notícia
+ * Classe que representa uma Notï¿½cia
  */
 function Noticia() {
 	
-	/* Identificador unico da notícia */
+	/* Identificador unico da notï¿½cia */
 	this.idnoticia = 0;
 	
-	/* Data de publicação da notícia */
+	/* Data de publicaï¿½ï¿½o da notï¿½cia */
 	this.data_pub = "";
 	
-	/* Assunto da notícia */
+	/* Assunto da notï¿½cia */
 	this.assunto = "";
 	
-	/* Descrição da notícia */
+	/* Descriï¿½ï¿½o da notï¿½cia */
 	this.descricao = "";
 	
-	/* URL para acesso ao recurso notícia do Web Service */
-	this.baseurl = "http://localhost/AW3/webservice/noticias.php/";
+	/* URL para acesso ao recurso notï¿½cia do Web Service */
+	this.baseurl = "http://localhost/proj/webservice/noticias.php/";
 	
 	/**
 	 * Retorna um conjunto de Noticias
@@ -65,8 +65,8 @@ function Noticia() {
 	};
 	
 	/**
-	 * Recupera uma noticia especifica de acordo com o id passado como parâmetro.
-	 * Necessita de função callback como parametro para devolver resultado
+	 * Recupera uma noticia especifica de acordo com o id passado como parï¿½metro.
+	 * Necessita de funï¿½ï¿½o callback como parametro para devolver resultado
 	 */
 	this.getNoticiaById = function (id, cb)
 	{
@@ -87,7 +87,7 @@ function Noticia() {
 				  var descricaoDOMArray = xmlRoot.getElementsByTagName("descricao");
 				  var urlDOMArray = xmlRoot.getElementsByTagName("url");
 				  
-				  /* Criação do objecto usando XML retornado */
+				  /* Criaï¿½ï¿½o do objecto usando XML retornado */
 				  var n = new Noticia();
 				  n.idnoticia = idnoticiaDOMArray.item(0).firstChild.data;
 				  n.data_pub = data_pubDOMArray.item(0).firstChild.data;
@@ -98,7 +98,7 @@ function Noticia() {
 				  //DEBUG
 			      //alert("Success! \n\n" + n.idnoticia);
 				  
-				  /* Retorno do objecto usando função callback passada como parametro */
+				  /* Retorno do objecto usando funï¿½ï¿½o callback passada como parametro */
 				  cb(n);
 			},
 			/* Tratamento de Falhas */
