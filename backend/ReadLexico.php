@@ -49,7 +49,7 @@
  $lexicos = $lex->getAll();
  
  foreach ($lexicos as $lexico){
-  	
+
   	//TODO - ser‡ a melhor maneira de comparar? 
   	if ($lexico->getTipo() == "nome"){
   		$tabela_relacao = null ; //indica tabela de rela�ao (lexico_integrantes ou lexico_clubes)

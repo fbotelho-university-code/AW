@@ -29,7 +29,9 @@ class GNewsClient extends Fonte {
 			
 			//carrega JSON 
 			$result_json = $this->execSearch($url_search);
-			
+			if (!isset($result_json)){
+				return; 
+			}
 			//Cria array com itens presentes no RSS consultado
 			$output = json_decode($result_json);
 			
@@ -64,9 +66,9 @@ class GNewsClient extends Fonte {
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_REFERER, "http://localhost/aw002/backend/");
+		curl_setopt($ch, CURLOPT_REFERER, "http://http://localhost/aw12/backend/");
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-		$result= curl_exec($ch);
+		@$result= curl_exec($ch);
 		curl_close($ch);
 		return $result;
 	}

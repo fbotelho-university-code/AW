@@ -99,10 +99,10 @@ class Util {
 		$dao = new DAO();
 		$param = array();
 		
-		$sqlClube = "SELECT nome_clube FROM clube";
+		$sqlClube = "SELECT nome_oficial FROM clube";
 		$rs = $dao->execute($sqlClube);
 		while(!$rs->EOF) {
-			$param[] = $rs->fields["nome_clube"];
+			$param[] = $rs->fields["nome_oficial"];
 			$rs->MoveNext();
 		}
 		
