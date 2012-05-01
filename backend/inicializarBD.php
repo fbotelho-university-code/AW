@@ -2,7 +2,7 @@
 @header('Content-Type: text/html; charset=utf-8');
 require_once "includes.php";
 
-echo "<center><h1>Inicializa��o da Base de Dados</h1></center>";
+echo "<center><h1>Inicialização da Base de Dados</h1></center>";
 //-------------------------- LIMPANDO BASE DE DADOS -------------------------------------------//
 echo "Limpando a Base de Dados... ";
 $dao = new DAO();
@@ -11,8 +11,18 @@ $rs = $dao->execute("SELECT table_name FROM information_schema.tables WHERE tabl
 
 while(!$rs->EOF) {
 	$table = $rs->fields["table_name"];
-	$sql = "TRUNCATE TABLE ". $table;
-	$dao->execute($sql);
+	if (strcmp($table, "local") != 0  &&
+		strcmp($table,"noticia_data_clube") != 0 && 
+		strcmp($table,"noticia_x_clube") != 0 &&
+		strcmp($table,"nr_noticia_data") != 0 &&
+		strcmp($table,"nr_noticia_integrante") != 0 &&
+		strcmp($table,"nr_noticia_local_clube") != 0 &&
+		strcmp($table,"testview") != 0
+		){
+		echo "Apagando tabela : " . $table . "<br/>"; 
+		$sql = "TRUNCATE TABLE ". $table;
+		$dao->execute($sql);
+	}
 	$rs->MoveNext();
 }
 echo "Ok!<hr>";
@@ -52,97 +62,21 @@ $f->add();
 
 echo "Ok!<hr>";
 
-//---------------------------- COMPETICAO ---------------------------------------------------//
-echo "Inicializa��o da Tabela <b>competicao</b>... ";
-$comp = new Competicao();
-$comp->setIdcompeticao(null);
-
-$comp->setNome_competicao("Liga Zon Sagres");
-$idLigaZon = $comp->add();
-$comp->setNome_competicao("Liga Orangina");
-$idLigaOran = $comp->add();
-echo "Ok!<hr>";
-
 //----------------------------- LOCAL ---------------------------------------------------------//
-echo "Inicializa��o da Tabela <b>local</b>... ";
+echo "Inicialização da Tabela <b>local</b>... ";
 $l = new Local();
+
 include "GeoNetPtClient.php";
-echo "Ok!<hr>";
-
-//----------------------------- CLUBE ----------------------------------------------------------//
-echo "Inicializa��o da Tabela <b>clube</b>... ";
-$c = new Clube();
-$c->setIdclube(null);
-
-$c->setNome_clube("Benfica");
-$where = array("nome_local" => "Lisboa");
-$idlocalLisboa = $l->findFirst($where)->getIdlocal();
-$c->setIdlocal($idlocalLisboa);
-$c->setIdcompeticao($idLigaZon);
-$c->setNome_oficial("sport lisboa e benfica");
-$idBenfica = $c->add();
-
-$c->setNome_clube("Porto");
-$where = array("nome_local" => "Porto");
-$idlocalPorto = $l->findFirst($where)->getIdlocal();
-$c->setIdlocal($idlocalPorto);
-$c->setIdcompeticao($idLigaZon);
-$c->setNome_oficial("futebol clube do porto");
-$idPorto = $c->add();
-
-$c->setNome_clube("Sporting");
-$c->setIdlocal($idlocalLisboa);
-$c->setIdcompeticao($idLigaZon);
-$c->setNome_oficial("sporting clube de portugal");
-$idSporting = $c->add();
-
-$c->setNome_clube("Braga");
-$where = array("nome_local" => "Braga");
-$idlocalBraga = $l->findFirst($where)->getIdlocal();
-$c->setIdlocal($idlocalBraga);
-$c->setIdcompeticao($idLigaZon);
-$c->setNome_oficial("sporting clube de braga");
-$idBraga = $c->add();
-
-$c->setNome_clube("Nacional");
-$where = array("nome_local" => "Funchal");
-$idlocalFunchal = $l->findFirst($where)->getIdlocal();
-$c->setIdlocal($idlocalFunchal);
-$c->setIdcompeticao($idLigaZon);
-$c->setNome_oficial("clube desportivo nacional");
-$idNacional = $c->add();
-echo "Ok!<hr>";
-//----------------------------- FUNCAO ----------------------------------------------------------//
-echo "Inicializa��o da Tabela <b>funcao</b>... ";
-$f = new Funcao();
-$f->setIdFuncao(null);
-
-$f->setFuncao("Presidente");
-$idPresidente = $f->add();
-
-$f->setFuncao("Treinador Principal");
-$idTreinadorP = $f->add();
-
-$f->setFuncao("Jogador");
-$idJogador = $f->add();
 
 echo "Ok!<hr>";
-//----------------------------- INTEGRANTE ---------------------------------------------------------//
-echo "Inicializa��o da Tabela <b>integrante</b>... ";
-$i = new Integrante();
-//include ("searchPlantel.php");
-$i = new Integrante(); 
-$i->nome_integrante = "Pinto da Costa"; 
-$i->idclube = "2"; 
-$i->idfuncao = "1"; 
-$i->add(); 
-$i->nome_integrante = "Jorge Jesus";
-$i->idfuncao = "2";
-$i->idclube = "1"; 
-$i->add();  
-echo "Ok!<hr>";
+
+echo "Inicialização de Integrantes e Clubes da Primeira liga portuguesa através da dbpedia <br/>";
+
+include "dbpedia.php";
+insertClubesOfPrimeiraLiga(); 
+
 //----------------------------- LEXICO -------------------------------------------------------------//
-echo "Inicializa��o da Tabela <b>lexico</b>... ";
+echo "Inicialização da Tabela <b>lexico</b>... ";
 require_once ("ReadLexico.php");
 echo "Ok!<hr>";
 echo 'The end'; 

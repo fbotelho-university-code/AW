@@ -15,6 +15,7 @@ class Lexico extends Model{
 	var $ambiguidade; //int
 	var $idlexico ; //int  
 	
+	
 	public function checkValidity(){
 		return true; 
 	}
