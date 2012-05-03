@@ -265,8 +265,8 @@ function updateLexico($nomes,$rel){
  */
 function fetch_and_insert_clube($clube_uri){
 	$clube = new Clube();
-	$clube->resumo = getAbstractInPortugueseOrEnglish($clube_uri);
-	$clube->nome_oficial = getFullNameClube($clube_uri);
+	$clube->resumo = addslashes(getAbstractInPortugueseOrEnglish($clube_uri));
+	$clube->nome_oficial = addslashes(getFullNameClube($clube_uri));
 	if (isset($clube->nome_oficial)){
 	try{
 		$id = $clube->add(); 
@@ -340,8 +340,8 @@ function insert_image($clube_uri, $id){
  function fetch_and_insert_player($p_uri, $clube_id, $funcao='Jogador'){
 	$player = new Integrante(); 
 
-	$player->resumo = getAbstractInPortugueseOrEnglish($p_uri);
-	$player->nome_integrante = getFullName($p_uri);
+	$player->resumo = addslashes(getAbstractInPortugueseOrEnglish($p_uri));
+	$player->nome_integrante = addslashes(getFullName($p_uri));
 
 	if (isset($player->nome_integrante) && $player->nome_integrante != null){
 		$res = $player->find(array("nome_integrante" => $player->nome_integrante));  
