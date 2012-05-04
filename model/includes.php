@@ -22,7 +22,7 @@ require_once "Nr_noticia_local_clube.php";
 require_once "Nr_noticia_integrante.php"; 
 require_once "Noticia_x_clube.php"; 
 require_once "Noticia_data_clube.php";
-
+require_once "Nr_noticia_local.php";
 
 //require_once "lib/Util.php";
 

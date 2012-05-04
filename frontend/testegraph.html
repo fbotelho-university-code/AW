@@ -7,6 +7,11 @@
 		<script type="text/javascript" src="classes/Local.js"></script>
 		<script type="text/javascript" src="classes/Tempo.js"></script>
 		<script type="text/javascript" src="classes/Noticia.js"></script>
+		<script type="text/javascript" src="classes/Nr_noticia_local.js"></script>
+		<script type="text/javascript" src="classes/Nr_noticia_data.js"></script>
+		<script type="text/javascript" src="classes/Nr_noticia_integrante.js"></script>
+		<script type="text/javascript" src="classes/Nr_noticia_local_clube.js"></script>
+		<script type="text/javascript" src="classes/Noticia_x_clube.js"></script>
 		<script src="highcharts/js/adapters/prototype-adapter.js" type="text/javascript"></script>
 		<script src="highcharts/js/highcharts.js" type="text/javascript"></script>
 
@@ -73,6 +78,131 @@
 				 });*/
 			}
 
+			function drawDonut() {
+				var chart;
+
+				var colors = Highcharts.getOptions().colors;
+				var categories = ['MSIE', 'Firefox', 'Chrome', 'Safari', 'Opera'];
+				var name = 'Browser brands';
+				var data = [{
+					y : 55.11,
+					color : colors[0],
+					drilldown : {
+						name : 'MSIE versions',
+						categories : ['MSIE 6.0', 'MSIE 7.0', 'MSIE 8.0', 'MSIE 9.0'],
+						data : [10.85, 7.35, 33.06, 2.81],
+						color : colors[0]
+					}
+				}, {
+					y : 21.63,
+					color : colors[1],
+					drilldown : {
+						name : 'Firefox versions',
+						categories : ['Firefox 2.0', 'Firefox 3.0', 'Firefox 3.5', 'Firefox 3.6', 'Firefox 4.0'],
+						data : [0.20, 0.83, 1.58, 13.12, 5.43],
+						color : colors[1]
+					}
+				}, {
+					y : 11.94,
+					color : colors[2],
+					drilldown : {
+						name : 'Chrome versions',
+						categories : ['Chrome 5.0', 'Chrome 6.0', 'Chrome 7.0', 'Chrome 8.0', 'Chrome 9.0', 'Chrome 10.0', 'Chrome 11.0', 'Chrome 12.0'],
+						data : [0.12, 0.19, 0.12, 0.36, 0.32, 9.91, 0.50, 0.22],
+						color : colors[2]
+					}
+				}, {
+					y : 7.15,
+					color : colors[3],
+					drilldown : {
+						name : 'Safari versions',
+						categories : ['Safari 5.0', 'Safari 4.0', 'Safari Win 5.0', 'Safari 4.1', 'Safari/Maxthon', 'Safari 3.1', 'Safari 4.1'],
+						data : [4.55, 1.42, 0.23, 0.21, 0.20, 0.19, 0.14],
+						color : colors[3]
+					}
+				}, {
+					y : 2.14,
+					color : colors[4],
+					drilldown : {
+						name : 'Opera versions',
+						categories : ['Opera 9.x', 'Opera 10.x', 'Opera 11.x'],
+						data : [0.12, 0.37, 1.65],
+						color : colors[4]
+					}
+				}];
+
+				// Build the data arrays
+				var browserData = [];
+				var versionsData = [];
+				for(var i = 0; i < data.length; i++) {
+
+					// add browser data
+					browserData.push({
+						name : categories[i],
+						y : data[i].y,
+						color : data[i].color
+					});
+
+					// add version data
+					for(var j = 0; j < data[i].drilldown.data.length; j++) {
+						var brightness = 0.2 - (j / data[i].drilldown.data.length) / 5;
+						versionsData.push({
+							name : data[i].drilldown.categories[j],
+							y : data[i].drilldown.data[j],
+							color : Highcharts.Color(data[i].color).brighten(brightness).get()
+						});
+					}
+				}
+
+				// Create the chart
+				chart = new Highcharts.Chart({
+					chart : {
+						renderTo : 'caixa',
+						type : 'pie'
+					},
+					title : {
+						text : 'Browser market share, April, 2011'
+					},
+					yAxis : {
+						title : {
+							text : 'Total percent market share'
+						}
+					},
+					plotOptions : {
+						pie : {
+							shadow : false
+						}
+					},
+					tooltip : {
+						formatter : function() {
+							return '<b>' + this.point.name + '</b>: ' + this.y + ' %';
+						}
+					},
+					series : [{
+						name : 'Browsers',
+						data : browserData,
+						size : '60%',
+						dataLabels : {
+							formatter : function() {
+								return this.y > 5 ? this.point.name : null;
+							},
+							color : 'white',
+							distance : -30
+						}
+					}, {
+						name : 'Versions',
+						data : versionsData,
+						innerSize : '60%',
+						dataLabels : {
+							formatter : function() {
+								// display only if larger than 1
+								return this.y > 1 ? '<b>' + this.point.name + ':</b> ' + this.y + '%' : null;
+							}
+						}
+					}]
+				});
+			}
+
 			function inTop10(valor, top) {
 				min_id = 0;
 				min_val = 999999999;
@@ -105,7 +235,7 @@
 			function getNomeArray(nomeCount) {
 				var nomes = Array();
 
-				for(var i=0; i<nomeCount.length; i++){
+				for(var i = 0; i < nomeCount.length; i++) {
 					nomes[i] = nomeCount[i].nome;
 				}
 				return (nomes);
@@ -114,96 +244,37 @@
 			function getValArray(nomeCount) {
 				var counts = Array();
 
-				for(var i=0; i<nomeCount.length; i++){
+				for(var i = 0; i < nomeCount.length; i++) {
 					counts[i] = nomeCount[i].val;
 				}
 				return (counts);
 			}
 
-			function drawClubes() {
-
-				var clubes = new Array();
-				var clube = new Clube();
-				clube.getAllClubes(0,0,function(result) {
-					clubes = result;
-				});
-
-				var top10 = new Array();
-				var nome_count = new Array();
-
-				// contar noticias
-				for( i = 0; i < clubes.length; i++) {
-					clube.getClubeCountNoticias(clubes[i].idclube, function(result) {
-						top10 = inTop10({
-							nome : clubes[i].nome_oficial,
-							val : result
-						}, top10);
-					});
-				}
-
-				// desenhar grafico
-
-				var options = {
-					chart : {
-						renderTo : 'caixa',
-						defaultSeriesType : 'bar'
-					}
-				};
-			
-				// title
-				options.title = new Object();
-				options.title.text = 'Top 10 clubes com mais notícias';
-
-				// x
-				options.xAxis = new Object();
-				options.xAxis.title = 'Clube'
-				options.xAxis.categories = new Array();
-				options.xAxis.categories = getNomeArray(top10);
-
-				// y
-				options.yAxis = new Object();
-				options.yAxis.title = '# notícias';
-
-				// data
-				options.series = new Array();
-				options.series[0] = new Object();
-				options.series[0].name = '# Notícias';
-				options.series[0].data = new Array();
-				options.series[0].data = getValArray(top10);
-				
-				chart1 = new Highcharts.Chart(options);
-			}
-
 			function drawLocais() {
 
-				var locais = new Array();
-				var local = new Local();
-				local.getAllLocais(0,0,function(result) {
-					locais = result;
+				var top10 = new Array();
+				var noticias_local = new Array();
+				var nr_noticia_local = new Nr_noticia_local();
+
+				nr_noticia_local.get(0, 0, function(result) {
+					noticias_local = result;
 				});
 
-				var top10 = new Array();
-				var nome_count = new Array();
-
-				// contar noticias
-				for( i = 0; i < locais.length; i++) {
-					local.getLocalCountNoticias(locais[i].idlocal, function(result) {
-						top10 = inTop10({
-							nome : locais[i].nome_local,
-							val : result
-						}, top10);
-					});
+				for(var i = 0; i < noticias_local.length; i++) {
+					top10 = inTop10({
+						nome : noticias_local[i].nome_local,
+						val : noticias_local[i].nr_noticia
+					}, top10);
 				}
 
 				// desenhar grafico
-
 				var options = {
 					chart : {
 						renderTo : 'caixa',
 						defaultSeriesType : 'bar'
 					}
 				};
-			
+
 				// title
 				options.title = new Object();
 				options.title.text = 'Top 10 locais com mais notícias';
@@ -224,8 +295,309 @@
 				options.series[0].name = '# Notícias';
 				options.series[0].data = new Array();
 				options.series[0].data = getValArray(top10);
-				
+
 				chart1 = new Highcharts.Chart(options);
+
+			}
+
+			function drawClubes() {
+
+				var top10 = new Array();
+				var clubes = new Array();
+				var noticia_x_clube = new Noticia_x_clube();
+
+				noticia_x_clube.get(0, 0, function(result) {
+					clubes = result;
+				});
+
+				for(var i = 0; i < clubes.length; i++) {
+					top10 = inTop10({
+						nome : clubes[i].nome_oficial,
+						val : clubes[i].nr_noticia
+					}, top10);
+				}
+
+				// desenhar grafico
+				var options = {
+					chart : {
+						renderTo : 'caixa',
+						defaultSeriesType : 'bar'
+					}
+				};
+
+				// title
+				options.title = new Object();
+				options.title.text = 'Top 10 clubes com mais notícias';
+
+				// x
+				options.xAxis = new Object();
+				options.xAxis.title = 'Clube'
+				options.xAxis.categories = new Array();
+				options.xAxis.categories = getNomeArray(top10);
+
+				// y
+				options.yAxis = new Object();
+				options.yAxis.title = '# notícias';
+
+				// data
+				options.series = new Array();
+				options.series[0] = new Object();
+				options.series[0].name = '# Notícias';
+				options.series[0].data = new Array();
+				options.series[0].data = getValArray(top10);
+
+				chart1 = new Highcharts.Chart(options);
+			}
+
+			function drawIntegrantes() {
+
+				var top10 = new Array();
+				var integrantes = new Array();
+				var nr_noticia_integrante = new Nr_noticia_integrante();
+
+				nr_noticia_integrante.get(0, 0, function(result) {
+					integrantes = result;
+				});
+
+				for(var i = 0; i < integrantes.length; i++) {
+					top10 = inTop10({
+						nome : integrantes[i].nome_integrante,
+						val : integrantes[i].nr_noticia
+					}, top10);
+				}
+
+				// desenhar grafico
+				var options = {
+					chart : {
+						renderTo : 'caixa',
+						defaultSeriesType : 'bar'
+					}
+				};
+
+				// title
+				options.title = new Object();
+				options.title.text = 'Top 10 integrantes com mais notícias';
+
+				// x
+				options.xAxis = new Object();
+				options.xAxis.title = 'Integrante'
+				options.xAxis.categories = new Array();
+				options.xAxis.categories = getNomeArray(top10);
+
+				// y
+				options.yAxis = new Object();
+				options.yAxis.title = '# notícias';
+
+				// data
+				options.series = new Array();
+				options.series[0] = new Object();
+				options.series[0].name = '# Notícias';
+				options.series[0].data = new Array();
+				options.series[0].data = getValArray(top10);
+
+				chart1 = new Highcharts.Chart(options);
+			}
+
+			function drawMes() {
+
+				var top10 = new Array();
+				var meses = new Array();
+				var nr_noticia_data = new Nr_noticia_data();
+
+				nr_noticia_data.get(0, 0, function(result) {
+					meses = result;
+				});
+
+				for(var i = 0; i < meses.length; i++) {
+					top10[i] = {
+						nome : meses[i].mes,
+						val : meses[i].nr_noticia
+					};
+				}
+
+				// desenhar grafico
+				var options = {
+					chart : {
+						renderTo : 'caixa',
+						defaultSeriesType : 'bar'
+					}
+				};
+
+				// title
+				options.title = new Object();
+				options.title.text = 'Notícias por mês';
+
+				// x
+				options.xAxis = new Object();
+				options.xAxis.title = 'Mês'
+				options.xAxis.categories = new Array();
+				options.xAxis.categories = getNomeArray(top10);
+
+				// y
+				options.yAxis = new Object();
+				options.yAxis.title = '# notícias';
+
+				// data
+				options.series = new Array();
+				options.series[0] = new Object();
+				options.series[0].name = '# Notícias';
+				options.series[0].data = new Array();
+				options.series[0].data = getValArray(top10);
+
+				chart1 = new Highcharts.Chart(options);
+			}
+
+			function drawClubesLocal() {
+
+				// get top 10 locais com mais noticias
+				var top10 = new Array();
+				var noticias_local = new Array();
+				var nr_noticia_local = new Nr_noticia_local();
+				var nr_noticia = new Array();
+				var total_noticias = 0;
+
+				nr_noticia_local.get(0, 0, function(result) {
+					noticias_local = result;
+				});
+
+				for(var i = 0; i < noticias_local.length; i++) {
+					top10 = inTop10({
+						nome : noticias_local[i].nome_local,
+						val : noticias_local[i].nr_noticia
+					}, top10);
+				}
+				
+				nr_noticia = getValArray(top10);
+				for(i=0; i<nr_noticia.length; i++)
+					total_noticias += nr_noticia[i];
+
+				top10 = getNomeArray(top10);
+
+				// le wild code hammer appears
+				var nr_noticia_local_clube = new Nr_noticia_local_clube();
+				var results = new Array();
+
+				nr_noticia_local_clube.get(0, 0, function(result) {
+					results = result;
+				});
+				
+				// hammering begins
+				var colors = Highcharts.getOptions().colors;
+				estrutura = new Array();
+				for(var color = 0, i = 0, tmp = results[i].nome_local; i < results.length;) {
+					tmp = results[i].nome_local;
+
+					// if in top10
+					for(var bool = false, z = 0; z < 10; z++)
+						if(results[i].nome_local == top10[z]) {
+							bool = true;
+							break;
+						}
+					
+					if(bool) {
+						for(var sum = 0, categories = new Array(), data = new Array(); tmp == results[i].nome_local; i++) {							
+							//alert(tmp+'\n'+results[i].nome_local);
+							categories.push(results[i].nome_oficial);
+							data.push(results[i].nr_noticia);
+							sum += results[i].nr_noticia;
+						}
+
+						estrutura.push({
+							y : sum,
+							color : colors[color],
+							drilldown : {
+								name : tmp,
+								categories : categories.slice(),
+								data : data.slice(),
+								color : colors[color]
+							}
+						});
+
+						color++;
+					}else i++;
+				}
+
+				//console.log(estrutura);
+				//alert(estrutura.length);
+				//for(i=0;i<estrutura.length;i++) alert(estrutura[i].drilldown.name);
+				
+				categories = new Array();
+				categories = top10;
+				var name = 'Locais';
+				data = new Array();
+				data = estrutura.slice();
+
+				// Build the data arrays
+				var browserData = [];
+				var versionsData = [];
+				for(var i = 0; i < data.length; i++) {
+
+					// add browser data
+					browserData.push({
+						name : categories[i],
+						y : data[i].y,
+						color : data[i].color
+					});
+
+					// add version data
+					for(var j = 0; j < data[i].drilldown.data.length; j++) {
+						var brightness = 0.2 - (j / data[i].drilldown.data.length) / 5;
+						versionsData.push({
+							name : data[i].drilldown.categories[j],
+							y : data[i].drilldown.data[j],
+							color : Highcharts.Color(data[i].color).brighten(brightness).get()
+						});
+					}
+				}
+
+				// Create the chart
+				var chart = new Highcharts.Chart({
+					chart : {
+						renderTo : 'caixa',
+						type : 'pie'
+					},
+					title : {
+						text : 'Número de noticias de cada clube por local (Top 10)'
+					},
+					yAxis : {
+						title : {
+							text : '# notícias'
+						}
+					},
+					plotOptions : {
+						pie : {
+							shadow : false
+						}
+					},
+					tooltip : {
+						formatter : function() {
+							return '<b>' + this.point.name + '</b>: ' + this.y + ' notícias';
+						}
+					},
+					series : [{
+						name : 'Locais',
+						data : browserData,
+						size : '60%',
+						dataLabels : {
+							formatter : function() {
+								return this.y > 5 ? this.point.name : null;
+							},
+							color : 'white',
+							distance : -30
+						}
+					}, {
+						name : 'Clubes',
+						data : versionsData,
+						innerSize : '60%',
+						dataLabels : {
+							formatter : function() {
+								// display only if larger than 1
+								return this.y > 1 ? '<b>' + this.point.name + ':</b> ' + this.percentage + '%' : null;
+							}
+						}
+					}]
+				});
+
 			}
 
 		</script>
@@ -237,5 +609,10 @@
 		<input type="button" onclick="drawFrutas()" value="Frutas" />
 		<input type="button" onclick="drawClubes()" value="Clubes" />
 		<input type="button" onclick="drawLocais()" value="Locais" />
+		<input type="button" onclick="drawIntegrantes()" value="Integrantes" />
+		<input type="button" onclick="drawMes()" value="Meses" />
+		<input type="button" onclick="drawDonut()" value="Donut" />
+		<input type="button" onclick="drawClubesMes()" value="ClubesMes" />
+		<input type="button" onclick="drawClubesLocal()" value="ClubesLocal" />
 	</body>
 </html>
