@@ -16,6 +16,14 @@ require_once "Noticia_Has_Integrante.php";
 require_once "Integrantes_Lexico.php";
 require_once "Comentario.php";
 require_once "Noticia_Data.php"; 
+require_once "Clube_Imagem.php"; 
+require_once "Nr_noticia_data.php";
+require_once "Nr_noticia_local_clube.php"; 
+require_once "Nr_noticia_integrante.php"; 
+require_once "Noticia_x_clube.php"; 
+require_once "Noticia_data_clube.php";
+
+
 //require_once "lib/Util.php";
 
 ?>

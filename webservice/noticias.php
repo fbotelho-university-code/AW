@@ -123,15 +123,16 @@
 			if ($result == true){
 				$xmlResponse = $xmlSerializer->getSerializedData();
 				$noticia = new Noticia();
-			
-				//RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
-			
-				if($noticia->validateXMLbyXSD($xmlResponse, "Noticias.xsd")) {
+				
+				RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+				
+				/*if($noticia->validateXMLbyXSD($xmlResponse, "Noticias.xsd")) {
 					RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
 				}
 				else {
 					RestUtils::sendResponse(500);
-				}
+				}*/
+				
 			}
 			else{
 				RestUtils::sendResponse(500); 
@@ -504,8 +505,6 @@
 		Utill::checkEtag($req, $n); 
 		
 		$noticia = new Noticia(); 
-
-		
 		if ($req->getHttpAccept() == 'json'){
 			RestUtils::sendResponse(200, null, json_encode($n)); 
 		}
@@ -518,13 +517,13 @@
 			
 			if ($result == true){
 				$xmlResponse = $xmlSerializer->getSerializedData();
-				RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
-				/*if($noticia->validateXMLbyXSD($xmlResponse, "Noticia.xsd")) {
+				//RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+				if($noticia->validateXMLbyXSD($xmlResponse, "Noticia.xsd")) {
 					RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
 				}
 				else {
 					RestUtils::sendResponse(500);
-				}*/
+				}
 			} else {
 				RestUtils::sendResponse(500); 
 			}

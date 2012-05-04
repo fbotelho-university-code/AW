@@ -6,12 +6,11 @@
  * To change the template for this generated file go to
  * Window - Preferences - PHPeclipse - PHP - Code Templates
  */
- require_once ('DAO.php'); 
-	require_once ('../webservice/Util/RestUtils.php'); 
+require_once ('DAO.php'); 
+require_once ('../webservice/Util/RestUtils.php'); 
 
 abstract class Model{
 	private $dao; 
-	
 	/**
 	 * Should check the validity of the data it is composed.
 	 *  
@@ -76,9 +75,8 @@ abstract class Model{
 			}
 		}
 	}		
-	return $array;  	 
+		return $array;  	 
 	}
-	
 	
 	/**
 	 * Methods should override this and return an array of the primary key identifiers. 
@@ -180,7 +178,7 @@ abstract class Model{
 		//Valida��o do XML usando o ficheiro XSD
 		$pathToXSD = "../webservice/Schemas/".$xsdName;
 		
-		@$validate = $xmlDOM->schemaValidate($pathToXSD); 
+		$validate = $xmlDOM->schemaValidate($pathToXSD); 
 		if($validate) {
 			return true;
 			//echo "validated<br>";

@@ -24,8 +24,9 @@ class GeoNetPtClient extends Fonte {
 	public function search($parameters) {
 		foreach($parameters as $query) {
 			/* Execute the query */
-			$page = file_get_html($this->main_url.$query);
+			@$page = file_get_html($this->main_url.$query);
 			
+			if ($page == null) return null; 
 			/* Parsing */
 			$tableHeader = TRUE;
 			/* Sweep all the entries in the table */
