@@ -19,10 +19,10 @@ function Tempo() {
 		/* Obtenï¿½ï¿½o da data atual */ 
 	    var hoje = new Date();
 	    var ano = hoje.getFullYear();
-	    //var mes = hoje.getMonth();
+	    var mes = hoje.getMonth();
 	    //var dia = hoje.getDate();
 		
-	    new Ajax.Request(this.baseurl + ano,
+	    new Ajax.Request(this.baseurl + ano + "/" + mes,
 				{
 				    method:'get',
 				    asynchronous: false,
@@ -34,7 +34,7 @@ function Tempo() {
 				      
 				      /* Recupera arrays com tags do XML retornado */
 				      var dataDOMArray = xmlRoot.getElementsByTagName("Data");
-					  
+				      
 					  /* Armazena dados retornados em Arrays */ 
 					  var tempos = new Array();
 					  for(var i=0; i<dataDOMArray.length; i++) {
@@ -46,6 +46,7 @@ function Tempo() {
 						/* Recuperaï¿½ï¿½o das notï¿½cias associadas ï¿½ data interpretada recuperada */
 						var noticiasArray = dataDOMArray.item(i).getElementsByTagName("Noticia");
 						var noticiasTempo = new Array();
+						
 						for(var j=0; j<noticiasArray.length;j++) {
 							var n = new Noticia();
 							n.idnoticia = noticiasArray[j].getElementsByTagName("idnoticia").item(0).firstChild.data;
@@ -70,7 +71,7 @@ function Tempo() {
 					  cb(tempos);
 				    },
 				    /* Tratamento de Falhas */
-				    onFailure: function(){ alert("Erro ao recuperar 'Clubes' do webservice!"); }
+				    onFailure: function(){ alert("Erro ao recuperar 'Últimas Notícias' do webservice!"); }
 				});
 	};
 }

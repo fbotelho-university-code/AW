@@ -1,29 +1,32 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
-
-<script type="text/javascript" src="ajax/prototype.js"></script>
-<script>
-
-var x = new Array();
-
-function f1() {
-	for(var i=0; i<5;i++) {
-		x[i] = i;
-	}
-	alert(x.length);
-}
-
-function f2() {
-	alert(x.length);
-}
-f1();
-f2();
-</script>
-</head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+	<title>Projecto AW</title>
+	<link rel="stylesheet" href="ajax/AutoComplete.css" media="screen" type="text/css">
+	<link rel="stylesheet" href="ajax/acomplete.css" media="screen" type="text/css">
+	<link rel="stylesheet" href="css/style.css" type="text/css" media="all" />
+	<!--[if lte IE 6]><link rel="stylesheet" href="css/ie6.css" type="text/css" media="all" /><![endif]-->
+	<script type="text/javascript" src="ajax/util.js" charset="utf-8"></script>
+	<script language="javascript" type="text/javascript" src="ajax/acomplete.js" charset="utf-8"></script>
+	<script type="text/javascript" src="ajax/prototype.js" charset="utf-8"></script>
+	<script type="text/javascript" src="classes/Clube.js" charset="utf-8"></script>
+	<script type="text/javascript" src="classes/Local.js" charset="utf-8"></script>
+	<script type="text/javascript" src="classes/Tempo.js" charset="utf-8"></script>
+	<script type="text/javascript" src="classes/Noticia.js" charset="utf-8"></script>
+	<script type="text/javascript" src="classes/Integrante.js" charset="utf-8"></script>
+	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true" charset="utf-8"></script>
+	<script type="text/javascript" charset="utf-8">
+		var not = new Noticia();
+		var newAux = new Noticia();
+					not.getNoticiaById(2, function(result) {
+						
+						newAux = result;
+						});
+						//alert(123)
+	</script>
+	</head>
 <body>
-<div id="teste"></div>
+	
 </body>
 </html>

@@ -1,0 +1,36 @@
+View Noticia x Clube
+select c.nome_oficial, count(*) as nr_noticia from clube c, noticia_has_clube nc where c.idclube=nc.idclube group by c.idclube
+
+Nome da visão: nr_noticia_local
+select l.nome_local, count(*) as nr_noticia from local l, noticia_locais nl where l.idlocal=nl.idlocal group by l.idlocal
+
+Nome da Visão: nr_noticia_integrante
+select i.nome_integrante, count(*) as nr_noticia from integrante i, noticia_has_integrante ni where i.idintegrante=ni.idintegrante group by i.idintegrante
+
+Nome da Visão: nr_noticia_clube
+select c.nome_oficial, count(*) as nr_noticia FROM clube c, noticia_has_clube nc where c.idclube=nc.idclube group by c.idclube
+
+Nome da Visão: nr_noticia_data
+SELECT month( nd.data_interpretada ) , count( * ) AS nr_noticia
+FROM noticia_data nd
+WHERE data_interpretada LIKE '2012-%'
+
+Nome da Visão: nr_noticia_local_clube
+SELECT l.nome_local, c.nome_oficial, count( n.idnoticia )
+WHERE nl.idlocal = l.idlocal
+AND n.idnoticia = nl.idnoticia
+AND n.idnoticia = nc.idnoticia
+AND nc.idclube = c.idclube
+AND nl.idnoticia = nc.idnoticia
+GROUP BY l.idlocal, c.idclube
+
+View Noticia x Data x Clube
+SELECT month( nd.data_interpretada ) , c.nome_oficial, count( n.idnoticia )
+FROM noticia_data nd, clube c, noticia n, noticia_has_clube nc
+WHERE n.idnoticia = nd.idnoticia
+AND n.idnoticia = nc.idnoticia
+AND nc.idclube = c.idclube
+AND nd.idnoticia = nc.idnoticia
+AND nd.data_interpretada LIKE '2012-%'
+GROUP BY month( nd.data_interpretada ) , c.idclube
+

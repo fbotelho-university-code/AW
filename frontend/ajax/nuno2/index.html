@@ -1,0 +1,144 @@
+
+<html>
+
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+
+	<head>
+		<title> Projecto de AW"</title>
+			
+			<script src="prototype.js" type="text/javascript"></script>
+			<script src="XMLbuilder.js" type="text/javascript"></script>
+
+							<script type="text/javascript">
+				
+				function constroiXML(op) { //Cria o XML com os elementos introduzidos na form
+				
+						switch(op) {
+							
+							case "clube":
+
+								pai="Clube";
+								filho1="idlocal";
+								elemento1=document.forms[0].in1.value
+								filho2="idcompeticao";
+								elemento2=document.forms[0].in2.value
+								filho3="nome_clube";
+								elemento3=document.forms[0].in3.value
+								filho4="nome_oficial";
+								elemento4=document.forms[0].in4.value
+								break
+								
+							case "integrante":
+
+								pai="Integrante";
+								filho1="idclube";
+								elemento1=document.forms[1].in1.value
+								filho2="idfuncao";
+								elemento2=document.forms[1].in2.value
+								filho3="nome_integrante";
+								elemento3=document.forms[1].in3.value
+								filho4="";
+								elemento4=null
+								break
+								
+							case "local":
+
+								pai="Local";
+								filho1="nome_local";
+								elemento1=document.forms[2].in1.value
+								filho2="coordenadas";
+								elemento2=document.forms[2].in2.value
+								filho3="";
+								elemento3=null
+								filho4="";
+								elemento4=null
+								break
+								
+							case "noticia":
+							
+								pai="Noticia";
+								filho1="data_pub";
+								elemento1=document.forms[3].in1.value
+								//document.write(elemento1);
+								filho2="assunto";
+								elemento2=document.forms[3].in2.value
+								//document.write(elemento2);
+								filho3="descricao";
+								elemento3=document.forms[3].in3.value
+								//document.write(elemento3);
+								filho4="url";
+								elemento4=document.forms[3].in4.value
+								//document.write(elemento4);
+								break
+								
+						}
+				
+					// Add an element with attributes
+						//xml.elem("root", { attrib1: "hello", attrib2: "world" });
+						xml.elem(pai, { xmlns: "localhost" , 'xmlns:xsi': "http://www.w3.org/2001/XMLSchema-instance", 'xsi:schemaLocation': "localhost Clube.xsd" });
+						
+						xml.elem(filho1).text(elemento1).elem("/"+filho1);
+						xml.elem(filho2).text(elemento2).elem("/"+filho2);
+						xml.elem(filho3).text(elemento3).elem("/"+filho3);
+						xml.elem(filho4).text(elemento4).elem("/"+filho4);
+
+						xml.elem("/"+pai);
+
+						alert(xml); //Mostra o XML criado TO DO passar "xml" para o servidor por http Request
+						
+				}
+				
+	</script>
+			
+	</head>
+	
+	<body >
+	
+			<table>
+			
+				<form>
+					<tr><td><h4>Dados do Clube a adicionar:</h4></td><td>	
+					<tr><td>ID do Local</td><td>					<input name="in1"	 size="32"  type="text"  value=133														></td></tr>
+					<tr><td>Competição</td><td>					<input name="in2" 	 size="32"  type="text"  value=1															></td></tr>
+					<tr><td>Nome do Clube</td><td>			<input name="in3"	 size="32"  type="text"  value="Belenenses"										></td></tr>
+					<tr><td>Nome oficial do Clube</td><td>	<input name="in4" 	 size="32"  type="text"  value="Clube de Futebol Os Belenenses"	></td></tr>
+
+					<tr><td></td><td><input value="Adicionar Clube" onclick="constroiXML('clube');" type="button"  style=" width: 145px;">&nbsp;<input type="reset" value="Limpar"></td></tr>
+					<tr><td></td><td>	
+				</form>
+			
+				<form>
+					<tr><td><h4>Dados do Integrante a adicionar:</h4></td><td>	
+					<tr><td>ID do Clube</td><td>					<input name="in1"	size="32"  type="text"  value=3											></td></tr>
+					<tr><td>ID da função</td><td>					<input name="in2" 	size="32"  type="text"  value=1											></td></tr>
+					<tr><td>Nome do Integrante</td><td>		<input name="in3"	size="32"  type="text"  value="Nuno"									></td></tr>
+
+					<tr><td></td><td><input value="Adicionar Integrante" onclick="constroiXML('integrante');" type="button"  style=" width: 145px;">&nbsp;<input type="reset" value="Limpar"></td></tr>
+					<tr><td></td><td>	
+				</form>
+			
+				<form>
+					<tr><td><h4>Dados do Local a adicionar:</h4></td><td>	
+					<tr><td>nome_local</td><td>					<input name="in1"	 size="32"  type="text"  value="Lisboa"									></td></tr>
+					<tr><td>coordenadas</td><td>				<input name="in2" 	 size="32"  type="text"  value="38.7416;-9.1577"					></td></tr>
+					
+					<tr><td></td><td><input value="Adicionar Local" onclick="constroiXML('local');" type="button"  style=" width: 145px;">&nbsp;<input type="reset" value="Limpar"></td></tr>
+					<tr><td></td><td>	
+				</form>
+			
+				<form>
+					<tr><td><h4>Dados da Notícia a adicionar:</h4></td><td>	
+					<tr><td>Data</td><td>					<input name="in1"	 size="32"  type="text"  value="2012-04-20 02:26:36"																></td></tr>
+					<tr><td>Assunto</td><td>			<input name="in2"	 size="32"  type="text"  value="Nuno Marques consegue!"														></td></tr>
+					<tr><td>Descrição</td><td>			<input name="in3" 	 size="32"  type="text"  value="Um dummie chamado Nuno Marques, conseguiu!!!"				></td></tr>
+					<tr><td>URL</td><td>					<input name="in4"	 size="32"  type="text"  value="Um dummie chamado Nuno Marques, conseguiu, com sucesso (que se note) fazer esta merda funcionar!!! Todos os membros do grupo estão convidados para um almoço comemorativo (na cantina, que a vida está difícil), pago pelo próprio, quando quiserem!!!" 	></td></tr>
+					
+					<tr><td></td><td><input value="Adicionar Notícia" onclick="constroiXML('noticia');" type="button" style=" width: 145px;">&nbsp;<input type="reset" value="Limpar"></td></tr>
+					<tr><td></td><td>	
+				</form>
+						
+			
+		</table>  
+		
+	</body>
+</html>
