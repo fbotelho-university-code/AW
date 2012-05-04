@@ -3,20 +3,20 @@
  */
 function Tempo() {
 	
-	/** Data presente em uma notícia com interpretaçção AAA-MM-DD **/ 
+	/** Data presente em uma notï¿½cia com interpretaï¿½ï¿½ï¿½o AAA-MM-DD **/ 
 	this.dataInterpretada = "";
 	
-	/** Array de notícias com referencia espacial igual a dataInterpretada **/
+	/** Array de notï¿½cias com referencia espacial igual a dataInterpretada **/
 	this.noticias = new Array();
 	
 	/** URL base para comunicacao com o web service **/
-	this.baseurl = "http://localhost/AW3/webservice/tempo.php/";
+	this.baseurl = "http://localhost/proj/webservice/tempo.php/";
 	
 	/**
-	 * Retorna as notícias do ano corrente
+	 * Retorna as notï¿½cias do ano corrente
 	 */
 	this.getUltimasNoticias = function (cb) {
-		/* Obtenção da data atual */ 
+		/* Obtenï¿½ï¿½o da data atual */ 
 	    var hoje = new Date();
 	    var ano = hoje.getFullYear();
 	    var mes = hoje.getMonth();
@@ -39,11 +39,11 @@ function Tempo() {
 					  var tempos = new Array();
 					  for(var i=0; i<dataDOMArray.length; i++) {
 						var t = new Tempo();
-						/* Recuperação da data interpretada do documento XML retornado */
+						/* Recuperaï¿½ï¿½o da data interpretada do documento XML retornado */
 						var tempoXML = dataDOMArray.item(i).getElementsByTagName("tempo").item(0).firstChild.data;
 						t.dataInterpretada = tempoXML;
 						
-						/* Recuperação das notícias associadas à data interpretada recuperada */
+						/* Recuperaï¿½ï¿½o das notï¿½cias associadas ï¿½ data interpretada recuperada */
 						var noticiasArray = dataDOMArray.item(i).getElementsByTagName("Noticia");
 						var noticiasTempo = new Array();
 						
@@ -67,7 +67,7 @@ function Tempo() {
 				    	  }
 				    	  alert(result);
 				      }*/
-					  /* Retorno do array de referências temporais usando função callback */
+					  /* Retorno do array de referï¿½ncias temporais usando funï¿½ï¿½o callback */
 					  cb(tempos);
 				    },
 				    /* Tratamento de Falhas */
