@@ -177,8 +177,7 @@ abstract class Model{
 		
 		//Valida��o do XML usando o ficheiro XSD
 		$pathToXSD = "../webservice/Schemas/".$xsdName;
-		
-		$validate = $xmlDOM->schemaValidate($pathToXSD); 
+		@$validate = $xmlDOM->schemaValidate($pathToXSD); 
 		if($validate) {
 			return true;
 			//echo "validated<br>";
