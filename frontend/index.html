@@ -3,78 +3,147 @@
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 	<title>Projecto AW</title>
-	<link rel="stylesheet" href="ajax/AutoComplete.css" media="screen" type="text/css" />
+	<link rel="stylesheet" href="ajax/AutoComplete.css" media="screen" type="text/css">
+	<link rel="stylesheet" href="ajax/acomplete.css" media="screen" type="text/css">
 	<link rel="stylesheet" href="css/style.css" type="text/css" media="all" />
 	<!--[if lte IE 6]><link rel="stylesheet" href="css/ie6.css" type="text/css" media="all" /><![endif]-->
-	<script type="text/javascript" src="ajax/util.js"></script>
-	<script type="text/javascript" src="ajax/autocomplete.js"></script>
-	<script type="text/javascript" src="ajax/prototype.js"></script>
-	<script type="text/javascript" src="classes/Clube.js"></script>
-	<script type="text/javascript" src="classes/Local.js"></script>
-	<script type="text/javascript" src="classes/Tempo.js"></script>
-	<script type="text/javascript" src="classes/Noticia.js"></script>
-	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true"></script>
-	<script type="text/javascript">
+	<script type="text/javascript" src="ajax/util.js" charset="utf-8"></script>
+	<script language="javascript" type="text/javascript" src="ajax/acomplete.js" charset="utf-8"></script>
+	<script type="text/javascript" src="ajax/prototype.js" charset="utf-8"></script>
+	<script type="text/javascript" src="classes/Clube.js" charset="utf-8"></script>
+	<script type="text/javascript" src="classes/Local.js" charset="utf-8"></script>
+	<script type="text/javascript" src="classes/Tempo.js" charset="utf-8"></script>
+	<script type="text/javascript" src="classes/Noticia.js" charset="utf-8"></script>
+	<script type="text/javascript" src="classes/Integrante.js" charset="utf-8"></script>
+	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true" charset="utf-8"></script>
+	<script type="text/javascript" charset="utf-8">
+	
+	var myGlobalHandlers = {
+		onCreate: function(){
+			Element.show('systemWorking');
+			Element.show('fundoLoading');
+		},
+
+		onComplete: function() {
+			if(Ajax.activeRequestCount == 0){
+				Element.hide('systemWorking');
+				Element.hide('fundoLoading');
+			}
+		}
+	};
+
+	Ajax.Responders.register(myGlobalHandlers);
 	
 	var map;
 	var nome_localArray = new Array();
+	var nome_clubeArray = new Array();
+	var nome_integranteArray = new Array();
+	var nomes_pesquisa = new Array();
 	var locais = new Array();
 	var ultimasNoticias = new Array();
 	var noticias = new Array();
+	var clubes = new Array();
+	var integrantes = new Array();
 	
-  	function initialize() {
-    		// LatLong de Liboa
-    		var latlng = new google.maps.LatLng(38.71284,-9.135475);
-    		// Opção iniciais para o mapa
-    		var myOptions = {
-      							zoom: 6,
-      							center: latlng,
-      							mapTypeId: google.maps.MapTypeId.ROADMAP
-    						};
-    		// Criação do Mapa
-    		map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+	var infoWindow = new google.maps.InfoWindow;
+	
+	var markersArray = new Array();
+	
+	var imgClubes = {
+		'1' : 'css/images/benfica.png',
+		'2' : 'css/images/braga.gif',
+		'3' : 'css/images/porto.jpg',
+		'4' : 'css/images/Sporting.png',
+		'5' : 'css/images/cdn.gif',
+	};
+	
+	function initialize() {
+    	// LatLong de Liboa
+    	var latlng = new google.maps.LatLng(39.71284,-9.635475);
+    	// Opção iniciais para o mapa
+    	var myOptions = {
+      		zoom: 6,
+      		center: latlng,
+      		mapTypeId: google.maps.MapTypeId.ROADMAP
+    	};
+    	// Criação do Mapa
+    	map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+    	
+    	// Evento para alteração de Markers a serem mostrados
+    	/*google.maps.event.addListener(map, 'dragend', function() {
+        	var sw = map.getBounds().getSouthWest();
+        	var ne =  map.getBounds().getNorthEast();
+        	var b = map.getBounds().toString();
+        	//alert(b);
+      	});
+      		
+		google.maps.event.addListener(map, 'zoom_changed', function() {
+        	var sw = map.getBounds().getSouthWest();
+        	var ne =  map.getBounds().getNorthEast();
+        	var b = map.getBounds().toString();
+        	//alert(b);
+      	});*/
+		
+		//Criação do Array com nome dos locais para AutoComplete	
+    	var l = new Local();
+    	l.getAllLocais(0, 0, function (result){
+    		locais = result;
+    	});
+  		
+  		//Criação do Array com nome dos clubes para AutoComplete
+  		createNomeLocalArray(locais);
+    	var c = new Clube();
+    	c.getAllClubes(0, 0, function (result){
+    		clubes = result;
+    	});
+    	createNomeClubeArray(clubes);
     		
-    		getAllLocais();
-    		//getAllClubes();
-    		//getAllIntegrantes();
-    		var tempo = new Tempo();
-    		tempo.getUltimasNoticias(function (result){
-  				ultimasNoticias = result;
-  			});
-    		setInitialMarks();
-    		//teste = new Array("A", "B", "C");
-    		//AutoComplete_Create("filtro", teste);
+    	//Criação do Array com nome dos integrantes para AutoComplete
+    	var i = new Integrante();
+    	i.getAllIntegrantes(0, 0, function (result){
+    		integrantes = result;
+    	});
+    	createNomeIntegranteArray(integrantes);
+  			
+  		//Set do Autocomplete do input de pesquisa
+  		nomes_pesquisa = nome_localArray.concat(nome_clubeArray, nome_integranteArray);
+  		autoComplete.Set("mygroup1", nomes_pesquisa);
+    	
+    	//Recuperação das últimas notícias (ano corrente)	 		
+    	var tempo = new Tempo();
+    	var myUltimasNoticias = new Array(); 
+    	tempo.getUltimasNoticias(function (result){
+  			myUltimasNoticias = result;
+  		});
+    	ultimasNoticias = myUltimasNoticias;
+    	//Inclusão dos locais das últimas notícias no mapa inicial
+    	setInitialMarks();
+    	
+    	// Inclusão das últimas notícias na barra lateral da página
+    	//writeLastNews();
+    	
+    		    		
+  		}
+  		
+  		function createNomeLocalArray(locaisObjArray) {
+  			for(var i=0; i<locaisObjArray.length; i++) {
+  				nome_localArray[i] = locaisObjArray[i].nome_local;
+  			}
+  		}
+  		
+  		function createNomeClubeArray(clubesObjArray) {
+  			for(var i=0; i<clubesObjArray.length; i++) {
+  				nome_clubeArray[i] = clubesObjArray[i].nome_clube;
+  			}
+  		}
+  		
+  		function createNomeIntegranteArray(integrantesObjArray) {
+  			for(var i=0; i<integrantesObjArray.length; i++) {
+  				nome_integranteArray[i] = integrantesObjArray[i].nome_integrante;
+  			}
   		}
  
-  		function changeInputSearch(optionIndex) {
-  			if(optionIndex == 3) {
-  				document.getElementById("filtro").type = "hidden";
-  				document.getElementById("filtroDataAno").type = "text";
-  				document.getElementById("filtroDataMes").type = "text";
-  				document.getElementById("filtroDataDia").type = "text";
-  			}
-  			else {
-  				document.getElementById("filtro").type = "text";
-  				document.getElementById("filtroDataAno").type = "hidden";
-  				document.getElementById("filtroDataMes").type = "hidden";
-  				document.getElementById("filtroDataDia").type = "hidden";
-  			}
-  		}
-  		function changeAutoComplete() {
-  			//alert(document.getElementById("pesquisaPor").value);
-  		}
-  		
-  		function getAllLocais() {
-  			// Requisição de todos os locais para o WebService
-  			var local = new Local();
-  			local.getAllLocais(function (result){
-  				locais = result;
-  			});
-  			
-  			//Criação do Array com nome dos locais para AutoComplete
-  			createNomeLocalArray(locais);
-  		}
-  		
+  		  		
   		function showAllClubes() {
   			$("showResult").src="./results/clubes.html";
   			$("showResult").style.display = "inline";
@@ -96,39 +165,371 @@
   		function setInitialMarks() {
   			//Criação das marcas no mapa
   			var marker;
-	  		var latlong;
-	  		var coordUltimasNoticias = new Array();
 	  		
 	  		/* Recuperação das coordenadas dos locais das últimas notícias */
+	  		alert(ultimasNoticias.length);
 	  		for(i=0; i<ultimasNoticias.length; i++) {
-				var result = ultimasNoticias[i].dataInterpretada;
+				//var result = ultimasNoticias[i].dataInterpretada;
 				for(var m=0; m<ultimasNoticias[i].noticias.length; m++) {
 				   	var idNoticia = ultimasNoticias[i].noticias[m].idnoticia;
-				   	alert(idNoticia);
+				   	var not = new Noticia();
+					not.getNoticiaById(idNoticia, function(result) {
+						var newAux = new Noticia();
+						newAux = result;
+						
+						/* Cria um objeto Marker para cada local da notícia */
+						for(var k=0; k<newAux.locaisNoticias.length;k++) {
+							coord = newAux.locaisNoticias[k].coordenadas.split(";");
+							local = new google.maps.LatLng(parseFloat(coord[0]), parseFloat(coord[1]));
+							nome_local = newAux.locaisNoticias[k].nome_local;
+							idlocal = newAux.locaisNoticias[k].idlocal
+							/* Criação do objeto Marker */
+							marker = new google.maps.Marker({
+					  			position: local,
+					  			title: nome_local,
+					  			map: map
+					  		});
+					  		
+					  		/* Inclusão do marker no array global */
+					  		markersArray.push(marker);
+					  		
+					  		/* Montagem do Texto em Balão com todas as notícias de um local */
+					  		var local = new Local();
+					  		var noticiasLocal = new Array();
+					  		local.getNoticiasLocal(idlocal, function (result){
+    							noticiasLocal = result;
+    						});
+    						
+    						var contentString = createContentMarker(nome_local, noticiasLocal); 
+					  		
+					  		google.maps.event.addListener(marker, 'click', function(content) {
+					  			return function() {
+					  				infoWindow.setContent(content);
+					  				infoWindow.open(map,this);
+					  			}
+					  		}(contentString));
+						}			   			
+					});
 				}
-				//alert(result);
 			}
-	  			
-	  			//coord = locais[i].coordenadas.split(";");
-	  			/*local = new google.maps.LatLng(parseFloat(coord[0]), parseFloat(coord[1]));
-	  			nome_local = locais[i].nome_local;
-	  			marker = new google.maps.Marker({
-			  			position: local,
-			  			title: nome_local
-			  		});
-			  		marker.setMap(map);
-			  		*/
   		}
   		
-  		function createNomeLocalArray(locaisObjArray) {
-  			for(var i=0; i<locaisObjArray.length; i++) {
-  				nome_localArray[i] = locaisObjArray[i].nome_local;
+  		function createContentMarker(nome_local, noticias) {
+  			var content = "<div id='infoMarker'>";
+  			content += "<h2><center>Notícias em " + nome_local + "</center></h2>";
+  			content +=  "<table id='infoMarker-t'><thread>";
+  			content += "<tr><th>Data de Publicação</th>";
+  			content += "<th>Assunto</th></tr></thread>";
+  			content += "<tbody>";
+  			for(var i=0; i<noticias.length; i++){
+  				var dataAux = noticias[i].data_pub.substring(0,11);
+  				content += "<tr><td>" + dataAux +  "</td>";
+  				content += "<td><a href='javascript: void 0' onclick=showQuadroNoticia("+noticias[i].idnoticia+")>" + noticias[i].assunto +  "</a></td></tr>";
+  			}
+  			content +=  "</tbody></table>";
+  			content +=  "</div>";
+  			return content;
+  		}
+  		
+  		function showQuadroNoticia(idN) {
+  			
+  			$("quadroNoticia").style.display="block";
+  			
+  			/* Recupera notícia escolhida */
+  			var noticia = new Noticia();
+  			var n = new Noticia();
+  			noticia.getNoticiaById(idN, function(result) {
+  				n = result;
+  			});
+  			
+  			/* Mostra dados básicos da notícia */
+  			$("assuntoNoticiaEscolhida").innerHTML = n.assunto;
+  			$("descricaoNoticiaEscolhida").innerHTML = n.descricao;
+  			$("qualificacaoNoticiaEscolhida").innerHTML = "(" + n.qualificacao + ")&nbsp;&nbsp;&nbsp;"
+  			$("linkNoticiaEscolhida").href = n.url;
+  			
+  			/* Mostra clubes associados à notícia */
+  			var imageClubes = "";
+  			if(n.clubesNoticias.length == 0) {
+  				imageClubes += "Não existem clubes associados a esta notícia.";
+  			}
+  			else {
+	  			for(var i=0; i<n.clubesNoticias.length; i++) {
+	  				imageClubes += "<img src='" + imgClubes[n.clubesNoticias[i].idclube] + "' alt='" + n.clubesNoticias[i].nome_oficial + "'>&nbsp;&nbsp;&nbsp;" ;
+	  			}
+	  		}
+  			$("clubesNoticiaEscolhida").innerHTML = imageClubes;
+  			
+  			/* Mostra integrantes associados à notícia */
+  			//@TODO
+  			
+  			/* Mostra Referências Espaciais da notícia escolhida */
+  			var locaisNoticia = "<ul>";
+  			if(n.locaisNoticias.length == 0) {
+  				locaisNoticia += "<li>Não existem locais associados a esta notícia.</li>";
+			}
+			else {
+  				for(var i=0; i<n.locaisNoticias.length; i++) {
+  					locaisNoticia += "<li>" + n.locaisNoticias[i].nome_local + "</li>" ;
+  				}
+			}
+			locaisNoticia += "</ul>"; 
+  			$("locaisNoticiaEscolhida").innerHTML = locaisNoticia;
+  			
+  			/* Mostra Referências Temporais da notícia escolhida */
+  			var datasNoticia = "<ul>";
+  			if(n.datasNoticias.length == 0) {
+  				datasNoticia += "<li>Não existem datas associadas a esta notícia.</li>";
+  			}
+  			else {
+	  			for(var i=0; i<n.datasNoticias.length; i++) {
+	  				datasNoticia += "<li>" + n.datasNoticias[i] + "</li>" ;
+	  			}
+	 		} 			
+  			datasNoticia += "</ul>"; 
+  			$("datasNoticiaEscolhida").innerHTML = datasNoticia;
+  		}
+  		
+  		function closeQuadroNoticia(){
+  			$("assuntoNoticiaEscolhida").innerHTML = "";
+  			$("descricaoNoticiaEscolhida").innerHTML = "";
+  			$("qualificacaoNoticiaEscolhida").innerHTML = ""
+  			$("linkNoticiaEscolhida").href = "#";
+  			$("clubesNoticiaEscolhida").innerHTML = "";
+  			$("locaisNoticiaEscolhida").innerHTML = "";
+  			$("datasNoticiaEscolhida").innerHTML = "";
+  			$("quadroNoticia").style.display="none";
+  			
+  		}
+  		
+  		function writeLastNews() {
+  			var lista = document.getElementById("newsSpot");
+  			//alert(ultimasNoticias.length);
+  			
+  			var qtdeNews = ultimasNoticias.length < 5 ? ultimasNoticias.length : 5; 
+  			for(var i=0; i<qtdeNews; i++) { 			
+  				var n1 = document.createElement("li");
+	  			var small = document.createElement("small");
+	  			small.setAttribute("class", "date");
+	  			small.innerHTML = ultimasNoticias[i].dataInterpretada;
+	  			n1.appendChild(small);
+	  			lista.appendChild(n1);
+	  			for(var m=0; m<ultimasNoticias[i].noticias.length; m++) {
+		  			var desc = document.createElement("p");
+		  			desc.innerHTML =  ultimasNoticias[i].noticias[m].assunto;
+		  			var linha = document.createElement("br");
+		  			lista.appendChild(desc);
+		  			lista.appendChild(linha);
+		  		}
+			}  			
+  		}
+  		
+  		function clearOverlays() {
+  			if (markersArray) {
+    			for (var i = 0; i < markersArray.length; i++ ) {
+      				markersArray[i].setMap(null);
+    			}
+  			}
+		}
+  		
+  		
+  		function setMarkers(localArray) {
+  			for(var i=0; i<localArray.length; i++) {
+		  				coord = localArray[i].coordenadas.split(";");
+						local = new google.maps.LatLng(parseFloat(coord[0]), parseFloat(coord[1]));
+						nome_local = localArray[i].nome_local;
+						idlocal = localArray[i].idlocal
+						/* Criação do objeto Marker */
+						marker = new google.maps.Marker({
+									position: local,
+						  			title: nome_local,
+						  			map: map
+						  		});
+						  		
+						/* Inclusão do marker no array global */
+						markersArray.push(marker);
+						 		
+						/* Montagem do Texto em Balão com todas as notícias de um local */
+						var local2 = new Local();
+						var noticiasLocal = new Array();
+						local2.getNoticiasLocal(idlocal, function (result){
+	    						noticiasLocal = result;
+	    				});
+	    				
+	    				var contentString = createContentMarker(nome_local, noticiasLocal); 
+						 		
+						google.maps.event.addListener(marker, 'click', function(content) {
+							return function() {
+								infoWindow.setContent(content);
+								infoWindow.open(map,this);
+							}
+						}(contentString));
+		  			}
+  		}
+  		
+  		function searchNews() {
+  			var param = $("parametroPesquisa").value;
+  			
+  			if(param == "") {
+  				alert("Preenchimento do campo de pesquisa obrigatório");
+  				return false;
+  			}
+  			else {
+  				clearOverlays();
+  			
+  				/* Buscar locais usando parametro de pesquisa */
+	  			var local = new Local();
+	  			var localArray = new Array();
+	  			local.getLocalByNome(param, function (result){
+	    			localArray = result;
+	    		});
+	    		
+	    		
+	    		/* Acrescentar Markers dos locais no mapa */ 
+	    		if(localArray != null) {
+		  			//alert("Locais: " + localArray.length);
+		  			setMarkers(localArray);
+				} 			
+	  			/* Buscar integrantes usando parametro de pesquisa */
+	  			var integrante = new Integrante();
+	  			var integranteArray = new Array();
+	  			integrante.getIntegranteByNome(param, function (result){
+	    			integranteArray = result;
+	    		});
+	  			
+	  			if(integranteArray != null) {
+	  				//alert("Integrantes: " + integranteArray.length);
+	  				// Buscar noticias com integrantes encontrados 
+	  				var noticiaIntegranteArray = new Array();
+	  				for(var i=0; i<integranteArray.length; i++) {
+	  					integrante.getNoticiasByIdIntegrante(integranteArray[i].idintegrante, function (result){
+	    					noticiaIntegranteArray = result;
+	    					if(noticiaIntegranteArray != null) {
+	    						// Buscar locais das notícias com integrantes encontrados 
+	    						var n = new Noticia();
+	    						var notAux = new Noticia();
+	    						for(var j=0; j<noticiaIntegranteArray.length; j++){
+	    							n.getNoticiaById(noticiaIntegranteArray[j].idnoticia, function (result){
+	    								notAux = result;
+	    							});
+	    							// Acrescentar Markers dos locais das notícias dos integrantes no mapa
+	    							setMarkers(notAux.locaisNoticias);	
+	    						}
+	    					}
+	    						
+	    				});
+					}
+				}	  			
+	  			
+	  			/* Buscar clubes usando parametro de pesquisa */
+	  			var clube = new Clube();
+	  			var clubeArray = new Array();
+	  			clube.getClubeByNome(param, function(result){
+	  				clubeArray = result;
+	  			});
+	  			
+	
+	  			if(clubeArray != null) {
+	  				//alert("Clubes: " + clubeArray.length);
+	  				/* Buscar noticias com clubes encontrados */
+	  				var noticiaClubeArray = new Array();
+	  				for(var i=0; i<clubeArray.length; i++) {
+	  					clube.getNoticiasByIdClube(clubeArray[i].idclube, function (result){
+	    					noticiaClubeArray = result;
+	    					if(noticiaClubeArray != null) {
+	    						/* Buscar locais das notícias com clubes encontrados */
+	    						var n = new Noticia();
+	    						var notAux = new Noticia();
+	    						for(var j=0; j<noticiaClubeArray.length; j++){
+	    							n.getNoticiaById(noticiaClubeArray[j].idnoticia, function (result){
+	    								notAux = result;
+	    							});
+	    							/* Acrescentar Markers dos locais das notícias dos clubes no mapa */
+	    							setMarkers(notAux.locaisNoticias);	
+	    						}
+	    					}
+	    						
+	    				});
+					}
+				}
+  			}
+  		}
+  		
+  		function showHideDiv(div){
+  			//var divComentario = $('comentario');
+  			if(div.style.display == 'none') {
+  				div.style.display = 'block';
+  			}
+  			else {
+  				div.style.display = 'none';
   			}
   		}
   			
 	</script>
 </head>
 <body onload="initialize()">
+
+<div id='systemWorking'><img src='css/images/ajax-loader3.gif' align='middle'></div>
+<div id='fundoLoading'></div>
+<div id="quadroNoticia" style="display:none;">
+<p align="right"><br /><a href="javascript: void(0)" onclick="closeQuadroNoticia()"><img src="css/images/close.png" alt="Close" border=0 /></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+<div id="clubesQuadroNoticia">
+	<p align="center">Clubes</p> <hr />
+	<p align="center"><img src="css/images/benfica.png" alt="Benfica" align="middle"/><br />Benfica </p><br />
+	<p align="center"><img src="css/images/braga.gif" alt="Braga" /><br />Braga </p><br />
+	<p align="center"><img src="css/images/porto.jpg" alt="Porto" /><br />Porto </p><br />
+	<p align="center"><img src="css/images/Sporting.png" alt="Sporting" /><br />Sporting </p><br />
+	<p align="center"><img src="css/images/cdn.gif" alt="Nacional" /><br />Nacional </p><br />
+	
+</div>
+<div id="noticiaQuadroNoticia">
+	<p align="left" class="assunto" id="assuntoNoticiaEscolhida"></p>
+		<hr width=75% /><hr width=75% />
+		<p class="descricao" id="descricaoNoticiaEscolhida"></p>
+		<br />
+		<p align='right'><a href="#" id="linkNoticiaEscolhida" target="_blank">Leia mais...</a>&nbsp;&nbsp;&nbsp;&nbsp;</p>
+		<p align="left"><a href="javascript:void(0)"><img src="css/images/button-like.png" alt="Curtir" align="middle" style="margin-left:5px" /></a><font id="qualificacaoNoticiaEscolhida"></font>
+						<a href="javascript:void(0)" onclick="showHideDiv($('todosComentarios'))"><img src="css/images/comment-icon.jpg" alt="Comentários" align="middle" /></a>(5)&nbsp;&nbsp;&nbsp;&nbsp;
+						 <a href="javascript: void(0)" onclick="showHideDiv($('comentario'))">Adicionar Comentário</a></p>
+		
+		<br />
+		<div id="todosComentarios" style="display:none;">
+		Gustavo Brandão, em 12/05/2011: <p class="textoComentarios">Uma das novas canções de Teenage Dream: The Complete Confection deverá ser contemplada</p><br /><hr width="50%" /><br />
+		Gustavo Brandão, em 12/05/2011: <p class="textoComentarios">Uma das novas canções de Teenage Dream: The Complete Confection deverá ser contemplada</p><br /><hr width="50%" /><br />
+		Gustavo Brandão, em 12/05/2011: <p class="textoComentarios">Uma das novas canções de Teenage Dream: The Complete Confection deverá ser contemplada</p><br /><hr width="50%" /><br />
+		Gustavo Brandão, em 12/05/2011: <p class="textoComentarios">Uma das novas canções de Teenage Dream: The Complete Confection deverá ser contemplada</p><br /><hr width="50%" /><br />
+		</div>
+		<div id="comentario" style="display:none;"><textarea rows="3" cols="30" id="comentarioTexto" style="margin-left:12px;" class="assunto"></textarea>
+							 <a href="#" class="mybutton">Enviar</a></div>
+		<p align="left" class="assunto">&nbsp;&nbsp;&nbsp;&nbsp;Clubes citados na notícia</p>
+		<hr width=75% />
+		<p id="clubesNoticiaEscolhida"></p>
+		<br />
+		<p align="left" class="assunto">&nbsp;&nbsp;&nbsp;&nbsp;Pessoas citadas na notícia</p>
+		<hr width=75% />
+		<p>
+			<img src="css/images/j1.jpg" alt="Benfica" width="48" height="48" />&nbsp;&nbsp;&nbsp;
+			<img src="css/images/j2.jpg" alt="Braga" width="48" height="48"/>&nbsp;&nbsp;&nbsp;
+		</p>
+		<p align="left" class="assunto">&nbsp;&nbsp;&nbsp;&nbsp;Locais citados na notícia</p>
+		<hr width=75% />
+		<p id="locaisNoticiaEscolhida"></p>
+		<br />
+		<p align="left" class="assunto">&nbsp;&nbsp;&nbsp;&nbsp;Datas citados na notícia</p>
+		<hr width=75% />
+		<p id="datasNoticiaEscolhida"></p>
+		<br />
+		
+		
+</div>
+<div id="pessoasQuadroNoticia">
+	<p align="center">Pessoas</p> <hr />
+	<p align="center"><img src="css/images/j1.jpg" alt="Benfica" width="48" height="48" /><br />João</p><br />
+	<p align="center"><img src="css/images/j2.jpg" alt="Braga" width="48" height="48" /><br />Pedro</p><br />
+	<p align="center"><img src="css/images/j3.jpg" alt="Porto" width="48" height="48" /><br />Davi</p><br />
+	<p align="center"><img src="css/images/j4.jpg" alt="Porto" width="48" height="48" /><br />Tiago</p><br />
+</div>
+</div>
 	<!-- Header -->
 	<div id="header">
 		<div class="shell">
@@ -139,32 +540,22 @@
 	</div>
 	<!-- End Header -->
 	
-	<form name="pesquisa"> 
 	<div id="navigation">
+		<form name="pesquisa">
 		<center>
 		<div class="shell">
 			<div class="cl">&nbsp;</div>
 			<ul>
 			    <li><a href="#">Pesquisa </a></li>
-			    <!-- <li><br /><select id="pesquisaPor" onchange="changeInputSearch(this.selectedIndex)">
-			    			<option value="clubes">Clubes</option>
-			    			<option value="pessoas">Pessoas</option>
-			    			<option value="local">Local</option>
-			    			<option value="data">Data</option>
-			    		</select></li> -->
-			    <li><br /><input type="text" id="filtro" size="50" />
-			    		<!-- <input type="hidden" id="filtroDataAno" size="13" value="Ano" />&nbsp;&nbsp;&nbsp;
-			    		<input type="hidden" id="filtroDataMes" size="13" value="Mes" />&nbsp;&nbsp;&nbsp;
-			    		<input type="hidden" id="filtroDataDia" size="13" value="Dia" /> -->
-			    </li>
-			    <li><a href="#" onclick=searchParameter(1)><img src="css/images/search.png" border="0" alt="Search" /></a></li>
+			    <li><br /><input type="text" size="50" id="parametroPesquisa" autoComplete="mygroup1" /></li>
+			    <li><a href="#" onclick='searchNews()'><img src="css/images/search.png" border="0" alt="Search" /></a></li>
 			    <li><a href="#">Administração</a></li>
 			</ul>
 			<div class="cl">&nbsp;</div>
 		</div>
 		</center>
+		</form>
 	</div>
-	</form>
 	<!-- Heading -->
 	<div id="heading">
 		<div class="shell">
@@ -264,31 +655,12 @@
 			<div class="cl">&nbsp;</div>	
 			<div id="sidebar">
 				<h2>news spot</h2>
-				<ul>
-				    <li>
+				<ul id="newsSpot">
+				    
+				    <!-- <li>
 				    	<small class="date">12.05.09</small>
 				    	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-				    </li>
-				    <li>
-				    	<small class="date">12.05.09</small>
-				    	<p>Donec venenatis varius urna vitae congue.</p>
-				    </li>
-				    <li>
-				    	<small class="date">12.05.09</small>
-				    	<p>Ullam vel neque ut lectus cursus dapibus.</p>
-				    </li>
-				    <li>
-				    	<small class="date">12.05.09</small>
-				    	<p>Praesent pellentesque arcu convallis ante dignissim quis ultrices felis iaculis.</p>
-				    </li>
-				    <li>
-				    	<small class="date">12.05.09</small>
-				    	<p>Ut eget lorem elit. Donec lorem eros, congue vel mollis non, tincidunt a nisl.</p>
-				    </li>
-				    <li>
-				    	<small class="date">12.05.09</small>
-				    	<p>Curabitur consectetur tellus a diam tincidunt pellentesque. </p>
-				    </li>
+				    </li> -->
 				</ul>
 				<a href="#" class="archives">News Archives</a>
 			</div>
@@ -302,8 +674,7 @@
 						<a href="#" class="button">Read more</a>
 					 </p>
 				</div>-->
-				<div id="showResult" style="display:none"><iframe height="350" width="700" frameborder="1" src="./results/clubes.html" id="iframeResult"></iframe></div>
-				<p>&nbsp;</p>
+				
 				<!-- <div class="grey-box">
 					<h3><a href="#">Curabitur elementum, odio tincidunt </a></h3>
 					<a href="#"><img src="css/images/main-2.jpg" alt="" /></a>
@@ -321,7 +692,7 @@
 					 </p>
 				</div> -->
 				<div class="cl">&nbsp;</div>
-				<div class="video-box">
+				 <div class="video-box">
 					<div class="cl">&nbsp;</div>
 					<h2 class="left">video spot</h2>
 					<a href="#" class="button">All videos</a>
@@ -355,7 +726,7 @@
 	<!-- End Main -->
 	
 	<!-- Footer -->
-	<div id="footer">
+	<!-- <div id="footer">
 		<div class="shell">
 			<div class="cl">&nbsp;</div>
 			<a href="#" class="left">TERMS OF USE</a>
@@ -363,7 +734,7 @@
 			<p class="right">&copy; Sitename.com. Design by <a href="http://chocotemplates.com">ChocoTemplates.com</a> | downloaded from <a href="http://www.mytemplatez.com">Free Templates</a></p>
 			<div class="cl">&nbsp;</div>
 		</div>
-	</div>
+	</div> -->
 	<!-- End Footer -->
 </body>
 </html>
