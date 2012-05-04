@@ -1,22 +1,40 @@
 /**
- * Classe que representa uma Notï¿½cia
+ * Classe que representa uma Notícia
  */
 function Noticia() {
 	
-	/* Identificador unico da notï¿½cia */
+	/* Identificador unico da notícia */
 	this.idnoticia = 0;
 	
-	/* Data de publicaï¿½ï¿½o da notï¿½cia */
+	/* Data de publicação da notícia */
 	this.data_pub = "";
 	
-	/* Assunto da notï¿½cia */
+	/* Assunto da notícia */
 	this.assunto = "";
 	
-	/* Descriï¿½ï¿½o da notï¿½cia */
+	/* Descrição da notícia */
 	this.descricao = "";
 	
-	/* URL para acesso ao recurso notï¿½cia do Web Service */
-	this.baseurl = "http://localhost/proj/webservice/noticias.php/";
+	/* URL da notícia */
+	this.url = "";
+	
+	/* Qualificação da Notícia */
+	this.qualificacao = 0;
+	
+	/* Array com locais das referências espaciais da notícia */
+	this.locaisNoticias = new Array();
+	
+	/* Array com datas das referências espaciais da notícia */
+	this.datasNoticias = new Array();
+	
+	/* Array com clubes presentes na notícia */
+	this.clubesNoticias = new Array();
+	
+	/* Array com integrantes presentes na notícia */
+	this.integrantesNoticias = new Array();
+	
+	/* URL para acesso ao recurso notícia do Web Service */
+	this.baseurl = "http://localhost/AW3/webservice/noticias.php/";
 	
 	/**
 	 * Retorna um conjunto de Noticias
@@ -65,8 +83,8 @@ function Noticia() {
 	};
 	
 	/**
-	 * Recupera uma noticia especifica de acordo com o id passado como parï¿½metro.
-	 * Necessita de funï¿½ï¿½o callback como parametro para devolver resultado
+	 * Recupera uma noticia especifica de acordo com o id passado como parâmetro.
+	 * Necessita de função callback como parametro para devolver resultado
 	 */
 	this.getNoticiaById = function (id, cb)
 	{
@@ -87,7 +105,7 @@ function Noticia() {
 				  var descricaoDOMArray = xmlRoot.getElementsByTagName("descricao");
 				  var urlDOMArray = xmlRoot.getElementsByTagName("url");
 				  
-				  /* Criaï¿½ï¿½o do objecto usando XML retornado */
+				  /* Criação do objecto usando XML retornado */
 				  var n = new Noticia();
 				  n.idnoticia = idnoticiaDOMArray.item(0).firstChild.data;
 				  n.data_pub = data_pubDOMArray.item(0).firstChild.data;
@@ -95,14 +113,68 @@ function Noticia() {
 				  n.descricao = descricaoDOMArray.item(0).firstChild.data;
 				  n.url = urlDOMArray.item(0).firstChild.data;
 				  
-				  //DEBUG
-			      //alert("Success! \n\n" + n.idnoticia);
-				  
-				  /* Retorno do objecto usando funï¿½ï¿½o callback passada como parametro */
+				  /* Array de Locais das referencias espaciais da notícia */
+				  var localDOMArray = xmlRoot.getElementsByTagName("Local");
+				  if(localDOMArray != null) {
+					  var myLocaisNoticias = new Array();
+					  for(var j=0; j<localDOMArray.length;j++) {
+							var l = new Local();
+							l.idlocal = localDOMArray[j].getElementsByTagName("idlocal").item(0).firstChild.data;
+							l.nome_local = localDOMArray[j].getElementsByTagName("nome_local").item(0).firstChild.data;
+							l.coordenadas = localDOMArray[j].getElementsByTagName("coordenadas").item(0).firstChild.data;
+							myLocaisNoticias[j] = l;
+					  }
+					  n.locaisNoticias = myLocaisNoticias;
+				  }
+				  //alert(n.locaisNoticias.length);
+				  /* Array de Datas das referências temporais da notícia */
+				  var dataDOMArray = xmlRoot.getElementsByTagName("data");
+				  if(dataDOMArray != null) {
+					  var myDatasNoticias = new Array();
+					  for(var j=0; j<dataDOMArray.length;j++) {
+							var d = dataDOMArray[j].firstChild.data;
+							myDatasNoticias[j] = d;
+					  }
+					  n.datasNoticias = myDatasNoticias;
+				  }
+				  //alert(n.datasNoticias.length);
+				  /* Array de Clubes das da notícia */
+				  var clubeDOMArray = xmlRoot.getElementsByTagName("Clube");
+				  var myClubesNoticias = new Array();
+				  if(clubeDOMArray != null) {
+					 
+					  for(var j=0; j<clubeDOMArray.length;j++) {
+							var c = new Clube();
+							c.idclube = clubeDOMArray[j].getElementsByTagName("idclube").item(0).firstChild.data;
+							c.nome_clube = clubeDOMArray[j].getElementsByTagName("nome_clube").item(0).firstChild.data;
+							c.nome_oficial = clubeDOMArray[j].getElementsByTagName("nome_oficial").item(0).firstChild.data;
+							n.qualificacao += Number(clubeDOMArray[j].getElementsByTagName("qualificacao").item(0).firstChild.data);
+							myClubesNoticias[j] = c;
+							
+					  }
+				  }
+				  n.clubesNoticias = myClubesNoticias;
+				  //alert(n.clubesNoticias.length);
+				  /* Array de Integrantes das da notícia */
+				  var integranteDOMArray = xmlRoot.getElementsByTagName("Integrante");
+				  if(integranteDOMArray != null) {
+					  var myIntegrantesNoticias = new Array();
+					  for(var j=0; j<integranteDOMArray.length;j++) {
+							var int = new Integrante();
+							int.idintegrante = integranteDOMArray[j].getElementsByTagName("idintegrante").item(0).firstChild.data;
+							int.nome_integrante = integranteDOMArray[j].getElementsByTagName("nome_integrante").item(0).firstChild.data;
+							n.qualificacao += Number(integranteDOMArray[j].getElementsByTagName("qualificacao").item(0).firstChild.data);
+							myIntegrantesNoticias[j] = int;
+							
+					  }
+					  n.integrantesNoticias = myIntegrantesNoticias;
+				  }
+				  //alert(n.integrantesNoticias.length);
+				  /* Retorno do objecto usando função callback passada como parametro */
 				  cb(n);
 			},
 			/* Tratamento de Falhas */
-		    onFailure: function(){ alert("Erro ao recuperar 'Noticia' do webservice!"); }
+		    onFailure: function(){ cb(null); }
 		});
 	};
 }
