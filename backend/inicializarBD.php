@@ -64,11 +64,11 @@ $idLigaOran = $comp->add();
 echo "Ok!<hr>";
 
 //----------------------------- LOCAL ---------------------------------------------------------//
-echo "Inicializa��o da Tabela <b>local</b>... ";
+/*echo "Inicializa��o da Tabela <b>local</b>... ";
 $l = new Local();
 include "GeoNetPtClient.php";
 echo "Ok!<hr>";
-
+*/
 //----------------------------- CLUBE ----------------------------------------------------------//
 echo "Inicializa��o da Tabela <b>clube</b>... ";
 $c = new Clube();

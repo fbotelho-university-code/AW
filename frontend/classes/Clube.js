@@ -53,8 +53,91 @@ function Clube() {
 		});
 	};
 	
-	this.getClubeById = function (id, cb)
+	/**
+	 * Recupera um clube especifico de acordo com o nome passado como parâmetro.
+	 * Necessita de função callback como parametro para devolver resultado
+	 */
+	this.getClubeByNome = function (nome, cb)
 	{
-		
+		var url = this.baseurl + nome;
+		new Ajax.Request(url,
+		{
+			method: 'get',
+			asynchronous: false,
+			onSuccess: function(transport){
+				/* Recebimento da resposta */
+			      var response = transport.responseXML;
+			      var xmlRoot = response.documentElement;
+			      
+			      /* Recupera arrays com tags do XML retornado */
+			      var idclubeDOMArray = xmlRoot.getElementsByTagName("idclube");
+				  var idlocalDOMArray = xmlRoot.getElementsByTagName("idlocal");
+				  var idcompeticaoDOMArray = xmlRoot.getElementsByTagName("idcompeticao");
+				  var nome_clubeDOMArray = xmlRoot.getElementsByTagName("nome_clube");
+				  var nome_oficialDOMArray = xmlRoot.getElementsByTagName("nome_oficial");
+				  
+				  /* Armazena dados retornados em Arrays */ 
+				  var clubes = new Array();
+				  
+				  for(var i=0; i<idclubeDOMArray.length; i++) {
+				  	var cl = new Clube();
+					cl.idclube = idclubeDOMArray.item(i).firstChild.data;
+					cl.idlocal = idlocalDOMArray.item(i).firstChild.data;
+					cl.idcompeticao = idcompeticaoDOMArray.item(i).firstChild.data;
+					cl.nome_clube = nome_clubeDOMArray.item(i).firstChild.data;
+					cl.nome_oficial = nome_oficialDOMArray.item(i).firstChild.data;
+				  	clubes[i] = cl;
+				  }
+				  //DEBUG
+			      //alert("Success! \n\n" + clubes.length);
+				  cb(clubes);
+			},
+			/* Tratamento de Falhas */
+		    onFailure: function(){ cb(null); }
+		});
 	};
+	
+	/**
+	 * Recupera as notícias de clube especifico de acordo com um id passado por parametro
+	 * Necessita de função callback como parametro para devolver resultado
+	 */
+	this.getNoticiasByIdClube = function (id, cb)
+	{
+		var url = this.baseurl + id + "/noticias";
+		new Ajax.Request(url,
+		{
+			method: 'get',
+			asynchronous: false,
+			onSuccess: function(transport){
+				/* Recebimento da resposta */
+			      var response = transport.responseXML;
+			      var xmlRoot = response.documentElement;
+					      
+			      /* Recupera arrays com tags do XML retornado */
+			      var idnoticiaDOMArray = xmlRoot.getElementsByTagName("idnoticia");
+				  var data_pubDOMArray = xmlRoot.getElementsByTagName("data_pub");
+				  var assuntoDOMArray = xmlRoot.getElementsByTagName("assunto");
+				  var descricaoDOMArray = xmlRoot.getElementsByTagName("descricao");
+						  
+				  /* Criação de um array para armazenar os dados retornados */ 
+				  var noticiasClube = new Array();
+				  
+				  for(var i=0; i<idnoticiaDOMArray.length; i++) {
+					  var n = new Noticia();
+					  n.idnoticia = idnoticiaDOMArray.item(i).firstChild.data;
+					  n.data_pub = data_pubDOMArray.item(i).firstChild.data;
+					  n.assunto = assuntoDOMArray.item(i).firstChild.data;
+					  n.descricao = descricaoDOMArray.item(i).firstChild.data;
+					  noticiasClube[i] = n;
+				  }	  
+				  //DEBUG
+			      //alert("Success! \n\n" + noticiasClube.length);
+						  
+				  /* Retorno do objecto usando função callback passada como parametro */
+				  cb(noticiasClube);
+			},
+			/* Tratamento de Falhas */
+		    onFailure: function(){ cb(null); }
+		});
+	}
 }
