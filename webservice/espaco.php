@@ -51,8 +51,16 @@
 	  	case 1:
 	  		processLocal($req);
 	  		break;  
+	  	case 4:
+	  		processCoordenadas($req);
+	  		break; 
+	  	default: 
+	  		RestUtils::sendResponse(); 
 	  } 
 	       
+	  function processCoordenadas($req){
+	  	
+	  }
 
 	// Process resource head (/noticias) requests. Accepts GET/POST/HEAD
 	
@@ -158,8 +166,7 @@
  * HEAD
  * DELETE
  */
- 
-	function processLocal($req){
+ 	function processLocal($req){
 		$path_info = $req->getPathInfo();
 		$id = $path_info[1];
 		
@@ -221,7 +228,7 @@
 	
 	function deleteLocal($id,$l){
 		try{
-			$l-del(); 
+			$l->del(); 
 		}catch(Exception $e){
 			RestUtils::sendResponse(500); 
 		}

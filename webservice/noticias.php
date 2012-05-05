@@ -214,7 +214,7 @@
 				deleteNewsFingir($id,$n);
 			break; 
 			default: 
-			 RestUtils::sendResponse(405, array('allow' => "PUT DELETE GET POST"));
+				RestUtils::sendResponse(405, array('allow' => "PUT DELETE GET POST"));
 			 
 		}
 	}
