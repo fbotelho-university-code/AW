@@ -17,6 +17,7 @@ while(!$rs->EOF) {
 		strcmp($table,"nr_noticia_data") != 0 &&
 		strcmp($table,"nr_noticia_integrante") != 0 &&
 		strcmp($table,"nr_noticia_local_clube") != 0 &&
+		strcmp($table,"nr_noticia_local") != 0 &&
 		strcmp($table,"testview") != 0
 		){
 		echo "Apagando tabela : " . $table . "<br/>"; 
