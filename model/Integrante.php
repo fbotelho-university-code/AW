@@ -33,7 +33,6 @@ class Integrante extends Model{
 	* Identificador da fun��o do integrante
 	* @var int
 	*/
-	var $idfuncao;
 	
 	/**
 	* Nome do integrante
@@ -118,6 +117,15 @@ class Integrante extends Model{
 		if ($this->nome_integrante) $res .= ' NOME: ' . $this->nome_integrante . ' | ' ;
 		if ($this->idintegrante) $rs .= 'ID  : ' . $this->idintegrante;
 		return $res; 
+	}
+	
+	public function setObj($arrayAssoc, $obj){
+		foreach($arrayAssoc as $key => $value){
+			$obj->$key = $value;
+		}
+		if (isset($obj->url_img)){
+			$obj->url_img =  $this->getUrl() . 'entidades.php/integrante/' . $obj->idintegrante  . '/thumbnail';
+		}
 	}
 }
 

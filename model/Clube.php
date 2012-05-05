@@ -7,7 +7,7 @@ require_once "Model.php";
  *  (Ex: Benfica, Porto, Sporting, etc.)
  */
 class Clube extends Model {
-	
+
 	/**
 	* Identificador do clube
 	* @var int
@@ -21,24 +21,6 @@ class Clube extends Model {
 	public function getKeyFields(){
 		return array ('idclube'); 
 	}
-	 
-	/**
-	 * Identificador do local do clube
-	 * @var int
-	 */
-	var $idlocal;
-	
-	/**
-	 * Identificador da competi��o que o clube participa
-	 * @var int
-	 */
-	var $idcompeticao;
-	
-	/**
-	 * Nome do clube. Usado para pesquisa nas fontes de informa��o
-	 * @var String
-	 */
-	var $nome_clube;
 	
 	/**
 	* Nome oficial do clube. Usado para relacionamento com o lexico
@@ -148,6 +130,14 @@ class Clube extends Model {
 		return $res; 
 	}
 	
+	public function setObj($arrayAssoc, $obj){
+		foreach($arrayAssoc as $key => $value){
+				$obj->$key = $value;
+			}
+		if (isset($obj->url_img)){
+			$obj->url_img =  $this->getUrl() . 'entidades.php/clube/' . $obj->idclube  . '/thumbnail'; 		
+		}
+	}
 }
 
 ?>

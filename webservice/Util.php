@@ -11,15 +11,21 @@ class Utill {
 	public static function whiteListening($text){
 		return true; 
 	}
+
+	public static function getEtag($ob){
+		return md5(var_export($ob, true));
+	}
 	
 	public static function checkEtag($req, $ob){
-		if (($n = $req->getEtag())){
-			$hash = md5(var_export($ob, true));
-			if ($hash == $req->getEtag()){
+		$n = $req->getEtag();
+		$hash = Utill::getEtag($ob);
+		if (isset($n)){
+			if (strcmp($hash,$req->getEtag()) == 0){
 				//Not modified. 
 			   RestUtils::sendResponse(304); 	
 			}
 		}
+		return $hash; 
 	}
 }
 ?>
