@@ -88,6 +88,7 @@ class RestUtils{
 		return $return_obj; 
 	}
 	
+
 	public static function sendResponseHead($etag, $status = 200){
 	   $status_header= 'HTTP/1.1 ' . $status . ' ' . RestUtils::getStatusCodeMessage($status);
 	   header($status_header);
@@ -95,8 +96,8 @@ class RestUtils{
 	   echo ''; 
 	   exit;   
 	}
+	
 	public static function sendResponse($status = 200, $vars = array(), $body ='', $content_type = 'text/html', $etag = null){
-		
 		$status_header= 'HTTP/1.1 ' . $status . ' ' . RestUtils::getStatusCodeMessage($status);
 		//set the status
 		header($status_header); 

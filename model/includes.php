@@ -6,6 +6,7 @@ require_once "DAO.php";
 require_once "Fonte.php";
 require_once "Funcao.php";
 require_once "Integrante.php";
+require_once "Integrante_imagem.php"; 
 require_once "Lexico.php";
 require_once "Local.php";
 require_once "Noticia_locais.php";

@@ -506,10 +506,9 @@
 	
 	function getNews($req, $id, $n){
 		$n = $n->getRelationArray($id, getUrl());
-
 		$hash = Utill::checkEtag($req, $n); 
-		
-		$noticia = new Noticia(); 
+		$noticia = new Noticia();
+		 
 		if ($req->getHttpAccept() == 'json'){
 			RestUtils::sendResponse(200, null, json_encode($n), $hash); 
 		}
@@ -536,8 +535,7 @@
 			RestUtils::sendResponse(406); 
 		}
 	}
-	
-	
+
     /*
      * Checks if the request is valid through whitelistening of the possible request types.
      * Deals with query variables, path info, method types, etc. 

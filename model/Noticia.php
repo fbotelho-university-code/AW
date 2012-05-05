@@ -10,7 +10,7 @@ require_once 'Encoding.php';
  *  (Google News, Sapo News, Twitter, etc.)
  */ 
 class Noticia extends Model{
-	
+
 	public static function checkAndGetDate($date){
 			//TODO - parse date from String
 			return $date; 
@@ -269,9 +269,8 @@ class Noticia extends Model{
 		}
 		return $selectedFields; 
 	}
-
+	
 	public function getObjectById($id){
-		
 		if ($this->setText()){
 			$selectedFields = array("idnoticia", "data_pub", "assunto", "descricao", "texto", "url"); 	
 		}else{

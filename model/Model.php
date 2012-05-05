@@ -141,9 +141,7 @@ abstract class Model{
 			if (isset($fields[$key]))
 				unset($fields[$key]); 
 		}
-		
 		$sql = 'update '. $table . $this->createWhereClause($fields, 'SET', ' , ');
-		
 		//Filter the primary key.
 		$sql .= $this->getPrimaryKeyWhere();
 		$this->dao->execute($sql);
@@ -364,9 +362,10 @@ abstract class Model{
 		$table = get_class($this);
 		$sql = 'select '; 
 		$sql .= $this->select($fields);
-		 
+		
+		
 		$sql .= " FROM ".$table. " WHERE id".$table." = ".$id;
-
+		
 		$rs = $this->dao->execute($sql);
 		if (!$rs->fields) return null;
 		$result = new $table; 
@@ -376,6 +375,7 @@ abstract class Model{
 		}
 		return $result; 	
 	}
+	
 	
 	/**
 	 * Cria uma clausula where bem formada a partir de um ArrayAssociativo com ANDS 
@@ -422,12 +422,20 @@ abstract class Model{
 			$this->execute($sql);   
 	}
 	
+	public function getUrl(){
+		$v = parse_url("http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+		$r = $v['scheme'] . '://' . $v['host'] . $v['path'];
+		$pos = strpos($r, 'webservice/') ;
+		$val = substr($r, 0, $pos );
+		return $val;
+	}
+	
 	/**
 	 * Transforma Array associaticvo em Objeto, de acordo com a subclasse chamadora
 	 * @param String[] $arrayAssoc
 	 * @param Object $obj - Objecto da subclasse chamadora
 	 */
-	private function setObj($arrayAssoc, $obj){
+	public function setObj($arrayAssoc, $obj){
 	 foreach($arrayAssoc as $key => $value) {
 			$obj->$key = $value;
 		}

@@ -20,8 +20,6 @@ class Utill {
 		$n = $req->getEtag();
 		$hash = Utill::getEtag($ob);
 		if (isset($n)){
-			//var_dump($hash); 
-			//var_dump($req->getEtag()); 
 			if (strcmp($hash,$req->getEtag()) == 0){
 				//Not modified. 
 			   RestUtils::sendResponse(304); 	
