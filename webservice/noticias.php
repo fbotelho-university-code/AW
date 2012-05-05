@@ -208,6 +208,7 @@
 			postComment($req,$n);
 			break; 
 			case 'HEAD':
+				getHeadNew($req, $id, $n); 
 			break; 
 			case 'DELETE':
 				deleteNewsFingir($id,$n);
@@ -216,6 +217,10 @@
 			 RestUtils::sendResponse(405, array('allow' => "PUT DELETE GET POST"));
 			 
 		}
+	}
+	
+	function getHeadNew($req, $id, $n){
+			RestUtils::sendResponseHead(); 
 	}
 	
 	function postComment($req, $n){
@@ -231,7 +236,7 @@
 		 
 		$comment = $Comment->fromXml($xmlHttpContent);
 		if ($comment->idnoticia != $n->idnoticia){
-			RestUtil::sendResponse(400); 
+			RestUtils::sendResponse(400); 
 		}
 		try{
 			$r = $comment->add();
@@ -501,12 +506,12 @@
 	
 	function getNews($req, $id, $n){
 		$n = $n->getRelationArray($id, getUrl());
-		
-		Utill::checkEtag($req, $n); 
+
+		$hash = Utill::checkEtag($req, $n); 
 		
 		$noticia = new Noticia(); 
 		if ($req->getHttpAccept() == 'json'){
-			RestUtils::sendResponse(200, null, json_encode($n)); 
+			RestUtils::sendResponse(200, null, json_encode($n), $hash); 
 		}
 		else if ($req->getHttpAccept() == 'text/xml'){
 			global $options; $options["rootName"] = "noticia"; 
@@ -517,9 +522,9 @@
 			
 			if ($result == true){
 				$xmlResponse = $xmlSerializer->getSerializedData();
-				//RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+				//RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml', $hash);
 				if($noticia->validateXMLbyXSD($xmlResponse, "Noticia.xsd")) {
-					RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+					RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml' , $hash);
 				}
 				else {
 					RestUtils::sendResponse(500);
