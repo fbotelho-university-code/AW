@@ -3,12 +3,36 @@
 	<title>Observer</title>
 		<script type="text/javascript" src="ajax/prototype.js"></script>
 
+		<script type="text/javascript" src="classes/Observable.js"></script>
+		<script type="text/javascript" src="classes/Observer.js"></script>
+
 <script type="text/javascript" charset="utf-8">
-	var pe = new PeriodicalExecuter(function(pe) {
-  if (!confirm('Want me to annoy you again later?')) {
-    pe.stop();
-  }
-}, 2);
+	
+	var id;
+	var obs = new Observable('http://localhost/proj/webservice/noticias.php/3','20648f7d2d6d1434dc02bf45703fd27d',function(novo){
+		document.write(novo.responseText);
+	});
+
+	var observer = new Observer();
+	observer.observe(obs,function(nid){
+		id = nid;
+	});
+	
+	new Ajax.Request('http://localhost/proj/webservice/noticias.php/3', { // options
+			method : 'get',
+			asynchronous : false,
+			onSuccess : function(transport) {
+				document.write(transport.responseText);
+			},
+			onFailure : function() {
+				alert("Erro ao recuperar 'dassadsaddassda' do webservice!");
+			}
+		});
+	
+	var pe = new PeriodicalExecuter(function() {
+		observer.stop(id);
+	},120);
+	
 </script>
 
 </head>
