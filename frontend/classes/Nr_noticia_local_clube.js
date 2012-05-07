@@ -42,6 +42,7 @@ function Nr_noticia_local_clube() {
 		      //alert("Success! \n\n" + clubes.length);
 			  cb(noticias_local_clube);
 		    },
+		    on404: cb(null),
 		    /* Tratamento de Falhas */
 		    onFailure: function(){ alert("Erro ao recuperar 'Notícias por local por clube' do webservice!"); }
 		});

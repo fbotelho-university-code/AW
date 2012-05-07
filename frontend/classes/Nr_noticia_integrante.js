@@ -40,6 +40,7 @@ function Nr_noticia_integrante() {
 			  cb(noticias_integrante);
 		    },
 		    /* Tratamento de Falhas */
+		    on404: cb(null),
 		    onFailure: function(){ alert("Erro ao recuperar 'Notícias por integrante' do webservice!"); }
 		});
 	};
