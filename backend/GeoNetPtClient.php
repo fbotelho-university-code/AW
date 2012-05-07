@@ -66,7 +66,7 @@ $queryDist = '?default-graph-uri=http%3A%2F%2Fdmir.inesc-id.pt%2Fpub%2Fpublicati
 
 $queries = array($queryIlha, $queryConc, $queryDist);
 $l = new Local();
-$l->clear();
+//$l->clear();
 $result = $geo->search($queries);
 
 ?>

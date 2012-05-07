@@ -78,11 +78,11 @@ require_once ('Util.php');
 	  try{
 	  	$resultados = $ent->getAll();
 	  }catch(Exception $e){
-	  	RestUtils(500); 
+	  	RestUtils::sendResponse(500); 
 	  }
 		  
 	   if (!isset($resultados) || count($resultados) == 0){
-	   	RestUtils(404); 
+	   	RestUtils::sendResponse(404); 
 	   }
 	   Utill::checkEtag($req, $resultados);
 	   

@@ -146,7 +146,6 @@ function Noticia() {
 					  for(var j=0; j<clubeDOMArray.length;j++) {
 							var c = new Clube();
 							c.idclube = clubeDOMArray[j].getElementsByTagName("idclube").item(0).firstChild.data;
-							c.nome_clube = clubeDOMArray[j].getElementsByTagName("nome_clube").item(0).firstChild.data;
 							c.nome_oficial = clubeDOMArray[j].getElementsByTagName("nome_oficial").item(0).firstChild.data;
 							n.qualificacao += Number(clubeDOMArray[j].getElementsByTagName("qualificacao").item(0).firstChild.data);
 							myClubesNoticias[j] = c;
