@@ -9,7 +9,7 @@
 <script type="text/javascript" charset="utf-8">
 	
 	var id;
-	var obs = new Observable('http://localhost/proj/webservice/noticias.php/3','20648f7d2d6d1434dc02bf45703fd27d',function(novo){
+	var obs = new Observable('http://localhost/AW3/webservice/noticias.php/3','7e51d73c7a33beebea65bb32b2b54255',function(novo){
 		document.write(novo.responseText);
 	});
 
@@ -18,7 +18,7 @@
 		id = nid;
 	});
 	
-	new Ajax.Request('http://localhost/proj/webservice/noticias.php/3', { // options
+	new Ajax.Request('http://localhost/AW3/webservice/noticias.php/3', { // options
 			method : 'get',
 			asynchronous : false,
 			onSuccess : function(transport) {

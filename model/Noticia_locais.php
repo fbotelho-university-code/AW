@@ -86,7 +86,11 @@ require_once "includes.php";
 		return $locais; 
   	}
   	
-  	public static function getAllNoticias($idlocal){
+  	public function getRel(){
+  		return "idlocal"; 
+  	}
+  	
+  	public static function getAllNoticias($idlocal, $baseurl){
 			$class_this = new Noticia_Locais(); 
 			$rel = $class_this->find(array("idlocal" => $idlocal)); 
 			if (!$rel) return null; 

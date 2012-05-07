@@ -20,22 +20,6 @@
  		$val = substr($r, 0, $pos );
  		return $val; 
  	}
- 	
- $options = array(
-      "indent"          => "    ",
-      "linebreak"       => "\n",
-      "typeHints"       => false,
-      "addDecl"         => true,
-      "encoding"        => "UTF-8",
-      XML_SERIALIZER_OPTION_RETURN_RESULT => true,
-      XML_SERIALIZER_OPTION_CLASSNAME_AS_TAGNAME => true,  
-       "rootAttributes"  => array("xmlns" => "localhost", "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance", "xsi:schemaLocation" => "localhost Locais.xsd "),
-      "namespace" 		=> "localhost", 
-      "ignoreNull"      => true,
- 	);
- 	 
- 	$xmlSerializer = new XML_Serializer($options);
- 	 
 	$req  = RestUtils::processRequest();  // The request made by the client.
 	checkRequest($req);   // check that the request is valid. Dies otherwise.  
 	  
@@ -59,10 +43,18 @@
 	  } 
 	       
 	  function processCoordenadas($req){
+	  	$result = $req->getPathInfo();
+	  	for ($i = 1 ; $i < 5 ; $i++){
+	  		if (!is_numeric($result[$i])){
+	  			RestUtils::sendResponse(404);
+	  		}
+	  	}
 	  	
+	  	$local = new Local();
+	  	$results = $local->getBetween($result[1], $result[2], $result[3], $result[4]);
+	  	getCompleteNewsLocais($results, $req); 
 	  }
 
-	// Process resource head (/noticias) requests. Accepts GET/POST/HEAD
 	
 	/*
 	 * TODO: 
@@ -77,8 +69,6 @@
 			case 'POST': 
 				postRoot($req);
 			break;
-			case 'HEAD': 
-				//postHead($req);
 			default:
 				RestUtils::sendResponse(405, array('allow' => "GET POST"));
 				exit; 
@@ -87,13 +77,10 @@
 	
 	function postRoot($req){
 		$espaco = new Local();
-		
 		if (!$espaco->validateXMLbyXSD($req->getData(), "Local.xsd")){
 			RestUtils::sendResponse(400); 
 		}
-		
 		$result = $espaco->fromXml($req->getData());
-		
 		if ($result->checkValidity() == true ){
 			if (isset($result->idlocal)){
 				RestUtils::sendResponse(406); 
@@ -119,7 +106,7 @@
 		$local = new Local();
 		if (!isset($ll)){
 			try{
-				$locais =$local->getAll(null);
+				$locais =$local->getAll();
 			}catch(Exception $e){
 				RestUtils::sendResponse(500); 
 			}
@@ -131,32 +118,7 @@
 			$locais = $ll;  
 		}
 		foreach ($locais as $n){ $n->follow = getUrl() . 'espaco.php/' . $n->idlocal; }
-		if ($req->getHttpAccept() == 'text/xml'){
-		
-			global $options; $options["rootName"] = "locais";  $options["defaultTagName"] = "local";   
-			$xmlSerializer =  new XML_Serializer($options); 
-			$result = $xmlSerializer->serialize($locais);
-			
-			if ($result == true){
-				$xmlResponse = $xmlSerializer->getSerializedData();
-				//RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
-				if($local->validateXMLbyXSD($xmlResponse, "Locais.xsd")) {
-					RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
-				}
-				else {
-					RestUtils::sendResponse(400);
-				} 
-			}
-			else{
-				RestUtils::sendResponse(500); 
-			}
-		}
-		else if ($req->getHttpAccept() == 'json'){
-			RestUtils::sendResponse(200, null,  json_encode($locais)); 
-		}
-		else{
-			RestUtils::sendResponse(406); 
-		}
+		RestUtils::webResponse($locais, $req, 'locais', 'Locais.xsd',  'local'); 
 	}
 	
 	//Process resource (/local/{idlocal}) requests. Accepts GET/PUT/HEAD/DELETE
@@ -174,6 +136,7 @@
 		if (is_numeric($id)){
 			try{ 
 				$l = $Local->getObjectById($id);
+				$n->visivel = null; // we do not want this to show on the result.
 			}catch(Exception $e){
 				RestUtils::sendResponse(500); 
 			}
@@ -193,38 +156,38 @@
 			if (count($locais) == 0){
 				RestUtils::sendResponse(404); 
 			}
-			getRoot($req, $locais); 
+			getCompleteNewsLocais($locais, $req); 
 		}
 		
 		switch(count($path_info)){
 			case 1 :
-		switch($req->getMethod()){
-			case 'GET': 
-				getLocal($req, $id, $l);
-			break;
-			case 'PUT':
-				putLocal($req, $id, $l); 
-			break;
-			case 'DELETE':
-				deleteLocal($id, $l);
-			break;
-			case 'HEAD': 
-			default: 
-			 RestUtils::sendResponse(405, array('allow' =>  "PUT DELETE GET"));
-		}
-		break;
-		case 2: 
-			if ($req->getMethod()){
-				if (strcmp($path_info[2], 'noticias' )!==false){
-					getLocalNoticia($req,$id, $l);
-				}else{
-					RestUtils::sendResponse(404); 
+				switch($req->getMethod()){
+					case 'GET': 
+						getLocal($req, $id, $l);
+						break;
+					case 'PUT':
+						putLocal($req, $id, $l); 
+						break;
+					case 'DELETE':
+						deleteLocal($id, $l);
+					break;
+						case 'HEAD': 
+					default: 
+			 		RestUtils::sendResponse(405, array('allow' =>  "PUT DELETE GET"));
 				}
-			}else{
-				RestUtils::sendResponse(405, array('allow' =>  "GET"));
+				break;
+			case 2: 
+				if ($req->getMethod()){
+					if (strcmp($path_info[2], 'noticias' )!==false){
+						getLocalNoticia($req,$id, $l);
+					}else{
+						RestUtils::sendResponse(404); 
+					}
+				}else{
+					RestUtils::sendResponse(405, array('allow' =>  "GET"));
+				}		
 			}
 		}
-	}
 	
 	function deleteLocal($id,$l){
 		try{
@@ -235,13 +198,25 @@
 		RestUtils::sendResponse(204, null, '', 'text');
 	}
 	
+	/**
+	 * 
+	 * @param unknown_type $locais array de locais
+	 */
+	function getCompleteNewsLocais($locais, $req){
+		$rel = new Noticia_locais();
+		foreach ($locais as $l){
+			$l->noticias = $rel->getAllNews($l->idlocal, getUrl());
+		}
+		RestUtils::webResponse($locais, $req, 'Locais', 'Local.xsd', 'data');
+		
+	}
+	
 	function putLocal($req, $id, $l){
 		$local = new Local();
 		$xmlHttpContent = $req->getData();
 		if(!$local->validateXMLbyXSD($xmlHttpContent, "Local.xsd")) {
 		 	RestUtils::sendResponse(400, null, "XML mal formado!", "text/plain");
 		}
-		
 		$new_local = $local->fromXml($xmlHttpContent);
 
 		if (isset($new_local->idlocal) && $new_local->idlocal != $l->idlocal){
@@ -264,45 +239,17 @@
 
 	function getLocalNoticia($req,$id, $l){
 		$n = $l; 
-		
+		$rel = new Noticia_locais(); 
 		try{
-			$n->noticias = Noticia_Locais::getAllNoticias($id);
+			$n->noticias =  $rel->getAllNews($l->idlocal, getUrl());
 		}catch(Exception $e){
 			RestUtils::sendResponse(500);
 		}
-		respond($n, $req); 
+		RestUtils::webResponse($n, $req, 'Locais', "Local.xsd ", 'data');
 	}
-		
+
 	function getLocal($req, $id, $n){
-		respond($n, $req); 
-	}
-
-	function respond($n, $req){
-		if ($req->getHttpAccept() == 'json'){
-			RestUtils::sendResponse(200, null, json_encode($n)); 
-		}
-		else if ($req->getHttpAccept() == 'text/xml'){
-			global $options; $options["rootName"] = "Local"; 
-	       	$options["rootAttributes"] = array("xmlns" => "localhost", "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance", "xsi:schemaLocation" => "localhost Local.xsd "); 
-
-			$xmlSerializer =  new XML_Serializer($options); 
-			$n->visivel = null; // we do not want this to show on the result.  
-			$result = $xmlSerializer->serialize($n);
-			if ($result == true){
-				$xmlResponse = $xmlSerializer->getSerializedData();
-				RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
-				/*if($n->validateXMLbyXSD($xmlResponse, "Local.xsd")) {
-					RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
-				}
-				else {
-					RestUtils::sendResponse(500);
-				}*/
-			} else {
-				RestUtils::sendResponse(500); 
-			}
-		}else{
-			RestUtils::sendResponse(406); 
-		}
+		RestUtils::webResponse($n, $req, 'Local', "Local.xsd "); 
 	}
 	
     /*
@@ -327,8 +274,5 @@
     		RestUtils::sendResponse(400, array('unrecognized_req_vars' => $dif));
     		exit; 
     	}
-    	
-    	//TODO - check that path parameters are correct through regulares expressions that validate input types and formats. 
-    	//could respond BadRequest also. 
     }
 ?>

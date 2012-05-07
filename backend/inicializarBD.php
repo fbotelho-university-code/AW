@@ -7,7 +7,7 @@ echo "<center><h1>Inicialização da Base de Dados</h1></center>";
 echo "Limpando a Base de Dados... ";
 $dao = new DAO();
 
-$rs = $dao->execute("SELECT table_name FROM information_schema.tables WHERE table_schema = 'aw' AND table_name NOT LIKE 'view_%';");
+/*$rs = $dao->execute("SELECT table_name FROM information_schema.tables WHERE table_schema = 'aw' AND table_name NOT LIKE 'view_%';");
 
 while(!$rs->EOF) {
 	$table = $rs->fields["table_name"];
@@ -26,7 +26,7 @@ while(!$rs->EOF) {
 	}
 	$rs->MoveNext();
 }
-echo "Ok!<hr>";
+echo "Ok!<hr>";*/
 
 //----------------------------- FONTE ----------------------------------------------------------//
 echo "Inicializa��o da Tabela <b>fonte</b>...";
