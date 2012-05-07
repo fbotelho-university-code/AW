@@ -11,7 +11,7 @@ function Local() {
 	
 	/* URL base para comunicacao com o web service */
 	this.baseurl = "http://localhost/AW3/webservice/espaco.php/";
-	
+
 	/**
 	 * Método para recuperar todos os locais.
 	 * Necessita de função callback como parametro para devolver resultado

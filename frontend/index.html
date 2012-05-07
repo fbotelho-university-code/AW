@@ -18,7 +18,7 @@
 	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true" charset="utf-8"></script>
 	<script type="text/javascript" charset="utf-8">
 	
-	var myGlobalHandlers = {
+	/*var myGlobalHandlers = {
 		onCreate: function(){
 			Element.show('systemWorking');
 			Element.show('fundoLoading');
@@ -32,7 +32,7 @@
 		}
 	};
 
-	Ajax.Responders.register(myGlobalHandlers);
+	Ajax.Responders.register(myGlobalHandlers);*/
 	
 	var map;
 	var nome_localArray = new Array();
@@ -91,13 +91,13 @@
     	});
   		
   		//Criação do Array com nome dos clubes para AutoComplete
-  		createNomeLocalArray(locais);
+  		/*createNomeLocalArray(locais);
     	var c = new Clube();
     	c.getAllClubes(0, 0, function (result){
     		clubes = result;
     	});
     	createNomeClubeArray(clubes);
-    		
+    	
     	//Criação do Array com nome dos integrantes para AutoComplete
     	var i = new Integrante();
     	i.getAllIntegrantes(0, 0, function (result){
@@ -107,22 +107,48 @@
   			
   		//Set do Autocomplete do input de pesquisa
   		nomes_pesquisa = nome_localArray.concat(nome_clubeArray, nome_integranteArray);
-  		autoComplete.Set("mygroup1", nomes_pesquisa);
+  		autoComplete.Set("mygroup1", nomes_pesquisa);*/
     	
     	//Recuperação das últimas notícias (ano corrente)	 		
-    	var tempo = new Tempo();
-    	var myUltimasNoticias = new Array(); 
+    	/*var tempo = new Tempo();
     	tempo.getUltimasNoticias(function (result){
-  			myUltimasNoticias = result;
-  		});
-    	ultimasNoticias = myUltimasNoticias;
+  			ultimasNoticias = result;
+  		});*/
+    	
     	//Inclusão dos locais das últimas notícias no mapa inicial
-    	setInitialMarks();
+    	//setInitialMarks();
     	
     	// Inclusão das últimas notícias na barra lateral da página
     	//writeLastNews();
     	
     		    		
+  		}
+  		
+  		function createAutoCompleteOptions() {
+  			//Criação do Array com nome dos locais para AutoComplete	
+	    	var l = new Local();
+	    	l.getAllLocais(0, 0, function (result){
+	    		locais = result;
+	    	});
+	  		
+	  		//Criação do Array com nome dos clubes para AutoComplete
+	  		createNomeLocalArray(locais);
+	    	var c = new Clube();
+	    	c.getAllClubes(0, 0, function (result){
+	    		clubes = result;
+	    	});
+	    	createNomeClubeArray(clubes);
+	    	
+	    	//Criação do Array com nome dos integrantes para AutoComplete
+	    	var i = new Integrante();
+	    	i.getAllIntegrantes(0, 0, function (result){
+	    		integrantes = result;
+	    	});
+	    	createNomeIntegranteArray(integrantes);
+	  			
+	  		//Set do Autocomplete do input de pesquisa
+	  		nomes_pesquisa = nome_localArray.concat(nome_clubeArray, nome_integranteArray);
+	  		autoComplete.Set("mygroup1", nomes_pesquisa);
   		}
   		
   		function createNomeLocalArray(locaisObjArray) {
@@ -133,7 +159,7 @@
   		
   		function createNomeClubeArray(clubesObjArray) {
   			for(var i=0; i<clubesObjArray.length; i++) {
-  				nome_clubeArray[i] = clubesObjArray[i].nome_clube;
+  				nome_clubeArray[i] = clubesObjArray[i].nome_oficial;
   			}
   		}
   		
@@ -167,7 +193,6 @@
   			var marker;
 	  		
 	  		/* Recuperação das coordenadas dos locais das últimas notícias */
-	  		alert(ultimasNoticias.length);
 	  		for(i=0; i<ultimasNoticias.length; i++) {
 				//var result = ultimasNoticias[i].dataInterpretada;
 				for(var m=0; m<ultimasNoticias[i].noticias.length; m++) {
@@ -468,9 +493,9 @@
 	</script>
 </head>
 <body onload="initialize()">
-
-<div id='systemWorking'><img src='css/images/ajax-loader3.gif' align='middle'></div>
-<div id='fundoLoading'></div>
+<script>createAutoCompleteOptions()</script>
+<!-- <div id='systemWorking'><img src='css/images/ajax-loader3.gif' align='middle'></div>
+<div id='fundoLoading'></div> -->
 <div id="quadroNoticia" style="display:none;">
 <p align="right"><br /><a href="javascript: void(0)" onclick="closeQuadroNoticia()"><img src="css/images/close.png" alt="Close" border=0 /></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
 <div id="clubesQuadroNoticia">
