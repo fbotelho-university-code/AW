@@ -55,14 +55,13 @@ require_once ('../model/includes.php');
   /**
   * Get the thumbnail image associative array from a dpbedia uri. 
   */
-function getThumbnailUrl($clube_uri){
+function getThumbnailUrlClube($clube_uri){
 	$query = "SELECT ?url WHERE { { <" . $clube_uri . "> <http://dbpedia.org/ontology/thumbnail> ?url } } ";
 	$result = execute_sparql_query($query);
 	if (isset($result)){
 		$result = toJsonResults($result);
-		if (isset($result)){
+		if (isset($result) && isset($result[0])){
 			$url = $result[0]->url->value;
-			
 			$url = str_replace("/commons/thumb/", "/en/", $url);
 			$pos = strpos($url, "/200px"); 
 			$url = substr($url, 0, $pos);
@@ -70,6 +69,19 @@ function getThumbnailUrl($clube_uri){
 			return getImage($url); 
 		} 
 	}  
+}
+
+function getThumbnailUrlInt($clube_uri){
+	$query = "SELECT ?url WHERE { { <" . $clube_uri . "> <http://dbpedia.org/ontology/thumbnail> ?url } } ";
+	$result = execute_sparql_query($query);
+	if (isset($result)){
+		$result = toJsonResults($result);
+		if (isset($result) && isset($result[0])){
+			$url = $result[0]->url->value;
+			// Get image :
+			return getImage($url);
+		}
+	}
 }
 
 /**
@@ -85,14 +97,12 @@ function getFullNameClube($p_uri){
 
 	$result = execute_sparql_query($query, 'json');
 	$result = json_decode($result);
-	
 	if (isset($result) && isset($result->results) && isset($result->results->bindings)){
 		$result = $result->results->bindings;
 		if (isset($result[0]->value->value)){
 			return $result[0]->value->value; 
 		}
 	}
-	
 }
 
 /**
@@ -238,6 +248,7 @@ function updateLexico($nomes,$rel){
    * Esta funcção insere todos os clubes da primeira liga de futebol. 
    */
   function insertClubesOfPrimeiraLiga(){
+  	//fetch_and_insert_clube("http://dbpedia.org/resource/S.L._Benfica");
 	$query ="SELECT ?clube
 	{
   	?clube a <http://dbpedia.org/ontology/SportsTeam> .
@@ -256,10 +267,11 @@ function updateLexico($nomes,$rel){
 			return;  
 		}
 	} 
-	echo 'Could not insert clubes <br/>'; 
+	echo 'Could not insert clubes <br/>';
+	
   }
    
-//fetch_and_insert_clube("http://dbpedia.org/resource/S.L._Benfica");
+
 /**
  * This function allows the insertion of a club through a dbpedia resource uri of that club. 
  */
@@ -270,18 +282,23 @@ function fetch_and_insert_clube($clube_uri){
 	if (isset($clube->nome_oficial)){
 	try{
 		$id = $clube->add(); 
+		$clube->idclube = $id; 
 		addClubeLexico($clube_uri, $id);
-		$img = getThumbnailUrl($clube_uri);
+		$img = getThumbnailUrlClube($clube_uri);
 		if (isset($img)){
 			echo 'vou inserir uma imagem<br/>'; 
 			$Img = new Clube_Imagem();
 			$Img->idclube = $id; 
 			$Img->content_type = $img['type']; 
 			$Img->imagem = $img['image']; 
-			$Img->add(); 
+			$id_img = $Img->add();
+				$clube->url_img = 'true'; 
+				$clube->update(); 
+			 
 		}
 	}catch(Exception $e){
-		echo $e; 
+		return; 
+		//echo $e; 
 	}
 	}
 	echo "Vou inserir integrantes para o clube : " . $clube->nome_oficial . "<br/>"; 	
@@ -348,9 +365,24 @@ function insert_image($clube_uri, $id){
 		if (count($res) > 0) return false; 
 		$player->idclube = $clube_id; 
 		$player->funcao = $funcao; 
+		
 		try{
 			$id = $player->add();
+			$player->idintegrante = $id; 
 			addIntegranteLexico($p_uri, $id);
+			$img = getThumbnailUrlInt($p_uri);
+			if (isset($img)){
+				echo 'vou inserir uma imagem<br/>';
+				$Img = new Integrante_Imagem();
+				$Img->idintegrante = $id;
+				$Img->content_type = $img['type'];
+				$Img->imagem = $img['image'];
+				$id_img = $Img->add();
+
+					$player->url_img = 'true';
+					$player->update();  
+
+			}
 		}catch(Exception $e){
 			return false; 
 		}

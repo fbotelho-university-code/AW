@@ -11,7 +11,6 @@ class RestUtils{
 	
 	public static function processRequest() {
 		//get our verb
-		
 		$request_method = ($_SERVER['REQUEST_METHOD']);
 		
 		$return_obj = new RestRequest(); 
@@ -21,8 +20,7 @@ class RestUtils{
 		//Check if has path parameters
 		$path = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO']:  null;
 		$accept = isset($_SERVER['HTTP_ACCEPT'])  ? $_SERVER['HTTP_ACCEPT'] : null;
-		$etag = isset($_SERVER['HTTP_IF_MATCH'])  ? strtolower($_SERVER['HTTP_If_MATCH']) : null;
-		
+		$etag = isset($_SERVER['HTTP_IF_NONE_MATCH'])  ? strtolower($_SERVER['HTTP_IF_NONE_MATCH']) : null;
 		$return_obj->setEtag($etag); 
 		
 		
@@ -90,6 +88,7 @@ class RestUtils{
 		return $return_obj; 
 	}
 	
+
 	public static function sendResponseHead($etag, $status = 200){
 	   $status_header= 'HTTP/1.1 ' . $status . ' ' . RestUtils::getStatusCodeMessage($status);
 	   header($status_header);
@@ -97,17 +96,16 @@ class RestUtils{
 	   echo ''; 
 	   exit;   
 	}
-	public static function sendResponse($status = 200, $vars = array(), $body ='', $content_type = 'text/html'){
-		
+	
+	public static function sendResponse($status = 200, $vars = array(), $body ='', $content_type = 'text/html', $etag = null){
 		$status_header= 'HTTP/1.1 ' . $status . ' ' . RestUtils::getStatusCodeMessage($status);
 		//set the status
 		header($status_header); 
 		//set the content type
 		header('Content-type: ' . $content_type . ' ; charset = utf-8'); 
 		
-		if ($status == 200){
-			$hash = md5(var_export($body, true));
-			header('Etag: ' . $hash);
+		if ($status == 200 && isset($etag)){
+			header('Etag: ' . $etag);
 		}
 		
 		if ($body!=''){

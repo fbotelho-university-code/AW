@@ -208,14 +208,19 @@
 			postComment($req,$n);
 			break; 
 			case 'HEAD':
+				getHeadNew($req, $id, $n); 
 			break; 
 			case 'DELETE':
 				deleteNewsFingir($id,$n);
 			break; 
 			default: 
-			 RestUtils::sendResponse(405, array('allow' => "PUT DELETE GET POST"));
+				RestUtils::sendResponse(405, array('allow' => "PUT DELETE GET POST"));
 			 
 		}
+	}
+	
+	function getHeadNew($req, $id, $n){
+			RestUtils::sendResponseHead(); 
 	}
 	
 	function postComment($req, $n){
@@ -231,7 +236,7 @@
 		 
 		$comment = $Comment->fromXml($xmlHttpContent);
 		if ($comment->idnoticia != $n->idnoticia){
-			RestUtil::sendResponse(400); 
+			RestUtils::sendResponse(400); 
 		}
 		try{
 			$r = $comment->add();
@@ -278,9 +283,11 @@
 					RestUtils::sendResponse(500);
 				}*/
 			} else {
+				 
 				RestUtils::sendResponse(500); 
 			}
 		}else{
+			 
 			RestUtils::sendResponse(406); 
 		}
 	}
@@ -501,12 +508,11 @@
 	
 	function getNews($req, $id, $n){
 		$n = $n->getRelationArray($id, getUrl());
-		
-		Utill::checkEtag($req, $n); 
-		
-		$noticia = new Noticia(); 
+		$hash = Utill::checkEtag($req, $n); 
+		$noticia = new Noticia();
+		 
 		if ($req->getHttpAccept() == 'json'){
-			RestUtils::sendResponse(200, null, json_encode($n)); 
+			RestUtils::sendResponse(200, null, json_encode($n), $hash); 
 		}
 		else if ($req->getHttpAccept() == 'text/xml'){
 			global $options; $options["rootName"] = "noticia"; 
@@ -517,13 +523,13 @@
 			
 			if ($result == true){
 				$xmlResponse = $xmlSerializer->getSerializedData();
-				//RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
-				if($noticia->validateXMLbyXSD($xmlResponse, "Noticia.xsd")) {
-					RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+				RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml', $hash);
+				/*if($noticia->validateXMLbyXSD($xmlResponse, "Noticia.xsd")) {
+					RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml' , $hash);
 				}
 				else {
 					RestUtils::sendResponse(500);
-				}
+				}*/
 			} else {
 				RestUtils::sendResponse(500); 
 			}
@@ -531,8 +537,7 @@
 			RestUtils::sendResponse(406); 
 		}
 	}
-	
-	
+
     /*
      * Checks if the request is valid through whitelistening of the possible request types.
      * Deals with query variables, path info, method types, etc. 

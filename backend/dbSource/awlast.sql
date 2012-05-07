@@ -221,14 +221,6 @@ CREATE TABLE IF NOT EXISTS `noticia_data` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `noticia_data_clube`
---
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `aw`.`noticia_data_clube` AS select month(`nd`.`data_interpretada`) AS `month( nd.data_interpretada )`,`c`.`nome_oficial` AS `nome_oficial`,count(`n`.`idnoticia`) AS `count( n.idnoticia )` from (((`aw`.`noticia_data` `nd` join `aw`.`clube` `c`) join `aw`.`noticia` `n`) join `aw`.`noticia_has_clube` `nc`) where ((`n`.`idnoticia` = `nd`.`idnoticia`) and (`n`.`idnoticia` = `nc`.`idnoticia`) and (`nc`.`idclube` = `c`.`idclube`) and (`nd`.`idnoticia` = `nc`.`idnoticia`) and (`nd`.`data_interpretada` like '2012-%')) group by month(`nd`.`data_interpretada`),`c`.`idclube`;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `noticia_has_clube`
 --
 
@@ -240,6 +232,14 @@ CREATE TABLE IF NOT EXISTS `noticia_has_clube` (
   PRIMARY KEY (`idnoticia`,`idclube`),
   KEY `idclube` (`idclube`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `noticia_data_clube`
+--
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `aw`.`noticia_data_clube` AS select month(`nd`.`data_interpretada`) AS `month( nd.data_interpretada )`,`c`.`nome_oficial` AS `nome_oficial`,count(`n`.`idnoticia`) AS `count( n.idnoticia )` from (((`aw`.`noticia_data` `nd` join `aw`.`clube` `c`) join `aw`.`noticia` `n`) join `aw`.`noticia_has_clube` `nc`) where ((`n`.`idnoticia` = `nd`.`idnoticia`) and (`n`.`idnoticia` = `nc`.`idnoticia`) and (`nc`.`idclube` = `c`.`idclube`) and (`nd`.`idnoticia` = `nc`.`idnoticia`) and (`nd`.`data_interpretada` like '2012-%')) group by month(`nd`.`data_interpretada`),`c`.`idclube`;
 
 -- --------------------------------------------------------
 

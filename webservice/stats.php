@@ -57,17 +57,20 @@ require_once ('Util.php');
 		case 'noticiasporclube':
 			$ent = new Noticia_x_clube(); 
 			break; 
-		case 'noticiapordata': 
+		case 'noticiaspordata': 
 			$ent = new Nr_noticia_data(); 
 			break; 
-		case 'noticiaporintegrante': 
+		case 'noticiasporintegrante': 
 			$ent = new Nr_noticia_integrante(); 
 			break;
-		case 'noticiaporlocalporclube': 
+		case 'noticiasporlocalporclube': 
 			$ent = new Nr_noticia_local_clube();
 			break; 
-		case 'noticiapordataporclube': 
+		case 'noticiaspordataporclube': 
 			$ent = new Noticia_data_clube(); 
+			break;
+		case 'noticiasporlocal': 
+			$ent = new Nr_noticia_local(); 
 			break;
 		default: 
 			RestUtils::sendResponse(404);  

@@ -46,10 +46,12 @@ class GeoNetPtClient extends Fonte {
 			
 				/* Fill the entry with the respective values */
 				$l = new Local();
-				$l->setIdlocal(null);
-				$l->setNome_local($tmp[0]);
-				$l->setCoordenadas($tmp[1].";".$tmp[2]);
-				$l->add();
+				if (count($l->find(array("nome_local" => $tmp[0])) == 0)){
+					$l->setIdlocal(null);
+					$l->setNome_local($tmp[0]);
+					$l->setCoordenadas($tmp[1].";".$tmp[2]);
+					$l->add();
+				}
 			}
 		}
 	}
@@ -65,7 +67,6 @@ $queryDist = '?default-graph-uri=http%3A%2F%2Fdmir.inesc-id.pt%2Fpub%2Fpublicati
 $queries = array($queryIlha, $queryConc, $queryDist);
 $l = new Local();
 $l->clear();
-
 $result = $geo->search($queries);
 
 ?>

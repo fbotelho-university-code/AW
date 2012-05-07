@@ -211,6 +211,7 @@
 	
 	
 	function getEntidade($req, $entidade, $entradas=null){
+		
 		$bdEnt = new $entidade();
 		if (!isset($entradas)){
 			try{
@@ -245,14 +246,14 @@
 			
 			$xmlResponse = $xmlSerializer->getSerializedData(); 
 			
-			//RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+			RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
 			
-			if($bdEnt->validateXMLbyXSD($xmlResponse,  $options["rootName"] . ".xsd")) {
+			/*if($bdEnt->validateXMLbyXSD($xmlResponse,  $options["rootName"] . ".xsd")) {
 				RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
 			}
 			else {
 				RestUtils::sendResponse(500);
-			}
+			}*/
 		}else{
 			RestUtils::sendResponse(406); 
 		}
@@ -289,7 +290,8 @@
 			$Entidade = new $ent;
 			
 			$id = '%' . mysql_real_escape_string($id) . '%';
-			$needle = $Entidade instanceof Clube ? 'nome_oficial' : 'nome_integrante';  
+			$needle = $Entidade instanceof Clube ? 'nome_oficial' : 'nome_integrante';
+			  
 			try{
 				$results = $Entidade->find (array($needle => $id), ' LIKE');
 			}catch(Exception $e){
@@ -324,6 +326,9 @@
 			     	if (strcmp($var, 'noticias') == 0 ){
 				 		getDeEntidadeNoticias($req,$ent,$id, $result); 
 				 	}
+				 	else if (strcmp($var, 'thumbnail') == 0){
+				 		getDeEntidadePhoto($req, $ent, $id, $result); 
+				 	}
 				 	else {
 				 		RestUtils::sendResponse(404);
 				 	}
@@ -333,10 +338,36 @@
 				}
 		}
 	}
+	
+	function getDeEntidadePhoto($req, $ent, $id, $result){
+		$img =  $ent . '_Imagem'; 
+		$img = new $img(); 
+		if (isset($result->url_img)){
+			try{
+				
+				$img = $img->FindFirst(array("id" . $ent  => $id));
+				if (!isset($img)){
+					RestUtils::sendResponse(404); 
+				}else{
+					//var_dump($img->content_type); 
+					header('Content-type:' .  $img->content_type); 
+					echo stripslashes($img->imagem);
+					exit;  
+					RestUtils::sendResponse(200, null, $img->imagem , $img->content_type); 
+				}
+			}catch( Exception $e){
+				echo $e; 
+				RestUtils::sendResponse(500); 
+			} 
+		}else{
+			RestUtils::sendResponse(404); 
+		}
 		
+	}
+	
 	function deleteIntegrante($id, $entry){
 		try{		
-			$integrante->del();
+			$entry->del();
 		}catch(Exception $e){
 			RestUtils::sendResponse(500); 
 		}
