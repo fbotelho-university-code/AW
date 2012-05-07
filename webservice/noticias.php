@@ -186,7 +186,6 @@
 		if (strcmp($keyword, 'comentarios') != 0){
 			RestUtils::sendResponse(404); 
 		}
-		
 		switch($req->getMethod()){
 			case 'GET':
 				getComments($req, $n);  
