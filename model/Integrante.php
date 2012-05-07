@@ -124,7 +124,7 @@ class Integrante extends Model{
 			$obj->$key = $value;
 		}
 		if (isset($obj->url_img)){
-			$obj->url_img =  $this->getUrl() . 'entidades.php/integrante/' . $obj->idintegrante  . '/thumbnail';
+			$obj->url_img =  $this->getUrl() . 'webservice/entidades.php/integrante/' . $obj->idintegrante  . '/thumbnail';
 		}
 	}
 }
