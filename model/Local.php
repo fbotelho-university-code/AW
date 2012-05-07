@@ -12,7 +12,7 @@ class Local extends Model{
 		
 		if (
 				preg_match('/\-?\d+\.?\d*/', $this->lat ) == 1 &&
-				preg_match('/\-?\d+\.?\d*/', $this->long ) == 1
+				preg_match('/\-?\d+\.?\d*/', $this->log ) == 1
 		)
 	    return true; 
 	}

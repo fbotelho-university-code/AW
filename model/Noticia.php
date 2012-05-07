@@ -39,11 +39,6 @@ class Noticia extends Model{
 		if (!$noticiaOb ) return null;
 		//We do not want this to show: 
 
-		
-		//O array resultante. 
-		foreach (get_object_vars($noticiaOb) as $key=>$value){
-			$result[$key] = $value; 
-		}
 		//locais : 
 		$class_locais_rel = new Noticia_Locais();
 		//TODO - what if idNoticia nao existe nas relações. 
@@ -54,7 +49,17 @@ class Noticia extends Model{
 		$result['clubes'] = Noticia_Has_Clube::getAllClubes($idNoticia,$baseurl); 
 		$result['integrantes'] = Noticia_Has_Integrante::getAllIntegrantes($idNoticia,$baseurl); 
 		
-		return $result; 
+		$rslt = new Noticia(); 
+		$rslt->idnoticia = $noticiaOb->idnoticia; 
+		$rslt->data_pub = $noticiaOb->data_pub; 
+		$rslt->assunto = $noticiaOb->assunto; 
+		$rslt->descricao = $noticiaOb->descricao;
+		$rsl->url = $noticiaOb->url;  
+		$rslt->datas = $result['datas'];
+		$rslt->locais = $result['locais']; 
+		$rslt->clubes = $result['clubes']; 
+		$rslt->integrantes = $result['integrantes'];
+		return $rslt; 
 	}
 	
 	/**
@@ -119,7 +124,6 @@ class Noticia extends Model{
 	 * Define se uma not�cia deve estar vis�vel para o utilizador
 	 * @var boolean
 	 */
-	
 	
 	/**
 	 * Contrutor da classe. 

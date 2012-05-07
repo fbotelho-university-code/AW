@@ -111,49 +111,13 @@
 	 * TODO : filtrar pesquisa. 
 	 **/
 	function getRoot($req){
-		$news = getAllNews($req); 
-		if ($req->getHttpAccept() == 'text/xml'){
-				global $options; $options["rootName"] = "noticias";
-				$xmlSerializer =  new XML_Serializer($options);
-			//$xmlSerializer->setOption("namespace",array("localhost", "localhost"));
-				$result = $xmlSerializer->serialize($news);
-
-			if ($result == true){
-				$xmlResponse = $xmlSerializer->getSerializedData();
-				$noticia = new Noticia();
-				
-				RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
-				
-				/*if($noticia->validateXMLbyXSD($xmlResponse, "Noticias.xsd")) {
-					RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
-				}
-				else {
-					RestUtils::sendResponse(500);
-				}*/
-				
-			}
-			else{
-				RestUtils::sendResponse(500); 
-			}
-		}
-		else if ($req->getHttpAccept() == 'json'){
-			RestUtils::sendResponse(200, null,  json_encode($news)); 
-		}
-		else{
-			//Not Acceptable. 
-			RestUtils::sendResponse(406); 
-		}
-		RestUtils::sendResponse(400); 
+		$news = getAllNews($req);
+		RestUtils::webResponse($news, $req, 'noticias', 'Noticias.xsd');
 	}
-	
-	
-	
-	
 	
 	//Process resource (/noticias/{idnoticia}) requests. Accepts GET/PUT/HEAD/DELETE
 
-/*
- * TODO: 
+ /* TODO: 
  * PUT
  * HEAD
  * DELETE
@@ -254,41 +218,12 @@
 		}catch(Exception $e){
 			RestUtils::sendResponse(404); 
 		}
-		
 		if (count($res) == 0){
 			RestUtils::sendResponse(404); 
 		}
-		
-		if ($req->getHttpAccept() == 'json'){
-			RestUtils::sendResponse(200, null, json_encode($res)); 
-		}
-		else if ($req->getHttpAccept() == 'text/xml'){
-			global $options; $options["rootName"] = "Comentarios"; 
-			$options['rootAttributes']  = array("xmlns" => "localhost", "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance", "xsi:schemaLocation" => "localhost Comentario.xsd "); 
-			$options['defaultTagName'] = 'comentario';
-			$xmlSerializer =  new XML_Serializer($options); 
-			$result = $xmlSerializer->serialize($res);
-			
-			if ($result == true){
-				$xmlResponse = $xmlSerializer->getSerializedData();
-				RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
-				/*TODO : XSD
-				 * if($n->validateXMLbyXSD($xmlResponse, "Noticia.xsd")) {
-					RestUtils::sendResponse(200, null, $xmlResponse , 'text/xml');
-				}
-				else {
-					RestUtils::sendResponse(500);
-				}*/
-			} else {
-				 
-				RestUtils::sendResponse(500); 
-			}
-		}else{
-			 
-			RestUtils::sendResponse(406); 
-		}
+		RestUtils::webResponse($res, $req, "Comentarios", null, "comentario");
 	}
-
+	
 	function deleteNewsFingir($id, $n){
 		// Criar noticia_bin
 		$noticia_bin = new Noticia_Bin($n);
@@ -337,15 +272,13 @@
 			RestUtils::sendResponse(500);
 		}
 	}
-		
+	
 	function putNews($req, $id, $n){
 		$noticia = new Noticia();
-		
 		$xmlHttpContent = $req->getData();
 		if(!$noticia->validateXMLbyXSD($xmlHttpContent, "Noticia.xsd")) {
 		 RestUtils::sendResponse(400, null, "XML mal formado!", "text/plain");
 		}
-		
 		$nova_noticia = $noticia->fromXml($xmlHttpContent);
 		if ($nova_noticia === null || checkRelations($nova_noticia)===false ||
 			// se existir id de noticia no gajo nao pode ir.  
@@ -490,9 +423,7 @@
 				 try{
 //				 	echo $l->__toString();
 					$rel = new Noticia_Data($noticia->idnoticia, '' ,$l->__toString());
-					
 					$rel->add();
-					
 				}catch(Exception $e){
 					echo $e; 	
 										
@@ -505,33 +436,8 @@
 	
 	function getNews($req, $id, $n){
 		$n = $n->getRelationArray($id, getUrl());
-		$hash = Utill::checkEtag($req, $n); 
 		$noticia = new Noticia();
-		if ($req->getHttpAccept() == 'json'){
-			RestUtils::sendResponse(200, null, json_encode($n), $hash); 
-		}
-		else if ($req->getHttpAccept() == 'text/xml'){
-			global $options; $options["rootName"] = "noticia"; 
-			$options['rootAttributes']  = array("xmlns" => "localhost", "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance", "xsi:schemaLocation" => "localhost Noticia.xsd "); 
-			$options['defaultTagName'] = 'data';
-			$xmlSerializer =  new XML_Serializer($options); 
-			$result = $xmlSerializer->serialize($n);
-			
-			if ($result == true){
-				$xmlResponse = $xmlSerializer->getSerializedData();
-				RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml', $hash);
-				/*if($noticia->validateXMLbyXSD($xmlResponse, "Noticia.xsd")) {
-					RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml' , $hash);
-				}
-				else {
-					RestUtils::sendResponse(500);
-				}*/
-			} else {
-				RestUtils::sendResponse(500); 
-			}
-		}else{
-			RestUtils::sendResponse(406); 
-		}
+		RestUtils::webResponse($n, $req, 'noticia', 'Noticia.xsd', 'data'); 
 	}
 
     /*

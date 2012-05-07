@@ -7,18 +7,10 @@
     			minOccurs="0">
     		</xsd:element>
     		<xsd:element name="idclube" type="xsd:int"></xsd:element>
-    		<xsd:element name="idfuncao" type="xsd:int"></xsd:element>
-    		<xsd:element name="nome_integrante">
-    			<xsd:simpleType>
-    				<xsd:restriction base="xsd:string">
-    					<xsd:maxLength value="100"></xsd:maxLength>
-    				</xsd:restriction>
-    			</xsd:simpleType>
-    		</xsd:element>
-    		<xsd:element name="qualificacao" type="xsd:int"
-    			maxOccurs="1" minOccurs="0">
-    		</xsd:element>
-    		<xsd:element name="follow" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+    		<xsd:element name="funcao" type="xsd:string"></xsd:element>
+    		<xsd:element name="resumo" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+    		
+    		<xsd:element name="url_img" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
     	</xsd:sequence>
     </xsd:complexType>
 

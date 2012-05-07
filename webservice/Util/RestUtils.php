@@ -159,9 +159,7 @@ class RestUtils{
 				 if (isset($vars) && !isset($vars['allow'])){
 					die ("Web service error, failed to comply to standards."); 
 				}
-				
 				header('Allow:'.  $vars['allow']); 
-				
 				break; 
 			case 500: 
 				$message = 'The server encountered an error processing your request.';
@@ -243,9 +241,11 @@ return (isset($codes[$status])) ? $codes[$status] : '';
 
 
 public static function webResponse($responseObject, $req, $rootName,  $rootAttributes, $default=null){
-	$root = array("xmlns" => "localhost", "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance", "xsi:schemaLocation" => "localhost Local.xsd ");
+	RestUtils::checkEtag($req, $responseObject);
+	$hash = RestUtils::getEtag($responseObject);
+	
+	$root = array("xmlns" => "localhost", "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance");
 	$root['xsi:schemaLocation'] = 'localhost ' . $rootAttributes;
-	 
 	$options = array(
 			"indent"          => "    ",
 			"linebreak"       => "\n",
@@ -254,30 +254,30 @@ public static function webResponse($responseObject, $req, $rootName,  $rootAttri
 			"encoding"        => "UTF-8",
 			XML_SERIALIZER_OPTION_RETURN_RESULT => true,
 			XML_SERIALIZER_OPTION_CLASSNAME_AS_TAGNAME => true,
-			"rootAttributes"  => array("xmlns" => "localhost", "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance", "xsi:schemaLocation" => "localhost Locais.xsd "),
 			"namespace" 		=> "localhost",
 			"ignoreNull"      => true,
 	);
-	
 	if (isset($default)){
+		
 		$options["defaultTagName"] = $default; 
 	}
-	RestUtils::checkEtag($req, $responseObject);
 	$xmlSerializer = new XML_Serializer($options);
 	
 	if ($req->getHttpAccept() == 'json'){
-		RestUtils::sendResponse(200, null, json_encode($responseObject));
+		RestUtils::sendResponse(200, null, json_encode($responseObject), 'json', $hash);
 	}
 	else if ($req->getHttpAccept() == 'text/xml'){
-		 $options["rootName"] = $rootName;
+		$validate = new Noticia(); 
+		$options["rootName"] = $rootName;
 		$options["rootAttributes"] = $root ; 
 		$xmlSerializer =  new XML_Serializer($options);
 		$result = $xmlSerializer->serialize($responseObject);
 		if ($result == true){
 			$xmlResponse = $xmlSerializer->getSerializedData();
-			RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
-			/*if($n->validateXMLbyXSD($xmlResponse, "Local.xsd")) {
-			 RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+			RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml', $hash);
+			/*if($validate->validateXMLbyXSD($xmlResponse, $rootAttributes)) {
+			
+			 RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml', $hash);
 			}
 			else {
 			RestUtils::sendResponse(500);

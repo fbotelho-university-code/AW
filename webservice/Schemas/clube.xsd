@@ -3,15 +3,6 @@
     <xsd:complexType name="clubeT">
     	<xsd:sequence>
     		<xsd:element name="idclube" type="xsd:int" minOccurs="0"></xsd:element>
-    		<xsd:element name="idlocal" type="xsd:int"></xsd:element>
-    		<xsd:element name="idcompeticao" type="xsd:int"></xsd:element>
-    		<xsd:element name="nome_clube">
-    			<xsd:simpleType>
-    				<xsd:restriction base="xsd:string">
-    					<xsd:maxLength value="100"></xsd:maxLength>
-    				</xsd:restriction>
-    			</xsd:simpleType>
-    		</xsd:element>
     		<xsd:element name="nome_oficial">
     			<xsd:simpleType>
     				<xsd:restriction base="xsd:string">
@@ -19,10 +10,13 @@
     				</xsd:restriction>
     			</xsd:simpleType>
     		</xsd:element>
-    		<xsd:element name="qualificacao" type="xsd:int"
-    			maxOccurs="1" minOccurs="0">
+    		<xsd:element name="follow" type="xsd:string" maxOccurs="1"
+    			minOccurs="0">
     		</xsd:element>
-    		<xsd:element name="follow" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+    		<xsd:element name="resumo" type="xsd:string" maxOccurs="1"
+    			minOccurs="0">
+    		</xsd:element>
+    		<xsd:element name="url_img" type="xsd:string"></xsd:element>
     	</xsd:sequence>
     </xsd:complexType>
 

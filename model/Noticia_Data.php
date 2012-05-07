@@ -140,7 +140,7 @@ public function __construct($idnoticia='', $tempo='', $dt =''){
  	return $val;    		
  	}
  	
-	public static function getAllNoticias($data, $start=null, $end = null) {
+	public static function getAllNoticias($data, $url, $start=null, $end = null) {
 		$class_Noticia_Locais = new Noticia_Data();
 		$rel = $class_Noticia_Locais->find(array("data_interpretada" => $data), ' LIKE ');
 		
@@ -161,13 +161,10 @@ public function __construct($idnoticia='', $tempo='', $dt =''){
 			$dataResult->noticias = array();  
 			//echo $data; 
 			$rel = $class_Noticia_Locais->find(array("data_interpretada" => $data), ' LIKE ');
-
+			$notEnt = new Noticia(); 
 			if (isset($rel)){
-
 				foreach ($rel as $l){
-					$n = $class_noticia->getObjectById($l->idnoticia);
-					$n->visivel = null; 
-					$dataResult->noticias[] = $n;
+					$dataResult->noticias[] = $notEnt->getRelationArray($l->idnoticia, $url);
 				}
 			}
 			$result['datas'][]= $dataResult; 	

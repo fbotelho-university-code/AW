@@ -1,24 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema targetNamespace="localhost" elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="localhost">
-
+    <xsd:include schemaLocation="noticia.xsd"></xsd:include>
     <xsd:complexType name="localT">
     	<xsd:sequence>
-    		<xsd:element name="idlocal" type="xsd:int" maxOccurs="1" minOccurs="0"></xsd:element>
-    		<xsd:element name="nome_local" maxOccurs="1" minOccurs="0">
+    		<xsd:element name="idlocal" type="xsd:int" maxOccurs="1"
+    			minOccurs="0">
+    		</xsd:element>
+    		<xsd:element name="nome_local" maxOccurs="1"
+    			minOccurs="0">
     			<xsd:simpleType>
     				<xsd:restriction base="xsd:string">
     					<xsd:maxLength value="100"></xsd:maxLength>
     				</xsd:restriction>
     			</xsd:simpleType>
     		</xsd:element>
-    		<xsd:element name="coordenadas" maxOccurs="1" minOccurs="0">
+    		<xsd:element name="lat" maxOccurs="1" minOccurs="0">
     			<xsd:simpleType>
     				<xsd:restriction base="xsd:string">
     					<xsd:maxLength value="45"></xsd:maxLength>
     				</xsd:restriction>
     			</xsd:simpleType>
     		</xsd:element>
-    		<xsd:element name="follow" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+    		<xsd:element name="log" maxOccurs="1" minOccurs="0">
+    			<xsd:simpleType>
+    				<xsd:restriction base="xsd:string">
+    					<xsd:maxLength value="45"></xsd:maxLength>
+    				</xsd:restriction>
+    			</xsd:simpleType>
+    		</xsd:element>
+    		<xsd:element name="follow" type="xsd:string" maxOccurs="1"
+    			minOccurs="0">
+    		</xsd:element>
+    		<xsd:element name="noticias" type="noticiaT"
+    			maxOccurs="unbounded" minOccurs="0">
+    		</xsd:element>
     	</xsd:sequence>
     </xsd:complexType>
 

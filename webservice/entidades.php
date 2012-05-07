@@ -109,11 +109,9 @@
  	*/
 	function processEntidade($req){
 		$entidade = $req->getPathInfo(); $entidade = $entidade[1];
-		
 		if (strcmp($entidade,'clube') != 0 && strcmp($entidade, 'integrante') !=0 ){
 			RestUtils::sendResponse(404); 
 		}
-		
 		switch($req->getMethod()){
 			case 'GET':
 				getEntidade($req, $entidade);
@@ -196,7 +194,7 @@
 			$id = strtolower($entidade) ==  'clube' ?  $en->getIdClube() : $en->getIdIntegrante(); 
 			$en->follow = getUrl() .  $entidade . "/" . $id;  
 		}
-		RestUtils::webResponse($entrys, $req, strtolower(get_class($bdEnt) . "s"), get_class($bdEnt) . "s.xsd", get_class($bdEnt));
+		RestUtils::webResponse($entrys, $req, strtolower(get_class($bdEnt) . "s"), get_class($bdEnt) . "s.xsd", 'data');
 	}
 	
 	/**
@@ -289,7 +287,7 @@
 		foreach ($results as $l){
 			$l->noticias = $rel->getAllNews($l->$idkey, getUrl());
 		}
-		RestUtils::webResponse($results, $req, $bdEnt . 's',  $bdEnt . "s.xsd", $bdEnt);
+		RestUtils::webResponse($results, $req, $bdEnt . 's',  $bdEnt . "s.xsd", 'data');
 	}
 	
 	function getDeEntidadePhoto($req, $ent, $id, $result){
@@ -353,7 +351,7 @@
 	function getDeEntidadeNoticias($req,$ent,$id, $entry){
 		getMore($ent, $id, $entry);
 		//treatGetRequest($req, $entry, $ent);
-		RestUtils::webResponse($entry, $req, $ent . 's',  $ent. "s.xsd", 'Noticia');
+		RestUtils::webResponse($entry, $req, $ent . 's',  $ent. "s.xsd", 'data');
 	}
 	
 	function getMore($ent, $id, $entry){
@@ -382,7 +380,7 @@
 	}
 	
 	function treatGetRequest($req, $entry, $ent){
-		RestUtils::webResponse($entry, $req, get_class($entry), get_class($entry) . ".xsd", 'descricao');
+		RestUtils::webResponse($entry, $req, get_class($entry), get_class($entry) . ".xsd", 'data');
 	}
 	
     /*
