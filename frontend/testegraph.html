@@ -75,6 +75,8 @@
 					noticias_local = result;
 				});
 
+				if(noticias_local==null) return;
+
 				for(var i = 0; i < noticias_local.length; i++) {
 					top10 = inTop10({
 						nome : noticias_local[i].nome_local,
@@ -124,6 +126,8 @@
 				noticia_x_clube.get(0, 0, function(result) {
 					clubes = result;
 				});
+				
+				if(clubes==null) return;
 
 				for(var i = 0; i < clubes.length; i++) {
 					top10 = inTop10({
@@ -173,9 +177,9 @@
 				nr_noticia_integrante.get(0, 0, function(result) {
 					integrantes = result;
 				});
-				if(integrantes == null) {
-					return;
-				}
+				
+				if(integrantes==null) return;
+
 				for(var i = 0; i < integrantes.length; i++) {
 					top10 = inTop10({
 						nome : integrantes[i].nome_integrante,
@@ -224,6 +228,8 @@
 				nr_noticia_data.get(0, 0, function(result) {
 					meses = result;
 				});
+				
+				if(meses==null) return;
 
 				for(var i = 0; i < meses.length; i++) {
 					top10[i] = {
@@ -275,6 +281,8 @@
 				nr_noticia_local.get(0, 0, function(result) {
 					noticias_local = result;
 				});
+				
+				if(noticias_local==null) return;
 
 				for(var i = 0; i < noticias_local.length; i++) {
 					top10 = inTop10({
@@ -434,6 +442,8 @@
 				noticia_data_clube.get(0, 0, function(result) {
 					noticias_mes = result;
 				});
+				
+				if(noticias_mes == null) return;
 				
 				// hammering begins
 				var colors = Highcharts.getOptions().colors;

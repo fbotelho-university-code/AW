@@ -20,6 +20,7 @@ function Observer() {
 				},
 				/* Nada alterado */
 				on304 : function(){
+					console.log("nada alterado");
 					// Nada para fazer?
 				},
 				/* Tratamento de Falhas */
@@ -27,7 +28,7 @@ function Observer() {
 					alert("Erro em: "+observable.url);
 				}
 			});
-		},10);
+		},5);
 		
 		// Adicionar a lista de pes
 		this.pes.push({

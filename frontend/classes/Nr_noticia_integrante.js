@@ -40,15 +40,8 @@ function Nr_noticia_integrante() {
 			  cb(noticias_integrante);
 		    },
 		    /* Tratamento de Falhas */
-		    onFailure: function(response){ 
-		    	if(response.status == 404) {
-		    		
-		    		alert ("N„o existem relacionamento entre integrantes e notÌcias");
-		    		cb(null);
-		    	}
-		    	else {
-		    		alert("Erro ao recuperar 'Not√≠cias por integrante' do webservice!"); }
-		    	}
-			});
+		    on404: cb(null),
+		    onFailure: function(){ alert("Erro ao recuperar 'Not√≠cias por integrante' do webservice!"); }
+		});
 	};
 }
