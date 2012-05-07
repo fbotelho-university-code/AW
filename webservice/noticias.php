@@ -112,8 +112,6 @@
 	 **/
 	function getRoot($req){
 		$news = getAllNews($req); 
-		Utill::checkEtag($req, $news);
-		
 		if ($req->getHttpAccept() == 'text/xml'){
 				global $options; $options["rootName"] = "noticias";
 				$xmlSerializer =  new XML_Serializer($options);
@@ -508,7 +506,6 @@
 		$n = $n->getRelationArray($id, getUrl());
 		$hash = Utill::checkEtag($req, $n); 
 		$noticia = new Noticia();
-		 
 		if ($req->getHttpAccept() == 'json'){
 			RestUtils::sendResponse(200, null, json_encode($n), $hash); 
 		}

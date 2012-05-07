@@ -19,6 +19,9 @@ require_once("Model.php");
 		return true; 
 	}
 	
+	public function getRel(){
+		return "idclube"; 
+	}
 	public function getKeyFields(){
 		return array ('idnoticia', 'idclube' ); 
 	}

@@ -38,7 +38,7 @@
  		$val = substr($r, 0, $pos );
  		return $val; 
  	}
- 	
+ /*	
  	$options = array(
       "indent"          => "    ",
       "linebreak"       => "\n",
@@ -52,6 +52,7 @@
        "namespace" 		=> "localhost"
  	); 
  	
+ 	*/
 
 	$req  = RestUtils::processRequest();  // The request made by the client.
 	checkRequest($req);   // check that the request is valid. Dies otherwise.  
@@ -93,48 +94,9 @@
 	
 	/**
 	 * Listar todas as entidades 
-	 * Representação em XML, JSON que devem conter apontadores para o recurso de cada entidade.
-	 * Representao tambem deve saber em grupos de entidade  
 	 **/
 	function getRoot($req){
-		$clube = new Clube();
-		$clube->setIdclube("Um campo numerico identificando univocamente o clube"); 
-		$clube->setIdcompeticao("Um identificador numerico identificando a competicao em que o clube se encontra"); 
-		$clube->setIdlocal("Um identificador numerico identificando o local do clube");
-		$clube->setNome_clube("O nome do clube"); 
-		$clube->setNome_oficial("O nome oficial do clube");
-		$clube->follow = "url/follow/clubes"; 
-		
-		//TODO : follow local, competi�ao, etc. 
-		$integrante = new Integrante();
-		$integrante->setIdclube("um campo numerico identificando univocamente o clube associado actualmente ao integrante"); 
-		$integrante->setIdfuncao("Um campo numerico identificando a funcao do integrante"); 
-		$integrante->setIdintegrante("Um campo numerico identificano univocamente o integrante");
-		$integrante->setNome_integrante("O nome completo do integrante");
-		
-		//TODO get current url 
-		$integrante->follow = "url/follow/integrantes";
-		$result = array($clube, $integrante); 
-		if ($req->getHttpAccept() == 'text/xml'){
-			global $options; $options["rootName"] = "entidades"; $options["defaultTagName"]  = "entidade";  
-
-			$xmlSerializer =  new XML_Serializer($options); 
-			//var_dump($news); 
-			$result = $xmlSerializer->serialize($result);
-		if ($result == true){
-			RestUtils::sendResponse(200, null, $xmlSerializer->getSerializedData(), 'text/xml'); 
-		}
-		else{
-			RestUtils::sendResponse(500); 
-			}
-		}
-		else if ($req->getHttpAccept() == 'json'){
-			RestUtils::sendResponse(200, null,  json_encode($result)); 
-		}
-		else{
-			RestUtils::sendResponse(406); 
-		}
-		//TODO - send malformed request response
+		RestUtils::sendResponse(404); 
 	}
 	
 
@@ -209,9 +171,13 @@
 		RestUtils::sendResponse(201, null, $id, 'text'); 
 	}
 	
-	
+	/**
+	 * ROOT : LISTA TODOS OS CLUBES OU INTEGRANTES DISPONIVEIS
+	 * @param unknown_type $req
+	 * @param unknown_type $entidade
+	 * @param unknown_type $entradas
+	 */
 	function getEntidade($req, $entidade, $entradas=null){
-		
 		$bdEnt = new $entidade();
 		if (!isset($entradas)){
 			try{
@@ -226,37 +192,11 @@
 		else{
 			$entrys = $entradas;
 		}
-		
 		foreach ($entrys as $en){
 			$id = strtolower($entidade) ==  'clube' ?  $en->getIdClube() : $en->getIdIntegrante(); 
 			$en->follow = getUrl() .  $entidade . "/" . $id;  
 		}
-		if ($req->getHttpAccept() == 'json'){
-			RestUtils::sendResponse(200, null, json_encode($entrys)); 
-		}
-		else if ($req->getHttpAccept() == 'text/xml'){
-			
-			global $options; $options["rootName"] = get_class($bdEnt) .  "s"; 
-			$options["defaultTagName"]  = get_class($bdEnt);
-			 $options["rootAttributes"]["xsi:schemaLocation"] = "localhost " . $options["rootName"] . ".xsd ";
-			 $options["rootName"] = strtolower($options["rootName"]); 
-			$xmlSerializer =  new XML_Serializer($options); 
-			$n->visivel = null; // we do not want this to show on the result.  
-			$result = $xmlSerializer->serialize($entrys);
-			
-			$xmlResponse = $xmlSerializer->getSerializedData(); 
-			
-			RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
-			
-			/*if($bdEnt->validateXMLbyXSD($xmlResponse,  $options["rootName"] . ".xsd")) {
-				RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
-			}
-			else {
-				RestUtils::sendResponse(500);
-			}*/
-		}else{
-			RestUtils::sendResponse(406); 
-		}
+		RestUtils::webResponse($entrys, $req, strtolower(get_class($bdEnt) . "s"), get_class($bdEnt) . "s.xsd", get_class($bdEnt));
 	}
 	
 	/**
@@ -282,7 +222,6 @@
 			}
 		}
 		else{
-			
 			if ($req->getMethod() != 'GET'){
 				RestUtils::sendResponse(405, array('allow' => "GET"));
 			}
@@ -301,9 +240,8 @@
 			if (count($results) == 0){
 				RestUtils::sendResponse(404); 
 			}
-			getEntidade($req, $ent, $results); 
+			getCompleteRegexNewsEnt($results, $req, $ent); 
 		}
-		
 		switch(count($req->getPathInfo())){
 			case 2: 
 		switch($req->getMethod()){
@@ -339,7 +277,23 @@
 		}
 	}
 	
+	/**
+	 * Caso de Regex para entidades 
+	 * @param unknown_type $results
+	 * @param unknown_type $req
+	 * @param unknown_type $ent
+	 */
+	function getCompleteRegexNewsEnt($results, $req, $bdEnt){
+		$rel = strcmp($bdEnt, 'clube') == 0 ?  new Noticia_Has_Clube() : new Noticia_Has_Integrante();
+		$idkey =  "id" . $bdEnt;  
+		foreach ($results as $l){
+			$l->noticias = $rel->getAllNews($l->$idkey, getUrl());
+		}
+		RestUtils::webResponse($results, $req, $bdEnt . 's',  $bdEnt . "s.xsd", $bdEnt);
+	}
+	
 	function getDeEntidadePhoto($req, $ent, $id, $result){
+		
 		$img =  $ent . '_Imagem'; 
 		$img = new $img(); 
 		if (isset($result->url_img)){
@@ -414,31 +368,12 @@
 	}
 	
 	function getDeEntidade($req, $ent, $id, $entry){
+		
 		treatGetRequest($req, $entry, $ent); 
 	}
 	
 	function treatGetRequest($req, $entry, $ent){
-		if ($req->getHttpAccept() == 'json'){
-			RestUtils::sendResponse(200, null, json_encode($entry)); 
-		}
-		else if ($req->getHttpAccept() == 'text/xml'){
-			//TODO descricao está cheio. 
-			global $options; $options["rootName"] = get_class($entry) ; $options["defaultTagName"]  = "descricao";
-			$options["rootAttributes"]["xsi:schemaLocation"] = "localhost " . $options["rootName"] . ".xsd ";
-			$xmlSerializer =  new XML_Serializer($options); 
-			$result = $xmlSerializer->serialize($entry);
-			
-			$xmlResponse = $xmlSerializer->serialize($entry); 
-			RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
-			/*if($entry->validateXMLbyXSD($xmlResponse,  $options["rootName"] . ".xsd")) {
-				RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
-			}
-			else {
-				RestUtils::sendResponse(500);
-			}*/
-		}else{
-			RestUtils::sendResponse(406); 
-		}
+		RestUtils::webResponse($entry, $req, get_class($entry), get_class($entry) . ".xsd", 'descricao');
 	}
 	
 	

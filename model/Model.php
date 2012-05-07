@@ -10,7 +10,9 @@ require_once ('DAO.php');
 require_once ('../webservice/Util/RestUtils.php'); 
 
 abstract class Model{
-	private $dao; 
+	private  $dao;
+
+	
 	/**
 	 * Should check the validity of the data it is composed.
 	 *  
@@ -107,8 +109,8 @@ abstract class Model{
 		$fields = $this->my_get_object_vars();
 		
 		$rs = $this->dao->db->AutoExecute($table, $fields, "INSERT") or $this->throwException($this->dao->db->ErrorMsg() . "<br>CENAS SQL: ".var_export($fields,true). " - Table: ".$table);
-		
 		$id = $this->dao->db->Insert_ID();
+		
 		$this->dao->disconnect();
 		return $id;
 	}
@@ -125,7 +127,8 @@ abstract class Model{
 		$sql .= $this->createWhereClause($fields) . ';';
 		$this->dao->execute($sql);
 	}
-	public function execute($m){ $this->dao->execute($m); }
+	
+	public function execute($m){ return $this->dao->execute($m); }
 
 /**
  * Return the Where statement selecting this object in the database.
@@ -272,7 +275,7 @@ abstract class Model{
 		$end = $var['count'];
 		
 		$table = get_class($this);
-		$sql = "SELECT "; 
+		$sql = "SELECT distinct "; 
 				
 		$sql .= $this->select($fields); 
 		$sql .= ' FROM ' . $table;
@@ -328,7 +331,7 @@ abstract class Model{
 			$table = get_class($this);
 		}
 		
-		$sql = 'select '; 
+		$sql = 'select distinct '; 
 		$sql .= $this->select($selectedFields);
 		$sql .= ' from ' . $table;
 		
@@ -439,6 +442,20 @@ abstract class Model{
 	 foreach($arrayAssoc as $key => $value) {
 			$obj->$key = $value;
 		}
+	}
+	
+	
+	public function getAllNews($idnoticia, $url){
+		$sql = "select idnoticia from " . get_class($this) . " where " . $this->getRel() .  " = "  . $idnoticia ;
+
+		$rs = $this->execute($sql);
+		if  (!$rs->fields) return ;
+		$result = array(); 
+
+		foreach  ($rs->fields as $key => $value){
+			$result[] = Noticia::getRelationArray($value, $url);
+		}
+		return $result; 
 	}
 }
 ?>
