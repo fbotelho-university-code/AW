@@ -173,7 +173,9 @@
 				nr_noticia_integrante.get(0, 0, function(result) {
 					integrantes = result;
 				});
-
+				if(integrantes == null) {
+					return;
+				}
 				for(var i = 0; i < integrantes.length; i++) {
 					top10 = inTop10({
 						nome : integrantes[i].nome_integrante,
