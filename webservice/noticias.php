@@ -281,9 +281,11 @@
 					RestUtils::sendResponse(500);
 				}*/
 			} else {
+				 
 				RestUtils::sendResponse(500); 
 			}
 		}else{
+			 
 			RestUtils::sendResponse(406); 
 		}
 	}
@@ -518,13 +520,13 @@
 			
 			if ($result == true){
 				$xmlResponse = $xmlSerializer->getSerializedData();
-				//RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml', $hash);
-				if($noticia->validateXMLbyXSD($xmlResponse, "Noticia.xsd")) {
+				RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml', $hash);
+				/*if($noticia->validateXMLbyXSD($xmlResponse, "Noticia.xsd")) {
 					RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml' , $hash);
 				}
 				else {
 					RestUtils::sendResponse(500);
-				}
+				}*/
 			} else {
 				RestUtils::sendResponse(500); 
 			}
