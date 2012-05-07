@@ -293,7 +293,6 @@
 	}
 	
 	function getDeEntidadePhoto($req, $ent, $id, $result){
-		
 		$img =  $ent . '_Imagem'; 
 		$img = new $img(); 
 		if (isset($result->url_img)){
@@ -303,7 +302,6 @@
 				if (!isset($img)){
 					RestUtils::sendResponse(404); 
 				}else{
-					//var_dump($img->content_type); 
 					header('Content-type:' .  $img->content_type); 
 					echo stripslashes($img->imagem);
 					exit;  
@@ -316,7 +314,6 @@
 		}else{
 			RestUtils::sendResponse(404); 
 		}
-		
 	}
 	
 	function deleteIntegrante($id, $entry){
@@ -355,16 +352,28 @@
 	
 	function getDeEntidadeNoticias($req,$ent,$id, $entry){
 		getMore($ent, $id, $entry);
-		treatGetRequest($req, $entry, $ent); 		 	
+		//treatGetRequest($req, $entry, $ent);
+		RestUtils::webResponse($entry, $req, $ent . 's',  $ent. "s.xsd", 'Noticia');
 	}
 	
 	function getMore($ent, $id, $entry){
+		$rel = strcmp($ent, 'clube') == 0 ?  new Noticia_Has_Clube() : new Noticia_Has_Integrante();
+		$idkey =  "id" . $ent;
+		
 		if (strtolower($ent)== 'clube'){
-			$entry->noticias = Noticia_Has_Clube::getAllNoticias($id);  	
+			$entry->noticias = Noticia_Has_Clube::getAllNoticias($id);
 		}
 		else {
 			$entry->noticias = Noticia_Has_Integrante::getAllNoticias($id);  	
 		}
+		$result = array(); 
+		if (isset($entry->noticias)){
+			foreach ($entry->noticias as $n){
+				$result[] = $rel->getAllNews($entry->$idkey, getUrl());  
+			}
+			$entry->noticias = $result; 
+		}
+		
 	}
 	
 	function getDeEntidade($req, $ent, $id, $entry){
@@ -375,7 +384,6 @@
 	function treatGetRequest($req, $entry, $ent){
 		RestUtils::webResponse($entry, $req, get_class($entry), get_class($entry) . ".xsd", 'descricao');
 	}
-	
 	
     /*
      * Checks if the request is valid through whitelistening of the possible request types.
