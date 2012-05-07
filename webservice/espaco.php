@@ -52,8 +52,7 @@
 	  	
 	  	$local = new Local();
 	  	$results = $local->getBetween($result[1], $result[2], $result[3], $result[4]);
-	  	
-	  	//$Local->getAllNoticias($results); 
+	  	getCompleteNewsLocais($results, $req); 
 	  }
 
 	
@@ -204,7 +203,7 @@
 	 * @param unknown_type $locais array de locais
 	 */
 	function getCompleteNewsLocais($locais, $req){
-		$rel = new Noticia_locais(); 
+		$rel = new Noticia_locais();
 		foreach ($locais as $l){
 			$l->noticias = $rel->getAllNews($l->idlocal, getUrl());
 		}
