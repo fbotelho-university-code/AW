@@ -3,11 +3,10 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 02, 2012 at 04:59 PM
+-- Generation Time: May 07, 2012 at 03:25 PM
 -- Server version: 5.1.44
 -- PHP Version: 5.3.1
 
-SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
 
@@ -30,346 +29,41 @@ CREATE TABLE IF NOT EXISTS `clube` (
   `idclube` int(11) NOT NULL AUTO_INCREMENT,
   `nome_oficial` varchar(100) NOT NULL,
   `resumo` text,
+  `url_img` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`idclube`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Esta tabela representa ....' AUTO_INCREMENT=9 ;
-
--- --------------------------------------------------------
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Esta tabela representa ....' AUTO_INCREMENT=30 ;
 
 --
--- Table structure for table `clubes_lexico`
+-- Dumping data for table `clube`
 --
 
-CREATE TABLE IF NOT EXISTS `clubes_lexico` (
-  `idclube` int(11) NOT NULL,
-  `idlexico` int(11) NOT NULL,
-  PRIMARY KEY (`idclube`,`idlexico`),
-  KEY `idlexico` (`idlexico`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `clube_imagem`
---
-
-CREATE TABLE IF NOT EXISTS `clube_imagem` (
-  `idclube` int(11) NOT NULL,
-  `imagem` blob NOT NULL,
-  `content_type` varchar(255) NOT NULL,
-  PRIMARY KEY (`idclube`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `comentario`
---
-
-CREATE TABLE IF NOT EXISTS `comentario` (
-  `idnoticia` int(11) NOT NULL,
-  `idcomentario` int(11) NOT NULL AUTO_INCREMENT,
-  `comentario` varchar(4048) NOT NULL,
-  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `user` varchar(1024) NOT NULL DEFAULT 'anonymous',
-  PRIMARY KEY (`idcomentario`),
-  KEY `idnoticia` (`idnoticia`),
-  KEY `user` (`user`(255))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `competicao`
---
-
-CREATE TABLE IF NOT EXISTS `competicao` (
-  `idcompeticao` int(11) NOT NULL AUTO_INCREMENT,
-  `nome_competicao` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`idcompeticao`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `fonte`
---
-
-CREATE TABLE IF NOT EXISTS `fonte` (
-  `idfonte` int(11) NOT NULL AUTO_INCREMENT,
-  `nome` varchar(45) DEFAULT NULL,
-  `main_url` varchar(100) DEFAULT NULL,
-  `ligado` tinyint(1) NOT NULL,
-  PRIMARY KEY (`idfonte`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `fonte_has_parametros`
---
-
-CREATE TABLE IF NOT EXISTS `fonte_has_parametros` (
-  `idfonte` int(11) NOT NULL,
-  `idparametros` int(11) NOT NULL,
-  PRIMARY KEY (`idfonte`,`idparametros`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `integrante`
---
-
-CREATE TABLE IF NOT EXISTS `integrante` (
-  `idintegrante` int(11) NOT NULL AUTO_INCREMENT,
-  `idclube` int(11) NOT NULL DEFAULT '0',
-  `funcao` varchar(255) NOT NULL,
-  `nome_integrante` varchar(100) DEFAULT NULL,
-  `resumo` text,
-  PRIMARY KEY (`idintegrante`,`idclube`,`funcao`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=111 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `integrantes_lexico`
---
-
-CREATE TABLE IF NOT EXISTS `integrantes_lexico` (
-  `idintegrante` int(11) NOT NULL,
-  `idlexico` int(11) NOT NULL,
-  PRIMARY KEY (`idintegrante`,`idlexico`),
-  KEY `idlexico` (`idlexico`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `lexico`
---
-
-CREATE TABLE IF NOT EXISTS `lexico` (
-  `nucleo` varchar(255) DEFAULT NULL,
-  `contexto` varchar(255) NOT NULL,
-  `entidade` varchar(255) DEFAULT NULL,
-  `tipo` varchar(255) NOT NULL,
-  `pol` int(10) NOT NULL,
-  `ambiguidade` int(10) NOT NULL,
-  `idlexico` int(11) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`idlexico`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=392 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `local`
---
-
-CREATE TABLE IF NOT EXISTS `local` (
-  `idlocal` int(11) NOT NULL AUTO_INCREMENT,
-  `nome_local` varchar(100) DEFAULT NULL,
-  `coordenadas` varchar(45) NOT NULL,
-  PRIMARY KEY (`idlocal`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `noticia`
---
-
-CREATE TABLE IF NOT EXISTS `noticia` (
-  `idnoticia` int(11) NOT NULL AUTO_INCREMENT,
-  `idfonte` int(11) NOT NULL,
-  `data_pub` datetime DEFAULT NULL,
-  `assunto` varchar(100) DEFAULT NULL,
-  `descricao` varchar(250) DEFAULT NULL,
-  `texto` longtext,
-  `url` text,
-  PRIMARY KEY (`idnoticia`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `noticia_bin`
---
-
-CREATE TABLE IF NOT EXISTS `noticia_bin` (
-  `idnoticia` int(11) NOT NULL,
-  `idfonte` int(11) DEFAULT NULL,
-  `data_pub` datetime DEFAULT NULL,
-  `assunto` varchar(100) DEFAULT NULL,
-  `descricao` varchar(250) DEFAULT NULL,
-  `texto` longtext,
-  `url` text
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Tabela para noticias que removidas';
-
--- --------------------------------------------------------
-
---
--- Table structure for table `noticia_data`
---
-
-CREATE TABLE IF NOT EXISTS `noticia_data` (
-  `idnoticia` int(11) NOT NULL,
-  `tempo` varchar(100) NOT NULL,
-  `data_interpretada` date NOT NULL,
-  PRIMARY KEY (`idnoticia`,`tempo`,`data_interpretada`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `noticia_has_clube`
---
-
-CREATE TABLE IF NOT EXISTS `noticia_has_clube` (
-  `idnoticia` int(11) NOT NULL,
-  `idclube` int(11) NOT NULL,
-  `qualificacao` int(1) NOT NULL,
-  `idlexico` int(11) NOT NULL,
-  PRIMARY KEY (`idnoticia`,`idclube`),
-  KEY `idclube` (`idclube`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `noticia_data_clube`
---
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `aw`.`noticia_data_clube` AS select month(`nd`.`data_interpretada`) AS `month( nd.data_interpretada )`,`c`.`nome_oficial` AS `nome_oficial`,count(`n`.`idnoticia`) AS `count( n.idnoticia )` from (((`aw`.`noticia_data` `nd` join `aw`.`clube` `c`) join `aw`.`noticia` `n`) join `aw`.`noticia_has_clube` `nc`) where ((`n`.`idnoticia` = `nd`.`idnoticia`) and (`n`.`idnoticia` = `nc`.`idnoticia`) and (`nc`.`idclube` = `c`.`idclube`) and (`nd`.`idnoticia` = `nc`.`idnoticia`) and (`nd`.`data_interpretada` like '2012-%')) group by month(`nd`.`data_interpretada`),`c`.`idclube`;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `noticia_has_integrante`
---
-
-CREATE TABLE IF NOT EXISTS `noticia_has_integrante` (
-  `idnoticia` int(11) NOT NULL,
-  `idintegrante` int(11) NOT NULL,
-  `qualificacao` int(11) NOT NULL DEFAULT '0',
-  `idlexico` int(11) NOT NULL,
-  PRIMARY KEY (`idnoticia`,`idintegrante`),
-  KEY `idintegrante` (`idintegrante`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `noticia_locais`
---
-
-CREATE TABLE IF NOT EXISTS `noticia_locais` (
-  `idnoticia` int(11) NOT NULL,
-  `idlocal` int(11) NOT NULL,
-  PRIMARY KEY (`idnoticia`,`idlocal`),
-  KEY `idnoticia` (`idnoticia`,`idlocal`),
-  KEY `idlocal` (`idlocal`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `noticia_x_clube`
---
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `aw`.`noticia_x_clube` AS select `c`.`nome_oficial` AS `nome_oficial`,count(0) AS `nr_noticia` from (`aw`.`clube` `c` join `aw`.`noticia_has_clube` `nc`) where (`c`.`idclube` = `nc`.`idclube`) group by `c`.`idclube`;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `nr_noticia_data`
---
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `aw`.`nr_noticia_data` AS select month(`nd`.`data_interpretada`) AS `month( nd.data_interpretada )`,count(0) AS `nr_noticia` from `aw`.`noticia_data` `nd` where (`nd`.`data_interpretada` like '2012-%');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `nr_noticia_integrante`
---
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `aw`.`nr_noticia_integrante` AS select `i`.`nome_integrante` AS `nome_integrante`,count(0) AS `nr_noticia` from (`aw`.`integrante` `i` join `aw`.`noticia_has_integrante` `ni`) where (`i`.`idintegrante` = `ni`.`idintegrante`) group by `i`.`idintegrante`;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `nr_noticia_local_clube`
---
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `aw`.`nr_noticia_local_clube` AS select `l`.`nome_local` AS `nome_local`,`c`.`nome_oficial` AS `nome_oficial`,count(`n`.`idnoticia`) AS `count( n.idnoticia )` from ((((`aw`.`noticia_locais` `nl` join `aw`.`local` `l`) join `aw`.`clube` `c`) join `aw`.`noticia` `n`) join `aw`.`noticia_has_clube` `nc`) where ((`nl`.`idlocal` = `l`.`idlocal`) and (`n`.`idnoticia` = `nl`.`idnoticia`) and (`n`.`idnoticia` = `nc`.`idnoticia`) and (`nc`.`idclube` = `c`.`idclube`) and (`nl`.`idnoticia` = `nc`.`idnoticia`)) group by `l`.`idlocal`,`c`.`idclube`;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `parametros`
---
-
-CREATE TABLE IF NOT EXISTS `parametros` (
-  `idparametros` int(11) NOT NULL,
-  `nome_parametro` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`idparametros`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `testview`
---
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `aw`.`testview` AS select `l`.`nucleo` AS `nucleo`,`l`.`contexto` AS `contexto`,`l`.`entidade` AS `entidade`,`l`.`tipo` AS `tipo`,`l`.`pol` AS `pol`,`l`.`ambiguidade` AS `ambiguidade`,`l`.`idlexico` AS `idlexico`,`i`.`nome_integrante` AS `nome_integrante` from ((`aw`.`lexico` `l` join `aw`.`integrante` `i`) join `aw`.`integrantes_lexico` `il`) where ((`l`.`idlexico` = `il`.`idlexico`) and (`i`.`idintegrante` = `il`.`idintegrante`));
-
--- --------------------------------------------------------
-
---
--- Table structure for table `view_noticia_clube`
---
--- in use(#1356 - View 'aw.view_noticia_clube' references invalid table(s) or column(s) or function(s) or definer/invoker of view lack rights to use them)
-
--- --------------------------------------------------------
-
---
--- Table structure for table `view_noticia_clube_lexico`
---
--- in use(#1356 - View 'aw.view_noticia_clube_lexico' references invalid table(s) or column(s) or function(s) or definer/invoker of view lack rights to use them)
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `comentario`
---
-ALTER TABLE `comentario`
-  ADD CONSTRAINT `comentario_ibfk_1` FOREIGN KEY (`idnoticia`) REFERENCES `noticia` (`idnoticia`) ON DELETE CASCADE;
-
---
--- Constraints for table `noticia_data`
---
-ALTER TABLE `noticia_data`
-  ADD CONSTRAINT `noticia_data_ibfk_1` FOREIGN KEY (`idnoticia`) REFERENCES `noticia` (`idnoticia`) ON DELETE CASCADE;
-
---
--- Constraints for table `noticia_has_clube`
---
-ALTER TABLE `noticia_has_clube`
-  ADD CONSTRAINT `noticia_has_clube_ibfk_1` FOREIGN KEY (`idclube`) REFERENCES `clube` (`idclube`) ON DELETE CASCADE,
-  ADD CONSTRAINT `noticia_has_clube_ibfk_2` FOREIGN KEY (`idnoticia`) REFERENCES `noticia` (`idnoticia`) ON DELETE CASCADE;
-
---
--- Constraints for table `noticia_has_integrante`
---
-ALTER TABLE `noticia_has_integrante`
-  ADD CONSTRAINT `noticia_has_integrante_ibfk_1` FOREIGN KEY (`idnoticia`) REFERENCES `noticia` (`idnoticia`) ON DELETE CASCADE,
-  ADD CONSTRAINT `noticia_has_integrante_ibfk_2` FOREIGN KEY (`idintegrante`) REFERENCES `integrante` (`idintegrante`) ON DELETE CASCADE;
-
---
--- Constraints for table `noticia_locais`
---
-ALTER TABLE `noticia_locais`
-  ADD CONSTRAINT `noticia_locais_ibfk_1` FOREIGN KEY (`idnoticia`) REFERENCES `noticia` (`idnoticia`) ON DELETE CASCADE,
-  ADD CONSTRAINT `noticia_locais_ibfk_2` FOREIGN KEY (`idlocal`) REFERENCES `local` (`idlocal`) ON DELETE CASCADE;
-SET FOREIGN_KEY_CHECKS=1;
+INSERT INTO `clube` (`idclube`, `nome_oficial`, `resumo`, `url_img`) VALUES
+(1, 'Club Sport Marítimo', 'O Club Sport Marítimo é um clube de futebol da ilha da Madeira, tendo cerca de 24000 sócios inscritos. A sua principal modalidade é o futebol, mas conta ainda com andebol, automobilismo, atletismo, basquetebol, futsal, hóquei em patins, patinagem, karaté, natação, pesca desportiva, tiro e voleibol. O Maior clube da ilha da madeira, fruto de uma maior mobilidade social, tem claramente a maioria da população da sua região como adepta. Um dos clubes mais históricos do campeonato português tem no futebol a sua maior e mais mediática modalidade, estando a sua história indubitavelmente ligada a este desporto.', NULL),
+(2, 'Rio Ave Futebol Clube', 'O Rio Ave Futebol Clube é um clube português de futebol, da cidade de Vila do Conde, que disputa actualmente a Liga Zon Sagres. Foi fundado em 18 de Janeiro de 1939. A sua casa é o Estádio dos Arcos, situado na cidade de Vila do Conde, ao lado do Pavilhão de Desportos.', 'true'),
+(3, 'Sport Lisboa e Benfica', 'O Sport Lisboa e Benfica é um clube multidesportivo sediado em Lisboa. O seu eclectismo, historial e forte base de adeptos fazem do Benfica um dos maiores clubes de Portugal e um dos mais prestigiados a nível mundial, tal como os outros clubes portugueses pertencentes aos "três grandes". As estimativas em relação ao número de adeptos apontam para cerca de 14 milhões espalhados por todo o mundo. Segundo o Guiness, o Benfica é o clube do mundo com mais sócios activos, cerca de 160.000, na altura, atingindo agora os 230.000 sócios. Foi considerado pela IFFHS como o nono melhor clube do século XX. Além do futebol, este clube distingue-se também noutras modalidades (apresentadas no final do artigo). Utiliza como cores principais o vermelho e o branco e como símbolo uma águia, chamada Vitória. Conquistou o seu último título como campeão nacional de futebol na época de 2009/10 no dia 9 de Maio de 2010, no Estádio da Luz, frente ao Predefinição:PtRA (2-1) com golos de Óscar Cardozo que assim foi o melhor marcador daquela época. É, actualmente, o segundo clube com mais troféus de Portugal, atrás do FC Porto.', 'true'),
+(4, 'Autónomo de Futebol', 'A Associação Académica de Coimbra – Organismo Autónomo de Futebol (AAC–OAF), normalmente apenas designada de Académica de Coimbra, é o clube de futebol profissional mais conhecido da cidade de Coimbra, Portugal. A Associação Académica de Coimbra foi fundada em 1887, e o Organismo Autónomo de Futebol, criado em 1984, sendo o mais antigo clube em Portugal a militar nas divisões profissionais. É hoje em dia presidido por José Eduardo Simões. A Académica é a detentora da 1ª Taça de Portugal, ganha em 1939.', NULL),
+(5, 'Sporting Clube de Portugal', 'O Sporting Clube de Portugal é um clube multi-desportivo português, fundado em 1906. Presente nas mais diversas modalidades é o clube português que mais títulos conquistou e o segundo com mais títulos na Europa, só ultrapassado pelo Barcelona, de Espanha. A nível mundial é o clube com mais medalhas e vitórias em competições olímpicas. Clube da capital, Lisboa, é um dos chamados "3 grandes de Portugal", destacando-se nas últimas duas décadas pelas suas escolas de formação em futebol, conseguindo ser o único clube do mundo a formar dois jogadores eleitos com o título de melhor jogador do mundo, Luís Figo e Cristiano Ronaldo. A equipa de futebol do Sporting Clube Portugal joga no Estádio José Alvalade, em Lisboa.', 'true'),
+(6, 'Autónomo de Futebol', 'A Associação Académica de Coimbra – Organismo Autónomo de Futebol (AAC–OAF), normalmente apenas designada de Académica de Coimbra, é o clube de futebol profissional mais conhecido da cidade de Coimbra, Portugal. A Associação Académica de Coimbra foi fundada em 1887, e o Organismo Autónomo de Futebol, criado em 1984, sendo o mais antigo clube em Portugal a militar nas divisões profissionais. É hoje em dia presidido por José Eduardo Simões. A Académica é a detentora da 1ª Taça de Portugal, ganha em 1939.', NULL),
+(7, 'Sporting Clube de Portugal', 'O Sporting Clube de Portugal é um clube multi-desportivo português, fundado em 1906. Presente nas mais diversas modalidades é o clube português que mais títulos conquistou e o segundo com mais títulos na Europa, só ultrapassado pelo Barcelona, de Espanha. A nível mundial é o clube com mais medalhas e vitórias em competições olímpicas. Clube da capital, Lisboa, é um dos chamados "3 grandes de Portugal", destacando-se nas últimas duas décadas pelas suas escolas de formação em futebol, conseguindo ser o único clube do mundo a formar dois jogadores eleitos com o título de melhor jogador do mundo, Luís Figo e Cristiano Ronaldo. A equipa de futebol do Sporting Clube Portugal joga no Estádio José Alvalade, em Lisboa.', 'true'),
+(8, 'Paços de Ferreira', 'O Futebol Clube Paços de Ferreira é um clube de futebol português, sediado em Paços de Ferreira.', NULL),
+(9, 'Futebol Clube do Porto', 'O Futebol Clube do Porto é um clube desportivo português fundado em 1893 da cidade do Porto. É o clube com maior número de títulos do futebol português, contabilizando 69 troféus, dos quais 7 internacionais. O principal rival Benfica possui 68 títulos, com "apenas" dois troféus internacionais. É o único clube português penta-campeão de futebol, duas vezes tetra-campeão e detentor de quatro triplas (1997-98, 2002-03, 2005-06 e 2008-09). Possui o deca-campeonato em hóquei em patins e é o clube de futebol europeu com mais títulos desde 1974/75. Se considerarmos todas as categorias de futebol (sénior, júnior e juvenil), o FC Porto é, novamente, quem mais títulos tem, com 124 troféus. É, ainda, o primeiro clube português a terminar o campeonato nacional sem derrotas no século XXI, feito que apenas tinha sido alcançado em 1972/1973 pelo Benfica. O Porto detém, ainda, o recorde de maior distância para o segundo classificado: 21 pontos para o Benfica em 2010/2011', 'true'),
+(10, 'Paços de Ferreira', 'O Futebol Clube Paços de Ferreira é um clube de futebol português, sediado em Paços de Ferreira.', NULL),
+(11, 'Futebol Clube do Porto', 'O Futebol Clube do Porto é um clube desportivo português fundado em 1893 da cidade do Porto. É o clube com maior número de títulos do futebol português, contabilizando 69 troféus, dos quais 7 internacionais. O principal rival Benfica possui 68 títulos, com "apenas" dois troféus internacionais. É o único clube português penta-campeão de futebol, duas vezes tetra-campeão e detentor de quatro triplas (1997-98, 2002-03, 2005-06 e 2008-09). Possui o deca-campeonato em hóquei em patins e é o clube de futebol europeu com mais títulos desde 1974/75. Se considerarmos todas as categorias de futebol (sénior, júnior e juvenil), o FC Porto é, novamente, quem mais títulos tem, com 124 troféus. É, ainda, o primeiro clube português a terminar o campeonato nacional sem derrotas no século XXI, feito que apenas tinha sido alcançado em 1972/1973 pelo Benfica. O Porto detém, ainda, o recorde de maior distância para o segundo classificado: 21 pontos para o Benfica em 2010/2011', 'true'),
+(12, 'Sporting Clube de Braga', 'O Sporting Clube de Braga, frequentemente tratado por apenas Sporting de Braga, Braga ou pelo acrónimo SCB, é um clube desportivo fundado oficialmente em 19 de Janeiro em 1921 e sediado na cidade de Braga, em Portugal. Trata-se de um clube eclético que, para além do futebol, se distingue em modalidades como o atletismo e a natação, tendo já vencido vários troféus nacionais e internacionais. Actualmente milita na Primeira Liga de futebol. O Sporting de Braga é hoje um clube de referência nacional que disputa a hegemonia dos três principais clubes portugueses. O clube dispõe de um palmarés significativo que inclui a conquista da Taça de Portugal na época de 1966/67 e da Taça Federação Portuguesa de Futebol em 1976/77. Nas últimas épocas classificou-se repetidamente nos cinco primeiros postos do campeonato português, assegurando presença assídua na Taça UEFA com resultados meritórios. A conquista da Taça Intertoto em 2008, o segundo lugar no Campeonato em 2010, a presença inédita na edição 2010/11 da Liga dos Campeões e o segundo lugar na Liga Europa da UEFA de 2010-11, constituem-se como momentos ímpares da afirmação internacional do clube português que mais tem crescido nos últimos anos. O crescimento desportivo tem sido acompanhado pelo aumento significativo do número de sócios. Actualmente, o Braga conta com mais de 25.000 sócios que acompanham a equipa de forma especial. No final da época de 2009/10, quando o clube disputava o primeiro lugar do campeonato com o Benfica, vários milhares de adeptos acompanharam a equipa nas deslocações às cidades de Leiria e Figueira da Foz. Em casa, o jogo com mais adeptos foi a recepção ao Marítimo em 14 de Fevereiro de 2010 que contou com 30.184 espectadores nas bancadas do Estádio Axa. Tem como principal rival o Vitória de Guimarães, o seu "vizinho" de cidade com quem protagoniza o "Derby do Minho".', 'true'),
+(13, 'Sporting Clube de Braga', 'O Sporting Clube de Braga, frequentemente tratado por apenas Sporting de Braga, Braga ou pelo acrónimo SCB, é um clube desportivo fundado oficialmente em 19 de Janeiro em 1921 e sediado na cidade de Braga, em Portugal. Trata-se de um clube eclético que, para além do futebol, se distingue em modalidades como o atletismo e a natação, tendo já vencido vários troféus nacionais e internacionais. Actualmente milita na Primeira Liga de futebol. O Sporting de Braga é hoje um clube de referência nacional que disputa a hegemonia dos três principais clubes portugueses. O clube dispõe de um palmarés significativo que inclui a conquista da Taça de Portugal na época de 1966/67 e da Taça Federação Portuguesa de Futebol em 1976/77. Nas últimas épocas classificou-se repetidamente nos cinco primeiros postos do campeonato português, assegurando presença assídua na Taça UEFA com resultados meritórios. A conquista da Taça Intertoto em 2008, o segundo lugar no Campeonato em 2010, a presença inédita na edição 2010/11 da Liga dos Campeões e o segundo lugar na Liga Europa da UEFA de 2010-11, constituem-se como momentos ímpares da afirmação internacional do clube português que mais tem crescido nos últimos anos. O crescimento desportivo tem sido acompanhado pelo aumento significativo do número de sócios. Actualmente, o Braga conta com mais de 25.000 sócios que acompanham a equipa de forma especial. No final da época de 2009/10, quando o clube disputava o primeiro lugar do campeonato com o Benfica, vários milhares de adeptos acompanharam a equipa nas deslocações às cidades de Leiria e Figueira da Foz. Em casa, o jogo com mais adeptos foi a recepção ao Marítimo em 14 de Fevereiro de 2010 que contou com 30.184 espectadores nas bancadas do Estádio Axa. Tem como principal rival o Vitória de Guimarães, o seu "vizinho" de cidade com quem protagoniza o "Derby do Minho".', 'true'),
+(14, 'Clube Desportivo Nacional', 'O Clube Desportivo Nacional é um clube português, fundado na ilha da Madeira a 8 de Dezembro de 1910. É muitas vezes referido como Nacional da Madeira ou simplesmente Nacional. A principal modalidade do Nacional é o futebol contando com várias participações na Primeira Liga, a principal divisão portuguesa. É um clube que tem vindo a ganhar preponderância. Foi o único clube da Madeira a participar numa fase de grupos da Liga Europa, depois de eliminar o Zenit de São Petersburgo. Stadim Barreiros Desde o início do século XX, uma importante parte dos Madeirenses sentiram a necessidade da região possuir um estádio polivalente pois, modalidades como o futebol, atletismo e outras, passaram a ter um papel importe na sociedade madeirense do início do século. O Nacional, em 1920 oficializa a intenção de construir um estádio, que não só servisse para a prática do futebol mas também para outras modalidades. Após uma procura exaustiva de terrenos que permitissem a construção de um estádio de média dimensão, foram seleccionados três possíveis localizações, um na Rua Nova da Alegria, o outro junto à Levada de Santa Luzia, e o terceiro perto da Estrada Monumental. Devido às facilidades que o proprietário do terreno ofereceu, e como o Clube tinha as suas raízes nesta zona, ficou decido que o estádio seria junto à Estrada Monumental. Por volta de 1923, deu-se início à arrecadação de fundos, e com as facilidades dadas pelo proprietário, em curto espaço de tempo a obra teve início. Como a obra obteve diversos apoios, devido ao caris sócio-desportivo, foi concluída dentro do período esperado, apesar dos diversos entraves que surgiram. Se quer saber o simblo vá a www. futebol. pt simbolo/C. D. Nacional A sua inauguração teve lugar no dia 26 de Julho de 1927 na presença dos mais altos dignitários da sociedade madeirense.', NULL),
+(15, 'Clube Desportivo Nacional', 'O Clube Desportivo Nacional é um clube português, fundado na ilha da Madeira a 8 de Dezembro de 1910. É muitas vezes referido como Nacional da Madeira ou simplesmente Nacional. A principal modalidade do Nacional é o futebol contando com várias participações na Primeira Liga, a principal divisão portuguesa. É um clube que tem vindo a ganhar preponderância. Foi o único clube da Madeira a participar numa fase de grupos da Liga Europa, depois de eliminar o Zenit de São Petersburgo. Stadim Barreiros Desde o início do século XX, uma importante parte dos Madeirenses sentiram a necessidade da região possuir um estádio polivalente pois, modalidades como o futebol, atletismo e outras, passaram a ter um papel importe na sociedade madeirense do início do século. O Nacional, em 1920 oficializa a intenção de construir um estádio, que não só servisse para a prática do futebol mas também para outras modalidades. Após uma procura exaustiva de terrenos que permitissem a construção de um estádio de média dimensão, foram seleccionados três possíveis localizações, um na Rua Nova da Alegria, o outro junto à Levada de Santa Luzia, e o terceiro perto da Estrada Monumental. Devido às facilidades que o proprietário do terreno ofereceu, e como o Clube tinha as suas raízes nesta zona, ficou decido que o estádio seria junto à Estrada Monumental. Por volta de 1923, deu-se início à arrecadação de fundos, e com as facilidades dadas pelo proprietário, em curto espaço de tempo a obra teve início. Como a obra obteve diversos apoios, devido ao caris sócio-desportivo, foi concluída dentro do período esperado, apesar dos diversos entraves que surgiram. Se quer saber o simblo vá a www. futebol. pt simbolo/C. D. Nacional A sua inauguração teve lugar no dia 26 de Julho de 1927 na presença dos mais altos dignitários da sociedade madeirense.', NULL),
+(16, 'Gil Vicente Futebol Clube', 'O Gil Vicente Futebol Clube é uma agremiação desportiva de Barcelos. Dedica-se ao futebol e a sua equipa principal vai disputar a 1ª Liga.', NULL),
+(17, 'Gil Vicente Futebol Clube', 'O Gil Vicente Futebol Clube é uma agremiação desportiva de Barcelos. Dedica-se ao futebol e a sua equipa principal vai disputar a 1ª Liga.', NULL),
+(18, 'Clube Desportivo Feirense', 'O Clube Desportivo Feirense é um clube de Portugal, da cidade de Santa Maria da Feira. Actualmente o clube tem como principal modalidade o Futebol, mantendo ainda como modalidades o Futebol Feminino, a Natação, o Andebol, a Ginástica, o Cicloturismo e o Badminton.', 'true'),
+(19, 'Clube Desportivo Feirense', 'O Clube Desportivo Feirense é um clube de Portugal, da cidade de Santa Maria da Feira. Actualmente o clube tem como principal modalidade o Futebol, mantendo ainda como modalidades o Futebol Feminino, a Natação, o Andebol, a Ginástica, o Cicloturismo e o Badminton.', 'true'),
+(20, 'União Desportiva de Leiria', 'União Desportiva de Leiria é um clube de futebol português que compete no principal escalão de Portugal. É o principal clube do distrito de Leiria e joga no Estádio Dr. Magalhães Pessoa. O Estádio Dr. Magalhães Pessoa tem capacidade para 24 mil lugares, e foi um dos estádios do Euro 2004. A UD Leiria tem cerca de 3 mil sócios . Em tempos, eram os Ultras Fantasmas que vibravam e apoiavam a equipa leiriense, porem, com a sua extinção, a Frente Leiria, em 2001, continuou esse trabalho. Actualmente é a única claque de apoio ao clube.', NULL),
+(21, 'União Desportiva de Leiria', 'União Desportiva de Leiria é um clube de futebol português que compete no principal escalão de Portugal. É o principal clube do distrito de Leiria e joga no Estádio Dr. Magalhães Pessoa. O Estádio Dr. Magalhães Pessoa tem capacidade para 24 mil lugares, e foi um dos estádios do Euro 2004. A UD Leiria tem cerca de 3 mil sócios . Em tempos, eram os Ultras Fantasmas que vibravam e apoiavam a equipa leiriense, porem, com a sua extinção, a Frente Leiria, em 2001, continuou esse trabalho. Actualmente é a única claque de apoio ao clube.', NULL),
+(22, 'Vitória Sport Club', 'O Vitória Sport Clube, também conhecido como Vitória de Guimarães, ou pelo acrónimo VSC é um clube desportivo sediado na cidade de Guimarães, Portugal. Desde 1918, um grupo de jovens estudantes tinham constituído um grupo de futebol a quem deram o nome de Vitória Sport Clube, mas data de 1922 a sua filiação na Associação de Futebol de Braga, exactamente no primeiro ano de funcionamento daquela associação. A referência mais antiga do Vitória é na edição do \\"Norte Desportivo\\" de 6 de Fevereiro 1938. É hoje um clube de referência nacional que ao longo da sua existência tem vindo a conquistar títulos. É um clube que tem grandes objectivos como o 5º lugar como mínimo, e a presença em provas europeias, como a Liga Europa e a Liga dos Campeões da UEFA. Tem ao longo dos anos conseguido manter uma boa posição como na época 2007-2008 em conseguiu a terceira posição na Primeira Liga. É um clube que tem tentado acabar com o favoritismo dos chamados \\"três grandes\\" indo sempre a luta pelo os primeiros postos da classificação. Tem como os principais rivais o Braga, seu \\"vizinho\\" de cidade, com quem disputa o \\"Derby do Minho\\", o Benfica, Porto e o Sporting. Além do futebol, o Clube tem vindo a criar outras modalidades, tendo algumas modalidades para além do futebol, com destaque para o Voleibol (Campeão Nacional em 2007/2008 e Campeão da Taça de Portugal 2008/2009), mas também Basquetebol (Campeão da ProLiga 2006/2007 e Campeão da Taça de Portugal 2007/2008), Natação, Pólo Aquático, Boxe, Kickboxing, Judo, Karaté, Futebol de Praia (masculino), Ténis de Mesa, Atletismo, Ciclismo (sub-23), Futsal (feminino), entre outras.', NULL),
+(23, 'Vitória Sport Club', 'O Vitória Sport Clube, também conhecido como Vitória de Guimarães, ou pelo acrónimo VSC é um clube desportivo sediado na cidade de Guimarães, Portugal. Desde 1918, um grupo de jovens estudantes tinham constituído um grupo de futebol a quem deram o nome de Vitória Sport Clube, mas data de 1922 a sua filiação na Associação de Futebol de Braga, exactamente no primeiro ano de funcionamento daquela associação. A referência mais antiga do Vitória é na edição do \\"Norte Desportivo\\" de 6 de Fevereiro 1938. É hoje um clube de referência nacional que ao longo da sua existência tem vindo a conquistar títulos. É um clube que tem grandes objectivos como o 5º lugar como mínimo, e a presença em provas europeias, como a Liga Europa e a Liga dos Campeões da UEFA. Tem ao longo dos anos conseguido manter uma boa posição como na época 2007-2008 em conseguiu a terceira posição na Primeira Liga. É um clube que tem tentado acabar com o favoritismo dos chamados \\"três grandes\\" indo sempre a luta pelo os primeiros postos da classificação. Tem como os principais rivais o Braga, seu \\"vizinho\\" de cidade, com quem disputa o \\"Derby do Minho\\", o Benfica, Porto e o Sporting. Além do futebol, o Clube tem vindo a criar outras modalidades, tendo algumas modalidades para além do futebol, com destaque para o Voleibol (Campeão Nacional em 2007/2008 e Campeão da Taça de Portugal 2008/2009), mas também Basquetebol (Campeão da ProLiga 2006/2007 e Campeão da Taça de Portugal 2007/2008), Natação, Pólo Aquático, Boxe, Kickboxing, Judo, Karaté, Futebol de Praia (masculino), Ténis de Mesa, Atletismo, Ciclismo (sub-23), Futsal (feminino), entre outras.', NULL),
+(24, 'Sport Clube Beira-Mar', 'O Beira-Mar é um clube eclético português com sede em Aveiro fundado a 1 de Janeiro de 1922. Neste clube são praticadas várias modalidades sendo o futebol de onze a mais representativa, mas igualmente outras modalidades como o futsal, basquetebol, judo, boxe, ginástica, paintball, bilhar, triatlo, duatlo. Em 2010, a secção de natação suspendeu a sua actividade. Em todas estas modalidades é desenvolvida formação de jovens. Quanto a infraestruturas, tem apenas um pavilhão polidesportivo do Alboi, sendo que as piscinas foram vendidas e o estádio é propriedade do município de Aveiro. É de notar o reconhecimento público como Instituição de Utilidade Pública Oficial da Ordem de Benemerência e tendo-lhe sido atribuída a Medalha de Prata e de Ouro da cidade de Aveiro bem como a Medalha de Mérito do Instituto de Desporto. É o clube mais representativo do distrito. O principal feito do clube foi na época desportiva de 1998-1999, quando venceu a Taça de Portugal frente ao Campomaiorense por 1-0. A equipa era treinada por António Sousa e o golo foi marcado por seu filho Ricardo Sousa. Na temporada de 2009-2010 voltou a sagrar-se Campeão Nacional da Liga Vitalis o que lhe permitiu ascender, na próxima época desportiva, à principal liga do futebol português.', 'true'),
+(25, 'Sport Clube Beira-Mar', 'O Beira-Mar é um clube eclético português com sede em Aveiro fundado a 1 de Janeiro de 1922. Neste clube são praticadas várias modalidades sendo o futebol de onze a mais representativa, mas igualmente outras modalidades como o futsal, basquetebol, judo, boxe, ginástica, paintball, bilhar, triatlo, duatlo. Em 2010, a secção de natação suspendeu a sua actividade. Em todas estas modalidades é desenvolvida formação de jovens. Quanto a infraestruturas, tem apenas um pavilhão polidesportivo do Alboi, sendo que as piscinas foram vendidas e o estádio é propriedade do município de Aveiro. É de notar o reconhecimento público como Instituição de Utilidade Pública Oficial da Ordem de Benemerência e tendo-lhe sido atribuída a Medalha de Prata e de Ouro da cidade de Aveiro bem como a Medalha de Mérito do Instituto de Desporto. É o clube mais representativo do distrito. O principal feito do clube foi na época desportiva de 1998-1999, quando venceu a Taça de Portugal frente ao Campomaiorense por 1-0. A equipa era treinada por António Sousa e o golo foi marcado por seu filho Ricardo Sousa. Na temporada de 2009-2010 voltou a sagrar-se Campeão Nacional da Liga Vitalis o que lhe permitiu ascender, na próxima época desportiva, à principal liga do futebol português.', 'true'),
+(26, 'Sporting Clube Olhanense', 'O Sporting Clube Olhanense é um clube de futebol português da cidade de Olhão. Utiliza como equipamento, camisola riscada preto e vermelho, calção branco ou preto. Com a promoção alcançada na época 2008-2009, o Olhanense regressa à 1. ª Liga 34 anos após a sua última participação.', 'true'),
+(27, 'Sporting Clube Olhanense', 'O Sporting Clube Olhanense é um clube de futebol português da cidade de Olhão. Utiliza como equipamento, camisola riscada preto e vermelho, calção branco ou preto. Com a promoção alcançada na época 2008-2009, o Olhanense regressa à 1. ª Liga 34 anos após a sua última participação.', 'true'),
+(28, 'Vitória Futebol Clube', 'Vitória Futebol Clube, também conhecido como Vitória de Setúbal, é um clube desportivo. A modalidade principal é o futebol, sendo que os principais feitos são 3 Taças de Portugal e 1 Taça da Liga conquistadas. Tem como lema: \\"O Vitória é enorme\\". Além do futebol, este clube distingue-se também em outras modalidades como Andebol, Judo, Ginástica, Kickboxing, Karaté, Ténis de Mesa, Atletismo, Dança, Rugby, Futsal e Futebol de Praia tendo sido Campeão Nacional de Futebol de Praia em 2007/2008 E 2009/2010. Tem 1.600 atletas em todas as modalidades. Utiliza como cores principais o verde e branco e a sua mascote é um Roaz corvineiro. O símbolo inclui um [castelo com três torres, uma roda de bicicleta (uma das modalidades principais na génese do clube), um pergaminho com o local e data de fundação, um ramo de Oliveira representando a vitória e os valores de honra a ela associados de acordo com a mesma simbologia na Grécia Antiga, uma bola de futebol e um escudo verde e branco. ] O nome de VIII Exército, claque do clube, vem do exército Inglês que no Norte de África derrotou o até então imbatível exército de Erwin Rommel durante a Segunda Guerra Mundial. VIII Exército era então uma claque espontânea, formada por todos os vitorianos que acompanhavam o seu clube. VIII Exército dá agora nome à claque organizada do Vitória FC, oficialmente reconhecida pelo clube acompanhar a equipa para todo o lado. Além disso, é um grupo de apoio reconhecido por encarar o desporto de uma forma sadia, prova nos inúmeros convívios que realiza com claques de outros clubes. O Vitória Futebol Clube tem neste momento 20 500 sócios e cerca de 200 000 adeptos. O ano de 2005 ficará na memória de todos os vitorianos pela reconquista da Taça de Portugal, 32 anos depois, ganhando ao Benfica por 2-1 golos de Manuel José e Meyong pelo Vitória, bem como pela conquista da Supertaça Ibérica frente ao Bétis de Sevilha em Ayamonte, com golos de Nandinho e Ricardo Chaves pelo Vitória. No ano de 2008 fez história ao conquistar a 1ª edição da Taça da Liga, batendo o Sporting Clube de Portugal por 3-2 após as grandes penalidades (0-0 no tempo regulamentar) defendendo o guarda-redes Eduardo 3 dessas penalidades.', NULL),
+(29, 'Vitória Futebol Clube', 'Vitória Futebol Clube, também conhecido como Vitória de Setúbal, é um clube desportivo. A modalidade principal é o futebol, sendo que os principais feitos são 3 Taças de Portugal e 1 Taça da Liga conquistadas. Tem como lema: \\"O Vitória é enorme\\". Além do futebol, este clube distingue-se também em outras modalidades como Andebol, Judo, Ginástica, Kickboxing, Karaté, Ténis de Mesa, Atletismo, Dança, Rugby, Futsal e Futebol de Praia tendo sido Campeão Nacional de Futebol de Praia em 2007/2008 E 2009/2010. Tem 1.600 atletas em todas as modalidades. Utiliza como cores principais o verde e branco e a sua mascote é um Roaz corvineiro. O símbolo inclui um [castelo com três torres, uma roda de bicicleta (uma das modalidades principais na génese do clube), um pergaminho com o local e data de fundação, um ramo de Oliveira representando a vitória e os valores de honra a ela associados de acordo com a mesma simbologia na Grécia Antiga, uma bola de futebol e um escudo verde e branco. ] O nome de VIII Exército, claque do clube, vem do exército Inglês que no Norte de África derrotou o até então imbatível exército de Erwin Rommel durante a Segunda Guerra Mundial. VIII Exército era então uma claque espontânea, formada por todos os vitorianos que acompanhavam o seu clube. VIII Exército dá agora nome à claque organizada do Vitória FC, oficialmente reconhecida pelo clube acompanhar a equipa para todo o lado. Além disso, é um grupo de apoio reconhecido por encarar o desporto de uma forma sadia, prova nos inúmeros convívios que realiza com claques de outros clubes. O Vitória Futebol Clube tem neste momento 20 500 sócios e cerca de 200 000 adeptos. O ano de 2005 ficará na memória de todos os vitorianos pela reconquista da Taça de Portugal, 32 anos depois, ganhando ao Benfica por 2-1 golos de Manuel José e Meyong pelo Vitória, bem como pela conquista da Supertaça Ibérica frente ao Bétis de Sevilha em Ayamonte, com golos de Nandinho e Ricardo Chaves pelo Vitória. No ano de 2008 fez história ao conquistar a 1ª edição da Taça da Liga, batendo o Sporting Clube de Portugal por 3-2 após as grandes penalidades (0-0 no tempo regulamentar) defendendo o guarda-redes Eduardo 3 dessas penalidades.', NULL);

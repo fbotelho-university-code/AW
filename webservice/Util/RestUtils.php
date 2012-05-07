@@ -1,4 +1,5 @@
 <?php
+
 @header('Content-Type: text/html; charset=utf-8');
 /*
  * Created on Mar 26, 2012
@@ -8,6 +9,22 @@
  */
 
 class RestUtils{
+	
+	public static function getEtag($ob){
+		return md5(var_export($ob, true));
+	}
+	
+	public static function checkEtag($req, $ob){
+		$n = $req->getEtag();
+		$hash = RestUtils::getEtag($ob);
+		if (isset($n)){
+			if (strcmp($hash,$req->getEtag()) == 0){
+				//Not modified.
+				RestUtils::sendResponse(304);
+			}
+		}
+		return $hash;
+	}
 	
 	public static function processRequest() {
 		//get our verb
@@ -107,6 +124,7 @@ class RestUtils{
 		if ($status == 200 && isset($etag)){
 			header('Etag: ' . $etag);
 		}
+		
 		
 		if ($body!=''){
 			echo $body;
@@ -222,6 +240,54 @@ $codes = Array(
 );
 return (isset($codes[$status])) ? $codes[$status] : '';
 }
-}
 
+
+public static function webResponse($responseObject, $req, $rootName,  $rootAttributes, $default=null){
+	$root = array("xmlns" => "localhost", "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance", "xsi:schemaLocation" => "localhost Local.xsd ");
+	$root['xsi:schemaLocation'] = 'localhost ' . $rootAttributes;
+	 
+	$options = array(
+			"indent"          => "    ",
+			"linebreak"       => "\n",
+			"typeHints"       => false,
+			"addDecl"         => true,
+			"encoding"        => "UTF-8",
+			XML_SERIALIZER_OPTION_RETURN_RESULT => true,
+			XML_SERIALIZER_OPTION_CLASSNAME_AS_TAGNAME => true,
+			"rootAttributes"  => array("xmlns" => "localhost", "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance", "xsi:schemaLocation" => "localhost Locais.xsd "),
+			"namespace" 		=> "localhost",
+			"ignoreNull"      => true,
+	);
+	
+	if (isset($default)){
+		$options["defaultTagName"] = $default; 
+	}
+	RestUtils::checkEtag($req, $responseObject);
+	$xmlSerializer = new XML_Serializer($options);
+	
+	if ($req->getHttpAccept() == 'json'){
+		RestUtils::sendResponse(200, null, json_encode($responseObject));
+	}
+	else if ($req->getHttpAccept() == 'text/xml'){
+		 $options["rootName"] = $rootName;
+		$options["rootAttributes"] = $root ; 
+		$xmlSerializer =  new XML_Serializer($options);
+		$result = $xmlSerializer->serialize($responseObject);
+		if ($result == true){
+			$xmlResponse = $xmlSerializer->getSerializedData();
+			RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+			/*if($n->validateXMLbyXSD($xmlResponse, "Local.xsd")) {
+			 RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
+			}
+			else {
+			RestUtils::sendResponse(500);
+			}*/
+		} else {
+			RestUtils::sendResponse(500);
+		}
+	}else{
+		RestUtils::sendResponse(406);
+	}
+}
+}
 ?>

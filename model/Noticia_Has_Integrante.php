@@ -19,6 +19,9 @@ class Noticia_Has_Integrante extends Model{
 		return array ('idnoticia', 'idintegrante' ); 
 	}
 	 
+	public function getRel(){
+		return "idintegrante"; 
+	}
 	/**
 	* Identificador do integrante
 	* @var int
