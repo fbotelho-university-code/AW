@@ -28,10 +28,20 @@
 				alert("Erro ao recuperar 'dassadsaddassda' do webservice!");
 			}
 		});
+		
+	var observer = new Observer();
+	observer.observe(obs,function(nid){
+		id = nid;
+	});
 	
 	var pe = new PeriodicalExecuter(function() {
 		observer.stop(id);
 	},120);
+	
+	var observer = new Observer();
+	observer.observe(obs,function(nid){
+		id = nid;
+	});
 	
 </script>
 
