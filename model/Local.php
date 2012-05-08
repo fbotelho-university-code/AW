@@ -46,12 +46,19 @@ class Local extends Model{
 	}
 	
 	public function getBetween($lat_low, $lat_up, $long_low, $long_up){
-		$sql = "select l.`nome_local` ,count(*) as total from `local` l , `noticia_locais` nl 
+		$var = $this->setCount();
+		$start = $var['start'];
+		$end = $var['count'];
+		
+		$sql = "select distinct * ,count(*) as total from `local` l , `noticia_locais` nl 
 		where lat between ". $long_low . " AND " . $lat_up . " AND log between " . $long_low . " AND " . $long_up  
-		. 'AND l.idlocal = nl.idlocal group by l.idlocal ORDER BY  total' ;
+		. ' AND l.idlocal = nl.idlocal group by l.idlocal ORDER BY  total DESC' ;
+		
+		if(!(is_null($start) && is_null($end))) {
+			$sql .= " LIMIT ".$start." , ". $end;
+		}
 		
 		$rs = $this->execute($sql);
-		
 		if (!isset($rs) ) return;
 		$objects = array();
 		while(!$rs->EOF) {
@@ -59,6 +66,7 @@ class Local extends Model{
 			$obj = new Local();
 			$this->setObj($arrayAssoc, $obj);
 			$objects[] = $obj;
+			$obj->total = null; 
 			$rs->MoveNext();
 		}
 		return $objects;

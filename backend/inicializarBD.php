@@ -11,7 +11,7 @@ $rs = $dao->execute("SELECT table_name FROM information_schema.tables WHERE tabl
 
 while(!$rs->EOF) {
 	$table = $rs->fields["table_name"];
-	if (strcmp($table, "local") != 0  &&
+	if (//strcmp($table, "local") != 0  &&
 		strcmp($table,"noticia_data_clube") != 0 && 
 		strcmp($table,"noticia_x_clube") != 0 &&
 		strcmp($table,"nr_noticia_data") != 0 &&

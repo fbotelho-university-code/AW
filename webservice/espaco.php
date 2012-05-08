@@ -198,6 +198,13 @@
 	 * @param unknown_type $locais array de locais
 	 */
 	function getCompleteNewsLocaisSmallNews($locais, $req){
+		if(isset($_GET["start"])) {
+			unset($_GET["start"]) ; 
+		}
+		if(isset($_GET["count"])) {
+			unset($_GET["count"]); 
+		}
+		
 		foreach ($locais as $l){
 			$l->noticia = Noticia_locais::getAllNoticias($l->idlocal, getUrl()); 
 		}
