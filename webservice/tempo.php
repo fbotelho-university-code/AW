@@ -30,9 +30,8 @@ function getUrl(){
       "namespace" 		=> "localhost", 
       "ignoreNull"      => true,
  	);
+ 	$xmlSerializer = new XML_Serializer($options);
  	
- 	 
- 	$xmlSerializer = new XML_Serializer($options); 
  	  //Dispatching according to the path info. 
 /**
  * The ideia is to have a path url like this:  /ano/mes/dia

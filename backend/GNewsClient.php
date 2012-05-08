@@ -5,7 +5,12 @@ require_once "ParserNoticias.php";
 require_once "lib/simple_html_dom.php";
 
 
-class GNewsClient {
+class GNewsClient extends Fonte{
+	
+	public function __construct(){
+		parent::__construct("RSS Google News");
+	}
+	
 	/**
 	* Busca das not�cias publicadas no RSS com palavras presentes no prametro de pesquisa
 	* @param String[] $parameters
@@ -24,7 +29,6 @@ class GNewsClient {
 			}
 			//Cria array com itens presentes no RSS consultado
 			$output = json_decode($result_json);
-			
 			//Insere na Base de Dados e caracteriza semanticamente cada noticia encontrada
 			foreach($output->responseData->results as $news) {
 				$myNew = new Noticia(); 
@@ -64,5 +68,8 @@ class GNewsClient {
 	}
 }
 
+$gn = new GNewsClient();
+$parameters = Util::getSearchParameters();
+$gn->search($parameters);
 
 ?>
