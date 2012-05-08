@@ -4,18 +4,8 @@ require_once "includes.php";
 require_once "ParserNoticias.php";
 require_once "lib/simple_html_dom.php";
 
-/**
-* Classe respons�vel pelo leitura e consulta dos RSS do Google News
-*/
-class GNewsClient extends Fonte {
-	
-	/**
-	* Contrutor da Classe
-	*/
-	public function __construct() {
-		parent::__construct("RSS Google News");
-	}
-	
+
+class GNewsClient {
 	/**
 	* Busca das not�cias publicadas no RSS com palavras presentes no prametro de pesquisa
 	* @param String[] $parameters
@@ -74,8 +64,5 @@ class GNewsClient extends Fonte {
 	}
 }
 
-$gnc = new GNewsClient();
-$parameters = Util::getSearchParameters();
-$gnc->search($parameters);
 
 ?>

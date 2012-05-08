@@ -1,5 +1,4 @@
 <?php
-
 require_once ('lib/HttpClient.php');
 require_once ('../model/includes.php');
 
@@ -14,7 +13,7 @@ require_once ('../model/includes.php');
  	return  getUrlContent($uri);
  }
  
-  /**
+   /**
   * Gets the abstract section of a dbpedia resource uri. 
   */
   function getAbstractInPortugueseOrEnglish($db_uri, $lang='pt'){

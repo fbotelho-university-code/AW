@@ -9,13 +9,12 @@ require_once "lib/rss_php.php";
  */
 
 class WebPortClient extends Fonte {
-	
+
 	/**
 	 * Objeto da classe rss_php
 	 * @var rss_php
 	 */
 	private $rss;
-	
 	/**
 	 * Contrutor da Classe
 	 */	
@@ -34,10 +33,8 @@ class WebPortClient extends Fonte {
 			//prepara query
 			$encode = urldecode($query);
 			$url_search = $this->main_url.$encode;
-			
 			//carrega RSS
 			@$this->rss->load($url_search);
-			
 			//Cria array com itens presentes no RSS consultado
 			$items = $this->rss->getItems();
 			
@@ -63,7 +60,7 @@ class WebPortClient extends Fonte {
 				ParserNoticias::parseNoticia($myNew);
 			}
 		}
-		echo "Foram inseridas notï¿½cias da Fonte ".$this->getNome()." com sucesso.";
+		echo "Foram inseridas not’cias da Fonte ".$this->getNome()." com sucesso.";
 	}
 }
 
