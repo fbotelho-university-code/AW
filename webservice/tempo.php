@@ -99,10 +99,8 @@ function getUrl(){
 	}
 	
 	RestUtils::webResponse($results, $req, 'datas', null,'data'); 
-	
 	 function checkRequest($req){
     //Variables that should be defined for checkRequest. Ideally this would be defined in a abstact/general form. 
- 	
  	$request_vars = array("start", "count", "texto");
     	//check the request variables that are not understood by this resource
     	$dif = array_diff(array_keys($req->getRequestVars()), $request_vars);
