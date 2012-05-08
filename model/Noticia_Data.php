@@ -143,10 +143,11 @@ public function __construct($idnoticia='', $tempo='', $dt =''){
 	public static function getAllNoticias($data, $url, $start=null, $end = null) {
 		$class_Noticia_Locais = new Noticia_Data();
 		$rel = $class_Noticia_Locais->find(array("data_interpretada" => $data), ' LIKE ');
-		
+				
 		if (!$rel) return null;
 		$datas = array(); 
 		foreach ($rel as $l){
+
 			if (array_search($l->data_interpretada, $datas) === false){
 				$datas[] = $l->data_interpretada; 
 			}

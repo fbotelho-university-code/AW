@@ -47,9 +47,10 @@ class Local extends Model{
 	
 	public function getBetween($lat_low, $lat_up, $long_low, $long_up){
 		$sql = "select *  from Local l   
-		 where lat between ". $long_low . " AND " . $lat_up . " AND log between " . $long_low . " AND " . $long_up  ;
+		 xwhere lat between ". $long_low . " AND " . $lat_up . " AND log between " . $long_low . " AND " . $long_up  ;
 		$rs = $this->execute($sql); 
 		if (!isset($rs) ) return; 
+		
 		$objects = array();
 		while(!$rs->EOF) {
 			$arrayAssoc = $rs->fields;

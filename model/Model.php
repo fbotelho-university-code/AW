@@ -300,10 +300,8 @@ abstract class Model{
 		if(!(is_null($start) && is_null($end))) {
 				$sql .= " LIMIT ".$start." , ". $end;
 		}
-		
 		$rs = $this->dao->execute($sql);
 		$values = array();
-		
 		while (!$rs->EOF){
 			$ob = new $table;
 			$this->setObj($rs->fields, $ob);
