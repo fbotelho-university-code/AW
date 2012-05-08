@@ -47,10 +47,10 @@
 	  	
 	  	$local = new Local();
 	  	$results = $local->getBetween($result[1], $result[2], $result[3], $result[4]);
-	  	getCompleteNewsLocais($results, $req); 
+	  	
+	  	getCompleteNewsLocaisSmallNews($results, $req); 
 	  }
-
-	
+	  
 	/*
 	 * TODO: 
 	 * POST
@@ -198,6 +198,14 @@
 	 * 
 	 * @param unknown_type $locais array de locais
 	 */
+	function getCompleteNewsLocaisSmallNews($locais, $req){
+		
+		foreach ($locais as $l){
+			$l->noticia = Noticia_locais::getAllNoticias($l->idlocal, getUrl()); 
+		}
+		RestUtils::webResponse($locais, $req, 'locais', 'Locais.xsd', 'data'); 
+	}
+	
 	function getCompleteNewsLocais($locais, $req){
 		
 		$rel = new Noticia_locais();

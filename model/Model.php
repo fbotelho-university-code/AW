@@ -147,6 +147,7 @@ abstract class Model{
 		$sql = 'update '. $table . $this->createWhereClause($fields, 'SET', ' , ');
 		//Filter the primary key.
 		$sql .= $this->getPrimaryKeyWhere();
+		echo $sql; 
 		$this->dao->execute($sql);
 	}
 	
@@ -233,7 +234,7 @@ abstract class Model{
 		$end = $var['count'];
 		
 		$table = get_class($this);
-		$sql = "SELECT distinct "; 
+		$sql = "SELECT  "; 
 				
 		$sql .= $this->select($fields); 
 		$sql .= ' FROM ' . $table;
@@ -289,7 +290,7 @@ abstract class Model{
 			$table = get_class($this);
 		}
 		
-		$sql = 'select distinct '; 
+		$sql = 'select  '; 
 		$sql .= $this->select($selectedFields);
 		$sql .= ' from ' . $table;
 		
@@ -299,7 +300,7 @@ abstract class Model{
 		if(!(is_null($start) && is_null($end))) {
 				$sql .= " LIMIT ".$start." , ". $end;
 		}
-
+		
 		$rs = $this->dao->execute($sql);
 		$values = array();
 		
@@ -323,10 +324,7 @@ abstract class Model{
 		$table = get_class($this);
 		$sql = 'select '; 
 		$sql .= $this->select($fields);
-		
-		
 		$sql .= " FROM ".$table. " WHERE id".$table." = ".$id;
-		
 		$rs = $this->dao->execute($sql);
 		if (!$rs->fields) return null;
 		$result = new $table; 

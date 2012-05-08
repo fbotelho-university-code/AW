@@ -8,7 +8,7 @@ require_once "includes.php";
 */
 
 class ParserNoticias {
-    	/**
+	/**
     	 * Efectua parsing de noticias
     	 * Efectua mudan�as directamente na base de dados relativa ˆ noticia  
     	 */

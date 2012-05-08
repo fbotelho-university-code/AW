@@ -17,7 +17,7 @@ require_once ('../model/includes.php');
   * Gets the abstract section of a dbpedia resource uri. 
   */
   function getAbstractInPortugueseOrEnglish($db_uri, $lang='pt'){
- 	$query = "SELECT ?abstract  WHERE { {<" . $db_uri . "> <http://dbpedia.org/ontology/abstract> ?abstract . FILTER langMatches(lang(?abstract),'" . $lang."') } }"; 
+ 	$query = "SELECT distinct ?abstract  WHERE { {<" . $db_uri . "> <http://dbpedia.org/ontology/abstract> ?abstract . FILTER langMatches(lang(?abstract),'" . $lang."') } }"; 
 	
 	$result =execute_sparql_query($query);
 
@@ -42,7 +42,7 @@ require_once ('../model/includes.php');
  }
 
  function getTreinador($clube_uri){
- 	$query = "SELECT ?manager  WHERE { {<" . $clube_uri . "> <http://dbpedia.org/ontology/manager> ?manager .  } }"; 
+ 	$query = "SELECT distinct ?manager  WHERE { {<" . $clube_uri . "> <http://dbpedia.org/ontology/manager> ?manager .  } }"; 
 	$result =execute_sparql_query($query);
 	$result = toJsonResults($result);
 		if (isset($result) && isset($result[0])){
@@ -55,7 +55,7 @@ require_once ('../model/includes.php');
   * Get the thumbnail image associative array from a dpbedia uri. 
   */
 function getThumbnailUrlClube($clube_uri){
-	$query = "SELECT ?url WHERE { { <" . $clube_uri . "> <http://dbpedia.org/ontology/thumbnail> ?url } } ";
+	$query = "SELECT distinct ?url WHERE { { <" . $clube_uri . "> <http://dbpedia.org/ontology/thumbnail> ?url } } ";
 	$result = execute_sparql_query($query);
 	if (isset($result)){
 		$result = toJsonResults($result);
@@ -71,7 +71,7 @@ function getThumbnailUrlClube($clube_uri){
 }
 
 function getThumbnailUrlInt($clube_uri){
-	$query = "SELECT ?url WHERE { { <" . $clube_uri . "> <http://dbpedia.org/ontology/thumbnail> ?url } } ";
+	$query = "SELECT distinct ?url WHERE { { <" . $clube_uri . "> <http://dbpedia.org/ontology/thumbnail> ?url } } ";
 	$result = execute_sparql_query($query);
 	if (isset($result)){
 		$result = toJsonResults($result);
@@ -89,7 +89,7 @@ function getThumbnailUrlInt($clube_uri){
  */
 function getFullNameClube($p_uri){
 	$query = "
-		SELECT * WHERE {<". $p_uri . "> ?key ?value .
+		SELECT distinct * WHERE {<". $p_uri . "> ?key ?value .
   		FILTER (?key = <http://dbpedia.org/property/fullname>   
 	)
 	}";
@@ -110,7 +110,7 @@ function getFullNameClube($p_uri){
  */
 function getFullName($p_uri){
 	$query = "
-		SELECT * WHERE {<". $p_uri . "> ?key ?value .
+		SELECT distinct * WHERE {<". $p_uri . "> ?key ?value .
   		FILTER (?key = <http://dbpedia.org/property/fullname>   
 	)
 	}";
@@ -126,7 +126,7 @@ function getFullName($p_uri){
 	}
 
 	$query = $query = "
-		SELECT * WHERE {<". $p_uri . "> ?key ?value .
+		SELECT distinct * WHERE {<". $p_uri . "> ?key ?value .
   		FILTER (?key = <http://dbpedia.org/property/name>   
 	)}"; 
 
@@ -148,7 +148,7 @@ function getFullName($p_uri){
  */ 
  function getNamesClubes($uri){
  	return getNames("
-	SELECT * WHERE {<". $uri . "> ?key ?value .
+	SELECT distinct * WHERE {<". $uri . "> ?key ?value .
   	FILTER ( 
   		 ?key = <http://dbpedia.org/property/clubname> ||
          ?key = <http://dbpedia.org/property/fullname> || 
@@ -160,7 +160,7 @@ function getFullName($p_uri){
  
  function getNamesIntegrante($uri){
  	return getnames("
-	SELECT * WHERE {<". $uri . "> ?key ?value .
+	SELECT distinct * WHERE {<". $uri . "> ?key ?value .
   	FILTER ( 
   		 ?key = <http://dbpedia.org/property/fullname> ||
          ?key = <http://dbpedia.org/property/name> || 
@@ -247,8 +247,8 @@ function updateLexico($nomes,$rel){
    * Esta funcção insere todos os clubes da primeira liga de futebol. 
    */
   function insertClubesOfPrimeiraLiga(){
-  	//fetch_and_insert_clube("http://dbpedia.org/resource/S.L._Benfica");
-	$query ="SELECT ?clube
+//  	fetch_and_insert_clube("http://dbpedia.org/resource/S.L._Benfica");
+	$query ="SELECT distinct ?clube
 	{
   	?clube a <http://dbpedia.org/ontology/SportsTeam> .
         ?clube dbpedia-owl:league <http://dbpedia.org/resource/Primeira_Liga>
@@ -267,8 +267,8 @@ function updateLexico($nomes,$rel){
 		}
 	} 
 	echo 'Could not insert clubes <br/>';
-	
-  }
+
+}
    
 
 /**
@@ -284,6 +284,7 @@ function fetch_and_insert_clube($clube_uri){
 		$clube->idclube = $id; 
 		addClubeLexico($clube_uri, $id);
 		$img = getThumbnailUrlClube($clube_uri);
+
 		if (isset($img)){
 			echo 'vou inserir uma imagem<br/>'; 
 			$Img = new Clube_Imagem();
@@ -291,9 +292,8 @@ function fetch_and_insert_clube($clube_uri){
 			$Img->content_type = $img['type']; 
 			$Img->imagem = $img['image']; 
 			$id_img = $Img->add();
-				$clube->url_img = 'true'; 
-				$clube->update(); 
-			 
+			$clube->url_img = 'true'; 
+			$clube->update(); 
 		}
 	}catch(Exception $e){
 		return; 
@@ -318,7 +318,7 @@ function insert_image($clube_uri, $id){
  	$clube = strrchr($clube, "/");
  	$clube = substr($clube, 1);
  	
- 	$result = execute_sparql_query( "SELECT ?player 
+ 	$result = execute_sparql_query( "SELECT distinct ?player 
 		{
     		?player a dbpedia-owl:SoccerPlayer .
     		?player dbpprop:currentclub	dbpedia:" . $clube . 

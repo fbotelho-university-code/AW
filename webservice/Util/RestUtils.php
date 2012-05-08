@@ -258,7 +258,6 @@ public static function webResponse($responseObject, $req, $rootName,  $rootAttri
 			"ignoreNull"      => true,
 	);
 	if (isset($default)){
-		
 		$options["defaultTagName"] = $default; 
 	}
 	$xmlSerializer = new XML_Serializer($options);
