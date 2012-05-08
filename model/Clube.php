@@ -135,8 +135,9 @@ class Clube extends Model {
 				$obj->$key = $value;
 			}
 		if (isset($obj->url_img)){
-			$obj->url_img =  $this->getUrl() . 'webservice/entidades.php/clube/' . $obj->idclube  . '/thumbnail'; 		
+			$obj->url_img =  $this->getUrl() . 'webservice/entidades.php/clube/' . $obj->idclube  . '/thumbnail';
 		}
+		else $obj->url_img = ""; 
 	}
 }
 

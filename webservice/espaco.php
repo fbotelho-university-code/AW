@@ -47,7 +47,6 @@
 	  	
 	  	$local = new Local();
 	  	$results = $local->getBetween($result[1], $result[2], $result[3], $result[4]);
-	  	
 	  	getCompleteNewsLocaisSmallNews($results, $req); 
 	  }
 	  
@@ -199,7 +198,6 @@
 	 * @param unknown_type $locais array de locais
 	 */
 	function getCompleteNewsLocaisSmallNews($locais, $req){
-		
 		foreach ($locais as $l){
 			$l->noticia = Noticia_locais::getAllNoticias($l->idlocal, getUrl()); 
 		}

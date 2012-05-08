@@ -68,13 +68,7 @@ function getUrl(){
 	  	case 1:
 	  		$ano = (strcmp($path_parameters[1], 'ano') == 0 ) ? '%' : $path_parameters[1];
 	  }
-	  
-	  if ($dia < 10){
-	  	$dia = '0'. $dia; 
-	  }
-	  if ($mes < 10){
-	  	$mes = '0' . $mes; 
-	  }
+
 	  
 	//var_dump($path_parameters); 	
 	$data_needle = $ano . '-' . $mes . '-' . $dia;
@@ -105,10 +99,8 @@ function getUrl(){
 	}
 	
 	RestUtils::webResponse($results, $req, 'datas', null,'data'); 
-	
 	 function checkRequest($req){
     //Variables that should be defined for checkRequest. Ideally this would be defined in a abstact/general form. 
- 	
  	$request_vars = array("start", "count", "texto");
     	//check the request variables that are not understood by this resource
     	$dif = array_diff(array_keys($req->getRequestVars()), $request_vars);
