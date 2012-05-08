@@ -170,64 +170,23 @@ abstract class Model{
 	 * Valida um XML em formato String usando um ficheiro XML Schema (XSD)
 	 * @param String $xmlString
 	 */
-	public function validateXMLbyXSD($xmlString, $xsdName) {
-		
+	public function validateXMLbyXSD($xmlString, $xsdName){
 		// Transforma��o da String em DOM
 		$xmlDOM = new DOMDocument();
 		@$xmlDOM->loadXML($xmlString);
 		
 		//Valida��o do XML usando o ficheiro XSD
 		$pathToXSD = "../webservice/Schemas/".$xsdName;
-		$validate = $xmlDOM->schemaValidate($pathToXSD); 
+		@$validate = $xmlDOM->schemaValidate($pathToXSD);
+		
 		if($validate) {
 			return true;
-			//echo "validated<br>";
 		}
 		else {
 			return false;
 		}
 	}
-	
-		//Altera��o do cabe�alho XML para inclus�o das refer�ncias para o XSD
-	public function createXMLNS($xmlString) {
-		$xmlDOM = new DOMDocument();
-		@$xmlDOM->loadXML($xmlString);
-		$xmlDOM->formatOutput = true;
-		
-		//Recupera Elemento raiz do XML
-		$rootElement = $xmlDOM->documentElement;
-		//$rootElement->get
-		
-		
-		$ns = $xmlDOM->createElementNS("localhost", "noticias");
-		//$xmlDOM->appendChild($ns);
-		
-		//xmlns='localhost'
-		//$atributo = $xmlDOM->createAttribute("xmlns");
-		//$atributo->value = "localhost";
-		//$rootElement->appendChild($atributo);
-		
-		//$atributo = $xmlDOM->createAttributeNS("localhost", "xmlns");
-		$rootElement->setAttributeNS("localhost", "xmlns", "localhost");
-		
-		//xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-		$atributo = $xmlDOM->createAttribute("xmlns:xsi");
-		$atributo->value = "http://www.w3.org/2001/XMLSchema-instance";
-		//$rootElement->appendChild($atributo);
-		$rootElement->setAttributeNS("localhost", "xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-		
-		//xsi:schemaLocation='localhost Noticias.xsd '
-		$atributo = $xmlDOM->createAttribute("xmlns:schemaLocation");
-		$atributo->value = "localhost Noticias.xsd";
-		//$rootElement->appendChild($atributo);
-		$rootElement->setAttributeNS("localhost", "xsi:schemaLocation", "localhost Noticias.xsd ");
-		
-		//echo $rootElement->namespaceURI;
-		//echo $xmlDOM->saveXML();
-		
-		return $xmlDOM->saveXML();
-	}
-	
+
 	
 	/**
 	 * Apaga todos os registos de uma tabela na base de dados
@@ -269,7 +228,6 @@ abstract class Model{
 	 * @return Object[] $objects Array de Objectos com atributos da base de dados
 	 */
 	public  function getAll($fields =null){
-		
 		$var = $this->setCount(); 
 		$start = $var['start'];
 		$end = $var['count'];
@@ -457,5 +415,48 @@ abstract class Model{
 		}
 		return $result; 
 	}
+	
+	
+
+	/*	//Altera��o do cabe�alho XML para inclus�o das refer�ncias para o XSD
+	 public function createXMLNS($xmlString) {
+	$xmlDOM = new DOMDocument();
+	@$xmlDOM->loadXML($xmlString);
+	$xmlDOM->formatOutput = true;
+	
+	//Recupera Elemento raiz do XML
+	$rootElement = $xmlDOM->documentElement;
+	//$rootElement->get
+	
+	
+	$ns = $xmlDOM->createElementNS("localhost", "noticias");
+	//$xmlDOM->appendChild($ns);
+	
+	//xmlns='localhost'
+	//$atributo = $xmlDOM->createAttribute("xmlns");
+	//$atributo->value = "localhost";
+	//$rootElement->appendChild($atributo);
+	
+	//$atributo = $xmlDOM->createAttributeNS("localhost", "xmlns");
+	$rootElement->setAttributeNS("localhost", "xmlns", "localhost");
+	
+	//xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+	$atributo = $xmlDOM->createAttribute("xmlns:xsi");
+	$atributo->value = "http://www.w3.org/2001/XMLSchema-instance";
+	//$rootElement->appendChild($atributo);
+	$rootElement->setAttributeNS("localhost", "xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+	
+	//xsi:schemaLocation='localhost Noticias.xsd '
+	$atributo = $xmlDOM->createAttribute("xmlns:schemaLocation");
+	$atributo->value = "localhost Noticias.xsd";
+	//$rootElement->appendChild($atributo);
+	$rootElement->setAttributeNS("localhost", "xsi:schemaLocation", "localhost Noticias.xsd ");
+	
+	//echo $rootElement->namespaceURI;
+	//echo $xmlDOM->saveXML();
+	
+	return $xmlDOM->saveXML();
+	}
+	*/
 }
 ?>

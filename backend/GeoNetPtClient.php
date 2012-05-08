@@ -15,7 +15,6 @@ class GeoNetPtClient extends Fonte {
 	public function __construct() {
 		parent::__construct("Geo-Net-PT");
 	}
-	
 	/**
 	 * Busca inform��es sobre as refer�ncias espaciais na fonte Geo-Net-PT
 	 * @param Array $parameters Array com queries SparQL

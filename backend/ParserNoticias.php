@@ -19,7 +19,6 @@ class ParserNoticias {
 	     	//Armazenamento da noticia na Base de Dados
 			$idnoticia = $noticia->add();
 			$noticia->setIdnoticia($idnoticia);
-			
 			// Caracterização Semântica da Notícia
 			ParserNoticias::findRefEspacial($noticia);
 		    ParserNoticias::findRefTemporal($noticia); 

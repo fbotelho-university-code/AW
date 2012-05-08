@@ -9,6 +9,14 @@ require_once ('Util/RestUtils.php');
 require_once ('Util/RestRequest.php'); 
 require_once ('Util/XML/Serializer.php');
  
+function getUrl(){
+	$v = parse_url("http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+		
+	$r = $v['scheme'] . '://' . $v['host'] . $v['path'];
+	$pos = strpos($r, 'tempo.php') ;
+	$val = substr($r, 0, $pos );
+	return $val;
+}
 
     $options = array(
       "indent"          => "    ",
@@ -88,7 +96,7 @@ require_once ('Util/XML/Serializer.php');
 	$n = new Noticia_Data();
 	//$results = $n->find(array('tempo' => $data_needle), ' LIKE ' );
 	try{
-		$results = Noticia_Data::getAllNoticias($data_needle);
+		$results = Noticia_Data::getAllNoticias($data_needle, getUrl());
 	}catch(Exception $e){
 		RestUtils::sendResponse(500); 
 	}
@@ -97,35 +105,12 @@ require_once ('Util/XML/Serializer.php');
 		RestUtils::sendResponse(404); 
 	}
 	
-	global $options; $options["rootName"] ='datas'; 
-	
-	$xmlSerializer = new XML_Serializer($options);
-	$result = $xmlSerializer->serialize($results['datas']);
-	
-	if ($req->getHttpAccept() == 'text/xml'){
-	if ($result == true){
-		
-		$xmlResponse = $xmlSerializer->getSerializedData();
-		RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
-		/*if($n->validateXMLbyXSD($xmlResponse, "Datas.xsd")) {
-			RestUtils::sendResponse(200, null,$xmlResponse , 'text/xml');
-		}
-		else {
-			RestUtils::sendResponse(400);
-		}*/
-	}else{
-		RestUtils::sendResponse(500); 
-	}
-	}else if ($req->getHttpAccept() == 'json'){
-		RestUtils::sendResponse(200, null, json_encode($results)); 
-	}
+	RestUtils::webResponse($results, $req, 'datas', null,'data'); 
 	
 	 function checkRequest($req){
     //Variables that should be defined for checkRequest. Ideally this would be defined in a abstact/general form. 
  	
  	$request_vars = array("start", "count", "texto");
- 	
-
     	//check the request variables that are not understood by this resource
     	$dif = array_diff(array_keys($req->getRequestVars()), $request_vars);
     	//If they are differences then we do not understand the request.  

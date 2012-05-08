@@ -14,7 +14,7 @@ class TwitterSearchClient extends Fonte{
 	public function __construct(){  
 		 parent::__construct("TwitterSearch");
 	}
-	
+
 	/**
 	* Busca dos coment�rios publicadas no Twitter com palavras presentes no parametro de pesquisa
 	* @param String[] $parameters

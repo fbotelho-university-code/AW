@@ -1,11 +1,6 @@
 <?php
 @header('Content-Type: text/html; charset=utf-8');
-/*
- * Created on Mar 29, 2012
- *
- * To change the template for this generated file go to
- * Window - Preferences - PHPeclipse - PHP - Code Templates
- */
+
  require_once ('Util/RestUtils.php'); 
  require_once ('Util/RestRequest.php'); 
  require_once ('Util/XML/Serializer.php'); 
@@ -118,6 +113,7 @@
 			$locais = $ll;  
 		}
 		foreach ($locais as $n){ $n->follow = getUrl() . 'espaco.php/' . $n->idlocal; }
+		
 		RestUtils::webResponse($locais, $req, 'locais', 'Locais.xsd',  'local'); 
 	}
 	
@@ -203,11 +199,12 @@
 	 * @param unknown_type $locais array de locais
 	 */
 	function getCompleteNewsLocais($locais, $req){
+		
 		$rel = new Noticia_locais();
 		foreach ($locais as $l){
 			$l->noticias = $rel->getAllNews($l->idlocal, getUrl());
 		}
-		RestUtils::webResponse($locais, $req, 'Locais', 'Local.xsd', 'data');
+		RestUtils::webResponse($locais, $req, 'locais', 'Locais.xsd', 'data');
 		
 	}
 	
@@ -245,11 +242,12 @@
 		}catch(Exception $e){
 			RestUtils::sendResponse(500);
 		}
-		RestUtils::webResponse($n, $req, 'Locais', "Local.xsd ", 'data');
+		RestUtils::webResponse($n, $req, 'locais', 'Locais.xsd', 'data');
+
 	}
 
 	function getLocal($req, $id, $n){
-		RestUtils::webResponse($n, $req, 'Local', "Local.xsd "); 
+		RestUtils::webResponse($n, $req, 'Local', "Local.xsd"); 
 	}
 	
     /*
