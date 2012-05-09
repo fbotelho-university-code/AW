@@ -83,7 +83,8 @@
 		$hash = md5(var_export($news,true));
 		RestUtils::sendResponseHead($hash);
 	}
-	*/
+*/
+
 	function getAllNews(){
 		$noticia = new Noticia();
 		try{
@@ -99,7 +100,6 @@
 		foreach ($news as $n){
 			$n->follow = getUrl() .'noticias.php/'.   $n->idnoticia;
 		}
-		
 		return $news;
 	}
 
@@ -202,7 +202,7 @@
 			RestUtils::sendResponse(400); 
 		}
 		if (!isset($comment->user)){
-			$comment->user = 'anonymous'; 
+			$comment->user = 'anonymous';
 		}
 		try{
 			$r = $comment->add();
@@ -210,8 +210,8 @@
 			echo $e; 
 			RestUtils::sendResponse(500); 
 		}
-		//XSD : Cmment : basicamente tem que ter texto. pode ter user : user, idnoticia.
 		
+		//XSD : Cmment : basicamente tem que ter texto. pode ter user : user, idnoticia.
 		//Created. 
 		RestUtils::sendResponse(201, null, $r, 'text'); 
 	}
@@ -397,7 +397,6 @@
 				}
 			}
 		}
-		
 		if (isset($noticia->clubes)){
 			foreach($noticia->clubes as $l){
 				try{
@@ -410,7 +409,6 @@
 				}
 			}	
 		}
-
 		if (isset($noticia->integrantes)){
 			foreach($noticia->integrantes as $l){
 				try{
@@ -439,7 +437,7 @@
 			}	
 		}
 	}
-	
+		
 	function getNews($req, $id, $n){
 		$n = $n->getRelationArray($id, getUrl());
 		$noticia = new Noticia();
