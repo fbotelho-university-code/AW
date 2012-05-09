@@ -147,6 +147,7 @@
 	// >= no futuro
 	if (count($path_info) == 2){
 		$keyword = $path_info[2]; 
+		
 		if (strcmp($keyword, 'comentarios') != 0){
 			RestUtils::sendResponse(404); 
 		}
@@ -186,26 +187,30 @@
 	
 	function postComment($req, $n){
 		$Comment = new Comentario();
-
 		$xmlHttpContent = $req->getData();
-		
-		
-		 /*if(!$Comment->validateXMLbyXSD($xmlHttpContent, "Comentario.xsd")) {
+		/*if(!$Comment->validateXMLbyXSD($xmlHttpContent, "Comentario.xsd")) {
 			RestUtils::sendResponse(400, null, "XML mal formado!", "text/plain");
 		 }
-		 */
+*/
 		 
+	
 		$comment = $Comment->fromXml($xmlHttpContent);
+		if (!isset($comment->idnoticia)){
+			$comment->idnoticia = $n->idnoticia;
+		}
 		if ($comment->idnoticia != $n->idnoticia){
 			RestUtils::sendResponse(400); 
 		}
+		if (!isset($comment->user)){
+			$comment->user = 'anonymous'; 
+		}
 		try{
 			$r = $comment->add();
-			
 		}catch(Exception $e){
 			echo $e; 
 			RestUtils::sendResponse(500); 
 		}
+		//XSD : Cmment : basicamente tem que ter texto. pode ter user : user, idnoticia.
 		
 		//Created. 
 		RestUtils::sendResponse(201, null, $r, 'text'); 
@@ -214,8 +219,9 @@
 	function getComments($req, $n){
 		$Comment = new Comentario();
 		try{
-			$res = $Comment->find(array("idnoticia" => $n->idnoticia), ' = ', array("comentario", "user","time"));
+			$res = $Comment->find(array("idnoticia" => $n->idnoticia), ' = ', array("texto", "user","time"));
 		}catch(Exception $e){
+
 			RestUtils::sendResponse(404); 
 		}
 		if (count($res) == 0){
