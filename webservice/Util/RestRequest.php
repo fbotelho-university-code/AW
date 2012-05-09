@@ -16,7 +16,23 @@
  	private $method;  //get, put, head, post...
 	private $path_info;  //array of path parameters. 
 	private $etag; 
+	private $http_accept_original;
 	
+	
+	/**
+	 * @return the $http_accept_original
+	 */
+	public function getHttp_accept_original() {
+		return $this->http_accept_original;
+	}
+
+	/**
+	 * @param field_type $http_accept_original
+	 */
+	public function setHttp_accept_original($http_accept_original) {
+		$this->http_accept_original = $http_accept_original;
+	}
+
 	public function setEtag($etag){ $this->etag = $etag; }
 	public function getEtag(){return $this->etag; }
  	public function construct(){

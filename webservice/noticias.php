@@ -437,13 +437,13 @@
 			}	
 		}
 	}
-		
+	
 	function getNews($req, $id, $n){
 		$n = $n->getRelationArray($id, getUrl());
 		$noticia = new Noticia();
 		RestUtils::webResponse($n, $req, 'noticia', 'Noticia.xsd', 'data'); 
 	}
-
+	
     /*
      * Checks if the request is valid through whitelistening of the possible request types.
      * Deals with query variables, path info, method types, etc. 

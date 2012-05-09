@@ -1,7 +1,7 @@
 <?php
 @header('Content-Type: text/html; charset=utf-8');
 
-class Util {
+class BackUtil {
 
 	/**
 	 * Array com a correla��o dos meses do ano em formato [A-Z]2[a-z] para 2[00-12]

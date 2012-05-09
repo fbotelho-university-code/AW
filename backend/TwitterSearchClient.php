@@ -22,13 +22,12 @@ class TwitterSearchClient extends Fonte{
 	*/
 	public function search($parameters){
 		$noticias = array();
-		 
 		foreach ($parameters as  $searchWord){
 			$url_search = $this->main_url . '?q='; 
 			$encode = urlencode($searchWord);
 			$url_search .= $encode;    
 			$url_search .= '&include_entities=true&result_type=mixed';
-			  
+			
 			$ch = curl_init($url_search);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			$data = curl_exec($ch);
@@ -86,8 +85,9 @@ class TwitterSearchClient extends Fonte{
 	}
 }
 
+/*
 $myself = new TwitterSearchClient(); 
 $parameters = Util::getSearchParameters();
 $myself->search($parameters);
-
+*/
 ?>

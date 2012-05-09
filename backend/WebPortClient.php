@@ -63,10 +63,9 @@ class WebPortClient extends Fonte {
 		echo "Foram inseridas not’cias da Fonte ".$this->getNome()." com sucesso.";
 	}
 }
-
-
+/*
 $arq = new WebPortClient();
 $parameters = Util::getSearchParameters();
 $arq->search($parameters);
-
+*/
 ?>
