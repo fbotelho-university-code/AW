@@ -54,7 +54,7 @@ class Noticia extends Model{
 		$rslt->data_pub = $noticiaOb->data_pub; 
 		$rslt->assunto = $noticiaOb->assunto; 
 		$rslt->descricao = $noticiaOb->descricao;
-		$rsl->url = $noticiaOb->url;  
+		$rslt->url = $noticiaOb->url;  
 		$rslt->datas = $result['datas'];
 		$rslt->locais = $result['locais']; 
 		$rslt->clubes = $result['clubes']; 
@@ -289,6 +289,7 @@ class Noticia extends Model{
 		$selectedFields = $this->arrangeFields($selectedFields);
 		return parent::find($fields, $connector, $selectedFields); 
 	}
+	
 	public function getAll($fields=null){
 		$fields = $this->arrangeFields($fields);
 		return parent::getAll($fields);  

@@ -7,14 +7,15 @@
  require_once ('../model/Local.php');
  require_once ('../model/Noticia_locais.php');
   
- 	function getUrl(){
+function getUrl(){
  		$v = parse_url("http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
  		
  		$r = $v['scheme'] . '://' . $v['host'] . $v['path'];
  		$pos = strpos($r, 'espaco.php') ;
  		$val = substr($r, 0, $pos );
  		return $val; 
- 	}
+}
+
 	$req  = RestUtils::processRequest();  // The request made by the client.
 	checkRequest($req);   // check that the request is valid. Dies otherwise.  
 	  
@@ -204,7 +205,6 @@
 		if(isset($_GET["count"])) {
 			unset($_GET["count"]); 
 		}
-		
 		foreach ($locais as $l){
 			$l->noticia = Noticia_locais::getAllNoticias($l->idlocal, getUrl()); 
 		}
