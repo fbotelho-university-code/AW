@@ -32,7 +32,6 @@
  
  	function getUrl(){
  		$v = parse_url("http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
- 		
  		$r = $v['scheme'] . '://' . $v['host'] . $v['path'];
  		$pos = strpos($r, 'entidades.php') ;
  		$val = substr($r, 0, $pos );

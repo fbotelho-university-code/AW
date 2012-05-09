@@ -68,8 +68,8 @@ class GNewsClient extends Fonte{
 	}
 }
 
-$gn = new GNewsClient();
+/*$gn = new GNewsClient();
 $parameters = Util::getSearchParameters();
 $gn->search($parameters);
-
+*/
 ?>

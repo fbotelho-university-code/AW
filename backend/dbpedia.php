@@ -10,6 +10,7 @@ require_once ('../model/includes.php');
   function execute_sparql_query($query, $format='json'){
  	$dpbedia_uri = 'http://dbpedia.org/sparql?'; 
  	$uri = $dpbedia_uri . 'query=' . urlencode($query) . '&format=' . $format;
+ 	
  	return  getUrlContent($uri);
  }
  
@@ -171,7 +172,22 @@ function getFullName($p_uri){
 	)
 	}");
  }
- 
+
+function isUrlClube($resource){
+	$query  = "SELECT distinct ?clube
+	{
+		?clube a <http://dbpedia.org/ontology/SportsTeam> .
+		FILTER ( ?clube = <http://dbpedia.org/resource/" . $resource. ">)
+	}";
+	var_dump($query); 
+	$result = execute_sparql_query($query);
+	$result = toJsonResults($result);
+	if (isset($result[0]->clube)){
+		return true; 
+	}
+	else return false; 
+}
+
 function getNames($query){
 	$result = execute_sparql_query($query);
 	
@@ -300,7 +316,7 @@ function fetch_and_insert_clube($clube_uri){
 		//echo $e; 
 	}
 	}
-	echo "Vou inserir integrantes para o clube : " . $clube->nome_oficial . "<br/>"; 	
+//	echo "Vou inserir integrantes para o clube : " . $clube->nome_oficial . "<br/>"; 	
 	fetch_and_insert_players_belonging_to_clube($clube_uri, $id);
 }
 
@@ -312,7 +328,7 @@ function insert_image($clube_uri, $id){
 }
 
   /*******************************END OF CLUBES ******************/
- 
+
  function fetch_and_insert_players_belonging_to_clube($clube, $id){
  	$clube_uri = $clube;
  	$clube = strrchr($clube, "/");
@@ -323,7 +339,13 @@ function insert_image($clube_uri, $id){
     		?player a dbpedia-owl:SoccerPlayer .
     		?player dbpprop:currentclub	dbpedia:" . $clube . 
 		"}");
-		
+	
+ 	echo "SELECT distinct ?player 
+		{
+    		?player a dbpedia-owl:SoccerPlayer .
+    		?player dbpprop:currentclub	dbpedia:" . $clube . 
+		"}"; 
+ 	var_dump($result); 
  	if (isset($result)){
  		$result = toJsonResults($result);
  		if (isset($result)){

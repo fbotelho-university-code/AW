@@ -1,6 +1,7 @@
 <?php
 
 @header('Content-Type: text/html; charset=utf-8');
+require_once ('RestRequest.php'); 
 /*
  * Created on Mar 26, 2012
  *
@@ -37,9 +38,8 @@ class RestUtils{
 		//Check if has path parameters
 		$path = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO']:  null;
 		$accept = isset($_SERVER['HTTP_ACCEPT'])  ? $_SERVER['HTTP_ACCEPT'] : null;
-		$etag = isset($_SERVER['HTTP_IF_NONE_MATCH'])  ? strtolower($_SERVER['HTTP_IF_NONE_MATCH']) : null;
+		$etag = isset($_SERVER['HTTP_IF_NONE_MATCH'])  ? $_SERVER['HTTP_IF_NONE_MATCH'] : null;
 		$return_obj->setEtag($etag); 
-		
 		
 		if (isset($accept)){
 			if (strpos( $accept, 'application/json') !==false){
@@ -55,19 +55,18 @@ class RestUtils{
 		else{
 			$accept = 'text/xml'; 
 		}
-
-		$return_obj->setHttpAccept($accept); 
-		
+		$return_obj->setHttpAccept($accept);
+		 
 		if (isset($path)){
  			$path_split_array = explode('/',  $path);
  			$i =0; 
  			foreach ($path_split_array as $p){
- 				
  				if ($p == ''){
  					unset($path_split_array[$i]); 
  				}
  				else{
- 					$path_split_array[$i] = strtolower($path_split_array[$i]); 
+ 					$path_split_arrayCopy[$i] =$path_split_array[$i];
+ 					$path_split_array[$i] = strtolower($path_split_array[$i]);
  				}
  				$i++; 
  			}
@@ -77,9 +76,13 @@ class RestUtils{
  			}
 			if ($path_split_array !== FALSE){
 				$return_obj->setPathInfo($path_split_array); 
+				if (isset($path_split_arrayCopy)){
+					$return_obj->setHttp_accept_original($path_split_arrayCopy);
+				} 
 			}
+			
 		}
-		
+ 		
 		//should hold query variables.  COOKIE is removed. No cookies in rest. 
 		$return_obj->setRequestVars(array_diff($_REQUEST, $_COOKIE));
 		//TODO - clean up. Do not care if get/post, etc. data should care for http content probably. not request variables encoded in the uri.   
@@ -95,7 +98,6 @@ class RestUtils{
 				$data =file_get_contents('php://input');
 				break;  
 		}
-
 		//store the method
 		$return_obj->setMethod($request_method); 
 		if (isset($data)){

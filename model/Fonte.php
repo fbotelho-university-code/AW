@@ -119,6 +119,44 @@ class Fonte extends Model {
 	public function setLigado($l) {
 		$this->ligado = $l;
 	}
+	
+	public function toObject($xmlString){
+		if ($xmlString == ''){
+			return ;
+		}
+		@$ob =  simplexml_load_string($xmlString);
+		return $ob; 
+	}
+	
+	public function getUrl($search){
+		if (!isset($this->xmlObject)){
+			if (isset($this->xml)){
+				var_dump($this->xml);
+				$this->xmlObject = $this->toObject($this->xml);
+				var_dump($this->xmlObject); 
+			}
+			else return; 
+		}
+			$base = "";
+
+			foreach ($this->xmlObject->uri->url as $url){
+					if (strcmp($url->url,"AW_SEARCH_VALUE") != 0){
+						$base .= $url;
+					}else{
+						$base .= $search; 
+					}
+			}
+			if (isset($this->xmlObject->query)){
+				$base .= '?'; 
+				foreach ($this->xmlObject->query as $q){
+					$base .= $q->id; 
+					if (isset($q->value)){
+						$base .= $search;
+					}
+				}	
+			}
+			return $base;
+		}
 }
 
 ?>

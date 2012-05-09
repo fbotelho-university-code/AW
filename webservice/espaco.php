@@ -45,9 +45,10 @@ function getUrl(){
 	  			RestUtils::sendResponse(404);
 	  		}
 	  	}
-	  	
 	  	$local = new Local();
+	  	
 	  	$results = $local->getBetween($result[1], $result[2], $result[3], $result[4]);
+	  	
 	  	getCompleteNewsLocaisSmallNews($results, $req); 
 	  }
 	  
@@ -113,17 +114,16 @@ function getUrl(){
 			$locais = $ll;  
 		}
 		foreach ($locais as $n){ $n->follow = getUrl() . 'espaco.php/' . $n->idlocal; }
-		
 		RestUtils::webResponse($locais, $req, 'locais', 'Locais.xsd',  'local'); 
 	}
-	
-	//Process resource (/local/{idlocal}) requests. Accepts GET/PUT/HEAD/DELETE
+//Process resource (/local/{idlocal}) requests. Accepts GET/PUT/HEAD/DELETE
 /*
  * TODO: 
  * PUT
  * HEAD
  * DELETE
  */
+	
  	function processLocal($req){
 		$path_info = $req->getPathInfo();
 		$id = $path_info[1];
@@ -206,13 +206,12 @@ function getUrl(){
 			unset($_GET["count"]); 
 		}
 		foreach ($locais as $l){
-			$l->noticia = Noticia_locais::getAllNoticias($l->idlocal, getUrl()); 
+			$l->noticias = Noticia_locais::getAllNoticias($l->idlocal, getUrl()); 
 		}
 		RestUtils::webResponse($locais, $req, 'locais', 'Locais.xsd', 'data'); 
 	}
 	
 	function getCompleteNewsLocais($locais, $req){
-		
 		$rel = new Noticia_locais();
 		foreach ($locais as $l){
 			$l->noticias = $rel->getAllNews($l->idlocal, getUrl());
