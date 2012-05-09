@@ -120,18 +120,28 @@ class Fonte extends Model {
 		$this->ligado = $l;
 	}
 	
+	public function toObject($xmlString){
+		if ($xmlString == ''){
+			return ;
+		}
+		@$ob =  simplexml_load_string($xmlString);
+		return $ob; 
+	}
+	
 	public function getUrl($search){
 		if (!isset($this->xmlObject)){
 			if (isset($this->xml)){
-				$this->xmlObject = $this->fromXml($this->xml);
+				var_dump($this->xml);
+				$this->xmlObject = $this->toObject($this->xml);
+				var_dump($this->xmlObject); 
 			}
 			else return; 
 		}
-		else{
 			$base = "";
-			foreach ($this->xmlObject->url->uri as $uri){
-					if (strcmp($uri->uri, "AW_SEARCH_VALUE") != 0){
-						$base .= $uri;
+
+			foreach ($this->xmlObject->uri->url as $url){
+					if (strcmp($url->url,"AW_SEARCH_VALUE") != 0){
+						$base .= $url;
 					}else{
 						$base .= $search; 
 					}
@@ -145,8 +155,8 @@ class Fonte extends Model {
 					}
 				}	
 			}
+			return $base;
 		}
-	}
 }
 
 ?>
