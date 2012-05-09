@@ -1,6 +1,8 @@
 <?php
 @header('Content-Type: text/html; charset=utf-8');
 require_once "../model/Fonte.php";
+require_once "../model/Noticia.php";
+
 
 $xml = "<xml>
 	<uri>
@@ -63,7 +65,7 @@ $f->item = "/rss/channel/item";
 			
 			$doc = new SimpleXmlElement($data, LIBXML_NOCDATA);
 			
-			$doc = $data->xpath($f->item);
+			$doc = $doc->xpath($f->item);
 			
 			if($doc){
 				foreach($doc as $item){
@@ -72,28 +74,37 @@ $f->item = "/rss/channel/item";
 					
 					// pubDate
 					$pub = $item->xpath($f->data_pub);
+					var_dump($pub);
 					if(isset($pub)) $myNew->setData_pub(Util::formatDateToDB($pub));
 					else $myNew->setData_pub("");
 					
 					// assunto
 					$ass = $item->xpath($f->assunto);
+					var_dump($ass);
 					if(isset($ass)) $myNew->setAssunto($ass);
 					else $myNew->setAssunto("");
 					
 					// descricao
 					$desc = $item->xpath($f->descricao);
+					var_dump($desc);
 					if(isset($desc)) $myNew->setDescricao($desc);
 					else $myNew->setDescricao("");
 					
 					// link
 					$link = $item->xpath($f->{'link'});
-					if(isset($link)) $myNew->setLink($link);
+					var_dump($link);
+					if(isset($link)) $myNew->setUrl($link);
 					else continue;
+					
+					var_dump($myNew->data_pub);
+					var_dump($myNew->assunto);
+					var_dump($myNew->descricao);
+					var_dump($myNew->url);
 					
 					// texto
 					//parserNoticias
 				}
-				echo "Foram inseridas notícias da Fonte ".$this->getNome()." com sucesso.";
+				echo "Foram inseridas notícias com sucesso.";
 			}
 
 ?>
