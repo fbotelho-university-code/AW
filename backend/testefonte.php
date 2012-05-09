@@ -1,4 +1,8 @@
-"<xml>
+<?php
+@header('Content-Type: text/html; charset=utf-8');
+require_once "../model/Fonte.php";
+
+$xml = "<xml>
 	<uri>
 		<uri>http://pesquisa.sapo.pt/</uri>
 		<query>
@@ -37,4 +41,15 @@
 		<descricao>item/description</descricao>
 		<link>item/link</link>
 	</noticia>
-</xml>"
+</xml>";
+
+
+$f = new Fonte();
+
+
+
+
+
+
+
+?>
