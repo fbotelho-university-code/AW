@@ -76,7 +76,9 @@ class RestUtils{
  			}
 			if ($path_split_array !== FALSE){
 				$return_obj->setPathInfo($path_split_array); 
-				$return_obj->setHttp_accept_original($path_split_arrayCopy); 
+				if (isset($path_split_arrayCopy)){
+					$return_obj->setHttp_accept_original($path_split_arrayCopy);
+				} 
 			}
 			
 		}
