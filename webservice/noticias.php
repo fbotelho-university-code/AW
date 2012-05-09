@@ -282,9 +282,9 @@
 	function putNews($req, $id, $n){
 		$noticia = new Noticia();
 		$xmlHttpContent = $req->getData();
-		if(!$noticia->validateXMLbyXSD($xmlHttpContent, "Noticia.xsd")) {
+		/*if(!$noticia->validateXMLbyXSD($xmlHttpContent, "Noticia.xsd")) {
 		 RestUtils::sendResponse(400, null, "XML mal formado!", "text/plain");
-		}
+		}*/
 		$nova_noticia = $noticia->fromXml($xmlHttpContent);
 		if ($nova_noticia === null || checkRelations($nova_noticia)===false ||
 			// se existir id de noticia no gajo nao pode ir.  
@@ -292,7 +292,6 @@
 			RestUtils::sendResponse(400);
 
 		}
-		
 		$nova_noticia->idnoticia =$id; 
 		addNoticia($nova_noticia, "update");
 		RestUtils::sendResponse(204);
@@ -437,13 +436,13 @@
 			}	
 		}
 	}
-		
+	
 	function getNews($req, $id, $n){
 		$n = $n->getRelationArray($id, getUrl());
 		$noticia = new Noticia();
 		RestUtils::webResponse($n, $req, 'noticia', 'Noticia.xsd', 'data'); 
 	}
-
+	
     /*
      * Checks if the request is valid through whitelistening of the possible request types.
      * Deals with query variables, path info, method types, etc. 

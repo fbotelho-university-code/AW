@@ -50,16 +50,16 @@ class Local extends Model{
 		$start = $var['start'];
 		$end = $var['count'];
 		
-		$sql = "select distinct * ,count(*) as total from `local` l , `noticia_locais` nl 
+		$sql = "select distinct l.* ,count(*) as total from `local` l , `noticia_locais` nl 
 		where lat between ". $long_low . " AND " . $lat_up . " AND log between " . $long_low . " AND " . $long_up  
 		. ' AND l.idlocal = nl.idlocal group by l.idlocal ORDER BY  total DESC' ;
-		
 		if(!(is_null($start) && is_null($end))) {
 			$sql .= " LIMIT ".$start." , ". $end;
 		}
-		
 		$rs = $this->execute($sql);
+		
 		if (!isset($rs) ) return;
+		
 		$objects = array();
 		while(!$rs->EOF) {
 			$arrayAssoc = $rs->fields;

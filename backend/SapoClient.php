@@ -68,7 +68,7 @@ class SapoClient extends Fonte {
 	}
 }
 
-$sapo = new SapoClient();
+/*$sapo = new SapoClient();
 $parameters = Util::getSearchParameters();
 $sapo->search($parameters);
-
+*/
