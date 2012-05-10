@@ -263,12 +263,14 @@ function getNoticiaById(id)
 			  var assuntoDOMArray = xmlRoot.getElementsByTagName("assunto");
 			  var descricaoDOMArray = xmlRoot.getElementsByTagName("descricao");
 			  var urlDOMArray = xmlRoot.getElementsByTagName("url");
+			  var aboutDOMArray = xmlRoot.getElementsByTagName("about");
 			  
 			  var idnoticia = idnoticiaDOMArray.item(0).firstChild.data;
 			  var data_pub = data_pubDOMArray.item(0).firstChild.data;
 			  var assunto = assuntoDOMArray.item(0).firstChild.data;
 			  var descricao = descricaoDOMArray.item(0).firstChild.data;
 			  var url = urlDOMArray.item(0).firstChild.data;
+			  var about = aboutDOMArray.item(0).firstChild.data;
 			  
 			  var localDOMArray = xmlRoot.getElementsByTagName("Local");
 			  var myLocaisNoticias = new Array();
@@ -337,14 +339,15 @@ function getNoticiaById(id)
 			 
 			  $("assuntoNoticiaEscolhida").innerHTML = assunto;
 			  $("descricaoNoticiaEscolhida").innerHTML = descricao;
-			  $("qualificacaoNoticiaEscolhida").innerHTML = "(" + qualificacao + ")&nbsp;&nbsp;&nbsp;";
+			  //$("qualificacaoNoticiaEscolhida").innerHTML = "(" + qualificacao + ")&nbsp;&nbsp;&nbsp;";
 			  $("linkNoticiaEscolhida").href = url;
+			  $("aboutTexto").innerHTML = "Pesquisada por: " + about;
 			  $("botaoComentario").href = "javascript:inserirComentario(" + idnoticia + ")";
 
 			  /* Mostra clubes associados à notícia */
 			  var imageClubes = "<table>";
 			  if(myClubesNoticias.length == 0) {
-				  imageClubes += "<tr><td>Não existem clubes associados a esta notícia.</td></tr>";
+				  imageClubes += "<tr><td>Sem clubes associados a esta noticia.</td></tr>";
 			  }
 			  else {
 				  for(var i=0; i<myClubesNoticias.length; i++) {
@@ -366,7 +369,7 @@ function getNoticiaById(id)
 			  /* Mostra integrantes associados à notícia */
 			  var imageIntegrantes = "<table>";
 			  if(myIntegrantesNoticias.length == 0) {
-				  imageIntegrantes += "<tr><td>Não existem integrantes associados a esta notícia.</td></tr>";
+				  imageIntegrantes += "<tr><td>Sem integrantes associados a esta noticia.</td></tr>";
 			  }
 			  else {
 				  for(var i=0; i<myIntegrantesNoticias.length; i++) {
@@ -858,7 +861,7 @@ function alterarRelacoesNoticia(idNoticia, xml) {
 function handleRequestStateChange(id)
 {
 	
-	if (xmlHttp.status==204)
+	if (xmlHttp.status > 200 && xmlHttp.status < 300)
 		{
 			try
 			{

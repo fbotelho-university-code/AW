@@ -64,14 +64,6 @@
 	
 	var markersArray = new Array();
 	
-	var imgClubes = {
-		'1' : 'css/images/benfica.png',
-		'2' : 'css/images/braga.gif',
-		'3' : 'css/images/porto.jpg',
-		'4' : 'css/images/Sporting.png',
-		'5' : 'css/images/cdn.gif',
-	};
-	
 	var latInicial_1 = 37.04;
    	var latInicial_2 = 42.28;
   	var logInicial_1 = -17.38;
@@ -93,6 +85,7 @@
 	function timelineLoad(){
 		events = new Timeline.DefaultEventSource();
 		getEvents(events);
+		//alert(events.getCount());
 		
 		var bandInfos = [	
 			Timeline.createBandInfo({
@@ -111,24 +104,7 @@
 		bandInfos[1].syncWith = 0;
   		bandInfos[1].highlight = true;
 		
-/*		Timeline.CompactEventPainter.prototype._showBubble=function(A,F,B){var E=document.createElement("div");
-B=("fillInfoBubble" in B)?[B]:B;
-for(var D=0;
-D<B.length;
-D++){var C=document.createElement("div");
-E.appendChild(C);
-B[D].fillInfoBubble(C,this._params.theme,this._band.getLabeller());
-}SimileAjax.WindowManager.cancelPopups();
-SimileAjax.Graphics.createBubbleForContentAndPoint(E,A,F,this._params.theme.event.bubble.width);
-};
 
-Timeline.DetailedEventPainter.prototype._showBubble=function(B,E,C){var D=document.createElement("div");
-var A=this._params.theme.event.bubble;
-C.fillInfoBubble(D,this._params.theme,this._band.getLabeller());
-SimileAjax.WindowManager.cancelPopups();
-SimileAjax.Graphics.createBubbleForContentAndPoint(D,B,E,A.width,null,A.maxHeight);
-};
-*/
 Timeline.OriginalEventPainter.prototype._showBubble=function(B,E,C){var D=document.createElement("div");
 var A=this._params.theme.event.bubble;
 C.fillInfoBubble(D,this._params.theme,this._band.getLabeller(),C);
@@ -192,6 +168,9 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
 		tempo.getUltimasNoticias(function(result){
 			tempos=result;
 		});
+				
+		//alert(tempos.length);		
+		//console.log(tempos);
 		
 		for(var i=0; i<tempos.length; i++){
 			var evt = new Timeline.DefaultEventSource.Event ({
@@ -199,21 +178,13 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
   				instant : true,
   				description : createBubbleHTML(tempos[i])
   			});
+  			
   			events.add(evt);
 		}
-		
-		
-		
-		/*
-		 var evt = new Timeline.DefaultEventSource.Event ({
-  			 start: new Date("2012-05-03"),
-  			 instant : true,
-  		});	
-  		events.add(evt);*/
 	}
 	
 	function initialize() {
-		
+		timelineLoad();
 		//getEvents();
 		
     	// LatLong de Liboa
@@ -227,7 +198,7 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
     	// Criação do Mapa
     	map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
     	getLocaisNoticiasByCoordenadas(latInicial_1, latInicial_2, logInicial_1, logInicial_2);
-    	//alert(123);
+    	
     	// Evento para alteração de Markers a serem mostrados
     	/*google.maps.event.addListener(map, 'dragend', function() {
         	var sw = map.getBounds().getSouthWest();
@@ -374,7 +345,7 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
   		function closeQuadroNoticia(){
   			$("assuntoNoticiaEscolhida").innerHTML = "";
   			$("descricaoNoticiaEscolhida").innerHTML = "";
-  			$("qualificacaoNoticiaEscolhida").innerHTML = ""
+  			//$("qualificacaoNoticiaEscolhida").innerHTML = ""
   			$("linkNoticiaEscolhida").href = "#";
   			$("clubesNoticiaEscolhida").innerHTML = "";
   			$("integrantesNoticiaEscolhida").innerHTML = "";
@@ -389,7 +360,7 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
   		function refreshQuadroNoticia(idN) {
   			$("assuntoNoticiaEscolhida").innerHTML = "";
   			$("descricaoNoticiaEscolhida").innerHTML = "";
-  			$("qualificacaoNoticiaEscolhida").innerHTML = ""
+  			//$("qualificacaoNoticiaEscolhida").innerHTML = ""
   			$("linkNoticiaEscolhida").href = "#";
   			$("clubesNoticiaEscolhida").innerHTML = "";
   			$("integrantesNoticiaEscolhida").innerHTML = "";
@@ -714,8 +685,9 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
 		<hr width=75% /><hr width=75% />
 		<p class="descricao" id="descricaoNoticiaEscolhida"></p>
 		<br />
+		<p align='left' id="aboutTexto"></p>
 		<p align='right'><a href="#" id="linkNoticiaEscolhida" target="_blank">Leia mais...</a>&nbsp;&nbsp;&nbsp;&nbsp;</p>
-		<p align="left"><a href="javascript:void(0)"><img src="css/images/button-like.png" alt="Curtir" align="middle" style="margin-left:5px" /></a><font id="qualificacaoNoticiaEscolhida"></font>
+		<p align="left"><!--  <a href="javascript:void(0)"><img src="css/images/button-like.png" alt="Curtir" align="middle" style="margin-left:5px" /></a><font id="qualificacaoNoticiaEscolhida"></font> -->
 						<a href="javascript:void(0)" onclick="showHideDiv($('todosComentarios'))"><img src="css/images/comment-icon.jpg" alt="Comentários" align="middle" /></a><span id="countComentarios"></span>&nbsp;&nbsp;&nbsp;&nbsp;
 						 <a href="javascript: void(0)" onclick="showHideDiv($('comentario'))">Adicionar Comentário</a></p>
 		
@@ -955,8 +927,8 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
 				</div>
 			</div>
 			<div class="cl">&nbsp;</div>
-				<h2 class="left">Videos</h2>
-			<div id="youtube" class="youtube">
+				<!-- <h2 class="left">Videos</h2>
+				<div id="youtube" class="youtube">
 				<div id="slot1" class="youVideo">
 				<p><object width="250" height="180"><param name="movie" value="https://www.youtube.com/v/B2isj47-Ses&hl=en_US&feature=player_embedded&version=3"></param><param name="allowFullScreen" value="true"></param><param name="allowScriptAccess" value="always"></param><embed src="https://www.youtube.com/v/B2isj47-Ses&hl=en_US&feature=player_embedded&version=3" type="application/x-shockwave-flash" allowfullscreen="true" allowScriptAccess="always" width="250" height="180"></embed></object></p>
 				<p>balsladsdasadhsi iahs dhiu auh iaiuhsadhiu </p> 
@@ -966,14 +938,10 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
 				</div>
 				<div id="slot3" class="youVideo">
 				  
-				</div>
+				</div>-->
 			</div>
 		</div>	
 	</div>
-	
-
-<!-- <script>timelineLoad();</script> -->
-		
 	<div id="timeline" style="height: 50px; border: 1px solid #aaa"></div>
 	<noscript>
 		This page uses Javascript to show you a Timeline. Please enable Javascript in your browser to see the full page. Thank you.
