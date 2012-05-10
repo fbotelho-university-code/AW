@@ -17,7 +17,7 @@ class Fonte extends Model {
 	 public function getKeyFields(){
 		return array ('idfonte'); 
 	}
-	 
+	
 	/**
 	* Identificador da fonte
 	* @var int
@@ -139,6 +139,7 @@ class Fonte extends Model {
 				if (isset($url_s)){
 					$data = getUrlContent($url_s);
 				}
+				
 				$n_ =  parseXml($data, $this->xmlObject, $this->idfonte, $s);
 				if (isset($n_)){
 						$news = array_merge($news, $n_);

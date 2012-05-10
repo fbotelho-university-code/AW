@@ -3,6 +3,11 @@
 
 class BackUtil {
 
+	
+	static function formatDateYoutubeRapidinho($date){
+		return $date .""; 
+	}
+	
 	/**
 	 * Array com a correla��o dos meses do ano em formato [A-Z]2[a-z] para 2[00-12]
 	 * @var String[] 
