@@ -163,11 +163,11 @@ function getFullName($p_uri){
  	return getnames("
 	SELECT distinct * WHERE {<". $uri . "> ?key ?value .
   	FILTER ( 
-  		 ?key = <http://dbpedia.org/property/fullname> ||
-         ?key = <http://dbpedia.org/property/name> || 
-         ?key = <http://dbpedia.org/property/playername> || 
-         ?key = <http://dbpedia.org/property/alternativeNames>  ||  
-         ?key = <http://dbpedia.org/property/nickname>" .
+	  		 ?key = <http://dbpedia.org/property/fullname> ||
+	         ?key = <http://dbpedia.org/property/name> || 
+	         ?key = <http://dbpedia.org/property/playername> || 
+	         ?key = <http://dbpedia.org/property/alternativeNames>  ||  
+	         ?key = <http://dbpedia.org/property/nickname>" .
          		"
 	)
 	}");
