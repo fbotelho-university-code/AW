@@ -1,5 +1,5 @@
 /**
- * Classe que representa uma referencia espacial de uma notícia.
+ * Classe que representa uma referencia espacial de uma notï¿½cia.
  */
 
 function Local() {
@@ -11,11 +11,11 @@ function Local() {
 	this.noticias = new Array();
 	
 	/* URL base para comunicacao com o web service */
-	this.baseurl = "http://localhost/AW3/webservice/espaco.php/";
+	this.baseurl = "http://localhost/proj/webservice/espaco.php/";
 
 	/**
-	 * Método para recuperar todos os locais.
-	 * Necessita de função callback como parametro para devolver resultado
+	 * Mï¿½todo para recuperar todos os locais.
+	 * Necessita de funï¿½ï¿½o callback como parametro para devolver resultado
 	 */
 	this.getAllLocais = function (start, count, cb) 
 	{
@@ -42,7 +42,7 @@ function Local() {
 			  /* Armazena dados retornados em Array */ 
 			  var locais = new Array();
 			  
-			  /* Construçção dos objectos e armazenamento no Array de retorno */
+			  /* Construï¿½ï¿½ï¿½o dos objectos e armazenamento no Array de retorno */
 			  for(var i=0; i<idlocalDOMArray.length; i++) {
 			  	var l = new Local();
 				l.idlocal = idlocalDOMArray.item(i).firstChild.data;
@@ -53,7 +53,7 @@ function Local() {
 			  //DEBUG
 		      //alert("Success! \n\n" + clubes.length);
 			  
-			  /* Retorno do array de objectos usando função callback passada como parâmetro */
+			  /* Retorno do array de objectos usando funï¿½ï¿½o callback passada como parï¿½metro */
 			  cb(locais);
 		    },
 		    /* Tratamento de Falhas */
@@ -62,8 +62,8 @@ function Local() {
 	};
 	
 	/**
-	 * Recupera um local especifico de acordo com o id passado como parâmetro.
-	 * Necessita de função callback como parametro para devolver resultado
+	 * Recupera um local especifico de acordo com o id passado como parï¿½metro.
+	 * Necessita de funï¿½ï¿½o callback como parametro para devolver resultado
 	 */
 	this.getLocalById = function (id, cb)
 	{
@@ -82,7 +82,7 @@ function Local() {
 				  var nome_localDOMArray = xmlRoot.getElementsByTagName("nome_local");
 				  var coordenadasDOMArray = xmlRoot.getElementsByTagName("coordenadas");
 				  
-				  /* Criação do objecto usando XML retornado */
+				  /* Criaï¿½ï¿½o do objecto usando XML retornado */
 				  var l = new Local();
 				  l.idlocal = idlocalDOMArray.item(0).firstChild.data;
 				  l.nome_local = nome_localDOMArray.item(0).firstChild.data;
@@ -91,7 +91,7 @@ function Local() {
 				  //DEBUG
 			      //alert("Success! \n\n" + l);
 				  
-				  /* Retorno do objecto usando função callback passada como parametro */
+				  /* Retorno do objecto usando funï¿½ï¿½o callback passada como parametro */
 				  cb(l);
 			},
 			/* Tratamento de Falhas */
@@ -100,8 +100,8 @@ function Local() {
 	};
 	
 	/**
-	 * Recupera um local especifico de acordo com o nome passado como parâmetro.
-	 * Necessita de função callback como parametro para devolver resultado
+	 * Recupera um local especifico de acordo com o nome passado como parï¿½metro.
+	 * Necessita de funï¿½ï¿½o callback como parametro para devolver resultado
 	 */
 	this.getLocalByNome = function (nome, cb)
 	{
@@ -123,7 +123,7 @@ function Local() {
 				  /* Armazena dados retornados em Array */ 
 				  var locais = new Array();
 				  
-				  /* Construçção dos objectos e armazenamento no Array de retorno */
+				  /* Construï¿½ï¿½ï¿½o dos objectos e armazenamento no Array de retorno */
 				  for(var i=0; i<idlocalDOMArray.length; i++) {
 				  	var l = new Local();
 					l.idlocal = idlocalDOMArray.item(i).firstChild.data;
@@ -134,7 +134,7 @@ function Local() {
 				  //DEBUG
 			      //alert("Success! \n\n" + clubes.length);
 				  
-				  /* Retorno do array de objectos usando função callback passada como parâmetro */
+				  /* Retorno do array de objectos usando funï¿½ï¿½o callback passada como parï¿½metro */
 				  cb(locais);
 			},
 			/* Tratamento de Falhas */
@@ -143,8 +143,8 @@ function Local() {
 	};
 	
 	/**
-	 * Recupera as notícias de local especifico de acordo com um id passado por parametro
-	 * Necessita de função callback como parametro para devolver resultado
+	 * Recupera as notï¿½cias de local especifico de acordo com um id passado por parametro
+	 * Necessita de funï¿½ï¿½o callback como parametro para devolver resultado
 	 */
 	this.getNoticiasLocal = function (id, cb)
 	{
@@ -164,7 +164,7 @@ function Local() {
 				  var assuntoDOMArray = xmlRoot.getElementsByTagName("assunto");
 				  var descricaoDOMArray = xmlRoot.getElementsByTagName("descricao");
 						  
-				  /* Criação de um array para armazenar os dados retornados */ 
+				  /* Criaï¿½ï¿½o de um array para armazenar os dados retornados */ 
 				  var noticiasLocal = new Array();
 				  
 				  for(var i=0; i<idnoticiaDOMArray.length; i++) {
@@ -178,7 +178,7 @@ function Local() {
 				  //DEBUG
 			      //alert("Success! \n\n" + l);
 						  
-				  /* Retorno do objecto usando função callback passada como parametro */
+				  /* Retorno do objecto usando funï¿½ï¿½o callback passada como parametro */
 				  cb(noticiasLocal);
 			},
 			/* Tratamento de Falhas */
@@ -254,7 +254,7 @@ function getLocaisNoticiasByCoordenadas(lat_1, lat_2, log_1, log_2) {
 				var noticiasArray = localDOMArray.item(i).getElementsByTagName("noticias");
 				
 				//TODO
-				// Retirar após acerto no WebService
+				// Retirar apï¿½s acerto no WebService
 				if(noticiasArray.length != 0) {
 					local = new google.maps.LatLng(parseFloat(lat), parseFloat(log));
 					//alert(data + "\n\nNoticia: " + idnoticia + "\n\nLocal: " + lat + "," + log);
@@ -267,9 +267,9 @@ function getLocaisNoticiasByCoordenadas(lat_1, lat_2, log_1, log_2) {
 					markersArray.push(marker);
 					var infoWindow = new google.maps.InfoWindow;
 					var contentString = "<div id='infoMarker'>";
-		  			contentString += "<h2><center>Notícias em " + nome_local + "</center></h2>";
+		  			contentString += "<h2><center>Notï¿½cias em " + nome_local + "</center></h2>";
 		  			contentString +=  "<table id='infoMarker-t'><thread>";
-		  			contentString += "<tr><th>Data de Publicação</th>";
+		  			contentString += "<tr><th>Data de Publicaï¿½ï¿½o</th>";
 		  			contentString += "<th>Assunto</th></tr></thread>";
 		  			contentString += "<tbody>";
 		  			//alert(nome_local);
@@ -304,10 +304,80 @@ function getLocaisNoticiasByCoordenadas(lat_1, lat_2, log_1, log_2) {
 					    	  }
 					    	  alert(result);
 					      }*/
-			/* Retorno do array de referências temporais usando função callback */
+			/* Retorno do array de referï¿½ncias temporais usando funï¿½ï¿½o callback */
 			//cb(tempos);
 		},
 		/* Tratamento de Falhas */
 	    onFailure: function(){ alert("Erro ao recuperar 'Locais' do webservice!"); }
 		});
 }
+
+
+
+function getLocalByNome(nome)
+{
+	var url = this.baseurlLocais + nome;
+	new Ajax.Request(url,
+	{
+		method: 'get',
+		asynchronous: true,
+		onSuccess: function(transport){
+			/* Recebimento da resposta */
+		      var response = transport.responseXML;
+		      var xmlRoot = response.documentElement;
+
+		      /* Recupera arrays com tags do XML retornado */
+		      var localDOMArray = xmlRoot.getElementsByTagName("Local");
+		      for(var i=0; i<localDOMArray.length; i++) {
+		    	  var idlocal = localDOMArray.item(i).getElementsByTagName("idlocal").item(0).firstChild.data;
+		    	  var nome_local = localDOMArray.item(i).getElementsByTagName("nome_local").item(0).firstChild.data;
+		    	  var lat = localDOMArray.item(i).getElementsByTagName("lat").item(0).firstChild.data;
+		    	  var log = localDOMArray.item(i).getElementsByTagName("log").item(0).firstChild.data;
+		    	  var noticiasArray = localDOMArray.item(i).getElementsByTagName("noticias");
+
+		    	  //TODO
+		    	  // Retirar após acerto no WebService
+		    	  if(noticiasArray.length != 0) {
+		    		  local = new google.maps.LatLng(parseFloat(lat), parseFloat(log));
+		    		  //alert(data + "\n\nNoticia: " + idnoticia + "\n\nLocal: " + lat + "," + log);
+
+		    		  marker = new google.maps.Marker({
+		    			  position: local,
+		    			  title: nome_local,
+		    			  map: map
+		    		  });
+		    		  markersArray.push(marker);
+		    		  var infoWindow = new google.maps.InfoWindow;
+		    		  var contentString = "<div id='infoMarker'>";
+		    		  contentString += "<h2><center>Notícias em " + nome_local + "</center></h2>";
+		    		  contentString +=  "<table id='infoMarker-t'><thread>";
+		    		  contentString += "<tr><th>Data de Publicação</th>";
+		    		  contentString += "<th>Assunto</th></tr></thread>";
+		    		  contentString += "<tbody>";
+		    		  //alert(nome_local);
+		    		  var noticiaXML = noticiasArray[0].getElementsByTagName("Noticia");
+		    		  for(var j=0; j<noticiaXML.length;j++) {
+		    			  var idnoticia = noticiaXML[j].getElementsByTagName("idnoticia").item(0).firstChild.data;
+		    			  var data_pub = noticiaXML[j].getElementsByTagName("data_pub").item(0).firstChild.data;
+		    			  var assunto = noticiaXML[j].getElementsByTagName("assunto").item(0).firstChild.data;
+
+		    			  var dataAux = data_pub.substring(0,11);
+		    			  contentString += "<tr><td>" + dataAux +  "</td>";
+		    			  contentString += "<td><a href='javascript: void 0' onclick=showQuadroNoticia("+idnoticia+")>" + assunto +  "</a></td></tr>";
+		    		  }
+		    		  contentString +=  "</tbody></table>";
+		    		  contentString +=  "</div>";
+
+		    		  google.maps.event.addListener(marker, 'click', function(content) {
+		    			  return function() {
+		    				  infoWindow.setContent(content);
+		    				  infoWindow.open(map,this);
+		    			  }
+		    		  }(contentString));
+		    	  }
+		      }
+		},
+		/* Tratamento de Falhas */
+	    onFailure: function(){ return null; }
+	});
+};

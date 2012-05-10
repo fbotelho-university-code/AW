@@ -20,7 +20,7 @@ function Observer() {
 				},
 				/* Nada alterado */
 				on304 : function(){
-					console.log("nada alterado");
+					//console.log("nada alterado");
 					// Nada para fazer?
 				},
 				/* Tratamento de Falhas */

@@ -10,7 +10,7 @@ function Tempo() {
 	this.noticias = new Array();
 	
 	/** URL base para comunicacao com o web service **/
-	this.baseurl = "http://localhost/AW3/webservice/tempo.php/";
+	this.baseurl = "http://localhost/proj/webservice/tempo.php/";
 	
 	/**
 	 * Retorna as not�cias do ano corrente
