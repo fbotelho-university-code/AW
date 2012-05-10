@@ -553,83 +553,11 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
   				return false;
   			}
   			else {
+  				
   				clearOverlays();
-  			
-  				/* Buscar locais usando parametro de pesquisa */
-	  			var local = new Local();
-	  			var localArray = new Array();
-	  			local.getLocalByNome(param, function (result){
-	    			localArray = result;
-	    		});
-	    		
-	    		
-	    		/* Acrescentar Markers dos locais no mapa */ 
-	    		if(localArray != null) {
-		  			//alert("Locais: " + localArray.length);
-		  			setMarkers(localArray);
-				} 			
-	  			/* Buscar integrantes usando parametro de pesquisa */
-	  			var integrante = new Integrante();
-	  			var integranteArray = new Array();
-	  			integrante.getIntegranteByNome(param, function (result){
-	    			integranteArray = result;
-	    		});
-	  			
-	  			if(integranteArray != null) {
-	  				//alert("Integrantes: " + integranteArray.length);
-	  				// Buscar noticias com integrantes encontrados 
-	  				var noticiaIntegranteArray = new Array();
-	  				for(var i=0; i<integranteArray.length; i++) {
-	  					integrante.getNoticiasByIdIntegrante(integranteArray[i].idintegrante, function (result){
-	    					noticiaIntegranteArray = result;
-	    					if(noticiaIntegranteArray != null) {
-	    						// Buscar locais das notícias com integrantes encontrados 
-	    						var n = new Noticia();
-	    						var notAux = new Noticia();
-	    						for(var j=0; j<noticiaIntegranteArray.length; j++){
-	    							n.getNoticiaById(noticiaIntegranteArray[j].idnoticia, function (result){
-	    								notAux = result;
-	    							});
-	    							// Acrescentar Markers dos locais das notícias dos integrantes no mapa
-	    							setMarkers(notAux.locaisNoticias);	
-	    						}
-	    					}
-	    						
-	    				});
-					}
-				}	  			
-	  			
-	  			/* Buscar clubes usando parametro de pesquisa */
-	  			var clube = new Clube();
-	  			var clubeArray = new Array();
-	  			clube.getClubeByNome(param, function(result){
-	  				clubeArray = result;
-	  			});
-	  			
-	
-	  			if(clubeArray != null) {
-	  				//alert("Clubes: " + clubeArray.length);
-	  				/* Buscar noticias com clubes encontrados */
-	  				var noticiaClubeArray = new Array();
-	  				for(var i=0; i<clubeArray.length; i++) {
-	  					clube.getNoticiasByIdClube(clubeArray[i].idclube, function (result){
-	    					noticiaClubeArray = result;
-	    					if(noticiaClubeArray != null) {
-	    						/* Buscar locais das notícias com clubes encontrados */
-	    						var n = new Noticia();
-	    						var notAux = new Noticia();
-	    						for(var j=0; j<noticiaClubeArray.length; j++){
-	    							n.getNoticiaById(noticiaClubeArray[j].idnoticia, function (result){
-	    								notAux = result;
-	    							});
-	    							/* Acrescentar Markers dos locais das notícias dos clubes no mapa */
-	    							setMarkers(notAux.locaisNoticias);	
-	    						}
-	    					}
-	    						
-	    				});
-					}
-				}
+	  			getLocalByNome(param);
+	    		getClubeByNome(param);
+	    		getIntegranteByNome(param);	    		
   			}
   		}
   		

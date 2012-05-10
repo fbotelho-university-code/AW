@@ -311,3 +311,73 @@ function getLocaisNoticiasByCoordenadas(lat_1, lat_2, log_1, log_2) {
 	    onFailure: function(){ alert("Erro ao recuperar 'Locais' do webservice!"); }
 		});
 }
+
+
+
+function getLocalByNome(nome)
+{
+	var url = this.baseurlLocais + nome;
+	new Ajax.Request(url,
+	{
+		method: 'get',
+		asynchronous: true,
+		onSuccess: function(transport){
+			/* Recebimento da resposta */
+		      var response = transport.responseXML;
+		      var xmlRoot = response.documentElement;
+
+		      /* Recupera arrays com tags do XML retornado */
+		      var localDOMArray = xmlRoot.getElementsByTagName("Local");
+		      for(var i=0; i<localDOMArray.length; i++) {
+		    	  var idlocal = localDOMArray.item(i).getElementsByTagName("idlocal").item(0).firstChild.data;
+		    	  var nome_local = localDOMArray.item(i).getElementsByTagName("nome_local").item(0).firstChild.data;
+		    	  var lat = localDOMArray.item(i).getElementsByTagName("lat").item(0).firstChild.data;
+		    	  var log = localDOMArray.item(i).getElementsByTagName("log").item(0).firstChild.data;
+		    	  var noticiasArray = localDOMArray.item(i).getElementsByTagName("noticias");
+
+		    	  //TODO
+		    	  // Retirar após acerto no WebService
+		    	  if(noticiasArray.length != 0) {
+		    		  local = new google.maps.LatLng(parseFloat(lat), parseFloat(log));
+		    		  //alert(data + "\n\nNoticia: " + idnoticia + "\n\nLocal: " + lat + "," + log);
+
+		    		  marker = new google.maps.Marker({
+		    			  position: local,
+		    			  title: nome_local,
+		    			  map: map
+		    		  });
+		    		  markersArray.push(marker);
+		    		  var infoWindow = new google.maps.InfoWindow;
+		    		  var contentString = "<div id='infoMarker'>";
+		    		  contentString += "<h2><center>Notícias em " + nome_local + "</center></h2>";
+		    		  contentString +=  "<table id='infoMarker-t'><thread>";
+		    		  contentString += "<tr><th>Data de Publicação</th>";
+		    		  contentString += "<th>Assunto</th></tr></thread>";
+		    		  contentString += "<tbody>";
+		    		  //alert(nome_local);
+		    		  var noticiaXML = noticiasArray[0].getElementsByTagName("Noticia");
+		    		  for(var j=0; j<noticiaXML.length;j++) {
+		    			  var idnoticia = noticiaXML[j].getElementsByTagName("idnoticia").item(0).firstChild.data;
+		    			  var data_pub = noticiaXML[j].getElementsByTagName("data_pub").item(0).firstChild.data;
+		    			  var assunto = noticiaXML[j].getElementsByTagName("assunto").item(0).firstChild.data;
+
+		    			  var dataAux = data_pub.substring(0,11);
+		    			  contentString += "<tr><td>" + dataAux +  "</td>";
+		    			  contentString += "<td><a href='javascript: void 0' onclick=showQuadroNoticia("+idnoticia+")>" + assunto +  "</a></td></tr>";
+		    		  }
+		    		  contentString +=  "</tbody></table>";
+		    		  contentString +=  "</div>";
+
+		    		  google.maps.event.addListener(marker, 'click', function(content) {
+		    			  return function() {
+		    				  infoWindow.setContent(content);
+		    				  infoWindow.open(map,this);
+		    			  }
+		    		  }(contentString));
+		    	  }
+		      }
+		},
+		/* Tratamento de Falhas */
+	    onFailure: function(){ return null; }
+	});
+};
