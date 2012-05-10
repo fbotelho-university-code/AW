@@ -71,7 +71,7 @@ function Tempo() {
 					  cb(tempos);
 				    },
 				    /* Tratamento de Falhas */
-				    onFailure: function(){ alert("Erro ao recuperar 'Últimas Notícias' do webservice!"); }
+				    onFailure: function(){ alert("Erro ao recuperar 'ï¿½ltimas Notï¿½cias' do webservice!"); }
 				});
 	};
 }
@@ -104,12 +104,12 @@ function getUltimasNoticias() {
 			var tempos = new Array();
 			for(var i=0; i<dataDOMArray.length; i++) {
 				var t = new Tempo();
-				/* Recuperação da data interpretada do documento XML retornado */
+				/* Recuperaï¿½ï¿½o da data interpretada do documento XML retornado */
 				var tempoXML = dataDOMArray.item(i).getElementsByTagName("tempo").item(0).firstChild.data;
 				t.dataInterpretada = tempoXML;
 				$("noticias").innerHTML += "<ul>" + t.dataInterpretada + "</ul>";
 				
-				/* Recuperação das notícias associadas à data interpretada recuperada */
+				/* Recuperaï¿½ï¿½o das notï¿½cias associadas ï¿½ data interpretada recuperada */
 				var noticiasArray = dataDOMArray.item(i).getElementsByTagName("Noticia");
 				var noticiasTempo = new Array();
 				for(var j=0; j<noticiasArray.length;j++) {
@@ -134,11 +134,11 @@ function getUltimasNoticias() {
 			    	  }
 			    	  alert(result);
 			      }*/
-			/* Retorno do array de referências temporais usando função callback */
+			/* Retorno do array de referï¿½ncias temporais usando funï¿½ï¿½o callback */
 			//cb(tempos);
 		},
 		/* Tratamento de Falhas */
-		onFailure: function(){ alert("Erro ao recuperar 'Últimas Notícias' do webservice!"); }
+		onFailure: function(){ alert("Erro ao recuperar 'ï¿½ltimas Notï¿½cias' do webservice!"); }
 	});
 	
 }

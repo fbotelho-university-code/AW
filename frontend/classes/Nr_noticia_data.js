@@ -3,7 +3,7 @@ function Nr_noticia_data() {
 	this.nr_noticia;
 	
 	/* URL base para comunicacao com o web service */
-	this.baseurl = "http://localhost/AW3/webservice/stats.php/noticiaspordata";
+	this.baseurl = "http://localhost/proj/webservice/stats.php/noticiaspordata";
 	
 	this.get = function (start, count, cb) 
 	{
@@ -31,7 +31,7 @@ function Nr_noticia_data() {
 			  
 			  for(var i=0; i<mesDOMArray.length; i++) {
 			  	var c = new Nr_noticia_data();
-				c.mes = mesDOMArray.item(i).firstChild.data;
+				c.mes = parseInt(mesDOMArray.item(i).firstChild.data,10);
 				c.nr_noticia = parseInt(nr_noticiaDOMArray.item(i).firstChild.data,10);
 				noticias_data[i] = c;
 			  }

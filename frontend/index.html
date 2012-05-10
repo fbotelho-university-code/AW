@@ -16,6 +16,17 @@
 	<script type="text/javascript" src="classes/Noticia.js" charset="utf-8"></script>
 	<script type="text/javascript" src="classes/Integrante.js" charset="utf-8"></script>
 	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true" charset="utf-8"></script>
+	<script type="text/javascript" src="classes/Nr_noticia_local.js" charset="utf-8"></script>
+	<script type="text/javascript" src="classes/Nr_noticia_data.js" charset="utf-8"></script>
+	<script type="text/javascript" src="classes/Noticia_data_clube.js" charset="utf-8"></script>
+	<script type="text/javascript" src="classes/Nr_noticia_integrante.js" charset="utf-8"></script>
+	<script type="text/javascript" src="classes/Nr_noticia_local_clube.js" charset="utf-8"></script>
+	<script type="text/javascript" src="classes/Noticia_x_clube.js" charset="utf-8"></script>
+	<script src="highcharts/js/adapters/prototype-adapter.js" type="text/javascript" charset="utf-8"></script>
+	<script src="highcharts/js/highcharts.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="graficos.js" charset="utf-8"></script>
+	<script src="http://static.simile.mit.edu/timeline/api-2.3.0/timeline-api.js?bundle=true" type="text/javascript"></script>
+
 	<script type="text/javascript" charset="utf-8">
 	
 	
@@ -59,7 +70,144 @@
 		'5' : 'css/images/cdn.gif',
 	};
 	
+	var tl;
+	
+	 var resizeTimerID = null;
+	function onResize() {
+		if (resizeTimerID == null) {
+			resizeTimerID = window.setTimeout(function() {
+				resizeTimerID = null;
+			}, 500);
+		}
+	}
+	
+	function timelineLoad(){
+		events = new Timeline.DefaultEventSource();
+		getEvents(events);
+		
+		var bandInfos = [	
+			Timeline.createBandInfo({
+				width:          "60%",
+				intervalUnit:   Timeline.DateTime.DAY,
+				intervalPixels: 100,
+				eventSource : events
+			}),
+			Timeline.createBandInfo({
+				overview:       true,
+				width:          "40%",
+				intervalUnit:   Timeline.DateTime.MONTH,
+				intervalPixels: 200
+			})
+		];
+		bandInfos[1].syncWith = 0;
+  		bandInfos[1].highlight = true;
+		
+/*		Timeline.CompactEventPainter.prototype._showBubble=function(A,F,B){var E=document.createElement("div");
+B=("fillInfoBubble" in B)?[B]:B;
+for(var D=0;
+D<B.length;
+D++){var C=document.createElement("div");
+E.appendChild(C);
+B[D].fillInfoBubble(C,this._params.theme,this._band.getLabeller());
+}SimileAjax.WindowManager.cancelPopups();
+SimileAjax.Graphics.createBubbleForContentAndPoint(E,A,F,this._params.theme.event.bubble.width);
+};
+
+Timeline.DetailedEventPainter.prototype._showBubble=function(B,E,C){var D=document.createElement("div");
+var A=this._params.theme.event.bubble;
+C.fillInfoBubble(D,this._params.theme,this._band.getLabeller());
+SimileAjax.WindowManager.cancelPopups();
+SimileAjax.Graphics.createBubbleForContentAndPoint(D,B,E,A.width,null,A.maxHeight);
+};
+*/
+Timeline.OriginalEventPainter.prototype._showBubble=function(B,E,C){var D=document.createElement("div");
+var A=this._params.theme.event.bubble;
+C.fillInfoBubble(D,this._params.theme,this._band.getLabeller(),C);
+SimileAjax.WindowManager.cancelPopups();
+SimileAjax.Graphics.createBubbleForContentAndPoint(D,B,E,A.width,null,A.maxHeight);
+};
+		
+Timeline._Impl.prototype._initialize=function(){var H=this._containerDiv;
+var E=H.ownerDocument;
+H.className=H.className.split(" ").concat("timeline-container").join(" ");
+var C=(this.isHorizontal())?"horizontal":"vertical";
+H.className+=" timeline-"+C;
+while(H.firstChild){H.removeChild(H.firstChild);
+}
+this._bands=[];
+for(var B=0;
+B<this._bandInfos.length;
+B++){var G=new Timeline._Band(this,this._bandInfos[B],B);
+this._bands.push(G);
+}this._distributeWidths();
+for(var B=0;
+B<this._bandInfos.length;
+B++){var F=this._bandInfos[B];
+if("syncWith" in F){this._bands[B].setSyncWithBand(this._bands[F.syncWith],("highlight" in F)?F.highlight:false);
+}}if(this.autoWidth){for(var B=0;
+B<this._bands.length;
+B++){this._bands[B].addOnScrollListener(this._autoWidthScrollListener);
+}}var D=SimileAjax.Graphics.createMessageBubble(E);
+D.containerDiv.className="timeline-message-container";
+H.appendChild(D.containerDiv);
+D.contentDiv.className="timeline-message";
+D.contentDiv.innerHTML="<img src='"+Timeline.urlPrefix+"images/progress-running.gif' /> Loading...";
+this.showLoadingMessage=function(){D.containerDiv.style.display="block";
+};
+this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
+};
+};		
+		  Timeline.DefaultEventSource.Event.prototype.fillInfoBubble =
+			function(element, theme, labeller, evt) {
+				var div = document.createElement("div");
+				div.setAttribute("style","height : 110px; overflow :auto;")
+				div.innerHTML = evt.getDescription();
+				element.appendChild(div);
+			};
+		
+		tl = Timeline.create(document.getElementById("timeline"), bandInfos);
+	}
+	
+	function createBubbleHTML(dataNews){
+		var html = "<ul>";
+		for(var i=0; i<dataNews.noticias.length; i++){
+			html += "<li><a class='linkNoticia2' href='javascript: void 0' onclick=showQuadroNoticia("+dataNews.noticias[i].idnoticia+")>" + dataNews.noticias[i].assunto + "</a></li>";
+		}
+		html+="</ul>"
+		return(html);
+	}
+	
+	function getEvents(events){
+		var tempo = new Tempo();
+		var tempos = new Array();
+		tempo.getUltimasNoticias(function(result){
+			tempos=result;
+			tl.getBand(0).getEventSource().layout();
+		});
+		
+		for(var i=0; i<tempos.length; i++){
+			var evt = new Timeline.DefaultEventSource.Event ({
+  				start: new Date(tempos[i].dataInterpretada),
+  				instant : true,
+  				description : createBubbleHTML(tempos[i])
+  			});
+  			events.add(evt);
+		}
+		
+		
+		
+		/*
+		 var evt = new Timeline.DefaultEventSource.Event ({
+  			 start: new Date("2012-05-03"),
+  			 instant : true,
+  		});	
+  		events.add(evt);*/
+	}
+	
 	function initialize() {
+		timelineLoad();
+		//getEvents();
+		
     	// LatLong de Liboa
     	var latlng = new google.maps.LatLng(39.71284,-9.635475);
     	// Opção iniciais para o mapa
@@ -491,10 +639,52 @@
   				div.style.display = 'none';
   			}
   		}
+  		
+  		function graphLocais(){
+   			$("graficoOutterBox").style.display="block";
+ 			$("quadroGrafico").style.display="block";
+  			drawLocais('quadroGrafico');
+  		}
+  		
+  		function graphClubes(){
+  			$("graficoOutterBox").style.display="block";
+			$("quadroGrafico").style.display="block";
+  			drawClubes('quadroGrafico');
+ 		}
+  		
+  		function graphIntegrantes(){
+  			$("graficoOutterBox").style.display="block";
+			$("quadroGrafico").style.display="block";
+  			drawIntegrantes('quadroGrafico');
+  		}
+  		
+  		function graphMes(){
+  			$("graficoOutterBox").style.display="block";
+			$("quadroGrafico").style.display="block";
+  			drawMes('quadroGrafico');
+ 		}
+  		
+  		function graphClubesLocal(){
+  			$("graficoOutterBox").style.display="block";
+			$("quadroGrafico").style.display="block";
+  			drawClubesLocal('quadroGrafico');
+ 		}
+  		
+  		function graphClubesMes(){
+  			$("graficoOutterBox").style.display="block";
+			$("quadroGrafico").style.display="block";
+  			drawClubesMes('quadroGrafico');
+ 		}
+  		
+  		function closeQuadroGrafico(){
+  			$("quadroGrafico").style.display="none";
+  			$("graficoOutterBox").style.display="none";
+  			$("quadroGrafico").innerHTML="";
+ 		}
   			
 	</script>
 </head>
-<body onload="initialize()">
+<body onload="initialize()" onresize="onResize()">
 <script>createAutoCompleteOptions()</script>
 <!-- <div id='systemWorking'><img src='css/images/ajax-loader3.gif' align='middle'></div>
 <div id='fundoLoading'></div> -->
@@ -556,6 +746,10 @@
 	<p align="center"><img src="css/images/j3.jpg" alt="Porto" width="48" height="48" /><br />Davi</p><br />
 	<p align="center"><img src="css/images/j4.jpg" alt="Porto" width="48" height="48" /><br />Tiago</p><br />
 </div>
+</div>
+<div id="quadroGrafico" style="display:none;"></div>
+<div id="graficoOutterBox" style="display:none;">
+<p align="right"><br /><a href="javascript: void(0)" onclick="closeQuadroGrafico()"><img src="css/images/close.png" alt="Close" border=0 /></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
 </div>
 	<!-- Header -->
 	<div id="header">
@@ -681,15 +875,29 @@
 		<div class="shell">		
 			<div class="cl">&nbsp;</div>	
 			<div id="sidebar">
-				<h2>news spot</h2>
+				<h2>Bitaites</h2>
 				<ul id="newsSpot">
-				    
-				    <!-- <li>
-				    	<small class="date">12.05.09</small>
+				    <li>
+				    	<small class="date">@Autor</small>
 				    	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-				    </li> -->
+				    </li>
+				    <li>
+				    	<small class="date">@Autor</small>
+				    	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+				    </li>
+				    <li>
+				    	<small class="date">@Autor</small>
+				    	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+				    </li>
+				    <li>
+				    	<small class="date">@Autor</small>
+				    	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+				    </li>
+				    <li>
+				    	<small class="date">@Autor</small>
+				    	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+				    </li>
 				</ul>
-				<a href="#" class="archives">News Archives</a>
 			</div>
 			<div id="content">
 				<!--  <div class="cl">&nbsp;</div>
@@ -721,28 +929,38 @@
 				<div class="cl">&nbsp;</div>
 				 <div class="video-box">
 					<div class="cl">&nbsp;</div>
-					<h2 class="left">video spot</h2>
-					<a href="#" class="button">All videos</a>
+					<h2 class="left">Estatísticas</h2>
+					<!--<a href="#" class="button">All videos</a>-->
 					<div class="cl">&nbsp;</div>
 					<div class="video-item-box">
-						<a href="#" class="left"><img src="css/images/video-1.jpg" alt="" /></a>
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
-						<a href="#" class="watch-now">Watch now</a>
+						<a class="left" href="javascript: void(0)" onclick="graphLocais()"><img src="css/images/locais.png" alt="Top 10 locais" /></a>
+						<p>Top 10 locais com mais notícias</p>
+						<a class="left" href="javascript: void(0)" onclick="graphLocais()">Ver gráfico</a>
 					</div>
 					<div class="video-item-box second">
-						<a href="#" class="left"><img src="css/images/video-2.jpg" alt="" /></a>
-						<p>Curabitur consectetur tellus a diam tincidunt pellentesque</p>
-						<a href="#" class="watch-now">Watch now</a>
+						<a class="left" href="javascript: void(0)" onclick="graphClubes()"><img src="css/images/clubes.png" alt="Top 10 clubes" /></a>
+						<p>Top 10 clubes com mais notícias</p>
+						<a class="left" href="javascript: void(0)" onclick="graphClubes()">Ver gráfico</a>
 					</div>
 					<div class="video-item-box">
-						<a href="#" class="left"><img src="css/images/video-3.jpg" alt="" /></a>
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
-						<a href="#" class="watch-now">Watch now</a>
+						<a class="left" href="javascript: void(0)" onclick="graphIntegrantes()"><img src="css/images/integrantes.png" alt="Top 10 integrantes" /></a>
+						<p>Top 10 integrantes com mais notícias</p>
+						<a class="left" href="javascript: void(0)" onclick="graphIntegrantes()">Ver gráfico</a>
 					</div>
 					<div class="video-item-box second">
-						<a href="#" class="left"><img src="css/images/video-4.jpg" alt="" /></a>
-						<p>Aliquam erat volutpat. Nam tortor justo, pretium eget iaculis et</p>
-						<a href="#" class="watch-now">Watch now</a>
+						<a class="left" href="javascript: void(0)" onclick="graphMes()"><img src="css/images/meses.png" alt="Notícias por mês" /></a>
+						<p>Notícias por mês</p>
+						<a class="left" href="javascript: void(0)" onclick="graphMes()">Ver gráfico</a>
+					</div>
+					<div class="video-item-box">
+						<a class="left" href="javascript: void(0)" onclick="graphClubesLocal()"><img src="css/images/clubelocal.png" alt="Clubes por local" /></a>
+						<p>Número de noticias de cada clube por local (Top 10)</p>
+						<a class="left" href="javascript: void(0)" onclick="graphClubesLocal()">Ver gráfico</a>
+					</div>
+					<div class="video-item-box second">
+						<a class="left" href="javascript: void(0)" onclick="graphClubesMes()"><img src="css/images/clubemes.png" alt="Clubes por mês" /></a>
+						<p>Número de noticias de cada clube por mês</p>
+						<a class="left" href="javascript: void(0)" onclick="graphClubesMes()">Ver gráfico</a>
 					</div>
 					<div class="cl">&nbsp;</div>
 				</div>
@@ -750,6 +968,12 @@
 			<div class="cl">&nbsp;</div>
 		</div>
 	</div>
+	
+	<div id="timeline" style="height: 50px; border: 1px solid #aaa"></div>
+	<noscript>
+		This page uses Javascript to show you a Timeline. Please enable Javascript in your browser to see the full page. Thank you.
+	</noscript>
+	
 	<!-- End Main -->
 	
 	<!-- Footer -->

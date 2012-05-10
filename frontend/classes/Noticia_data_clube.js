@@ -4,7 +4,7 @@ function Noticia_data_clube() {
 	this.nr_noticia;
 	
 	/* URL base para comunicacao com o web service */
-	this.baseurl = "http://localhost/AW3/webservice/stats.php/noticiaspordataporclube";
+	this.baseurl = "http://localhost/proj/webservice/stats.php/noticiaspordataporclube";
 	
 	this.get = function (start, count, cb) 
 	{
@@ -33,7 +33,7 @@ function Noticia_data_clube() {
 			  
 			  for(var i=0; i<mesDOMArray.length; i++) {
 			  	var c = new Noticia_data_clube();
-				c.mes = mesDOMArray.item(i).firstChild.data;
+				c.mes = parseInt(mesDOMArray.item(i).firstChild.data,10);
 				c.nome_oficial = nome_oficialDOMArray.item(i).firstChild.data;
 				c.nr_noticia = parseInt(nr_noticiaDOMArray.item(i).firstChild.data,10);
 				noticias_data_clube[i] = c;
