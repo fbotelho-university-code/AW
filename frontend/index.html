@@ -182,7 +182,6 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
 		var tempos = new Array();
 		tempo.getUltimasNoticias(function(result){
 			tempos=result;
-			tl.getBand(0).getEventSource().layout();
 		});
 		
 		for(var i=0; i<tempos.length; i++){
