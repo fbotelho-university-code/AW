@@ -71,7 +71,7 @@ function Tempo() {
 					  cb(tempos);
 				    },
 				    /* Tratamento de Falhas */
-				    onFailure: function(){ alert("Erro ao recuperar 'Últimas Notícias' do webservice!"); }
+				    onFailure: function(){ alert("Erro ao recuperar 'ï¿½ltimas Notï¿½cias' do webservice!"); }
 				});
 	};
 }
@@ -148,11 +148,11 @@ function getUltimasNoticias() {
 			    	  }
 			    	  alert(result);
 			      }*/
-			/* Retorno do array de referências temporais usando função callback */
+			/* Retorno do array de referï¿½ncias temporais usando funï¿½ï¿½o callback */
 			//cb(tempos);
 		},
 		/* Tratamento de Falhas */
-		onFailure: function(){ alert("Erro ao recuperar 'Últimas Notícias' do webservice!"); }
+		onFailure: function(){ alert("Erro ao recuperar 'ï¿½ltimas Notï¿½cias' do webservice!"); }
 	});
 	
 }
