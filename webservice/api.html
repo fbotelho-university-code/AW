@@ -26,6 +26,13 @@
 				<td bgcolor="green"></td>
 				<td bgcolor="green"></td>
 			</tr>
+			<tr>
+				<td>/noticias.php/{id}/comentarios</td>
+				<td bgcolor="green"></td>
+				<td bgcolor="green"></td>
+				<td></td>
+				<td></td>
+			</tr>
 			<td>/entidades.php/clube</td>
 			<td bgcolor="green"></td>
 			<td bgcolor="green"></td>
@@ -89,9 +96,86 @@
 				<td></td>
 			</tr>
 			<tr>
+				<td>/espaco.php/{latmin}/{latmax}/{longmin}⁄{longmax}</td>
+				<td bgcolor="green"></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
 				<td>/tempo.php[/{ano}[/{mes}[/{dia}]]]</td>
 				<td bgcolor="green"></td>
 				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>/stats.php/noticiaspordata</td>
+				<td bgcolor="green"></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>/stats.php/noticiasporintegrante</td>
+				<td bgcolor="green"></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>/stats.php/noticiasporlocal</td>
+				<td bgcolor="green"></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>/stats.php/noticiasporclube</td>
+				<td bgcolor="green"></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>/stats.php/noticiaspordataporclube</td>
+				<td bgcolor="green"></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>/stats.php/noticiasporlocalporclube</td>
+				<td bgcolor="green"></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>/fonte.php/{nomedafonte}</td>
+				<td></td>
+				<td bgcolor="green"></td>
+				<td bgcolor="green"></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>/fonte.php/{nomedafonte}/clube/{id}</td>
+				<td></td>
+				<td></td>
+				<td bgcolor="green"></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>/fonte.php/{nomedafonte}/integrante/{id}</td>
+				<td></td>
+				<td></td>
+				<td bgcolor="green"></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>/fonte.php/dbpedia/{nome}</td>
+				<td></td>
+				<td bgcolor="green"></td>
 				<td></td>
 				<td></td>
 			</tr>
@@ -110,7 +194,8 @@
 		<code>count</code> indica quantos elementos devem ser devolvidos na resposta. Se não houverem elementos suficientes 
 		disponíveis para perfazer <code>count</code>, todos os elementos disponíveis são retornados. Obviamente tanto 
 		<code>count</code> como <code>start</code> devem ser sempre valores inteiros e positivos. Se estas variáveis não estiverem definidas, 
-		o valor por defeito utilizado é 0 para <code>start</code> e 10 para <code>count</code>.
+		o valor por defeito utilizado é 0 para <code>start</code> e 10 para <code>count</code>. Finalmente, todos os métodos <code>GET</code> 
+		retornam o campo <code>Etag</code>, e suportam <code>HTTP</code> condicional.
 		</p> 
 		<h2><code>/noticias.php</code></h2>
 		<p>
@@ -135,7 +220,7 @@
 			<code>PUT</code> e <code>DELETE</code>.
 				<dl>
 					<dt><code>GET</code></dt>
-						<dd>Devolve a notícia com o identificador igual à <code>id</code>.</dd>
+						<dd>Devolve a notícia (e as suas relações) com o identificador igual à <code>id</code>.</dd>
 					<dt><code>PUT</code></dt>
 						<dd>Actualiza a notícia com o identificador igual à <code>id</code>, para ficar igual a notícia passada por parâmetro no corpo do 
 					pedido <code>HTTP</code>. A notícia fornecida deve seguir o <code>XML Schema</code> <a href="Schemas/noticia.xsd">noticia.xsd</a>.
@@ -143,6 +228,19 @@
 					<dt><code>DELETE</code></dt>
 						<dd>Remove a notícia com o identificador igual à <code>id</code>. A notícia não é pagada da base de dados, mas sim movida para uma 
 					tabela secundária, onde não estará disponível para o público.</dd>
+				</dl>
+			</p>
+			<h3><code>/noticias.php/{id}/comentarios</code></h3>
+			<p>Este recurso é relativo aos comentarios de uma <em>notícia</em>.</p>
+			<p>
+			A variável <code>id</code> representa o identificador único da notícia. Para este recurso estão definidos os métodos <code>GET</code> e 
+			<code>POST</code>.
+				<dl>
+					<dt><code>POST</code></dt>
+						<dd>Associa um novo comentário à notícia com o identificador igual à <code>id</code>. O comentário fornecido deve seguir o <code>XML Schema</code> <a href="Schemas/comentario.xsd">comentario.xsd</a>.</dd>
+					<dt><code>GET</code></dt>
+						<dd>Retorna os comentários associados à notícia com o identificador igual à <code>id</code>.
+						</dd>
 				</dl>
 			</p>
 		<h2><code>/entidades.php</code></h2>
@@ -253,6 +351,17 @@
 								<dd>Retorna as notícias relacionadas com o local com identificador igual à <code>id</code>.</dd>
 						</dl>
 					</p>
+			<h3>/espaco.php/{latmin}/{latmax}⁄{longmin}⁄{longmax}</h3>
+			<p>
+				Este recurso representa vários <em>locais</em> que se encontram entre certas coordenadas.
+			</p>
+				Este recurso aceita o método <code>GET</code>.
+			<p>
+				<dl>
+					<dt><code>GET</code></dt>
+						<dd>Retorna os locais (e suas notícias) que se encontram entre as coordenadas passadas.</dd>
+				</dl>
+			</p>
 		<h2>/tempo.php</h2>
 		<p>
 			Este recurso representa as <em>datas</em> que estão associadas à notícias.
@@ -288,6 +397,102 @@
 							<dd>Retorna a data associada às notícias do ano <code>ano</code>, mês <code>mes</code> e dia <code>dia</code>.</dd>
 					</dl>
 				</p>
+		<h2>/stats.php/noticiasporclube</h2>
+		<p>
+			Para este recurso está definido o método <code>GET</code>.
+			<dl>
+				<dt><code>GET</code></dt>
+					<dd>Retorna uma associação entre clubes e o número de notícias para cada clube.</dd>
+			</dl>
+		</p>
+		<h2>/stats.php/noticiasporlocal</h2>
+		<p>
+			Para este recurso está definido o método <code>GET</code>.
+			<dl>
+				<dt><code>GET</code></dt>
+					<dd>Retorna uma associação entre locais e o número de notícias para cada local.</dd>
+			</dl>
+		</p>
+		<h2>/stats.php/noticiaspordata</h2>
+		<p>
+			Para este recurso está definido o método <code>GET</code>.
+			<dl>
+				<dt><code>GET</code></dt>
+					<dd>Retorna uma associação entre meses e o número de notícias para cada mês.</dd>
+			</dl>
+		</p>
+		<h2>/stats.php/noticiasporintegrante</h2>
+		<p>
+			Para este recurso está definido o método <code>GET</code>.
+			<dl>
+				<dt><code>GET</code></dt>
+					<dd>Retorna uma associação entre integrantes e o número de notícias para cada integrante.</dd>
+			</dl>
+		</p>
+		<h2>/stats.php/noticiasporlocalporclube</h2>
+		<p>
+			Para este recurso está definido o método <code>GET</code>.
+			<dl>
+				<dt><code>GET</code></dt>
+					<dd>Retorna uma associação entre locais e o número de notícias para cada local, relacionando ainda o número de
+						notícias de cada clube para cada local.</dd>
+			</dl>
+		</p>
+		<h2>/stats.php/noticiaspordataporclube</h2>
+		<p>
+			Para este recurso está definido o método <code>GET</code>.
+			<dl>
+				<dt><code>GET</code></dt>
+					<dd>Retorna uma associação entre meses e o número de notícias para cada mês, relacionando ainda o número de
+						notícias de cada clube para cada mês.</dd>
+			</dl>
+		</p>
+		<h2>/fonte.php/{nomefonte}</h2>
+		<p>
+			Este recurso identifica uma fonte.
+		</p>
+		<p>
+			Para este recurso estão definidos os métodos <code>POST</code> e <code>PUT</code>.
+			<dl>
+				<dt><code>POST</code></dt>
+					<dd>Adiciona uma fonte nova. A informação deve ser passada em <code>XML</code> no corpo do pedido <code>HTTP</code>, respeitando o <code>XML Schema</code> <a href="Schemas/fonte.xsd">fonte.xsd</a>.</dd>
+				<dt><code>PUT</code></dt>
+					<dd>Efectua uma pesquisa na fonte.</dd>
+			</dl>
+		</p>
+			<h3>/fonte.php/{nomefonte}/clube/{id}</h3>
+			<p>
+				Este recurso identifica um clube que deve ser pesquisado numa fonte.
+			</p>
+			<p>
+				Para este recurso está definido o método <code>PUT</code>.
+				<dl>
+					<dt><code>PUT</code></dt>
+						<dd>Efectua uma pesquisa numa fonte por um clube.</dd>
+			</p>
+			<h3>/fonte.php/{nomefonte}/integrante/{id}</h3>
+			<p>
+				Este recurso identifica um integrante que deve ser pesquisado numa fonte.
+			</p>
+			<p>
+				Para este recurso está definido o método <code>PUT</code>.
+				<dl>
+					<dt><code>PUT</code></dt>
+						<dd>Efectua uma pesquisa numa fonte por um integrante.</dd>
+				</dl>
+			</p>
+			<h3>/fonte.php/dbpedia/{nomedbpedia}</h3>
+			<p>
+				Este recurso identifica um clube que deve ser pesquisado na DBpédia.
+			</p>
+			<p>
+				Para este recurso está definido o método <code>POST</code>.
+				<dl>
+					<dt><code>POST</code></dt>
+						<dd>Efectua uma pesquisa na DBpedia por um clube, inserindo-o na base de dados.</dd>
+				</dl>
+			</p>
+
 		<h1>Códigos de resposta		<code>HTTP</code></h1>
 		<dl>
 			<dt>200<dt>
