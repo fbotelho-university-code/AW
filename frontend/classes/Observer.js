@@ -28,7 +28,7 @@ function Observer() {
 					alert("Erro em: "+observable.url);
 				}
 			});
-		},5);
+		},observable.timeout);
 		
 		// Adicionar a lista de pes
 		this.pes.push({

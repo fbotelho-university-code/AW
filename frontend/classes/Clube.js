@@ -4,6 +4,7 @@ function Clube() {
 	this.idcompeticao;
 	this.nome_clube;
 	this.nome_oficial;
+	this.url_img;
 	
 	/* URL base para comunicacao com o web service */
 	this.baseurl = "http://localhost/AW3/webservice/entidades.php/clube/";
@@ -135,3 +136,51 @@ function Clube() {
 		});
 	}
 }
+
+var baseurlClubes = "http://localhost/AW3/webservice/entidades.php/clube/";
+var allClubes = new Array();
+var nome_clubeArray = new Array();
+var img_clubes = new Array();
+var id_clubes = new Array();
+
+function getAllClubes(start, count) 
+{
+	var params = "";
+	if(start != 0 && count != 0) {
+		params = "?start=" + start + "&count=" + count;
+	}
+	var url = baseurlClubes + params;
+	
+	new Ajax.Request(url,
+	{
+	    method:'get',
+	    asynchronous: false,
+	    onSuccess: function(transport){
+	      /* Recebimento da resposta */
+	      var response = transport.responseXML;
+	      var xmlRoot = response.documentElement;
+	      
+	      var nome_oficialDOMArray = xmlRoot.getElementsByTagName("nome_oficial");
+	      var img_clubesDOMArray = xmlRoot.getElementsByTagName("url_img");
+	      var id_clubesDOMArray = xmlRoot.getElementsByTagName("idclube");
+	      
+	      for(var i=0; i<nome_oficialDOMArray.length; i++) {
+			  nome_clubeArray[i] = nome_oficialDOMArray.item(i).firstChild.data;
+			  id_clubes[i] = id_clubesDOMArray.item(i).firstChild.data;
+			 if(img_clubesDOMArray.item(i).firstChild != null) {
+				  img_clubes[i] = img_clubesDOMArray.item(i).firstChild.data;
+			  }
+			  else{
+				  img_clubes[i] = "css/images/escudo_default.JPG";
+			  }
+		  }
+		  //alert("Antes Clube \n\n" + nomes_pesquisa.length);
+		  nomes_pesquisa = nomes_pesquisa.concat(nome_clubeArray);
+		  //DEBUG
+	      //alert("Depois Clube \n\n" + img_clubes.length);
+		  
+	    },
+	    /* Tratamento de Falhas */
+	    onFailure: function(){ alert("Erro ao recuperar 'Clubes' do webservice!"); }
+	});
+};

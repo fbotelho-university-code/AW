@@ -208,7 +208,7 @@ AutoComplete.prototype.CreateDefaultStyles = function() {
     style.media = "screen";
     var styleStr = "";
     styleStr += ".defaultAutoCompletePopupStyle { font-family:Arial; font-size: 10pt; color:black; width: 150px; margin: 3px; background-color: Gray; }\n";
-    styleStr += ".defaultAutoCompletePopupStyle div { top: -3px; left: -3px; background: white; border: solid 1px black; position: relative; overflow: auto; max-height: 100px; }\n";
+    styleStr += ".defaultAutoCompletePopupStyle div { top: -3px; left: -3px; background: white; border: solid 1px black; position: relative; overflow: auto; max-height: 100px; z-index:3; }\n";
     styleStr += ".defaultAutoCompletePopupStyle span { cursor: pointer; margin: 2px; display: block; }\n";
     styleStr += ".defaultAutoCompletePopupStyle span.wordSelected { background: blue;	color: White; }\n";
 
