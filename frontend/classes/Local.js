@@ -232,7 +232,7 @@ function getAllLocais(start, count) {
 function getLocaisNoticiasByCoordenadas(lat_1, lat_2, log_1, log_2) {
 	
 	var url = baseurlLocais + lat_1 + "/" + lat_2 + "/" + log_1 + "/" + log_2;
-	var count = "?count=1";
+	var count = "?count=15";
 	url += count;
 	//alert(url);
 	new Ajax.Request(url,

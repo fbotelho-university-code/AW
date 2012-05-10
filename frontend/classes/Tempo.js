@@ -10,7 +10,7 @@ function Tempo() {
 	this.noticias = new Array();
 	
 	/** URL base para comunicacao com o web service **/
-	this.baseurl = "http://localhost/proj/webservice/tempo.php/";
+	this.baseurl = "http://localhost/AW3/webservice/tempo.php/";
 	
 	/**
 	 * Retorna as not�cias do ano corrente
@@ -21,33 +21,36 @@ function Tempo() {
 	    var ano = hoje.getFullYear();
 	    var mes = hoje.getMonth();
 	    //var dia = hoje.getDate();
+		var url = this.baseurl + ano;
 		
-	    new Ajax.Request(this.baseurl + ano,
+	    new Ajax.Request(url,
 				{
 				    method:'get',
 				    asynchronous: false,
 				    onSuccess: function(transport){
+				    	
 				      /* Recebimento da resposta */
 				      var response = transport.responseXML;
 				      var xmlRoot = response.documentElement;
 				      
 				      
 				      /* Recupera arrays com tags do XML retornado */
-				      var dataDOMArray = xmlRoot.getElementsByTagName("Data");
-				      
-					  /* Armazena dados retornados em Arrays */ 
-					  var tempos = new Array();
-					  for(var i=0; i<dataDOMArray.length; i++) {
-						var t = new Tempo();
-						/* Recupera��o da data interpretada do documento XML retornado */
-						var tempoXML = dataDOMArray.item(i).getElementsByTagName("tempo").item(0).firstChild.data;
-						t.dataInterpretada = tempoXML;
-						
-						/* Recupera��o das not�cias associadas � data interpretada recuperada */
-						var noticiasArray = dataDOMArray.item(i).getElementsByTagName("Noticia");
-						var noticiasTempo = new Array();
-						
-						for(var j=0; j<noticiasArray.length;j++) {
+				      /* Recupera arrays com tags do XML retornado */
+						var dataDOMArray = xmlRoot.getElementsByTagName("Data");
+
+						/* Armazena dados retornados em Arrays */ 
+						var tempos = new Array();
+						for(var i=0; i<dataDOMArray.length; i++) {
+							t = new Tempo();
+							var data = dataDOMArray.item(i).getElementsByTagName("tempo").item(0).firstChild.data;
+							//alert(data);
+							t.dataInterpretada = data;
+							
+							/* Recupera��o das not�cias associadas � data interpretada recuperada */
+							var noticiasArray = dataDOMArray.item(i).getElementsByTagName("Noticia");
+							var noticiasTempo = new Array();
+							//alert(data + ": " + noticiasArray.length);
+							for(var j=0; j<noticiasArray.length;j++) {
 							var n = new Noticia();
 							n.idnoticia = noticiasArray[j].getElementsByTagName("idnoticia").item(0).firstChild.data;
 							n.data_pub = noticiasArray[j].getElementsByTagName("data_pub").item(0).firstChild.data;
@@ -68,6 +71,7 @@ function Tempo() {
 				    	  alert(result);
 				      }*/
 					  /* Retorno do array de refer�ncias temporais usando fun��o callback */
+					  //alert(tempos.length);
 					  cb(tempos);
 				    },
 				    /* Tratamento de Falhas */
