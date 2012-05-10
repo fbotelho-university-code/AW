@@ -209,7 +209,7 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
 	}
 	
 	function initialize() {
-		timelineLoad();
+		
 		//getEvents();
 		
     	// LatLong de Liboa
@@ -223,7 +223,7 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
     	// Criação do Mapa
     	map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
     	getLocaisNoticiasByCoordenadas(latInicial_1, latInicial_2, logInicial_1, logInicial_2);
-    	
+    	//alert(123);
     	// Evento para alteração de Markers a serem mostrados
     	/*google.maps.event.addListener(map, 'dragend', function() {
         	var sw = map.getBounds().getSouthWest();
@@ -446,8 +446,8 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
   				a.setAttribute("href","javascript:void(0)");
   				var img_plus = document.createElement("img");
   				img_plus.setAttribute("src", "css/images/plus.png");
-	  			img_plus.setAttribute("width",12);
-	  			img_plus.setAttribute("height",12);
+	  			img_plus.setAttribute("width",16);
+	  			img_plus.setAttribute("height",16);
 	  			a.appendChild(img_plus);
 	  			td_3.appendChild(a);
 	  			
@@ -659,7 +659,7 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
             {
                 alert("Error: " + Err.description);
             }
-  		}
+ }
 		
   		
   		function graphLocais(){
@@ -707,7 +707,7 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
 	</script>
 </head>
 <body onload="initialize()" onresize="onResize()">
-<!-- <script>getLocaisNoticiasByCoordenadas(latInicial_1, latInicial_2, logInicial_1, logInicial_2)</script> -->
+
 <script>createAutoCompleteOptions()</script>
 <!-- <div id='systemWorking'><img src='css/images/ajax-loader3.gif' align='middle'></div>
 <div id='fundoLoading'></div> -->
@@ -820,11 +820,11 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
 					<div id="heading-box-cnt">
 						<div class="cl">&nbsp;</div>
 						
-						<!--  <div id="map_canvas" style="width:438px; height:310px"></div> -->
+						<!--  <div id="map_canvas" style="width:538px; height:310px"></div> -->
 						<!-- Main Slide Item -->
 						<div class="featured-main">
 							<!-- <a href="#"><img id="map_canvas" src="css/images/featured-main.jpg" alt="" /></a> -->
-							<div id="map_canvas" style="width:705px; height:310px"></div>
+							<div id="map_canvas" style="width:890px; height:310px;padding-left:50px"></div>
 							
 						</div>
 						<!-- End Main Slide Item -->
@@ -989,7 +989,7 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
 			<div class="cl">&nbsp;</div>
 		</div>
 	</div>
-	
+<!-- <script>timelineLoad();</script> -->	
 	<div id="timeline" style="height: 50px; border: 1px solid #aaa"></div>
 	<noscript>
 		This page uses Javascript to show you a Timeline. Please enable Javascript in your browser to see the full page. Thank you.

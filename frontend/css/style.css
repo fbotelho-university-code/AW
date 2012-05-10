@@ -36,7 +36,7 @@ h1#logo a {display: block; background: url(images/logo.gif) no-repeat 0 0; width
 
 #heading {height: 340px; background: url(images/heading.jpg) repeat-x 0 0;}
 #heading .shell {width: 1024px; position: relative;}
-#heading-cnt {background: url(images/heading-cnt.png) no-repeat 0 0; width: 1024px; height: 161px;}
+#heading-cnt {position: relative; background: url(images/heading-cnt.png) no-repeat 0 0; width: 1200px; height: 161px;}
 
 #side-nav ul {list-style-type: none; width: 205px; padding-top: 9px; padding-left: 10px;}
 #side-nav ul li {float: left; display: block; width: 305px; padding-bottom:5px;}
@@ -46,7 +46,7 @@ h1#logo a {display: block; background: url(images/logo.gif) no-repeat 0 0; width
 #side-nav ul li.active a:hover {text-decoration: none;}
 
 #heading-box {position: absolute; top: 9px; left: 235px;}
-#heading-box-cnt {background: url(images/heading-box.png) no-repeat 0 0; width: 709px; height: 316px; padding-top: 5px; padding-left: 4px;}
+#heading-box-cnt {position:relative; right:210px; background: url(images/heading-box.png) no-repeat 0 0; width: 909px; height: 316px; padding-top: 5px; padding-left: 4px; }
 .featured-main {position: relative; width: 440px; float: left;}
 .featured-main img {border: 1px solid #000;}
 .featured-main-details {position: absolute; left: 0; top: 260px;}
