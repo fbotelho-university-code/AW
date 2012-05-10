@@ -1,6 +1,7 @@
 <?php
 @header('Content-Type: text/html; charset=utf-8');
 require_once "Clube.php";
+require_once 'Bitaites.php'; 
 require_once "Competicao.php";
 require_once "DAO.php";
 require_once "Fonte.php";
@@ -24,7 +25,5 @@ require_once "Nr_noticia_integrante.php";
 require_once "Noticia_x_clube.php"; 
 require_once "Noticia_data_clube.php";
 require_once "Nr_noticia_local.php";
-
 //require_once "lib/Util.php";
-
 ?>

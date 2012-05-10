@@ -47,7 +47,7 @@ class BackUtil {
 		else {
 			$date_db = substr($stringDate,5,20);
 			$date_db = explode(" ", $date_db);
-			$date_db_formated = $date_db[2]."-".Util::$meses[$date_db[1]]."-".$date_db[0]." ".$date_db[3];
+			$date_db_formated = $date_db[2]."-".BackUtil::$meses[$date_db[1]]."-".$date_db[0]." ".$date_db[3];
 		}
 		return $date_db_formated;
 	}

@@ -409,9 +409,5 @@ function insert_image($clube_uri, $id){
 		}
 	}
  }
-
- 
- 
- 
 	
 ?>

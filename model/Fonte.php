@@ -1,7 +1,9 @@
 <?php
 @header('Content-Type: text/html; charset=utf-8');
 require_once "Model.php";
-
+require_once '../backend/lib/HttpClient.php';
+require_once '../backend/lib/parseXml.php'; 
+ 
 /**
  * Classe que representa uma fonte de informações da Web
  *  (Google News, Sapo News, Twitter, etc.)
@@ -21,7 +23,7 @@ class Fonte extends Model {
 	* @var int
 	*/
 	var $idfonte;
-	
+	var $type; 
 	/**
 	* Nome da fonte
 	* @var String
@@ -46,12 +48,10 @@ class Fonte extends Model {
 	public function __construct($n = "") {
 		parent::__construct();
 		if($n != "") {
-			$this->nome = $n; 
-			$where = array("nome" => $this->nome);
+			$this->webname = $n; 
+			$where = array("webname" => $this->webname);
 			$obj = $this->findFirst($where);
 			$this->setIdfonte($obj->idfonte);
-			$this->setMain_url($obj->main_url);
-			$this->setLigado($obj->ligado);
 		}
 	}
 	
@@ -128,30 +128,59 @@ class Fonte extends Model {
 		return $ob; 
 	}
 	
-	public function getUrl($search){
+	/**
+	 * 
+	 * @param unknown_type $searchParameters
+	 */
+	public function search($searchParameters){
+		$news = array(); 
+		foreach ($searchParameters as $s){
+				$url_s = $this->getUri(urlencode($s));
+				if (isset($url_s)){
+					$data = getUrlContent($url_s);
+				}
+				$n_ =  parseXml($data, $this->xmlObject, $this->idfonte, $s);
+				if (isset($n_)){
+						$news = array_merge($news, $n_);
+				}
+		}
+		return $news; 
+	}
+	
+	public function getUri($search){
 		if (!isset($this->xmlObject)){
 			if (isset($this->xml)){
-				var_dump($this->xml);
 				$this->xmlObject = $this->toObject($this->xml);
-				var_dump($this->xmlObject); 
+				if (isset($this->xmlObject->template)){
+					$this->xmlObject = $this->xmlObject->template; 
+				}
 			}
 			else return; 
 		}
 			$base = "";
-
 			foreach ($this->xmlObject->uri->url as $url){
-					if (strcmp($url->url,"AW_SEARCH_VALUE") != 0){
-						$base .= $url;
+					if (strcmp($url,"AW_SEARCH_VALUE") == 0){
+						$base .= $search;
 					}else{
-						$base .= $search; 
+						$base .= $url;
+						
 					}
 			}
-			if (isset($this->xmlObject->query)){
+			if (isset($this->xmlObject->uri->query->variable)){
 				$base .= '?'; 
-				foreach ($this->xmlObject->query as $q){
-					$base .= $q->id; 
-					if (isset($q->value)){
+				$i = 0;
+				$count = count($this->xmlObject->uri->query->variable);
+				foreach ($this->xmlObject->uri->query->variable as $q){
+					$base .= $q->id . '='; 
+					if (!isset($q->value)){
 						$base .= $search;
+					}
+					else{
+						$base .= $q->value; 
+					}
+					$i++; 
+					if ($i < $count){
+						$base .= '&'; 
 					}
 				}	
 			}

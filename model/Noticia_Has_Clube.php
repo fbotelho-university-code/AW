@@ -7,6 +7,7 @@ require_once("Model.php");
  * To change the template for this generated file go to
  * Window - Preferences - PHPeclipse - PHP - Code Templates
  */
+
  class Noticia_Has_Clube extends Model{
  	
  	/**

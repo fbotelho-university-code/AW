@@ -6,8 +6,8 @@
   */
  function checkCurlResponse($ch){
  	$info = curl_getinfo($ch);
+
  	return isset($info['http_code']) && $info['http_code'] == 200;
- 	 
  }
 function getCurlContentType($ch){
 	$info = curl_getinfo($ch);
@@ -62,9 +62,7 @@ function getCurlContentType($ch){
       true);
 
    $response = curl_exec($ch);
-   
    if (!checkCurlResponse($ch)) return null;  
-  
    curl_close($ch);
    return $response;
  }
