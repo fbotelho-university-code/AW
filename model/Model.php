@@ -391,13 +391,14 @@ abstract class Model{
 	
 	public function getAllNews($idnoticia, $url){
 		$sql = "select idnoticia from " . get_class($this) . " where " . $this->getRel() .  " = "  . $idnoticia ;
-
+		
 		$rs = $this->execute($sql);
 		if  (!$rs->fields) return ;
-		$result = array(); 
-
-		foreach  ($rs->fields as $key => $value){
-			$result[] = Noticia::getRelationArray($value, $url);
+		$result = array();
+		
+		while (!$rs->EOF){
+			$result[] = Noticia::getRelationArray($rs->fields['idnoticia'], $url);
+			$rs->MoveNext();
 		}
 		return $result; 
 	}

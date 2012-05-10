@@ -145,7 +145,7 @@ echo "Ok!<hr>";
 //----------------------------- LOCAL ---------------------------------------------------------//
 echo "Inicialização da Tabela <b>local</b>... ";
 
-//include "GeoNetPtClient.php";
+include "GeoNetPtClient.php";
 
 echo "Ok!<hr>";
 
