@@ -25,7 +25,6 @@ class Noticia extends Model{
 	
 	}
 	
-	
 	/**
 	 * Return associative array with (
 	 * "noticia" => obNoticia, 
@@ -47,13 +46,16 @@ class Noticia extends Model{
 		$result['locais'] =  Noticia_Locais::getAllLocais($locais_noticias, $baseurl);
 		$result['datas'] = Noticia_Data::getAllDatas($idNoticia, $baseurl); 
 		$result['clubes'] = Noticia_Has_Clube::getAllClubes($idNoticia,$baseurl); 
-		$result['integrantes'] = Noticia_Has_Integrante::getAllIntegrantes($idNoticia,$baseurl); 
-		
+		$result['integrantes'] = Noticia_Has_Integrante::getAllIntegrantes($idNoticia,$baseurl);
+		 
 		$rslt = new Noticia(); 
 		$rslt->idnoticia = $noticiaOb->idnoticia; 
 		$rslt->data_pub = $noticiaOb->data_pub; 
 		$rslt->assunto = $noticiaOb->assunto; 
 		$rslt->descricao = $noticiaOb->descricao;
+		
+		$rslt->about = $noticiaOb->about;
+		
 		$rslt->url = $noticiaOb->url;  
 		$rslt->datas = $result['datas'];
 		$rslt->locais = $result['locais']; 
@@ -71,6 +73,7 @@ class Noticia extends Model{
 			    addslashes($url);
     	}
 	 
+    var $about;
 	/**
 	 * Identificador da noticia
 	 * @var int
@@ -205,6 +208,7 @@ class Noticia extends Model{
 		return $this->descricao;
 	}
 	
+	
 	/**
 	 * Altera o valor da descrição da notícia {@link $descricao}
 	 * @param String $desc
@@ -276,10 +280,10 @@ class Noticia extends Model{
 	
 	public function getObjectById($id){
 		if ($this->setText()){
-			$selectedFields = array("idnoticia", "data_pub", "assunto", "descricao", "texto", "url"); 	
+			$selectedFields = array("idnoticia", "data_pub", "assunto", "descricao", "texto", "url", "about"); 	
 		}else{
 			
-			$selectedFields = array("idnoticia", "data_pub", "assunto", "descricao", "url"); 	
+			$selectedFields = array("idnoticia", "data_pub", "assunto", "descricao", "url", "about"); 	
 		}
 
 		return parent::getObjectById($id, $selectedFields); 
