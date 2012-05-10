@@ -28,50 +28,128 @@ while(!$rs->EOF) {
 }
 echo "Ok!<hr>";
 //----------------------------- FONTE ----------------------------------------------------------//
-echo "Inicializa��o da Tabela <b>fonte</b>...";
+echo "Inicializa da Tabela <b>fonte</b>...";
 $f = new Fonte();
-$f->setIdfonte(null);
-$f->setLigado(1);
+$f->ligado = 1; 
+$f->type = 2; 
+$f->webname = "twiiter" ; 
+$f->xml =  "<template>
+	<uri>
+	<url>http://search.twitter.com/search.rss</url>
+	<query>
+	<variable>
+	<id>q</id>
+	</variable>
+	<variable>
+	<id>include_entities</id>
+	<value>true</value>
+	</variable>
+	<variable>
+	<id>result_type</id>
+	<value>mixed</value>
+	</variable>
+	</query>
+	</uri>
+	<noticia>
+	<item>/rss/channel/item</item>
+	<data_pub>pubDate</data_pub>
+	<assunto>title</assunto>
+	<descricao>description</descricao>
+	<link>link</link>
+	<user>author</user>
+	<formatfoo>formatDateToDB</formatfoo>
+	</noticia>
+	</template>";
 
-$f->setNome("Arquivo da Web Portuguesa");
-$f->setMain_url("http://arquivo.pt/opensearch?query=");
-$f->add();
-
-$f->setNome("RSS Sapo Noticias");
-$f->setMain_url("http://pesquisa.sapo.pt/?barra=noticias&cluster=0&format=rss&location=pt&st=local&limit=10&q=");
-$f->add();
-
-$f->setNome("Geo-Net-PT");
-$f->setMain_url("http://dmir.inesc-id.pt/resolve/geonetpt02/sparql.psp");
-$f->add();
-
-$f->setNome("RSS Google News");
-$f->setMain_url("https://ajax.googleapis.com/ajax/services/search/news?v=1.0&q=");
-$f->add();
-
-$f->setNome("Google Maps");
-$f->setMain_url("http://maps.google.com");
-$f->add();
-
-$f->setNome("TwitterSearch");
-$f->setMain_url("http://search.twitter.com/search.rss");
-
-$f->setNome("WebService");
-$f->setMain_url("");
-$f->add(); 
+try{
+	$f->add();
+	$f->type = 1; 
+	$f->webname = 'sapo';
+	$f->xml =  "<template>
+	<uri>
+		<url>http://pesquisa.sapo.pt/</url>
+		<query>
+			<variable>
+				<id>barra</id>
+				<value>noticias</value>
+			</variable>
+			<variable>
+				<id>cluster</id>
+				<value>0</value>
+			</variable>
+			<variable>
+				<id>format</id>
+				<value>rss</value>
+			</variable>
+			<variable>
+				<id>location</id>
+				<value>pt</value>
+			</variable>
+			<variable>
+				<id>st</id>
+				<value>local</value>
+			</variable>
+			<variable>
+				<id>limit</id>
+				<value>10</value>
+			</variable>
+			<variable>
+				<id>q</id>
+			</variable>
+		</query>
+	</uri>
+	<noticia>
+		<item>/rss/channel/item</item>
+		<data_pub>pubDate</data_pub>
+		<assunto>title</assunto>
+		<descricao>description</descricao>
+		<link>link</link>
+		<formatfoo>formatDateToDB</formatfoo>
+	</noticia>
+</template>"; 
+	$f->add();
+	$f->nome = 'webservice'; 
+	$f->xml = '';
+	$f->webname ='webportuguesa'; 
+	$f->xml = "<template>
+	<uri>
+		<url>http://arquivo.pt/opensearch</url>
+		<query>
+			<variable>
+				<id>query</id>
+			</variable>
+		</query>
+	</uri>
+	<noticia>
+		<item>/rss/channel/item</item>
+		<data_pub>pwa:tstamp</data_pub>
+		<assunto>title</assunto>
+		<descricao>pwa:digest</descricao>
+		<link>link</link>
+		<formatfoo>formatTstampToDb</formatfoo>
+	</noticia>
+</template>";
+	$f->type = 1; 
+	$f->add();
+	$f->webname = 'gnews'; 
+	$f->xml = "invalid"; 
+	$f->add(); 
+	
+}catch(Exception $e){
+	echo $e; 
+	echo '<br/>Could not add fonte ' . $f->nome . "<br/>"; 
+}
 
 echo "Ok!<hr>";
 
 //----------------------------- LOCAL ---------------------------------------------------------//
 echo "Inicialização da Tabela <b>local</b>... ";
-$l = new Local();
 
-include "GeoNetPtClient.php";
+//include "GeoNetPtClient.php";
 
 echo "Ok!<hr>";
 
 echo "Inicialização de Integrantes e Clubes da Primeira liga portuguesa através da dbpedia <br/>";
-
 include "dbpedia.php";
 insertClubesOfPrimeiraLiga(); 
 

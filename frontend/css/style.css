@@ -135,6 +135,7 @@ a.watch-now:hover {text-decoration: none;}
 #fundoLoading {position:absolute; background:#000000; z-index:4; width:100%; height:100%; border:1px solid #bebebe; opacity:0.9}
 #quadroNoticia {position:absolute; color:#000000; font-size: 10px; padding-top: 1px; background:#ffffff; z-index:3; width:850px; height:500px; overflow: auto; left:50%; top:50%; margin-left:-400px; margin-top:-250px; border:1px solid #bebebe;-moz-box-shadow:-1px 1px 1px rgba(0,0,0,.2);-webkit-box-shadow:0 2px 4px rgba(0,0,0,.2);box-shadow:0 2px 4px rgba(0,0,0,.2) }
 #quadroNoticia a {color: #000000; margin-right: 10px; text-decoration: underline; }
+.inputPesquisa {color:#2F4F4F; font-size: 15px; font-family: "Lucida San Unicode"; font-weight: bold; z-index:3;}
 #sub { height: 800px}
 #clubesQuadroNoticia {position:absolute; width:10%; float:left; overflow: inherit; margin-left:5px; /* border:1px solid #000000; */}
 #noticiaQuadroNoticia {position:absolute; width:75%;  margin-left: 95px; /* border:1px solid #000000; */}
@@ -149,5 +150,17 @@ a.watch-now:hover {text-decoration: none;}
 .descricao {position: relative; color:#2F4F4F; font-size: 13px; font-family: "Lucida San Unicode"}
 .textoComentarios {position: relative; color:#2F4F4F; font-size: 11px; font-family: "Lucida San Unicode"}
 a.mybutton {background: url(images/button.png) no-repeat 0 0; width: 81px;height: 16px; display: block; color: #373737; font-size: 10px; text-align: center; text-transform: uppercase;margin-left:72px; margin-top: 5px; margin-bottom: 5px}
+
+.dropv, .dropv ul {padding: 0; margin: 0; list-style: none;}
+.dropv a {display: inline; width: 170px;}
+.dropv li {float: left; padding: 0px 8px 2px 0px;}  /* all list items */
+.dropv li ul {position: absolute; background: #993399; 
+  padding: 0px 0px 0px 4px; width: 170px; left: -9999px;} /* second-level lists */
+.dropv li:hover ul {left: auto; } /* nest list under hovered list items */
+.dropv li ul li a {color: #ffffff; text-decoration: none; display: block;}
+.dropv li ul li a:hover {color: yellow; background:#663399;}
+
+
+
 
 /* #quadroNoticia {position:absolute;z-index:2;width:700px; text-align:left;border:1px solid #bebebe;background:#fff;-moz-box-shadow:-1px 1px 1px rgba(0,0,0,.2);-webkit-box-shadow:0 2px 4px rgba(0,0,0,.2);box-shadow:0 2px 4px rgba(0,0,0,.2)}*/

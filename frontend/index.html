@@ -9,6 +9,8 @@
 	<!--[if lte IE 6]><link rel="stylesheet" href="css/ie6.css" type="text/css" media="all" /><![endif]-->
 	<script type="text/javascript" src="ajax/util.js" charset="utf-8"></script>
 	<script language="javascript" type="text/javascript" src="ajax/acomplete.js" charset="utf-8"></script>
+	<script src="ajax/Global.js" language="javascript" charset="utf-8"></script>
+    <script src="ajax/XMLWriter.js" language="javascript" charset="utf-8"></script>
 	<script type="text/javascript" src="ajax/prototype.js" charset="utf-8"></script>
 	<script type="text/javascript" src="classes/Clube.js" charset="utf-8"></script>
 	<script type="text/javascript" src="classes/Local.js" charset="utf-8"></script>
@@ -28,8 +30,6 @@
 	<script src="http://static.simile.mit.edu/timeline/api-2.3.0/timeline-api.js?bundle=true" type="text/javascript"></script>
 
 	<script type="text/javascript" charset="utf-8">
-	
-	
 	
 	/*var myGlobalHandlers = {
 		onCreate: function(){
@@ -58,8 +58,6 @@
 	var clubes = new Array();
 	var integrantes = new Array();
 	
-	var infoWindow = new google.maps.InfoWindow;
-	
 	var markersArray = new Array();
 	
 	var imgClubes = {
@@ -69,6 +67,12 @@
 		'4' : 'css/images/Sporting.png',
 		'5' : 'css/images/cdn.gif',
 	};
+	
+	var latInicial_1 = 37.04;
+   	var latInicial_2 = 42.28;
+  	var logInicial_1 = -17.38;
+   	var logInicial_2 = -1.89;
+
 	
 	var tl;
 	
@@ -217,6 +221,7 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
     	};
     	// Criação do Mapa
     	map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+    	getLocaisNoticiasByCoordenadas(latInicial_1, latInicial_2, logInicial_1, logInicial_2);
     	
     	// Evento para alteração de Markers a serem mostrados
     	/*google.maps.event.addListener(map, 'dragend', function() {
@@ -233,32 +238,7 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
         	//alert(b);
       	});*/
 		
-		//Criação do Array com nome dos locais para AutoComplete	
-    	var l = new Local();
-    	l.getAllLocais(0, 0, function (result){
-    		locais = result;
-    	});
-  		
-  		//Criação do Array com nome dos clubes para AutoComplete
-  		/*createNomeLocalArray(locais);
-    	var c = new Clube();
-    	c.getAllClubes(0, 0, function (result){
-    		clubes = result;
-    	});
-    	createNomeClubeArray(clubes);
-    	
-    	//Criação do Array com nome dos integrantes para AutoComplete
-    	var i = new Integrante();
-    	i.getAllIntegrantes(0, 0, function (result){
-    		integrantes = result;
-    	});
-    	createNomeIntegranteArray(integrantes);
-  			
-  		//Set do Autocomplete do input de pesquisa
-  		nomes_pesquisa = nome_localArray.concat(nome_clubeArray, nome_integranteArray);
-  		autoComplete.Set("mygroup1", nomes_pesquisa);*/
-    	
-    	//Recuperação das últimas notícias (ano corrente)	 		
+		//Recuperação das últimas notícias (ano corrente)	 		
     	/*var tempo = new Tempo();
     	tempo.getUltimasNoticias(function (result){
   			ultimasNoticias = result;
@@ -274,48 +254,15 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
   		}
   		
   		function createAutoCompleteOptions() {
-  			//Criação do Array com nome dos locais para AutoComplete	
-	    	var l = new Local();
-	    	l.getAllLocais(0, 0, function (result){
-	    		locais = result;
-	    	});
-	  		
-	  		//Criação do Array com nome dos clubes para AutoComplete
-	  		createNomeLocalArray(locais);
-	    	var c = new Clube();
-	    	c.getAllClubes(0, 0, function (result){
-	    		clubes = result;
-	    	});
-	    	createNomeClubeArray(clubes);
-	    	
-	    	//Criação do Array com nome dos integrantes para AutoComplete
-	    	var i = new Integrante();
-	    	i.getAllIntegrantes(0, 0, function (result){
-	    		integrantes = result;
-	    	});
-	    	createNomeIntegranteArray(integrantes);
-	  			
+  			getAllLocais(0,0);
+	  		getAllClubes(0,0);
+	    	getAllIntegrantes(0,0);
+	    		
 	  		//Set do Autocomplete do input de pesquisa
-	  		nomes_pesquisa = nome_localArray.concat(nome_clubeArray, nome_integranteArray);
 	  		autoComplete.Set("mygroup1", nomes_pesquisa);
-  		}
-  		
-  		function createNomeLocalArray(locaisObjArray) {
-  			for(var i=0; i<locaisObjArray.length; i++) {
-  				nome_localArray[i] = locaisObjArray[i].nome_local;
-  			}
-  		}
-  		
-  		function createNomeClubeArray(clubesObjArray) {
-  			for(var i=0; i<clubesObjArray.length; i++) {
-  				nome_clubeArray[i] = clubesObjArray[i].nome_oficial;
-  			}
-  		}
-  		
-  		function createNomeIntegranteArray(integrantesObjArray) {
-  			for(var i=0; i<integrantesObjArray.length; i++) {
-  				nome_integranteArray[i] = integrantesObjArray[i].nome_integrante;
-  			}
+	  		var locaisAux = new Array();
+	  		locaisAux = nome_localArray.slice();
+	  		autoComplete.Set("mygroup2", locaisAux);
   		}
  
   		  		
@@ -406,62 +353,17 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
   		}
   		
   		function showQuadroNoticia(idN) {
-  			
   			$("quadroNoticia").style.display="block";
   			
   			/* Recupera notícia escolhida */
-  			var noticia = new Noticia();
+  			/*var noticia = new Noticia();
   			var n = new Noticia();
   			noticia.getNoticiaById(idN, function(result) {
   				n = result;
-  			});
+  			});*/
   			
   			/* Mostra dados básicos da notícia */
-  			$("assuntoNoticiaEscolhida").innerHTML = n.assunto;
-  			$("descricaoNoticiaEscolhida").innerHTML = n.descricao;
-  			$("qualificacaoNoticiaEscolhida").innerHTML = "(" + n.qualificacao + ")&nbsp;&nbsp;&nbsp;"
-  			$("linkNoticiaEscolhida").href = n.url;
-  			
-  			/* Mostra clubes associados à notícia */
-  			var imageClubes = "";
-  			if(n.clubesNoticias.length == 0) {
-  				imageClubes += "Não existem clubes associados a esta notícia.";
-  			}
-  			else {
-	  			for(var i=0; i<n.clubesNoticias.length; i++) {
-	  				imageClubes += "<img src='" + imgClubes[n.clubesNoticias[i].idclube] + "' alt='" + n.clubesNoticias[i].nome_oficial + "'>&nbsp;&nbsp;&nbsp;" ;
-	  			}
-	  		}
-  			$("clubesNoticiaEscolhida").innerHTML = imageClubes;
-  			
-  			/* Mostra integrantes associados à notícia */
-  			//@TODO
-  			
-  			/* Mostra Referências Espaciais da notícia escolhida */
-  			var locaisNoticia = "<ul>";
-  			if(n.locaisNoticias.length == 0) {
-  				locaisNoticia += "<li>Não existem locais associados a esta notícia.</li>";
-			}
-			else {
-  				for(var i=0; i<n.locaisNoticias.length; i++) {
-  					locaisNoticia += "<li>" + n.locaisNoticias[i].nome_local + "</li>" ;
-  				}
-			}
-			locaisNoticia += "</ul>"; 
-  			$("locaisNoticiaEscolhida").innerHTML = locaisNoticia;
-  			
-  			/* Mostra Referências Temporais da notícia escolhida */
-  			var datasNoticia = "<ul>";
-  			if(n.datasNoticias.length == 0) {
-  				datasNoticia += "<li>Não existem datas associadas a esta notícia.</li>";
-  			}
-  			else {
-	  			for(var i=0; i<n.datasNoticias.length; i++) {
-	  				datasNoticia += "<li>" + n.datasNoticias[i] + "</li>" ;
-	  			}
-	 		} 			
-  			datasNoticia += "</ul>"; 
-  			$("datasNoticiaEscolhida").innerHTML = datasNoticia;
+  			getNoticiaById(idN);
   		}
   		
   		function closeQuadroNoticia(){
@@ -470,10 +372,27 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
   			$("qualificacaoNoticiaEscolhida").innerHTML = ""
   			$("linkNoticiaEscolhida").href = "#";
   			$("clubesNoticiaEscolhida").innerHTML = "";
+  			$("integrantesNoticiaEscolhida").innerHTML = "";
   			$("locaisNoticiaEscolhida").innerHTML = "";
   			$("datasNoticiaEscolhida").innerHTML = "";
+  			$("countComentarios").innerHTML = "";
+			$("todosComentarios").innerHTML = "";
   			$("quadroNoticia").style.display="none";
   			
+  		}
+  		
+  		function refreshQuadroNoticia(idN) {
+  			$("assuntoNoticiaEscolhida").innerHTML = "";
+  			$("descricaoNoticiaEscolhida").innerHTML = "";
+  			$("qualificacaoNoticiaEscolhida").innerHTML = ""
+  			$("linkNoticiaEscolhida").href = "#";
+  			$("clubesNoticiaEscolhida").innerHTML = "";
+  			$("integrantesNoticiaEscolhida").innerHTML = "";
+  			$("locaisNoticiaEscolhida").innerHTML = "";
+  			$("datasNoticiaEscolhida").innerHTML = "";
+  			$("countComentarios").innerHTML = "";
+			$("todosComentarios").innerHTML = "";
+  			getNoticiaById(idN);
   		}
   		
   		function writeLastNews() {
@@ -496,6 +415,91 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
 		  			lista.appendChild(linha);
 		  		}
 			}  			
+  		}
+  		function showEscudos() {
+  			var divEscudos = $("escudosClubes");
+  			
+  			//divEscudos.appendChild(tr);
+  			for(var i=0; i<img_clubes.length; i++) { 			
+  				var tr_1 = document.createElement("tr");
+  				var tr_2 = document.createElement("tr");
+  				var tr_3 = document.createElement("tr");
+  				
+  				var td_1 = document.createElement("td");
+  				td_1.setAttribute("align","center");
+  				//if(img_clubes[i] != "css/images/escudo_default.JPG") {
+  					var img = document.createElement("img");
+	  				img.setAttribute("src", img_clubes[i]);
+	  				img.setAttribute("width",48);
+	  				img.setAttribute("height",48);
+	  				td_1.appendChild(img);
+				//}	  			
+	  			var td_2 = document.createElement("td");
+  				td_2.setAttribute("align","center");
+  				td_2.innerHTML =  nome_clubeArray[i];
+  				
+  				var td_3 = document.createElement("td");
+  				td_3.setAttribute("align","center");
+  				var a = document.createElement("a");
+  				a.setAttribute("id","addClube_" + i);
+  				a.setAttribute("href","javascript:void(0)");
+  				var img_plus = document.createElement("img");
+  				img_plus.setAttribute("src", "css/images/plus.png");
+	  			img_plus.setAttribute("width",12);
+	  			img_plus.setAttribute("height",12);
+	  			a.appendChild(img_plus);
+	  			td_3.appendChild(a);
+	  			
+	  			tr_1.appendChild(td_1);
+  				tr_2.appendChild(td_2);
+  				tr_3.appendChild(td_3);
+  				divEscudos.appendChild(tr_1);
+  				divEscudos.appendChild(tr_2);
+  				divEscudos.appendChild(tr_3);
+  				
+			}
+  		}
+  		
+  		function showFotosIntegrantes() {
+  			var divFotos = $("fotosIntegrantes");
+  			
+  			for(var i=0; i<img_integrantes.length; i++) { 			
+  				var tr_1 = document.createElement("tr");
+  				var tr_2 = document.createElement("tr");
+  				var tr_3 = document.createElement("tr");
+  				
+  				var td_1 = document.createElement("td");
+  				td_1.setAttribute("align","center");
+  				var img = document.createElement("img");
+	  			img.setAttribute("src", img_integrantes[i]);
+	  			img.setAttribute("width",48);
+	  			img.setAttribute("height",48);
+	  			td_1.appendChild(img);
+	  			
+	  			var td_2 = document.createElement("td");
+  				td_2.setAttribute("align","center");
+  				td_2.innerHTML =  nome_integranteArray[i];
+  				
+  				var td_3 = document.createElement("td");
+  				td_3.setAttribute("align","center");
+  				var a = document.createElement("a");
+  				a.setAttribute("id","addIntegrante_" + i);
+  				a.setAttribute("href","javascript:void(0)");
+  				var img_plus = document.createElement("img");
+  				img_plus.setAttribute("src", "css/images/plus.png");
+	  			img_plus.setAttribute("width",12);
+	  			img_plus.setAttribute("height",12);
+	  			a.appendChild(img_plus);
+	  			td_3.appendChild(a);
+	  			
+	  			tr_1.appendChild(td_1);
+  				tr_2.appendChild(td_2);
+  				tr_3.appendChild(td_3);
+  				divFotos.appendChild(tr_1);
+  				divFotos.appendChild(tr_2);
+  				divFotos.appendChild(tr_3);
+  				
+			}
   		}
   		
   		function clearOverlays() {
@@ -638,6 +642,24 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
   				div.style.display = 'none';
   			}
   		}
+  function inserirComentario(id) {
+  			try
+            {
+                var XML=new XMLWriter();
+                //XML.BeginNode("xml");
+                XML.BeginNode("comentario");
+                XML.Node("texto", $("comentarioTexto").value);
+                XML.Node("user", $("comentarioUser").value);
+                XML.Close(); // Takes care of unended tags.
+                inserirComentarioNoticia(id,XML.ToString());
+                showHideDiv($("comentario"));
+            }
+            catch(Err)
+            {
+                alert("Error: " + Err.description);
+            }
+  		}
+		
   		
   		function graphLocais(){
    			$("graficoOutterBox").style.display="block";
@@ -684,19 +706,18 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
 	</script>
 </head>
 <body onload="initialize()" onresize="onResize()">
+<!-- <script>getLocaisNoticiasByCoordenadas(latInicial_1, latInicial_2, logInicial_1, logInicial_2)</script> -->
 <script>createAutoCompleteOptions()</script>
 <!-- <div id='systemWorking'><img src='css/images/ajax-loader3.gif' align='middle'></div>
 <div id='fundoLoading'></div> -->
+
 <div id="quadroNoticia" style="display:none;">
 <p align="right"><br /><a href="javascript: void(0)" onclick="closeQuadroNoticia()"><img src="css/images/close.png" alt="Close" border=0 /></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
 <div id="clubesQuadroNoticia">
 	<p align="center">Clubes</p> <hr />
-	<p align="center"><img src="css/images/benfica.png" alt="Benfica" align="middle"/><br />Benfica </p><br />
-	<p align="center"><img src="css/images/braga.gif" alt="Braga" /><br />Braga </p><br />
-	<p align="center"><img src="css/images/porto.jpg" alt="Porto" /><br />Porto </p><br />
-	<p align="center"><img src="css/images/Sporting.png" alt="Sporting" /><br />Sporting </p><br />
-	<p align="center"><img src="css/images/cdn.gif" alt="Nacional" /><br />Nacional </p><br />
-	
+	<table id="escudosClubes">
+	<script>showEscudos()</script>	
+	</table>
 </div>
 <div id="noticiaQuadroNoticia">
 	<p align="left" class="assunto" id="assuntoNoticiaEscolhida"></p>
@@ -705,45 +726,44 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
 		<br />
 		<p align='right'><a href="#" id="linkNoticiaEscolhida" target="_blank">Leia mais...</a>&nbsp;&nbsp;&nbsp;&nbsp;</p>
 		<p align="left"><a href="javascript:void(0)"><img src="css/images/button-like.png" alt="Curtir" align="middle" style="margin-left:5px" /></a><font id="qualificacaoNoticiaEscolhida"></font>
-						<a href="javascript:void(0)" onclick="showHideDiv($('todosComentarios'))"><img src="css/images/comment-icon.jpg" alt="Comentários" align="middle" /></a>(5)&nbsp;&nbsp;&nbsp;&nbsp;
+						<a href="javascript:void(0)" onclick="showHideDiv($('todosComentarios'))"><img src="css/images/comment-icon.jpg" alt="Comentários" align="middle" /></a><span id="countComentarios"></span>&nbsp;&nbsp;&nbsp;&nbsp;
 						 <a href="javascript: void(0)" onclick="showHideDiv($('comentario'))">Adicionar Comentário</a></p>
 		
 		<br />
 		<div id="todosComentarios" style="display:none;">
-		Gustavo Brandão, em 12/05/2011: <p class="textoComentarios">Uma das novas canções de Teenage Dream: The Complete Confection deverá ser contemplada</p><br /><hr width="50%" /><br />
-		Gustavo Brandão, em 12/05/2011: <p class="textoComentarios">Uma das novas canções de Teenage Dream: The Complete Confection deverá ser contemplada</p><br /><hr width="50%" /><br />
-		Gustavo Brandão, em 12/05/2011: <p class="textoComentarios">Uma das novas canções de Teenage Dream: The Complete Confection deverá ser contemplada</p><br /><hr width="50%" /><br />
-		Gustavo Brandão, em 12/05/2011: <p class="textoComentarios">Uma das novas canções de Teenage Dream: The Complete Confection deverá ser contemplada</p><br /><hr width="50%" /><br />
 		</div>
-		<div id="comentario" style="display:none;"><textarea rows="3" cols="30" id="comentarioTexto" style="margin-left:12px;" class="assunto"></textarea>
-							 <a href="#" class="mybutton">Enviar</a></div>
+		<div id="comentario" style="display:none;">
+			<p style="margin-left:12px;">Nome: <input id="comentarioUser" type="text" size="15" name="user" value="Anonymous" class="assunto" /></p><br />
+			<p><textarea rows="3" cols="30" id="comentarioTexto" style="margin-left:12px;" class="assunto"></textarea></p>
+							 <a id="botaoComentario" href="#" class="mybutton" onclick="javascript void(0)">Enviar</a></div>
 		<p align="left" class="assunto">&nbsp;&nbsp;&nbsp;&nbsp;Clubes citados na notícia</p>
 		<hr width=75% />
 		<p id="clubesNoticiaEscolhida"></p>
 		<br />
 		<p align="left" class="assunto">&nbsp;&nbsp;&nbsp;&nbsp;Pessoas citadas na notícia</p>
 		<hr width=75% />
-		<p>
-			<img src="css/images/j1.jpg" alt="Benfica" width="48" height="48" />&nbsp;&nbsp;&nbsp;
-			<img src="css/images/j2.jpg" alt="Braga" width="48" height="48"/>&nbsp;&nbsp;&nbsp;
-		</p>
+		<p id="integrantesNoticiaEscolhida" style="margin-left:12px;"></p>
+		<br />
 		<p align="left" class="assunto">&nbsp;&nbsp;&nbsp;&nbsp;Locais citados na notícia</p>
+		<br />
 		<hr width=75% />
-		<p id="locaisNoticiaEscolhida"></p>
+		
+		<p id="locaisNoticiaEscolhida" style="margin-left:12px;"></p>
 		<br />
 		<p align="left" class="assunto">&nbsp;&nbsp;&nbsp;&nbsp;Datas citados na notícia</p>
 		<hr width=75% />
-		<p id="datasNoticiaEscolhida"></p>
+		<p id="datasNoticiaEscolhida" style="margin-left:12px;"></p>
 		<br />
 		
 		
 </div>
+
+
 <div id="pessoasQuadroNoticia">
 	<p align="center">Pessoas</p> <hr />
-	<p align="center"><img src="css/images/j1.jpg" alt="Benfica" width="48" height="48" /><br />João</p><br />
-	<p align="center"><img src="css/images/j2.jpg" alt="Braga" width="48" height="48" /><br />Pedro</p><br />
-	<p align="center"><img src="css/images/j3.jpg" alt="Porto" width="48" height="48" /><br />Davi</p><br />
-	<p align="center"><img src="css/images/j4.jpg" alt="Porto" width="48" height="48" /><br />Tiago</p><br />
+	<table id="fotosIntegrantes">
+	<script>showFotosIntegrantes()</script>	
+	</table>
 </div>
 </div>
 <div id="quadroGrafico" style="display:none;"></div>
@@ -769,6 +789,7 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
 			    <li><a href="#">Pesquisa </a></li>
 			    <li><br /><input type="text" size="50" id="parametroPesquisa" autoComplete="mygroup1" /></li>
 			    <li><a href="#" onclick='searchNews()'><img src="css/images/search.png" border="0" alt="Search" /></a></li>
+			    
 			    <li><a href="#">Administração</a></li>
 			</ul>
 			<div class="cl">&nbsp;</div>

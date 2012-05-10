@@ -130,12 +130,20 @@ class Clube extends Model {
 		return $res; 
 	}
 	
+	public function getUrl2(){
+		$v = parse_url("http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+		$r = $v['scheme'] . '://' . $v['host'] . $v['path'];
+		$pos = strpos($r, 'webservice/') ;
+		$val = substr($r, 0, $pos );
+		return $val;
+	}
+	
 	public function setObj($arrayAssoc, $obj){
 		foreach($arrayAssoc as $key => $value){
 				$obj->$key = $value;
 			}
 		if (isset($obj->url_img)){
-			$obj->url_img =  $this->getUrl() . 'webservice/entidades.php/clube/' . $obj->idclube  . '/thumbnail';
+			$obj->url_img =  $this->getUrl2() . 'webservice/entidades.php/clube/' . $obj->idclube  . '/thumbnail';
 		}
 		else $obj->url_img = ""; 
 	}

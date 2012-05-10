@@ -165,12 +165,11 @@ public function __construct($idnoticia='', $tempo='', $dt =''){
 			$notEnt = new Noticia(); 
 			if (isset($rel)){
 				foreach ($rel as $l){
-					$dataResult->noticias[] = $notEnt->getRelationArray($l->idnoticia, $url);
+					$dataResult->noticias[] = $notEnt->getObjectById($l->idnoticia, $url);
 				}
 			}
 			$result['datas'][]= $dataResult; 	
 		}
-
 		return $result; 
 	}
 	public function add(){

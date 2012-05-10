@@ -5,8 +5,8 @@
  require_once ('Util/XML/Serializer.php'); 
  require_once ('../model/Noticia.php');
  require_once ('../model/Noticia_Bin.php');
- require_once ('./Util.php');    
-  
+ require_once ('./Util.php');
+     
  /*
   * Documenta�‹o dos mŽtodos suportados neste url: 
 	/ | GET | Listar todas as noticias. Representa�‹o em XML, JSON e XHTML que devem conter apontadores para o recurso de cada noticia.  Por parametro Ž possivel especificar palavras chaves de forma a filtrar os resultados (i.e., permitir escolher noticias que referem o clube X.).
@@ -18,8 +18,6 @@
  
  	function getUrl(){
  	$v = parse_url("http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
- 	 
-
  	$r = $v['scheme'] . '://' . $v['host'] . $v['path'];
  	$pos = strpos($r, 'noticias.php') ;
  	$val = substr($r, 0, $pos );
@@ -27,21 +25,6 @@
  	return $val;    		
  	}
 
-    $options = array(
-      "indent"          => "    ",
-      "linebreak"       => "\n",
-      "typeHints"       => false,
-      "addDecl"         => true	,
-      "encoding"        => "UTF-8",
-      XML_SERIALIZER_OPTION_RETURN_RESULT => true,
-      XML_SERIALIZER_OPTION_CLASSNAME_AS_TAGNAME => true,  
-      "ignoreNull"      => true,
-      "rootAttributes"  => array("xmlns" => "localhost", "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance", "xsi:schemaLocation" => "localhost Noticias.xsd "),
-      "namespace" 		=> "localhost"
- 	); 
- 	
- 	$xmlSerializer = new XML_Serializer($options); 
-    
 	$req  = RestUtils::processRequest();  // The request made by the client.
 	checkRequest($req);   // check that the request is valid. Dies otherwise.  
 

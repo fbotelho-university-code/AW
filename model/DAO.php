@@ -14,6 +14,7 @@ class DAO extends ADOConnection {
 	 */
 	private $mysgbd = "mysql";
 	
+	
 	/**
 	 * Nome ou IP do servidor na qual encontra-se instalada a Base de Dados
 	 * @var String

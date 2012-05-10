@@ -10,7 +10,7 @@ function Tempo() {
 	this.noticias = new Array();
 	
 	/** URL base para comunicacao com o web service **/
-	this.baseurl = "http://localhost/proj/webservice/tempo.php/";
+	this.baseurl = "http://localhost/AW3/webservice/tempo.php/";
 	
 	/**
 	 * Retorna as not�cias do ano corrente
@@ -76,17 +76,20 @@ function Tempo() {
 	};
 }
 
+var baseurlTempo = "http://localhost/AW3/webservice/tempo.php/";
+var markersArray = new Array();
+
+
 function getUltimasNoticias() {
 	
 	var hoje = new Date();
 	var ano = hoje.getFullYear();
-	//var mes = hoje.getMonth();
-	var dia = "1";
-	//var dia = hoje.getDate();
+	var mes = hoje.getMonth() + 1;
+	//var dia = "1";
+	var dia = hoje.getDate();
+	mes = 4;
+	var url = baseurlTempo + ano + "/" + mes;
 	
-	var baseurl = "http://localhost/AW3/webservice/tempo.php/";
-	var url = baseurl + ano;
-	alert(url);
 	new Ajax.Request(url,
 	{
 		method:'get',
@@ -103,29 +106,40 @@ function getUltimasNoticias() {
 			/* Armazena dados retornados em Arrays */ 
 			var tempos = new Array();
 			for(var i=0; i<dataDOMArray.length; i++) {
-				var t = new Tempo();
-				/* Recupera��o da data interpretada do documento XML retornado */
-				var tempoXML = dataDOMArray.item(i).getElementsByTagName("tempo").item(0).firstChild.data;
-				t.dataInterpretada = tempoXML;
-				$("noticias").innerHTML += "<ul>" + t.dataInterpretada + "</ul>";
+				
+				var data = dataDOMArray.item(i).getElementsByTagName("tempo").item(0).firstChild.data;
+				//alert(data);
 				
 				/* Recupera��o das not�cias associadas � data interpretada recuperada */
 				var noticiasArray = dataDOMArray.item(i).getElementsByTagName("Noticia");
 				var noticiasTempo = new Array();
+			
 				for(var j=0; j<noticiasArray.length;j++) {
-					//var n = new Noticia();
-					//var idnoticia = noticiasArray[j].getElementsByTagName("idnoticia").item(0).firstChild.data;
+					var idnoticia = noticiasArray[j].getElementsByTagName("idnoticia").item(0).firstChild.data;
+					var locaisArray = noticiasArray[j].getElementsByTagName("Local");
+					for(var k=0; k<locaisArray.length; k++) {
+						var nome_local = locaisArray[k].getElementsByTagName("nome_local").item(0).firstChild.data;
+						var lat = locaisArray[k].getElementsByTagName("lat").item(0).firstChild.data;
+						var log = locaisArray[k].getElementsByTagName("log").item(0).firstChild.data;
+						local = new google.maps.LatLng(parseFloat(lat), parseFloat(log));
+						//alert(data + "\n\nNoticia: " + idnoticia + "\n\nLocal: " + lat + "," + log);
+						marker = new google.maps.Marker({
+				  			position: local,
+				  			title: nome_local,
+				  			map: map
+				  		});
+						markersArray.push(marker);
+					}
 					//n.data_pub = noticiasArray[j].getElementsByTagName("data_pub").item(0).firstChild.data;
-					var assunto = noticiasArray[j].getElementsByTagName("assunto").item(0).firstChild.data;
+					//n.assunto = noticiasArray[j].getElementsByTagName("assunto").item(0).firstChild.data;
 					//n.descricao = noticiasArray[j].getElementsByTagName("descricao").item(0).firstChild.data;
-					var url = noticiasArray[j].getElementsByTagName("url").item(0).firstChild.data;
+					//n.url = noticiasArray[j].getElementsByTagName("url").item(0).firstChild.data;
 					//noticiasTempo[j] = n;
-					//alert(tempoXML + ": " + n.idnoticia);
-					$("noticias").innerHTML += "<li><a href='"+ url + "'>" + assunto + "</a></li>";
+					//alert(data + "\n\n" + idnoticia + "\n\n" + locaisArray.length);
 				}
-				t.noticias = noticiasTempo;
-				tempos[i] = t;
-			}
+				//t.noticias = noticiasTempo;
+				//tempos[i] = t;
+			  }
 			//DEBUG
 			/*for(var k=0; k<tempos.length; k++) {
 					  var result = tempos[k].dataInterpretada;

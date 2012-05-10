@@ -3,36 +3,14 @@
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 	<title>Projecto AW</title>
-	<script type="text/javascript" src="ajax/prototype.js" charset="utf-8"></script>
-	<script type="text/javascript" src="classes/localFunctions.js" charset="utf-8"></script>
-	<script type="text/javascript" src="classes/Tempo.js" charset="utf-8"></script>
-	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true" charset="utf-8"></script>
-	<script type="text/javascript" charset="utf-8">
-	
-	function showMap(){
-		// LatLong de Liboa
-    	var latlng = new google.maps.LatLng(39.71284,-9.635475);
-    	// Opção iniciais para o mapa
-    	var myOptions = {
-      		zoom: 6,
-      		center: latlng,
-      		mapTypeId: google.maps.MapTypeId.ROADMAP
-    	};
-    	// Criação do Mapa
-    	map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-	}
-		//var teste = new Array();
-		//getAllLocais(0,0,function(result){teste = result});
-		//alert("Success! \n\n" + teste.length);
-	</script>
 	</head>
 <body>
-<div id="map_canvas" style="width:705px; height:310px"></div>
-<script>
-showMap();
-getAllLocais(0,0);
-getUltimasNoticias();
-</script>
-<div id="noticias"></div>
+
+<embed src="http://localhost/AW3/webservice/entidades.php/clube/3/thumbnail"
+       width="300" height="220"
+       type="image/svg+xml"
+       pluginspage="http://www.adobe.com/svg/viewer/install/" />
+
+
 </body>
 </html>
