@@ -269,12 +269,14 @@
 		try{
 			$id = addNoticia($n, 'add');
 		}catch(Exception $e){
+			echo $e; 
 			RestUtils::sendResponse(500);
 		}
 		
 		if (isset($id)){
 			RestUtils::sendResponse(201, null, $id, 'text');
 		}else{
+			echo 'have not received id '; 
 			RestUtils::sendResponse(500);
 		}
 	}
@@ -318,7 +320,6 @@
 		if ($nova_noticia){
 		$nova_noticia->texto = Noticia::fetchTexto($nova_noticia->url);
 		$nova_noticia->idfonte = Utill::getIdWebServiceAsFonte();
-		
 			try{
 				$r = $nova_noticia->$foo();
 				if (isset($r)){
@@ -382,6 +383,7 @@
 			$datas_classe->deleteById($noticia->getIdNoticia());
 			
 		}catch (Exception $e){
+			echo $e; 
 			RestUtils::sendResponse(500);
 			exit;  
 		}
@@ -391,6 +393,7 @@
 				try{
 					$rel->add();
 				}catch(Exception $e){
+					echo $e; 
 					RestUtils::sendResponse(500);
 					exit;  
 				}
@@ -402,7 +405,7 @@
 					$rel = new Noticia_Has_Clube($noticia->idnoticia, $l->idclube , $l->qualificacao );
 					$rel->add();
 				}catch(Exception $e){
-					
+					echo $e; 
 					RestUtils::sendResponse(500);
 					exit;  
 				}
@@ -414,13 +417,12 @@
 					$rel = new Noticia_Has_Integrante($noticia->idnoticia, $l->idintegrante , $l->qualificacao );
 					$rel->add();
 				}catch(Exception $e){
-					
+					echo $e; 
 					RestUtils::sendResponse(500);
 					exit;  
 				}
 			}	
 		}
-
 		if (isset($noticia->datas)){
 			foreach($noticia->datas as $l){
 				 try{
@@ -429,7 +431,6 @@
 					$rel->add();
 				}catch(Exception $e){
 					echo $e; 	
-										
 					RestUtils::sendResponse(500);
 					exit;  
 				}
