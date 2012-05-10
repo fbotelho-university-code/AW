@@ -1,26 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema targetNamespace="localhost" elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="localhost">
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/Fonte" xmlns:tns="http://www.example.org/Fonte" elementFormDefault="qualified">
+    <element name="type" type="integer"></element>
+    <element name="template" type="tns:templateT"></element>
+    <complexType name="templateT">
+    	<sequence>
+    		<element name="uri" type="tns:uriT" maxOccurs="1" minOccurs="1"></element>
+    		<element name="noticia" type="tns:ntt" maxOccurs="1" minOccurs="1"></element>
+    	</sequence>
+    </complexType>
 
-    <xsd:complexType name="fonteT">
-    	<xsd:sequence>
-    		<xsd:element name="id" type="xsd:int" minOccurs="0"></xsd:element>
-    		<xsd:element name="nome">
-    			<xsd:simpleType>
-    				<xsd:restriction base="xsd:string">
-    					<xsd:maxLength value="45"></xsd:maxLength>
-    				</xsd:restriction>
-    			</xsd:simpleType>
-    		</xsd:element>
-    		<xsd:element name="main_url">
-    			<xsd:simpleType>
-    				<xsd:restriction base="xsd:string">
-    					<xsd:maxLength value="100"></xsd:maxLength>
-    				</xsd:restriction>
-    			</xsd:simpleType>
-    		</xsd:element>
-    		<xsd:element name="ligado" type="xsd:int"></xsd:element>
-    	</xsd:sequence>
-    </xsd:complexType>
-
-    <xsd:element name="fonte" type="tns:fonteT"></xsd:element>
-</xsd:schema>
+    <complexType name="uriT">
+    	<sequence>
+    		<element name="url" type="string" maxOccurs="unbounded" minOccurs="1"></element>
+    		<element name="query" type="tns:queryT" maxOccurs="1" minOccurs="0"></element>
+    	</sequence>
+    </complexType>
+    <complexType name="queryT">
+    	<sequence>
+    		<element name="variable" type="tns:variableT" maxOccurs="unbounded" minOccurs="0"></element>
+    	</sequence>
+    </complexType>
+    <complexType name="variableT">
+    	<sequence>
+    		<element name="id" type="string" maxOccurs="1" minOccurs="1"></element>
+    		<element name="value" type="string" maxOccurs="1" minOccurs="0"></element>
+    	</sequence>
+    </complexType>
+    <complexType name="ntt">
+    	<sequence>
+    		<element name="item" type="string" maxOccurs="1" minOccurs="1"></element>
+    		<element name="data_pub" type="string" maxOccurs="1" minOccurs="0"></element>
+    		<element name="assunto" type="string" maxOccurs="1" minOccurs="0"></element>
+    		<element name="descricao" type="string" maxOccurs="1" minOccurs="0"></element>
+    		<element name="link" type="string" maxOccurs="1" minOccurs="1"></element>
+    		<element name="formatfoo" type="string" maxOccurs="1" minOccurs="1"></element>
+    	</sequence>
+    </complexType>
+</schema>

@@ -183,4 +183,94 @@ function getAllClubes(start, count)
 	    /* Tratamento de Falhas */
 	    onFailure: function(){ alert("Erro ao recuperar 'Clubes' do webservice!"); }
 	});
-};
+}
+
+function getClubeByNome(nome)
+{
+	var locaisEncontrados = new Array();
+	
+	var url = baseurlClubes + nome;
+	new Ajax.Request(url,
+	{
+		method: 'get',
+		asynchronous: true,
+		onSuccess: function(transport)
+		{
+			/* Recebimento da resposta */
+			var response = transport.responseXML;
+			var xmlRoot = response.documentElement;
+
+			var noticiaDOMArray = xmlRoot.getElementsByTagName("Noticia");
+			for(var i=0; i<noticiaDOMArray.length; i++) {
+				var n = new Noticia();
+				n.idnoticia = noticiaDOMArray.item(i).getElementsByTagName("idnoticia").item(0).firstChild.data;
+				n.data_pub = noticiaDOMArray.item(i).getElementsByTagName("data_pub").item(0).firstChild.data;
+				n.assunto = noticiaDOMArray.item(i).getElementsByTagName("assunto").item(0).firstChild.data;
+				//console.log("Noticia: " + n.idnoticia);
+				var locaisNoticia = noticiaDOMArray.item(i).getElementsByTagName("Local");
+				//console.log("Locais nesta noticia: " + locaisNoticia.length);
+				for(var j=0; j<locaisNoticia.length; j++) {
+					var l = new Local();
+					var idlocal = locaisNoticia[j].getElementsByTagName("idlocal").item(0).firstChild.data;
+					var flag = false;
+					for(var aux=0; aux<locaisEncontrados.length; aux++) {
+						if(locaisEncontrados[aux].idlocal == idlocal) {
+							locaisEncontrados[aux].noticias.push(n);
+							//console.log("Entrei no if-flag com local " + idlocal);
+							flag = true;
+						}
+					}
+					if(!flag) {
+						//console.log("Entrei em !flag com " + idlocal);
+						l.idlocal = idlocal;
+						l.nome_local = locaisNoticia[j].getElementsByTagName("nome_local").item(0).firstChild.data;
+						l.lat = locaisNoticia[j].getElementsByTagName("lat").item(0).firstChild.data;
+						l.log = locaisNoticia[j].getElementsByTagName("log").item(0).firstChild.data;
+						l.noticias.push(n);
+						locaisEncontrados.push(l);
+					}
+				}
+			}
+			//alert(locaisEncontrados.length);
+			for(var k=0; k<locaisEncontrados.length; k++) {
+				local = new google.maps.LatLng(parseFloat(locaisEncontrados[k].lat), parseFloat(locaisEncontrados[k].log));
+				nome_local = locaisEncontrados[k].nome_local;
+				marker = new google.maps.Marker({
+					position: local,
+					title: nome_local,
+					map: map
+				});
+				markersArray.push(marker);
+				var infoWindow = new google.maps.InfoWindow;
+				var contentString = "<div id='infoMarker'>";
+				contentString += "<h2><center>Notícias em " + nome_local + "</center></h2>";
+				contentString +=  "<table id='infoMarker-t'><thread>";
+				contentString += "<tr><th>Data de Publicação</th>";
+				contentString += "<th>Assunto</th></tr></thread>";
+				contentString += "<tbody>";
+
+				noticiasL = locaisEncontrados[k].noticias;
+				for(var b=0; b<noticiasL.length;b++) {
+					var dataAux = noticiasL[b].data_pub.substring(0,11);
+					contentString += "<tr><td>" + dataAux +  "</td>";
+					contentString += "<td><a href='javascript: void 0' onclick=showQuadroNoticia("+noticiasL[b].idnoticia+")>" + noticiasL[b].assunto +  "</a></td></tr>";
+				}
+				contentString +=  "</tbody></table>";
+				contentString +=  "</div>";
+
+				google.maps.event.addListener(marker, 'click', function(content) {
+					return function() {
+						infoWindow.setContent(content);
+						infoWindow.open(map,this);
+					}
+				}(contentString));
+			}
+	},
+	//DEBUG
+
+	/* Tratamento de Falhas */
+	onFailure: function(){ return null }
+	//alert("Success! \n\n" + clubes.length);
+		
+	});
+}

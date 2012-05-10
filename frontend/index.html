@@ -213,7 +213,7 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
 	}
 	
 	function initialize() {
-		timelineLoad();
+		
 		//getEvents();
 		
     	// LatLong de Liboa
@@ -227,7 +227,7 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
     	// Criação do Mapa
     	map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
     	getLocaisNoticiasByCoordenadas(latInicial_1, latInicial_2, logInicial_1, logInicial_2);
-    	
+    	//alert(123);
     	// Evento para alteração de Markers a serem mostrados
     	/*google.maps.event.addListener(map, 'dragend', function() {
         	var sw = map.getBounds().getSouthWest();
@@ -450,8 +450,8 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
   				a.setAttribute("href","javascript:void(0)");
   				var img_plus = document.createElement("img");
   				img_plus.setAttribute("src", "css/images/plus.png");
-	  			img_plus.setAttribute("width",12);
-	  			img_plus.setAttribute("height",12);
+	  			img_plus.setAttribute("width",16);
+	  			img_plus.setAttribute("height",16);
 	  			a.appendChild(img_plus);
 	  			td_3.appendChild(a);
 	  			
@@ -558,83 +558,11 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
   				return false;
   			}
   			else {
+  				
   				clearOverlays();
-  			
-  				/* Buscar locais usando parametro de pesquisa */
-	  			var local = new Local();
-	  			var localArray = new Array();
-	  			local.getLocalByNome(param, function (result){
-	    			localArray = result;
-	    		});
-	    		
-	    		
-	    		/* Acrescentar Markers dos locais no mapa */ 
-	    		if(localArray != null) {
-		  			//alert("Locais: " + localArray.length);
-		  			setMarkers(localArray);
-				} 			
-	  			/* Buscar integrantes usando parametro de pesquisa */
-	  			var integrante = new Integrante();
-	  			var integranteArray = new Array();
-	  			integrante.getIntegranteByNome(param, function (result){
-	    			integranteArray = result;
-	    		});
-	  			
-	  			if(integranteArray != null) {
-	  				//alert("Integrantes: " + integranteArray.length);
-	  				// Buscar noticias com integrantes encontrados 
-	  				var noticiaIntegranteArray = new Array();
-	  				for(var i=0; i<integranteArray.length; i++) {
-	  					integrante.getNoticiasByIdIntegrante(integranteArray[i].idintegrante, function (result){
-	    					noticiaIntegranteArray = result;
-	    					if(noticiaIntegranteArray != null) {
-	    						// Buscar locais das notícias com integrantes encontrados 
-	    						var n = new Noticia();
-	    						var notAux = new Noticia();
-	    						for(var j=0; j<noticiaIntegranteArray.length; j++){
-	    							n.getNoticiaById(noticiaIntegranteArray[j].idnoticia, function (result){
-	    								notAux = result;
-	    							});
-	    							// Acrescentar Markers dos locais das notícias dos integrantes no mapa
-	    							setMarkers(notAux.locaisNoticias);	
-	    						}
-	    					}
-	    						
-	    				});
-					}
-				}	  			
-	  			
-	  			/* Buscar clubes usando parametro de pesquisa */
-	  			var clube = new Clube();
-	  			var clubeArray = new Array();
-	  			clube.getClubeByNome(param, function(result){
-	  				clubeArray = result;
-	  			});
-	  			
-	
-	  			if(clubeArray != null) {
-	  				//alert("Clubes: " + clubeArray.length);
-	  				/* Buscar noticias com clubes encontrados */
-	  				var noticiaClubeArray = new Array();
-	  				for(var i=0; i<clubeArray.length; i++) {
-	  					clube.getNoticiasByIdClube(clubeArray[i].idclube, function (result){
-	    					noticiaClubeArray = result;
-	    					if(noticiaClubeArray != null) {
-	    						/* Buscar locais das notícias com clubes encontrados */
-	    						var n = new Noticia();
-	    						var notAux = new Noticia();
-	    						for(var j=0; j<noticiaClubeArray.length; j++){
-	    							n.getNoticiaById(noticiaClubeArray[j].idnoticia, function (result){
-	    								notAux = result;
-	    							});
-	    							/* Acrescentar Markers dos locais das notícias dos clubes no mapa */
-	    							setMarkers(notAux.locaisNoticias);	
-	    						}
-	    					}
-	    						
-	    				});
-					}
-				}
+	  			getLocalByNome(param);
+	    		getClubeByNome(param);
+	    		getIntegranteByNome(param);	    		
   			}
   		}
   		
@@ -663,7 +591,7 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
             {
                 alert("Error: " + Err.description);
             }
-  		}
+ }
 		
   		
   		function graphLocais(){
@@ -768,7 +696,7 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
 	</script>
 </head>
 <body onload="initialize()" onresize="onResize()">
-<!-- <script>getLocaisNoticiasByCoordenadas(latInicial_1, latInicial_2, logInicial_1, logInicial_2)</script> -->
+
 <script>createAutoCompleteOptions()</script>
 <!-- <div id='systemWorking'><img src='css/images/ajax-loader3.gif' align='middle'></div>
 <div id='fundoLoading'></div> -->
@@ -881,11 +809,11 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
 					<div id="heading-box-cnt">
 						<div class="cl">&nbsp;</div>
 						
-						<!--  <div id="map_canvas" style="width:438px; height:310px"></div> -->
+						<!--  <div id="map_canvas" style="width:538px; height:310px"></div> -->
 						<!-- Main Slide Item -->
 						<div class="featured-main">
 							<!-- <a href="#"><img id="map_canvas" src="css/images/featured-main.jpg" alt="" /></a> -->
-							<div id="map_canvas" style="width:705px; height:310px"></div>
+							<div id="map_canvas" style="width:890px; height:310px;padding-left:50px"></div>
 							
 						</div>
 						<!-- End Main Slide Item -->
@@ -1044,7 +972,8 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
 	</div>
 	
 
-	
+<!-- <script>timelineLoad();</script> -->
+		
 	<div id="timeline" style="height: 50px; border: 1px solid #aaa"></div>
 	<noscript>
 		This page uses Javascript to show you a Timeline. Please enable Javascript in your browser to see the full page. Thank you.
