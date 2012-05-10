@@ -10,6 +10,7 @@ body {
 }
 
 .cl { font-size: 0; line-height: 0; height: 0; clear: both; }
+.tweetLink {color:#ffffff;}
 
 a img { border: 0; }
 a { color: #9fea00; text-decoration: none; }

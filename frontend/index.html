@@ -14,6 +14,7 @@
 	<script type="text/javascript" src="ajax/prototype.js" charset="utf-8"></script>
 	<script type="text/javascript" src="classes/Clube.js" charset="utf-8"></script>
 	<script type="text/javascript" src="classes/Local.js" charset="utf-8"></script>
+	<script type="text/javascript" src="classes/Bitaite.js" charset="utf-8"></script>
 	<script type="text/javascript" src="classes/Tempo.js" charset="utf-8"></script>
 	<script type="text/javascript" src="classes/Noticia.js" charset="utf-8"></script>
 	<script type="text/javascript" src="classes/Integrante.js" charset="utf-8"></script>
@@ -28,6 +29,9 @@
 	<script src="highcharts/js/highcharts.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript" src="graficos.js" charset="utf-8"></script>
 	<script src="http://static.simile.mit.edu/timeline/api-2.3.0/timeline-api.js?bundle=true" type="text/javascript"></script>
+	<script type="text/javascript" src="classes/Observable.js" charset="utf-8"></script>
+	<script type="text/javascript" src="classes/Observer.js" charset="utf-8"></script>
+
 
 	<script type="text/javascript" charset="utf-8">
 	
@@ -73,6 +77,7 @@
   	var logInicial_1 = -17.38;
    	var logInicial_2 = -1.89;
 
+	var observer = new Observer();
 	
 	var tl;
 	
@@ -702,6 +707,63 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
   			$("graficoOutterBox").style.display="none";
   			$("quadroGrafico").innerHTML="";
  		}
+ 		
+ 		function getBitaites(){
+ 			var bit = new Bitaite();
+ 			var bitaites = new Array();
+ 			var etag;
+ 			
+ 			// get bitaites
+ 			bit.get(function(results,etg){
+ 				bitaites = results;
+ 				etag = etg;
+ 			});
+
+ 			// create and register observable
+ 			var o = new Observable(bit.url,etag,function(transport){
+ 				/* Recebimento da resposta */
+		      var response = transport.responseXML;
+		      var xmlRoot = response.documentElement;
+		      
+		      /* Recupera arrays com tags do XML retornado */
+		      var idbitaiteDOMArray = xmlRoot.getElementsByTagName("idbitaite");
+		      var textoDOMArray = xmlRoot.getElementsByTagName("texto");
+		      var userDOMArray = xmlRoot.getElementsByTagName("user");
+			  
+			  /* Armazena dados retornados em Arrays */ 
+			  var bitaites = new Array();
+			  
+			  for(var i=0; i<idbitaiteDOMArray.length; i++) {
+			  	var c = new Bitaite();
+				c.idbitaite = parseInt(idbitaiteDOMArray.item(i).firstChild.data,10);
+				c.texto = textoDOMArray.item(i).firstChild.data;
+				c.user = userDOMArray.item(i).firstChild.data;
+				bitaites[i] = c;
+			  }
+			  
+			  // parse bitaites
+			  parseBitaites(bitaites);
+ 			},10);
+ 			
+ 			observer.observe(o,function(id){});
+ 			
+ 			// parse bitaites 		
+ 			parseBitaites(bitaites);
+ 		}
+ 		
+ 		function parseBitaites(bitaites){
+ 			bitaites.sort(function(b1,b2){return(b2.idbitaite-b1.idbitaite)});
+ 			
+ 			var html="<h2>Bitaites</h2><ul id=\"newsSpot\">";
+ 			for(var i=0; i<10 && i<bitaites.length; i++){
+ 				html+="<li>";
+ 				html+="<small class=\"date\"><a href="+bitaites[i].link+">@"+bitaites[i].user.substring(0,bitaites[i].user.length-1)+"</a></small>";
+ 				html+="<p><a class='tweetLink' href="+bitaites[i].link+">"+bitaites[i].texto+"</a></p>";
+ 				html+="</li>";
+ 			}
+ 			html+="</ul>";
+ 			document.getElementById("sidebar").innerHTML = html;
+ 		}
   			
 	</script>
 </head>
@@ -894,31 +956,10 @@ this.hideLoadingMessage=function(){D.containerDiv.style.display="none";
 	<div id="main">
 		<div class="shell">		
 			<div class="cl">&nbsp;</div>	
-			<div id="sidebar">
+			<div id="sidebar" style="height : 270px; overflow :auto;">
 				<h2>Bitaites</h2>
-				<ul id="newsSpot">
-				    <li>
-				    	<small class="date">@Autor</small>
-				    	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-				    </li>
-				    <li>
-				    	<small class="date">@Autor</small>
-				    	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-				    </li>
-				    <li>
-				    	<small class="date">@Autor</small>
-				    	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-				    </li>
-				    <li>
-				    	<small class="date">@Autor</small>
-				    	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-				    </li>
-				    <li>
-				    	<small class="date">@Autor</small>
-				    	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-				    </li>
-				</ul>
 			</div>
+			<script>getBitaites()</script>
 			<div id="content">
 				<!--  <div class="cl">&nbsp;</div>
 				<div class="grey-box">
