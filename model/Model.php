@@ -147,7 +147,6 @@ abstract class Model{
 		$sql = 'update '. $table . $this->createWhereClause($fields, 'SET', ' , ');
 		//Filter the primary key.
 		$sql .= $this->getPrimaryKeyWhere();
-		echo $sql; 
 		$this->dao->execute($sql);
 	}
 	
@@ -377,13 +376,6 @@ abstract class Model{
 			$this->execute($sql);   
 	}
 	
-	public function getUrl(){
-		$v = parse_url("http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
-		$r = $v['scheme'] . '://' . $v['host'] . $v['path'];
-		$pos = strpos($r, 'webservice/') ;
-		$val = substr($r, 0, $pos );
-		return $val;
-	}
 	
 	/**
 	 * Transforma Array associaticvo em Objeto, de acordo com a subclasse chamadora

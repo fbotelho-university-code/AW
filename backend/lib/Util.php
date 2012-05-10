@@ -3,6 +3,11 @@
 
 class BackUtil {
 
+	
+	static function formatDateYoutubeRapidinho($date){
+		return $date .""; 
+	}
+	
 	/**
 	 * Array com a correla��o dos meses do ano em formato [A-Z]2[a-z] para 2[00-12]
 	 * @var String[] 
@@ -47,7 +52,7 @@ class BackUtil {
 		else {
 			$date_db = substr($stringDate,5,20);
 			$date_db = explode(" ", $date_db);
-			$date_db_formated = $date_db[2]."-".Util::$meses[$date_db[1]]."-".$date_db[0]." ".$date_db[3];
+			$date_db_formated = $date_db[2]."-".BackUtil::$meses[$date_db[1]]."-".$date_db[0]." ".$date_db[3];
 		}
 		return $date_db_formated;
 	}

@@ -1,5 +1,6 @@
 <?php
 @header('Content-Type: text/html; charset=utf-8'); 
+require_once('lib/HttpClient.php');
 require_once "includes.php";
  
 /**
@@ -8,28 +9,55 @@ require_once "includes.php";
 */
 
 class ParserNoticias {
+	var $l ;
+	var $Lexico;
+	var $locais; 
+	var $lexicos; 
+	
+	public function parseSeveral($noticias){
+		try{
+		$this->l = new Local(); 
+		$this->Lexico = new Lexico(); 
+		$this->locais = $this->l->getAll(); 
+		$this->lexicos = $this->Lexico->getAll(); 
+		}catch(Exception $e){
+			return ; 
+		}
+		foreach ($noticias as $n){
+			$this->parseNoticia($n); 
+		}
+	}
 	/**
     	 * Efectua parsing de noticias
     	 * Efectua mudan�as directamente na base de dados relativa ˆ noticia  
     	 */
-		public static function parseNoticia($noticia){
+		public  function parseNoticia($noticia){
+			$n = new Noticia(); 
 			$noticia->descricao = strip_tags($noticia->descricao); 
-			$noticia->assunto = strip_tags($noticia->assunto); 
-			
-	     	//Armazenamento da noticia na Base de Dados
-			$idnoticia = $noticia->add();
-			$noticia->setIdnoticia($idnoticia);
-			// Caracterização Semântica da Notícia
-			ParserNoticias::findRefEspacial($noticia);
-		    ParserNoticias::findRefTemporal($noticia); 
-			ParserNoticias::findRefClubesAndIntegrantes($noticia); 
+			$noticia->assunto = strip_tags($noticia->assunto);
+
+			$r = $n->findFirst(array("url" => $noticia->url)); 
+			if (!isset($r)){
+				$texto = getUrlContent($noticia->url);
+				
+				if (isset($texto)){
+					$noticia->texto = $texto; 
+				} 
+		     	//Armazenamento da noticia na Base de Dados
+				$idnoticia = $noticia->add();
+				$noticia->setIdnoticia($idnoticia);
+				// Caracterização Semântica da Notícia
+				ParserNoticias::findRefEspacial($noticia);
+		    	ParserNoticias::findRefTemporal($noticia); 
+				ParserNoticias::findRefClubesAndIntegrantes($noticia);
+			} 
 		}
 		
-		private static function findRefEspacial($noticia){
+		private  function findRefEspacial($noticia){
 			$l = new Local();
-			$locais = $l->getAll(); // TODO  tirar getAll daqui. Tirar classe est�tica. 
+			
 			$textoNoticia = $noticia->getTexto();
-			foreach ($locais as $local){
+			foreach ($this->locais as $local){
 				$nome_local = ' ' . $local->getNome_local() . ' ';   // para encontrar palavra exacta e nao no meio de outra palavra 
 				$pos = stripos($textoNoticia , $nome_local);
 				if ($pos !== false){
@@ -41,7 +69,7 @@ class ParserNoticias {
 			}
 		}
 				 	 
-		private static function findRefClubesAndIntegrantes($noticia){
+		private  function findRefClubesAndIntegrantes($noticia){
 			$Lexico = new Lexico();
 			$Clubes_Lexico = new Clubes_Lexico();
 			$Noticias_Clube = new Noticia_Has_Clube(); 
@@ -49,9 +77,7 @@ class ParserNoticias {
             $Noticia_Integrante = new Noticia_Has_Integrante(); 
 			$textoNoticia = $noticia->getTexto(); 
                         
-			$lexicos = $Lexico->getAll();
-			                        
-			foreach($lexicos as $lexico){
+			foreach($this->lexicos as $lexico){
 				$pos = stripos($textoNoticia, " " . $lexico->getContexto() . " ");
 				if ($pos !== false){
 					//Find the clube associated with lexico. 
@@ -91,7 +117,7 @@ class ParserNoticias {
 			}
 		}
 		
-		private static function findRefTemporal($noticia){
+		private  function findRefTemporal($noticia){
 				$texto = $noticia->getTexto(); 
 				$regexes = array(
 /*1*/			//'/\d{1,2}((\ )*\/(\ )*|(\ )*\-(\ )*)\d{1,2}((\ )*\/(\ )*|(\ )*\-(\ )*)\d{2}/',
@@ -148,7 +174,7 @@ class ParserNoticias {
 								case 4:
 									$dataInterpretada = explode("de", $dates[$j]);
 									if(count($dataInterpretada) == 3) {
-										$dataInterpretada = trim($dataInterpretada[2])."-".Util::$mesesFull[trim($dataInterpretada[1])]."-".trim($dataInterpretada[0]);
+										$dataInterpretada = trim($dataInterpretada[2])."-".BackUtil::$mesesFull[trim($dataInterpretada[1])]."-".trim($dataInterpretada[0]);
 									}
 									else {
 										$dataInterpretada = $dataInterpretada[0]."-".$dataInterpretada[1]."-00";

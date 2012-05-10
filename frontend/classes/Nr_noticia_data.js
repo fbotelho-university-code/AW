@@ -16,7 +16,7 @@ function Nr_noticia_data() {
 		new Ajax.Request(url,
 		{
 		    method:'get',
-		    asynchronous: false,
+		    asynchronous: true,
 		    onSuccess: function(transport){
 		      /* Recebimento da resposta */
 		      var response = transport.responseXML;
