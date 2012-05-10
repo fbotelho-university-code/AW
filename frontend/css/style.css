@@ -71,7 +71,7 @@ h1#logo a {display: block; background: url(images/logo.gif) no-repeat 0 0; width
 a.archives {color: #909090; font-size: 11px; text-decoration: underline; display: block;}
 a.archives:hover {text-decoration: none;}
 
-#content {width: 700px; float: left;}
+#content {width: 700px; float: left;}	
 .grey-box {background: url(images/video-box.gif) no-repeat 0 0; width: 680px; height: 400px; float: left; padding: 10px 26px 17px 8px;}
 .last {padding-right: 10px !important;}
 .grey-box h3, .grey-box h3 a {font-size: 13px; color: #303235; text-transform: uppercase; padding-bottom: 8px;}
@@ -89,6 +89,13 @@ a.buttonTable {background: url(images/button.png) no-repeat 0 0;  width: 81px;he
 .second {padding-right: 5px !important; background: url(images/second.gif) no-repeat 0 0; width: 324px; }
 a.watch-now {text-decoration: underline; text-transform: uppercase;}
 a.watch-now:hover {text-decoration: none;}
+
+/* YouTube */
+.youtube {width: 896px; height: 300px; background: url(images/video-box2.gif) no-repeat 0 0; padding-left: 10px; padding-top: 25px; padding-right: 13px;}
+.youtube h2 {padding-bottom: 10px !important;}
+.youVideo {width: 275px; height: 200px; float: left; padding-top: 8px; padding-left: 6px; padding-right: 17px; padding-bottom: 15px;}
+.youVideo img {border: 3px solid #333; margin-right: 7px;}
+.youVideo p {color: #f9f9f9;}
 
 #footer {padding-bottom: 50px; width: 930px; margin: 0 auto; padding-right: 12px; font-size: 10px;}
 #footer .shell {background: url(images/news-divider.gif) repeat-x 0 0; padding-top: 10px; margin: 0 auto;}
