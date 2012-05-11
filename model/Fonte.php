@@ -139,7 +139,6 @@ class Fonte extends Model {
 				if (isset($url_s)){
 					$data = getUrlContent($url_s);
 				}
-				
 				$n_ =  parseXml($data, $this->xmlObject, $this->idfonte, $s);
 				if (isset($n_)){
 						$news = array_merge($news, $n_);

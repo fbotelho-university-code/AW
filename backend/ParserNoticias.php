@@ -7,7 +7,6 @@ require_once "includes.php";
 * Classe para fazer parsing ao texto da noticia.
 * Busca referencias temporais, espaciais e relacionamento com clubes e integrantes
 */
-
 class ParserNoticias {
 	var $l ;
 	var $Lexico;
@@ -16,10 +15,10 @@ class ParserNoticias {
 	
 	public function parseSeveral($noticias){
 		try{
-		$this->l = new Local(); 
-		$this->Lexico = new Lexico(); 
-		$this->locais = $this->l->getAll(); 
-		$this->lexicos = $this->Lexico->getAll(); 
+			$this->l = new Local(); 
+			$this->Lexico = new Lexico(); 
+			$this->locais = $this->l->getAll(); 
+			$this->lexicos = $this->Lexico->getAll();
 		}catch(Exception $e){
 			return ; 
 		}
@@ -29,20 +28,23 @@ class ParserNoticias {
 	}
 	/**
     	 * Efectua parsing de noticias
-    	 * Efectua mudan�as directamente na base de dados relativa ˆ noticia  
+    	 * Efectua mudanças directamente na base de dados relativa ˆ noticia  
     	 */
 		public  function parseNoticia($noticia){
 			$n = new Noticia(); 
 			$noticia->descricao = strip_tags($noticia->descricao); 
 			$noticia->assunto = strip_tags($noticia->assunto);
-
 			$r = $n->findFirst(array("url" => $noticia->url)); 
 			if (!isset($r)){
+				//echo '<br/> Tenho uma noticia nova <br/>'; 
 				$texto = getUrlContent($noticia->url);
-				
+				//echo '<br/> Texto: <br/>' . strlen($texto); 
 				if (isset($texto)){
 					$noticia->texto = $texto; 
-				} 
+				}else{
+					//No texto to analyse. 
+					return; 
+				}
 		     	//Armazenamento da noticia na Base de Dados
 				$idnoticia = $noticia->add();
 				$noticia->setIdnoticia($idnoticia);
@@ -50,7 +52,9 @@ class ParserNoticias {
 				ParserNoticias::findRefEspacial($noticia);
 		    	ParserNoticias::findRefTemporal($noticia); 
 				ParserNoticias::findRefClubesAndIntegrantes($noticia);
-			} 
+			}else{
+				//echo '<br/>Url repetido : ' . $noticia->url . '<br/>'; 
+			}
 		}
 		
 		private  function findRefEspacial($noticia){
@@ -64,7 +68,11 @@ class ParserNoticias {
 					$n_l = new Noticia_locais();
 					$n_l->setIdnoticia($noticia->getIdNoticia());
 					$n_l->setIdlocal($local->getIdlocal());
-					$n_l->add();
+					try{
+						$n_l->add();
+					}catch(Exception $e){
+						continue; 
+					}
 				} 
 			}
 		}
@@ -75,19 +83,22 @@ class ParserNoticias {
 			$Noticias_Clube = new Noticia_Has_Clube(); 
 			$Integrantes_Lexico = new Integrantes_Lexico(); 
             $Noticia_Integrante = new Noticia_Has_Integrante(); 
-			$textoNoticia = $noticia->getTexto(); 
-                        
+			$textoNoticia = $noticia->getTexto();
+        	$integrantes_inseridos[] = array(); 
+        	$clubes_inseridos[] = array();
+        	
 			foreach($this->lexicos as $lexico){
+				//echo '<br/> Looking for this lexico : ' . $lexico->getContexto() ;
 				$pos = stripos($textoNoticia, " " . $lexico->getContexto() . " ");
 				if ($pos !== false){
+					//echo '<br/> Found it in the news <br/>';
 					//Find the clube associated with lexico. 
 					//TODO - lexico poderia estar associado a mais que um clube !  
-					//Assumindo que s— vai ser associado a um: 
+					//Assumindo que s— vai ser associado a um:
 					$lexClubes = $Clubes_Lexico->findFirst(array("idlexico" => $lexico->getIdlexico()));
-					$lexIntegrantes = $Integrantes_Lexico->findFirst(array ("idlexico" => $lexico->getIdlexico())); 
-
-					if ($lexClubes){					
-						//rela��o entre noticiaEClubes
+					if ($lexClubes){
+						//echo '<br/> Lexico pertence a clubes <br/>';
+						//relação entre noticiaEClubes
 						$rel = $Noticias_Clube->findFirst(array("idnoticia" => $noticia->getIdnoticia(), "idclube" => $lexClubes->getIdClube()));
 						if (!$rel){
 							$rel = new Noticia_Has_Clube($noticia->getIdnoticia(), $lexClubes->getIdClube(), 0 , $lexico->getIdLexico());
@@ -97,16 +108,16 @@ class ParserNoticias {
 						$rel->update();
 					//echo 'phase 1 <br/>';  
 					}
+					$lexIntegrantes = $Integrantes_Lexico->findFirst(array ("idlexico" => $lexico->getIdlexico()));
                   if ($lexIntegrantes){
+                  		//echo '<br/> Lexico pertence a integrantes <br/>'; 
                   	//echo 'going to find first ' . $lexIntegrantes->getIdIntegrante() .'<br/>'; 
                      $rel = $Noticia_Integrante->findFirst(array ("idnoticia" => $noticia->getIdnoticia(), "idintegrante" => $lexIntegrantes->getIdIntegrante())); 
-                     
                      if (!$rel){
-                     //	echo 'going to create relation <br/>'; 
+    	                 //	echo 'going to create relation <br/>'; 
                           $rel = new Noticia_Has_Integrante($noticia->getIdnoticia(), $lexIntegrantes->getIdIntegrante(), 0 ,$lexico->getIdLexico()); 
                           //echo '<br/> aqui <br/>';
-                       //   echo 'Printing id ' . $rel->getIdNoticia();  
-
+	                      //   echo 'Printing id ' . $rel->getIdNoticia();  
                           $rel->add(); 
                          // echo '<br/> done <br/>';
                       }
