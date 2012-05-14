@@ -280,7 +280,7 @@
 		}
 		$nova_noticia->idnoticia =$id; 
 		addNoticia($nova_noticia, "update");
-		RestUtils::sendResponse(204);
+		RestUtils::sendResponse(204, null, 'text', $nova_noticia->idnoticia);
 	}
 	
 	function addNoticia($nova_noticia, $foo){
