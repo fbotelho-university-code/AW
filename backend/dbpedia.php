@@ -61,6 +61,7 @@ function getThumbnailUrlClube($clube_uri){
 	if (isset($result)){
 		$result = toJsonResults($result);
 		if (isset($result) && isset($result[0])){
+			var_dump($result[0]->url->value); 
 			$url = $result[0]->url->value;
 			$url = str_replace("/commons/thumb/", "/en/", $url);
 			$pos = strpos($url, "/200px"); 
@@ -79,6 +80,7 @@ function getThumbnailUrlInt($clube_uri){
 		if (isset($result) && isset($result[0])){
 			$url = $result[0]->url->value;
 			// Get image :
+			//var_dump($url); 
 			return getImage($url);
 		}
 	}
@@ -179,7 +181,7 @@ function isUrlClube($resource){
 		?clube a <http://dbpedia.org/ontology/SportsTeam> .
 		FILTER ( ?clube = <http://dbpedia.org/resource/" . $resource. ">)
 	}";
-	var_dump($query); 
+	//var_dump($query); 
 	$result = execute_sparql_query($query);
 	$result = toJsonResults($result);
 	if (isset($result[0]->clube)){
@@ -216,8 +218,8 @@ function addClubeLexico($clube_uri, $idclube){
 	$names = getNamesClubes($clube_uri);
 	$rel = new Clubes_Lexico();
 	$rel->idclube = $idclube;
-	echo '<br/> Inserindo para ' . $clube_uri . "Nomes : <br/>" ;
-	var_dump($names);
+	//echo '<br/> Inserindo para ' . $clube_uri . "Nomes : <br/>" ;
+	//var_dump($names);
 	updateLexico($names , $rel); 
 }
 
@@ -226,8 +228,8 @@ function addIntegranteLexico($integrante_uri, $idintegrante){
 	$names = getNamesIntegrante($integrante_uri);
 	$rel = new Integrantes_Lexico();
 	$rel->idintegrante = $idintegrante;
-	echo '<br/> Inserindo para ' . $integrante_uri . "Nomes : <br/>" ;
-	var_dump($names); 
+	//echo '<br/> Inserindo para ' . $integrante_uri . "Nomes : <br/>" ;
+	//var_dump($names); 
 	updateLexico($names , $rel);
 }
 
@@ -242,17 +244,17 @@ function updateLexico($nomes,$rel){
 			} else
 				continue;
 	        $Lexico->contexto = $nome;
-	        echo '<br/> Adding : ' . $Lexico->contexto . '<br/>'; 
+	        //echo '<br/> Adding : ' . $Lexico->contexto . '<br/>'; 
 		  	$strings[] = $Lexico->contexto;
 			$Lexico->tipo = 'dbpedia_name';
 			try{
 				$id = $Lexico->add();
-				echo '<br> Adicionei ao lexico ; '; 
+				//echo '<br> Adicionei ao lexico ; '; 
 				$rel->idlexico = $id; 
 				$rel->add(); 
-				echo ' Adicionei a relações <br/>'; 
+				//echo ' Adicionei a relações <br/>'; 
 			}catch(Exception $e){
-				var_dump($e); 
+				//var_dump($e); 
 				continue; 
 			}
 		}
@@ -289,11 +291,11 @@ function updateLexico($nomes,$rel){
 			foreach ($result as $r){
 				fetch_and_insert_clube($r->clube->value); 
 			}
-			echo 'Done inserting clubes<br/>';
+			//echo 'Done inserting clubes<br/>';
 			return;  
 		}
 	} 
-	echo 'Could not insert clubes <br/>';
+	//echo 'Could not insert clubes <br/>';
 
 }
    
@@ -305,6 +307,8 @@ function fetch_and_insert_clube($clube_uri){
 	$clube = new Clube();
 	$clube->resumo = addslashes(getAbstractInPortugueseOrEnglish($clube_uri));
 	$clube->nome_oficial = addslashes(getFullNameClube($clube_uri));
+	getThumbnailUrlClube($clube_uri);
+	
 	if (isset($clube->nome_oficial)){
 		$rs = $clube->findFirst(array("nome_oficial" => $clube->nome_oficial));
 		if (isset($rs)) return ;  
@@ -312,9 +316,10 @@ function fetch_and_insert_clube($clube_uri){
 		$id = $clube->add(); 
 		$clube->idclube = $id; 
 		addClubeLexico($clube_uri, $id);
+		
 		$img = getThumbnailUrlClube($clube_uri);
 		if (isset($img)){
-			echo 'vou inserir uma imagem<br/>'; 
+			//echo 'vou inserir uma imagem<br/>'; 
 			$Img = new Clube_Imagem();
 			$Img->idclube = $id; 
 			$Img->content_type = $img['type']; 
@@ -352,12 +357,12 @@ function insert_image($clube_uri, $id){
     		?player dbpprop:currentclub	dbpedia:" . $clube . 
 		"}");
 	
- 	echo "SELECT distinct ?player 
+ 	/*echo "SELECT distinct ?player 
 		{
     		?player a dbpedia-owl:SoccerPlayer .
     		?player dbpprop:currentclub	dbpedia:" . $clube . 
 		"}"; 
- 	
+ 	*/
  	if (isset($result)){
  		$result = toJsonResults($result);
  		if (isset($result)){
@@ -388,7 +393,8 @@ function insert_image($clube_uri, $id){
   * @param $clube_id The clube_id to insert in the database.  
   */
  function fetch_and_insert_player($p_uri, $clube_id, $funcao='Jogador'){
-	$player = new Integrante(); 
+ 	$img = getThumbnailUrlInt($p_uri);
+ 	$player = new Integrante(); 
 
 	$player->resumo = addslashes(getAbstractInPortugueseOrEnglish($p_uri));
 	$player->nome_integrante = addslashes(getFullName($p_uri));
@@ -405,7 +411,7 @@ function insert_image($clube_uri, $id){
 			addIntegranteLexico($p_uri, $id);
 			$img = getThumbnailUrlInt($p_uri);
 			if (isset($img)){
-				echo 'vou inserir uma imagem<br/>';
+				//echo 'vou inserir uma imagem<br/>';
 				$Img = new Integrante_Imagem();
 				$Img->idintegrante = $id;
 				$Img->content_type = $img['type'];

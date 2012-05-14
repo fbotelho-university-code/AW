@@ -7,6 +7,7 @@
  function checkCurlResponse($ch){
  	$info = curl_getinfo($ch);
 
+ 	
  	return isset($info['http_code']) && $info['http_code'] == 200;
  }
 function getCurlContentType($ch){
@@ -32,7 +33,7 @@ function getCurlContentType($ch){
     curl_setopt($ch, CURLOPT_BINARYTRANSFER,1);
 
    $response = curl_exec($ch);
-   
+
    $info = curl_getinfo($ch);
    
    if (!checkCurlResponse($ch)) return null;
@@ -55,13 +56,17 @@ function getCurlContentType($ch){
       CURLOPT_URL, 
       $uri);
 	
-   curl_setopt($ch, CURLOPT_HEADER, 0); 
+     if (isset($headers)){
+     	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+     }
+	curl_setopt($ch, CURLOPT_HEADER, 0);
    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); 	
    curl_setopt($ch, 
       CURLOPT_RETURNTRANSFER, 
       true);
-
+	
    $response = curl_exec($ch);
+   
    if (!checkCurlResponse($ch)) return null;  
    curl_close($ch);
    return $response;
