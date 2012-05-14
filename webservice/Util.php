@@ -4,7 +4,7 @@ require_once ('../model/Fonte.php');
 
 class Utill {
 	public static function getIdWebServiceAsFonte(){
-		$f = new Fonte("WebService");		
+		$f = new Fonte("webservice");		
 		return $f->getIdFonte();
 	}
 	

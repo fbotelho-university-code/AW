@@ -41,7 +41,6 @@ class Fonte extends Model {
 	* @var boolean
 	*/
 	var $ligado;
-	
 	/**
 	 * Contrutor da classe.
 	 */
@@ -54,7 +53,6 @@ class Fonte extends Model {
 			$this->setIdfonte($obj->idfonte);
 		}
 	}
-	
 
 	/**
 	* Retorna o identificador da fonte

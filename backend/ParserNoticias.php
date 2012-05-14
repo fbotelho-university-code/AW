@@ -196,14 +196,22 @@ class ParserNoticias {
 							if(!count($testearray)){							
 								//echo $dataInterpretada."<br>";
 								$rel  = new Noticia_Data($noticia->getIdnoticia(), $dates[$j], $dataInterpretada);
-								$rel->add();
+								try{
+									$rel->add();
+								}catch(Exception $e) {
+									continue; 
+								}
 							}
 						}
 					}	
 				}
 			}
 			$noticiaData = new Noticia_Data();
+			try{
 			$badDates = $noticiaData->delete(array("data_interpretada" => "0000-00-00"));
+			}catch(Exception $e){
+				continue; 
+			}
 		}
 }
 

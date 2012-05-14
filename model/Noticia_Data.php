@@ -173,7 +173,7 @@ public function __construct($idnoticia='', $tempo='', $dt =''){
 		return $result; 
 	}
 	public function add(){
-		$rs = $this->findFirst(array('tempo' => $this->data_interpretada, 'idnoticia' => $this->idnoticia )); 
+		$rs = $this->findFirst(array('tempo' => $this->data_interpretada, 'idnoticia' => $this->idnoticia ));
 		if (!isset($rs)){
 			parent::add(); 
 		}

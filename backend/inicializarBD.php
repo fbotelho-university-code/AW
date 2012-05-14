@@ -110,6 +110,7 @@ try{
 	$f->add();
 	$f->nome = 'webservice'; 
 	$f->xml = '';
+	$f->add();
 	$f->webname ='webportuguesa'; 
 	$f->xml = "<template>
 	<uri>
@@ -134,7 +135,7 @@ try{
 	$f->webname = 'gnews'; 
 	$f->xml = "invalid"; 
 	$f->add(); 
-	
+
 }catch(Exception $e){
 	echo $e; 
 	echo '<br/>Could not add fonte ' . $f->nome . "<br/>"; 
