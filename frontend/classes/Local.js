@@ -11,7 +11,7 @@ function Local() {
 	this.noticias = new Array();
 	
 	/* URL base para comunicacao com o web service */
-	this.baseurl = "http://localhost/proj/webservice/espaco.php/";
+	this.baseurl = "http://localhost/AW3/webservice/espaco.php/";
 
 	/**
 	 * Mï¿½todo para recuperar todos os locais.
@@ -267,9 +267,9 @@ function getLocaisNoticiasByCoordenadas(lat_1, lat_2, log_1, log_2) {
 					markersArray.push(marker);
 					var infoWindow = new google.maps.InfoWindow;
 					var contentString = "<div id='infoMarker'>";
-		  			contentString += "<h2><center>Notï¿½cias em " + nome_local + "</center></h2>";
+		  			contentString += "<h2><center>Noticias em " + nome_local + "</center></h2>";
 		  			contentString +=  "<table id='infoMarker-t'><thread>";
-		  			contentString += "<tr><th>Data de Publicaï¿½ï¿½o</th>";
+		  			contentString += "<tr><th>Data Pub</th>";
 		  			contentString += "<th>Assunto</th></tr></thread>";
 		  			contentString += "<tbody>";
 		  			//alert(nome_local);
@@ -349,9 +349,9 @@ function getLocalByNome(nome)
 		    		  markersArray.push(marker);
 		    		  var infoWindow = new google.maps.InfoWindow;
 		    		  var contentString = "<div id='infoMarker'>";
-		    		  contentString += "<h2><center>Notícias em " + nome_local + "</center></h2>";
+		    		  contentString += "<h2><center>Noticias em " + nome_local + "</center></h2>";
 		    		  contentString +=  "<table id='infoMarker-t'><thread>";
-		    		  contentString += "<tr><th>Data de Publicação</th>";
+		    		  contentString += "<tr><th>Data Pub</th>";
 		    		  contentString += "<th>Assunto</th></tr></thread>";
 		    		  contentString += "<tbody>";
 		    		  //alert(nome_local);
