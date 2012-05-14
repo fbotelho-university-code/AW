@@ -73,6 +73,7 @@
 		try{
 			$news =$noticia->getAll(array("idnoticia","data_pub", "assunto", "descricao", "url"));
 		}catch(Exception $e){
+			echo $e; 
 			RestUtils::sendResponse(500);
 			exit;  
 		}
@@ -310,6 +311,7 @@
 				} 
 				
 			}catch(Exception $e){
+				echo $e; 
 				RestUtils::sendResponse(500);
 				exit;  
 			}
@@ -332,7 +334,7 @@
 	}
 	
 	function checkRelations($noticia){
-		/*if (isset($noticia->locais)){
+		if (isset($noticia->locais)){
 			foreach ($noticia->locais as $l){
 				if (!isset($l->idlocal) ) {
 					return false; 
@@ -350,7 +352,7 @@
 			foreach($noticia->integrantes as $l)
 				if (!isset($l->idintegrante))	
 					return false;
-		}*/
+		}
 	}
 	
 	function updateRelations($noticia){
