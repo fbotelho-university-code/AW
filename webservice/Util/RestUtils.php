@@ -1,7 +1,8 @@
 <?php
 
 @header('Content-Type: text/html; charset=utf-8');
-require_once ('RestRequest.php'); 
+require_once ('RestRequest.php');
+require_once ('XML/Serializer.php');  
 /*
  * Created on Mar 26, 2012
  *

@@ -14,20 +14,31 @@ function getUrl(){
 	$r = $v['scheme'] . '://' . $v['host'] . $v['path'];
 	$pos = strpos($r, 'noticias.php') ;
 	$val = substr($r, 0, $pos );
-
 	return $val;
 }
-
+function treatRoot($req){
+	switch($req->getMethod() ){
+		case 'GET': 
+			break; 
+		default:
+		RestUtils::sendResponse(405, array('allow' =>"GET "));
+	}
+	$fonte = new Fonte(); 
+	try{
+		$n = $fonte->getAll();
+	} catch(Exception $e){
+		RestUtils::sendResponse(500); 
+	}
+	RestUtils::webResponse($n, $req, 'fontes', 'Fonte.xsd', 'fonte');
+}
 $req  = RestUtils::processRequest();  // The request made by the client.
 //checkRequest($req);   // check that the request is valid. Dies otherwise.
-
 //Dispatching according to the path info.
 $path_parameters = $req->getPathInfo();
 $path_parameters_count = count($path_parameters);
 
-
-if (!($path_parameters_count >= 1   && $path_parameters_count <= 4)){
-	RestUtils::sendResponse(404);
+if ($path_parameters_count == 0){
+	treatRoot($req); 
 }
 
 switch ($req->getMethod()){
@@ -40,7 +51,6 @@ switch ($req->getMethod()){
 		RestUtils::sendResponse(405, array('allow' =>"GET "));
 		break; 
 }
-
 $fonte = new Fonte();
 switch($path_parameters[1]){
 	case 'dbpedia':
@@ -62,7 +72,6 @@ switch($path_parameters[1]){
 	$searches = null;
 	$clube = new Clube();
 	$integrante = new Integrante();
-	
 	switch($path_parameters_count){
 		case 1: 
 			//get default search keywords

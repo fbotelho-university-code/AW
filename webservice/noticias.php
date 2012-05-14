@@ -427,7 +427,7 @@
 	function getNews($req, $id, $n){
 		$n = $n->getRelationArray($id, getUrl());
 		$noticia = new Noticia();
-		RestUtils::webResponse($n, $req, 'noticia', 'Noticia.xsd', 'data'); 
+		RestUtils::webResponse($n, $req, 'noticia', 'Noticia.xsd', 'data');
 	}
 	
     /*

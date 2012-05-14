@@ -157,7 +157,7 @@ abstract class Model{
 		if ($xmlString == ''){
 			return ; 
 		}
-		@$ob =  simplexml_load_string($xmlString);
+		$ob =  simplexml_load_string($xmlString);
 		$class = get_class($this);
 	    $return_obj  = new $class; 
 	    $this->setObj(get_object_vars($ob), $return_obj);

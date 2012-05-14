@@ -40,10 +40,9 @@ if($doc){
 		}
 		if (isset($f->descricao)){
 			$desc = $item->xpath($f->descricao);
-			var_dump($desc[0]. ""); 
 			if(isset($desc)) $myNew->setDescricao(deal($desc[0] . ""));
 			else $myNew->setDescricao("");
-			var_dump($myNew->descricao); 
+
 			
 		}
 		if (isset($f->user)){
