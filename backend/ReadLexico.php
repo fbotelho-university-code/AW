@@ -20,9 +20,9 @@
  
  $ado = new DAO(); 
  $ado->connect();
- $ado->execute("truncate table lexico");
- $ado->execute("truncate table clubes_lexico"); 
- $ado->execute("truncate table integrantes_lexico");
+ //$ado->execute("truncate table lexico");
+ //$ado->execute("truncate table clubes_lexico"); 
+ //$ado->execute("truncate table integrantes_lexico");
   
  $relacoes  = array(); // Array para guardar actualiza�›es finais de rela�›es .
  
@@ -83,8 +83,7 @@
 		}		
   	}
  }
- 
-  function findPlayer($array, $needle){
+   function findPlayer($array, $needle){
  	foreach ($array as $elem){
  		if (stripos($elem->getNome_integrante(),$needle)  !== false){
  			return $elem; 

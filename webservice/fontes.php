@@ -105,7 +105,7 @@ switch($path_parameters[1]){
 			
 			break;
 	}
-		
+	
 	$pes = array(); 
 	foreach($searches as $s){
 		if (isset($s->nome_integrante)){
@@ -118,6 +118,7 @@ switch($path_parameters[1]){
 	try{
 		
 		$n = $fonte->search($searches);
+		
 
 	}catch(Exception $e){
 		RestUtils::sendResponse(500); 
@@ -178,7 +179,7 @@ switch($path_parameters[1]){
 				}
 			} 
 	}
-	RestUtils::sendResponse(201, null, $n,'text/html');
+	RestUtils::sendResponse(201, null, count($n),'text');
 	function treatdbpedia($req){
 		$path_info = $req->getHttp_accept_original(); 
 		$path_info_count = count($path_info);

@@ -163,11 +163,11 @@ function getFullName($p_uri){
  	return getnames("
 	SELECT distinct * WHERE {<". $uri . "> ?key ?value .
   	FILTER ( 
-  		 ?key = <http://dbpedia.org/property/fullname> ||
-         ?key = <http://dbpedia.org/property/name> || 
-         ?key = <http://dbpedia.org/property/playername> || 
-         ?key = <http://dbpedia.org/property/alternativeNames>  ||  
-         ?key = <http://dbpedia.org/property/nickname>" .
+	  		 ?key = <http://dbpedia.org/property/fullname> ||
+	         ?key = <http://dbpedia.org/property/name> || 
+	         ?key = <http://dbpedia.org/property/playername> || 
+	         ?key = <http://dbpedia.org/property/alternativeNames>  ||  
+	         ?key = <http://dbpedia.org/property/nickname>" .
          		"
 	)
 	}");
@@ -198,14 +198,13 @@ function getNames($query){
 		if (isset($result)){
 		  foreach ($result as $entry){
 		  	$nome = $entry->value->value; 
-	  		$nomes_explode = explode(",", $nome);
-	  		foreach ($nomes_explode  as $nome){
+	  	//	$nomes_explode = explode(",", $nome);
+	  		//foreach ($nomes_explode  as $nome){
 	  			if (array_search($nome, $nomes)===false){
 	  				$nomes[] = trim($nome); 
-	  			}	
-	  		}
 		  }
 		}
+	}
 	}
 	return $nomes; 
 }
@@ -216,7 +215,9 @@ function getNames($query){
 function addClubeLexico($clube_uri, $idclube){
 	$names = getNamesClubes($clube_uri);
 	$rel = new Clubes_Lexico();
-	$rel->idclube = $idclube; 
+	$rel->idclube = $idclube;
+	echo '<br/> Inserindo para ' . $clube_uri . "Nomes : <br/>" ;
+	var_dump($names);
 	updateLexico($names , $rel); 
 }
 
@@ -225,7 +226,8 @@ function addIntegranteLexico($integrante_uri, $idintegrante){
 	$names = getNamesIntegrante($integrante_uri);
 	$rel = new Integrantes_Lexico();
 	$rel->idintegrante = $idintegrante;
-	
+	echo '<br/> Inserindo para ' . $integrante_uri . "Nomes : <br/>" ;
+	var_dump($names); 
 	updateLexico($names , $rel);
 }
 
@@ -233,15 +235,24 @@ function updateLexico($nomes,$rel){
 
 	$Lexico = new Lexico(); 
 	$Lexico->pol = $Lexico->ambiguidade = 0;
+	$strings = array(); 
 	foreach ($nomes as $nome){
+			if (array_search($nome, $strings) === false){
+				$strings[] = $nome;
+			} else
+				continue;
 	        $Lexico->contexto = $nome;
-		  	$strings[] = $Lexico->contexto; 
+	        echo '<br/> Adding : ' . $Lexico->contexto . '<br/>'; 
+		  	$strings[] = $Lexico->contexto;
 			$Lexico->tipo = 'dbpedia_name';
 			try{
 				$id = $Lexico->add();
+				echo '<br> Adicionei ao lexico ; '; 
 				$rel->idlexico = $id; 
 				$rel->add(); 
+				echo ' Adicionei a relações <br/>'; 
 			}catch(Exception $e){
+				var_dump($e); 
 				continue; 
 			}
 		}
@@ -295,12 +306,13 @@ function fetch_and_insert_clube($clube_uri){
 	$clube->resumo = addslashes(getAbstractInPortugueseOrEnglish($clube_uri));
 	$clube->nome_oficial = addslashes(getFullNameClube($clube_uri));
 	if (isset($clube->nome_oficial)){
+		$rs = $clube->findFirst(array("nome_oficial" => $clube->nome_oficial));
+		if (isset($rs)) return ;  
 	try{
 		$id = $clube->add(); 
 		$clube->idclube = $id; 
 		addClubeLexico($clube_uri, $id);
 		$img = getThumbnailUrlClube($clube_uri);
-
 		if (isset($img)){
 			echo 'vou inserir uma imagem<br/>'; 
 			$Img = new Clube_Imagem();
@@ -345,12 +357,12 @@ function insert_image($clube_uri, $id){
     		?player a dbpedia-owl:SoccerPlayer .
     		?player dbpprop:currentclub	dbpedia:" . $clube . 
 		"}"; 
- 	var_dump($result); 
+ 	
  	if (isset($result)){
  		$result = toJsonResults($result);
  		if (isset($result)){
  			//Grab each player url and feed the database with it. 
- 			echo "Tenho " . count($result) . " jogadores para o clube " . $clube . "<br/>";
+ 			//echo "Tenho " . count($result) . " jogadores para o clube " . $clube . "<br/>";
  			foreach ($result  as $p){
  				if (isset($p->player) && isset($p->player->value)) {
  				    fetch_and_insert_player($p->player->value, $id); 
@@ -380,13 +392,13 @@ function insert_image($clube_uri, $id){
 
 	$player->resumo = addslashes(getAbstractInPortugueseOrEnglish($p_uri));
 	$player->nome_integrante = addslashes(getFullName($p_uri));
-
+	
 	if (isset($player->nome_integrante) && $player->nome_integrante != null){
 		$res = $player->find(array("nome_integrante" => $player->nome_integrante));  
 		if (count($res) > 0) return false; 
 		$player->idclube = $clube_id; 
-		$player->funcao = $funcao; 
-		
+		$player->funcao = $funcao;
+		 
 		try{
 			$id = $player->add();
 			$player->idintegrante = $id; 

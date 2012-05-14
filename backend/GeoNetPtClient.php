@@ -41,7 +41,8 @@ class GeoNetPtClient extends Fonte {
 			
 				/* Fill the entry with the respective values */
 				$l = new Local();
-				if (count($l->find(array("nome_local" => $tmp[0])) == 0)){
+				$rs = $l->findFirst(array("nome_local" => $tmp[0]));
+				if (!isset($rs)){ 
 					$l->setNome_local($tmp[0]);
 					$l->lat = $tmp[1];
 					$l->log = $tmp[2];
