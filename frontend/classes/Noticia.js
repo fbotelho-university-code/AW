@@ -861,7 +861,7 @@ function alterarRelacoesNoticia(idNoticia, xml) {
 function handleRequestStateChange(id)
 {
 	
-	if (xmlHttp.status > 200 && xmlHttp.status < 300)
+	if (xmlHttp.status <= 500)
 		{
 			try
 			{

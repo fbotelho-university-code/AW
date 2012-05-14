@@ -3,7 +3,7 @@ function Noticia_x_clube() {
 	this.nr_noticia;
 	
 	/* URL base para comunicacao com o web service */
-	this.baseurl = "http://localhost/proj/webservice/stats.php/noticiasporclube/";
+	this.baseurl = "http://localhost/AW3/webservice/stats.php/noticiasporclube/";
 	
 	this.get = function (start, count, cb) 
 	{

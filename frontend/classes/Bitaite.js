@@ -5,7 +5,7 @@ function Bitaite() {
 	this.link;
 	
 	/* URL base para comunicacao com o web service */
-	this.url = "http://localhost/proj/webservice/bitas.php/";
+	this.url = "http://localhost/AW3/webservice/bitas.php/";
 	
 	this.get = function (cb) 
 	{
