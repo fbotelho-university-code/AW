@@ -18,10 +18,12 @@ $f = $f->noticia;
 $doc = $doc->xpath($f->item);
 
 if($doc){
+	$i = 0; 
 	foreach($doc as $item){
+		$i++; 
+		if ($i == 11) return ; 
 		$myNew = new Noticia();
 		$myNew->setIdfonte($f->idfonte);
-		
 		// pubDate
 		if (isset($f->data_pub) && isset($f->formatfoo)){
 			$pub = $item->xpath($f->data_pub);
