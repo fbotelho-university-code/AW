@@ -108,34 +108,35 @@ try{
 	</noticia>
 </template>"; 
 	$f->add();
-	$f->nome = 'webservice'; 
-	$f->xml = '';
-	$f->add();
-	$f->webname ='webportuguesa'; 
+	$f->webname ='webportuguesa';
 	$f->xml = "<template>
 	<uri>
-		<url>http://arquivo.pt/opensearch</url>
-		<query>
-			<variable>
-				<id>query</id>
-			</variable>
-		</query>
+	<url>http://arquivo.pt/opensearch</url>
+	<query>
+	<variable>
+	<id>query</id>
+	</variable>
+	</query>
 	</uri>
 	<noticia>
-		<item>/rss/channel/item</item>
-		<data_pub>pwa:tstamp</data_pub>
-		<assunto>title</assunto>
-		<descricao>pwa:digest</descricao>
-		<link>link</link>
-		<formatfoo>formatTstampToDb</formatfoo>
+	<item>/rss/channel/item</item>
+	<data_pub>pwa:tstamp</data_pub>
+	<assunto>title</assunto>
+	<descricao>pwa:digest</descricao>
+	<link>link</link>
+	<formatfoo>formatTstampToDb</formatfoo>
 	</noticia>
-</template>";
-	$f->type = 1; 
+	</template>";
+	$f->type = 1;
 	$f->add();
-	$f->webname = 'gnews'; 
-	$f->xml = "invalid"; 
-	$f->add(); 
-
+	$f->webname = 'gnews';
+	$f->xml = "invalid";
+	$f->add();
+	$f->webname = 'webservice'; 
+	$f->xml = '';
+	$f->add();
+	
+	
 }catch(Exception $e){
 	echo $e; 
 	echo '<br/>Could not add fonte ' . $f->nome . "<br/>"; 

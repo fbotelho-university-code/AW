@@ -20,6 +20,7 @@ $doc = $doc->xpath($f->item);
 if($doc){
 	$i = 0; 
 	foreach($doc as $item){
+		
 		$i++; 
 		if ($i == 11) return ; 
 		$myNew = new Noticia();

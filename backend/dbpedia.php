@@ -61,13 +61,22 @@ function getThumbnailUrlClube($clube_uri){
 	if (isset($result)){
 		$result = toJsonResults($result);
 		if (isset($result) && isset($result[0])){
-			var_dump($result[0]->url->value); 
 			$url = $result[0]->url->value;
+			$url_save = $url; 
+			if (pingUrlWithHead($url)){
+				return $url; 
+			}
 			$url = str_replace("/commons/thumb/", "/en/", $url);
 			$pos = strpos($url, "/200px"); 
 			$url = substr($url, 0, $pos);
-			// Get image : 
-			return getImage($url); 
+			// Get image :
+			if (pingUrlWithHead($url)){
+				return $url; 
+			} 
+			else{
+				echo $url_save; 
+				return null; 
+			}
 		} 
 	}  
 }
@@ -76,12 +85,24 @@ function getThumbnailUrlInt($clube_uri){
 	$query = "SELECT distinct ?url WHERE { { <" . $clube_uri . "> <http://dbpedia.org/ontology/thumbnail> ?url } } ";
 	$result = execute_sparql_query($query);
 	if (isset($result)){
+		
 		$result = toJsonResults($result);
 		if (isset($result) && isset($result[0])){
 			$url = $result[0]->url->value;
-			// Get image :
-			//var_dump($url); 
-			return getImage($url);
+			$url_save = $url; 
+			if (pingUrlWithHead($url)){
+				return $url; 
+			}
+			$url = str_replace("/commons/thumb/", "/en/", $url);
+			$pos = strpos($url, "/200px");
+			$url = substr($url, 0, $pos);
+			if (pingUrlWithHead($url)){
+				return $url; 
+			}
+			else{
+				echo $url_save; 
+				return null; 
+			}
 		}
 	}
 }
@@ -276,6 +297,7 @@ function updateLexico($nomes,$rel){
    * Esta func√ß√£o insere todos os clubes da primeira liga de futebol. 
    */
   function insertClubesOfPrimeiraLiga(){
+  	echo 'Inicialização de clubes da primeira liga: <br/>'; 
 //  	fetch_and_insert_clube("http://dbpedia.org/resource/S.L._Benfica");
 	$query ="SELECT distinct ?clube
 	{
@@ -288,8 +310,11 @@ function updateLexico($nomes,$rel){
 	if (isset($result)){
 		$result = toJsonResults($result);
 		if (isset($result)){
+			$i = 0; 
 			foreach ($result as $r){
-				fetch_and_insert_clube($r->clube->value); 
+				fetch_and_insert_clube($r->clube->value);
+				$i++; 
+				
 			}
 			//echo 'Done inserting clubes<br/>';
 			return;  
@@ -307,8 +332,8 @@ function fetch_and_insert_clube($clube_uri){
 	$clube = new Clube();
 	$clube->resumo = addslashes(getAbstractInPortugueseOrEnglish($clube_uri));
 	$clube->nome_oficial = addslashes(getFullNameClube($clube_uri));
-	getThumbnailUrlClube($clube_uri);
-	
+	$clube->url_img = getThumbnailUrlClube($clube_uri);
+	 	
 	if (isset($clube->nome_oficial)){
 		$rs = $clube->findFirst(array("nome_oficial" => $clube->nome_oficial));
 		if (isset($rs)) return ;  
@@ -316,18 +341,6 @@ function fetch_and_insert_clube($clube_uri){
 		$id = $clube->add(); 
 		$clube->idclube = $id; 
 		addClubeLexico($clube_uri, $id);
-		
-		$img = getThumbnailUrlClube($clube_uri);
-		if (isset($img)){
-			//echo 'vou inserir uma imagem<br/>'; 
-			$Img = new Clube_Imagem();
-			$Img->idclube = $id; 
-			$Img->content_type = $img['type']; 
-			$Img->imagem = $img['image']; 
-			$id_img = $Img->add();
-			$clube->url_img = 'true'; 
-			$clube->update(); 
-		}
 	}catch(Exception $e){
 		return; 
 		//echo $e; 
@@ -391,35 +404,21 @@ function insert_image($clube_uri, $id){
   * @param $clube_id The clube_id to insert in the database.  
   */
  function fetch_and_insert_player($p_uri, $clube_id, $funcao='Jogador'){
- 	$img = getThumbnailUrlInt($p_uri);
  	$player = new Integrante(); 
 
 	$player->resumo = addslashes(getAbstractInPortugueseOrEnglish($p_uri));
 	$player->nome_integrante = addslashes(getFullName($p_uri));
 	
-	if (isset($player->nome_integrante) && $player->nome_integrante != null){
-		$res = $player->find(array("nome_integrante" => $player->nome_integrante));  
-		if (count($res) > 0) return false; 
+	if (isset($player->nome_integrante)){
+		$res = $player->findFirst(array("nome_integrante" => $player->nome_integrante));
+		if (isset($res)) return false; 
 		$player->idclube = $clube_id; 
 		$player->funcao = $funcao;
-		 
+		$player->url_img = getThumbnailUrlInt($p_uri); 
 		try{
 			$id = $player->add();
 			$player->idintegrante = $id; 
 			addIntegranteLexico($p_uri, $id);
-			$img = getThumbnailUrlInt($p_uri);
-			if (isset($img)){
-				//echo 'vou inserir uma imagem<br/>';
-				$Img = new Integrante_Imagem();
-				$Img->idintegrante = $id;
-				$Img->content_type = $img['type'];
-				$Img->imagem = $img['image'];
-				$id_img = $Img->add();
-
-					$player->url_img = 'true';
-					$player->update();  
-
-			}
 		}catch(Exception $e){
 			return false; 
 		}

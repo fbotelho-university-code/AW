@@ -1,6 +1,22 @@
 <?php
 
+function pingUrlWithHead($url){
+$ch = curl_init();
+curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt ($ch, CURLOPT_URL, $url);
+curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 4);
+curl_setopt ($ch, CURLOPT_USERAGENT, 'Faculty project scraper to retrieve info from wikipedia v0.1: balayhashi@gmail.com');
+
+// Only calling the head
+curl_setopt($ch, CURLOPT_HEADER, false); // header will be at output
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'HEAD'); // HTTP request is 'HEAD'
  
+$content = curl_exec ($ch);
+if (!checkCurlResponse($ch)) return false;
+
+curl_close ($ch);
+return true; 
+}
  /**
   * Check a curl response code. If is not a valid response return false. 
   */

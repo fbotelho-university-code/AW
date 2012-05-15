@@ -78,7 +78,11 @@
 			foreach ($lexicosEntidade as $lexico2relation){
 				//echo 'here'; 
 				$values_lexico["idlexico"] = $lexico2relation->getIdlexico();
-				$result = $ado->AutoExecute($tabela_to_inserir, $values_lexico, "INSERT");	
+				try{
+				$result = $ado->AutoExecute($tabela_to_inserir, $values_lexico, "INSERT");
+				}catch(Exception $e) {
+					continue; 
+				}	
 			}
 		}		
   	}

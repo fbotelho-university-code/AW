@@ -131,11 +131,8 @@ class Integrante extends Model{
 		foreach($arrayAssoc as $key => $value){
 			$obj->$key = $value;
 		}
-		if (isset($obj->url_img)){
-			$obj->url_img =  $this->getUrl2() . 'webservice/entidades.php/integrante/' . $obj->idintegrante  . '/thumbnail';
-		}
-		else {
-			$obj->url_img = ""; 
+		if (!isset($obj->url_img)){
+			$obj->url_img =  "";
 		}
 	}
 }

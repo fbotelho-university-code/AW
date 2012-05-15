@@ -94,6 +94,32 @@ class ParserNoticias {
         	$integrantes_inseridos[] = array(); 
         	$clubes_inseridos[] = array();
         	
+        	try{
+        	$int = new Integrante(); 
+        	$id = $int->findFirst(array("nome_integrante" => $noticia->about));
+        	if (isset($id)){ 
+        		$id = $id->idintegrante;
+        		$Noticia_Integrante->idnoticia = $noticia->idnoticia; 
+        		$Noticia_Integrante->idintegrante = $id;
+        		$Noticia_Integrante->idlexico =0;
+        		$Noticia_Integrante->qualificacao = 0; 
+        		$Noticia_Integrante->add();  
+        	}
+        	else{
+        		$id = $int->findFirst(array("nome_oficial" => $noticia->about));
+        		if (isset($id)){
+        			$id = $id->idclube;
+        			$Noticias_Clube->idnoticia = $noticia->$idnoticia;
+        			$Noticias_Clube->idclube = $id;
+        			$Noticias_Clube->idlexico = 0;
+        			$Noticias_Clube->qualificacao = 0;
+        			$Noticias_Clube->add();
+        		}	
+        	}
+        	}catch(Exception $e){
+        		; 
+        	}
+        	
 			foreach($this->lexicos as $lexico){
 				//echo '<br/> Looking for this lexico : ' . $lexico->getContexto() ;
 				$pos = stripos($textoNoticia, " " . $lexico->getContexto() . " ");

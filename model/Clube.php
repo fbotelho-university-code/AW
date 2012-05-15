@@ -142,10 +142,9 @@ class Clube extends Model {
 		foreach($arrayAssoc as $key => $value){
 				$obj->$key = $value;
 			}
-		if (isset($obj->url_img)){
-			$obj->url_img =  $this->getUrl2() . 'webservice/entidades.php/clube/' . $obj->idclube  . '/thumbnail';
+		if (!isset($obj->url_img)){
+			$obj->url_img = ""; 
 		}
-		else $obj->url_img = ""; 
 	}
 }
 
