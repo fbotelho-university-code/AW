@@ -167,7 +167,6 @@ switch($path_parameters[1]){
 			break;  
 			//bitaites
 		case 3:
-
 			$v = new Video(); 
 			foreach($n as $video){
 				try{
@@ -188,7 +187,7 @@ switch($path_parameters[1]){
 				}
 			} 
 	}
-	RestUtils::sendResponse(201, null, count($n),'text');
+	RestUtils::sendResponse(204, null, count($n),'text');
 	function treatdbpedia($req){
 		$path_info = $req->getHttp_accept_original(); 
 		$path_info_count = count($path_info);
@@ -206,6 +205,7 @@ switch($path_parameters[1]){
 	}
 	
 	function createNewFonte($req){
+		
 		$path_info = $req->getPathInfo(); 
 		if (count($path_info) !=1){
 			RestUtils::sendResponse(404);

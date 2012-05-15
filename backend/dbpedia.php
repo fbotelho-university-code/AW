@@ -343,9 +343,7 @@ function fetch_and_insert_clube($clube_uri){
 function insert_image($clube_uri, $id){
 
 }
-
-  /*******************************END OF CLUBES ******************/
-
+/*******************************END OF CLUBES ******************/
  function fetch_and_insert_players_belonging_to_clube($clube, $id){
  	$clube_uri = $clube;
  	$clube = strrchr($clube, "/");
