@@ -109,7 +109,11 @@ class ParserNoticias {
 						$rel = $Noticias_Clube->findFirst(array("idnoticia" => $noticia->getIdnoticia(), "idclube" => $lexClubes->getIdClube()));
 						if (!$rel){
 							$rel = new Noticia_Has_Clube($noticia->getIdnoticia(), $lexClubes->getIdClube(), 0 , $lexico->getIdLexico());
-							$rel->add();  
+							try{
+							$rel->add();
+							}catch(Exception $e){
+								continue; 
+							}  
 						}
 						$rel->addQualificacao($lexico->getPol());
 						$rel->update();
@@ -124,8 +128,12 @@ class ParserNoticias {
     	                 //	echo 'going to create relation <br/>'; 
                           $rel = new Noticia_Has_Integrante($noticia->getIdnoticia(), $lexIntegrantes->getIdIntegrante(), 0 ,$lexico->getIdLexico()); 
                           //echo '<br/> aqui <br/>';
-	                      //   echo 'Printing id ' . $rel->getIdNoticia();  
-                          $rel->add(); 
+	                      //   echo 'Printing id ' . $rel->getIdNoticia();
+	                      try{  
+                          	$rel->add();
+	                      }catch(Exception $e){
+	                      	continue; 
+	                      } 
                          // echo '<br/> done <br/>';
                       }
                       $rel->addQualificacao($lexico->getPol()); 

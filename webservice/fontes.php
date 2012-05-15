@@ -199,7 +199,8 @@ switch($path_parameters[1]){
 			RestUtils::sendResponse(400); 
 		}
 		else{
-			fetch_and_insert_clube('http://dbpedia.org/resource/' . $resource); 
+			fetch_and_insert_clube('http://dbpedia.org/resource/' . $resource);
+			RestUtils::sendResponse(204);  
 		}
 	}
 	
