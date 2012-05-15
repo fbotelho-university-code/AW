@@ -22,9 +22,13 @@ class ParserNoticias {
 		}catch(Exception $e){
 			return ; 
 		}
+		$i = 0; 
 		foreach ($noticias as $n){
-			$this->parseNoticia($n); 
+			if ( $this->parseNoticia($n) == true ){
+				$i++; 
+			}
 		}
+		return $i; 
 	}
 	/**
     	 * Efectua parsing de noticias
@@ -46,12 +50,15 @@ class ParserNoticias {
 					return; 
 				}
 		     	//Armazenamento da noticia na Base de Dados
+
 				$idnoticia = $noticia->add();
+
 				$noticia->setIdnoticia($idnoticia);
 				// Caracterização Semântica da Notícia
 				ParserNoticias::findRefEspacial($noticia);
 		    	ParserNoticias::findRefTemporal($noticia); 
 				ParserNoticias::findRefClubesAndIntegrantes($noticia);
+				return true; 
 			}else{
 				//echo '<br/>Url repetido : ' . $noticia->url . '<br/>'; 
 			}

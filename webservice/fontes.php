@@ -136,14 +136,13 @@ switch($path_parameters[1]){
 	switch($fonte->type){
 		case 1:
 			$parser = new ParserNoticias();
-			$parser->parseSeveral($n);
-			//noticias
+			$n = $parser->parseSeveral($n);
+			RestUtils::sendResponse(204, null, $n,'text');
 			break;
 		case 2:
 			$b = new Bitaites();
 			$i =0;
 			foreach ($n as $bitai){
-								
 				$exi =$b->findFirst(array("url" => $bitai->url));
 				if (isset($exi)) continue;
 				if (isset($bitai->user)){
@@ -187,7 +186,7 @@ switch($path_parameters[1]){
 				}
 			} 
 	}
-	RestUtils::sendResponse(204, null, count($n),'text');
+	
 	function treatdbpedia($req){
 		$path_info = $req->getHttp_accept_original(); 
 		$path_info_count = count($path_info);
